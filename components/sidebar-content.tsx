@@ -2991,6 +2991,17 @@ C0.7,239.6,62.1,0.5,62.2,0.4c0,0,54,13.8,119.9,30.8S302.1,62,302.2,62c0.2,0,0.2,
 
 export const contents: Content[] = [
 	{
+		title: "本周推荐",
+		Icon: () => <Briefcase className="w-4 h-4 text-current" />,
+		list: [
+			{ title: "Overview", href: "/docs/companies", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Sierra", href: "/docs/companies/sierra", icon: () => <Headphones className="w-4 h-4 text-current" /> },
+			{ title: "Hebbia", href: "/docs/companies/hebbia", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
+			{ title: "Nimble", href: "/docs/companies/nimble", icon: () => <Globe className="w-4 h-4 text-current" /> },
+			{ title: "Sycamore", href: "/docs/companies/sycamore", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
 		title: "AI Agents",
 		Icon: () => <BotIcon className="w-4 h-4 text-current" />,
 		list: [
@@ -3076,17 +3087,6 @@ export const contents: Content[] = [
 		list: [
 			{ title: "Overview", href: "/docs/vertical-ai", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "Hebbia", href: "/docs/companies/hebbia", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
-		],
-	},
-	{
-		title: "Companies",
-		Icon: () => <Briefcase className="w-4 h-4 text-current" />,
-		list: [
-			{ title: "Overview", href: "/docs/companies", icon: () => <Book className="w-4 h-4 text-current" /> },
-			{ title: "Sierra", href: "/docs/companies/sierra", icon: () => <Headphones className="w-4 h-4 text-current" /> },
-			{ title: "Hebbia", href: "/docs/companies/hebbia", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
-			{ title: "Nimble", href: "/docs/companies/nimble", icon: () => <Globe className="w-4 h-4 text-current" /> },
-			{ title: "Sycamore", href: "/docs/companies/sycamore", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 		],
 	},
 ];
