@@ -2,9 +2,7 @@
   "title": "guide",
   "root": true,
   "pages": [
-    "business-ideas",
-    "ai-card",
-    "nesthub",
-    "career"
+    "companies",
+    "themes"
   ]
 }

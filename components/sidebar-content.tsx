@@ -2986,39 +2986,27 @@ C0.7,239.6,62.1,0.5,62.2,0.4c0,0,54,13.8,119.9,30.8S302.1,62,302.2,62c0.2,0,0.2,
 
 export const contents: Content[] = [
 	{
-		title: "Business Ideas",
+		title: "Companies",
 		Icon: () => <Briefcase className="w-4 h-4 text-current" />,
 		list: [
-			{
-				title: "Daily Picks",
-				href: "/docs/business-ideas",
-				icon: () => <Book className="w-4 h-4 text-current" />,
-			},
-			{
-				title: "2026-04-10 Sierra",
-				href: "/docs/business-ideas/daily-picks/2026-04-10%20-%20Sierra",
-				icon: () => <Book className="w-4 h-4 text-current" />,
-			},
-			{
-				title: "2026-04-11 Hebbia",
-				href: "/docs/business-ideas/daily-picks/2026-04-11%20-%20Hebbia",
-				icon: () => <Book className="w-4 h-4 text-current" />,
-			},
-			{
-				title: "2026-04-12 Nimble",
-				href: "/docs/business-ideas/daily-picks/2026-04-12%20-%20Nimble",
-				icon: () => <Book className="w-4 h-4 text-current" />,
-			},
-			{
-				title: "2026-04-13 Sycamore",
-				href: "/docs/business-ideas/daily-picks/2026-04-13%20-%20Sycamore",
-				icon: () => <Book className="w-4 h-4 text-current" />,
-			},
+			{ title: "Overview", href: "/docs/companies", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Sierra", href: "/docs/companies/sierra", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Hebbia", href: "/docs/companies/hebbia", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Nimble", href: "/docs/companies/nimble", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Sycamore", href: "/docs/companies/sycamore", icon: () => <Book className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
+		title: "Themes",
+		Icon: () => <Binoculars className="w-4 h-4 text-current" />,
+		list: [
+			{ title: "Overview", href: "/docs/themes", icon: () => <Book className="w-4 h-4 text-current" /> },
 		],
 	},
 ];
 
 export const examples: Content[] = [
+
 
 	{
 		title: "Examples",
