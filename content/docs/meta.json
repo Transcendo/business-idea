@@ -2,6 +2,7 @@
   "title": "guide",
   "root": true,
   "pages": [
+    "weekly-picks",
     "ai-agents",
     "developer-tools",
     "cybersecurity",
