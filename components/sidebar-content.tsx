@@ -2,21 +2,21 @@ import type { Folder, Root } from "fumadocs-core/page-tree";
 import type { LucideIcon } from "lucide-react";
 import {
 	Activity,
+	AppWindow,
+	Binoculars,
+	Book,
+	BotIcon,
+	Briefcase,
+	CircleHelp,
+	Database,
+	FileBoxIcon,
 	FileSearch,
+	FlaskConical,
+	Gauge,
 	Globe,
 	GraduationCap,
 	Headphones,
 	HeartPulse,
-	AppWindow,
-	Binoculars,
-	Briefcase,
-	Book,
-	BotIcon,
-	CircleHelp,
-	Database,
-	FileBoxIcon,
-	FlaskConical,
-	Gauge,
 	Home,
 	Key,
 	KeyRound,
@@ -2991,6 +2991,64 @@ C0.7,239.6,62.1,0.5,62.2,0.4c0,0,54,13.8,119.9,30.8S302.1,62,302.2,62c0.2,0,0.2,
 
 export const contents: Content[] = [
 	{
+		title: "AI Agents",
+		Icon: () => <BotIcon className="w-4 h-4 text-current" />,
+		list: [
+			{ title: "Overview", href: "/docs/ai-agents", icon: () => <Book className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
+		title: "Developer Tools",
+		Icon: () => <Zap className="w-4 h-4 text-current" />,
+		list: [
+			{ title: "Overview", href: "/docs/developer-tools", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Nimble", href: "/docs/companies/nimble", icon: () => <Globe className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
+		title: "Cybersecurity",
+		Icon: () => <ShieldCheck className="w-4 h-4 text-current" />,
+		list: [
+			{ title: "Overview", href: "/docs/cybersecurity", icon: () => <Book className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
+		title: "Fintech",
+		Icon: () => <Activity className="w-4 h-4 text-current" />,
+		list: [
+			{ title: "Overview", href: "/docs/fintech", icon: () => <Book className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
+		title: "Healthcare",
+		Icon: () => <HeartPulse className="w-4 h-4 text-current" />,
+		list: [
+			{ title: "Overview", href: "/docs/healthcare", icon: () => <Book className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
+		title: "Climate & Energy",
+		Icon: () => <FlaskConical className="w-4 h-4 text-current" />,
+		list: [
+			{ title: "Overview", href: "/docs/climate-energy", icon: () => <Book className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
+		title: "Robotics & Industrial",
+		Icon: () => <Activity className="w-4 h-4 text-current" />,
+		list: [
+			{ title: "Overview", href: "/docs/robotics-industrial", icon: () => <Book className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
+		title: "Vertical AI",
+		Icon: () => <Binoculars className="w-4 h-4 text-current" />,
+		list: [
+			{ title: "Overview", href: "/docs/vertical-ai", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Hebbia", href: "/docs/companies/hebbia", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
 		title: "Companies",
 		Icon: () => <Briefcase className="w-4 h-4 text-current" />,
 		list: [
@@ -3001,18 +3059,10 @@ export const contents: Content[] = [
 			{ title: "Sycamore", href: "/docs/companies/sycamore", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 		],
 	},
-	{
-		title: "Sectors",
-		Icon: () => <Binoculars className="w-4 h-4 text-current" />,
-		list: [
-			{ title: "Overview", href: "/docs/sectors", icon: () => <Book className="w-4 h-4 text-current" /> },
-			{ title: "Education", href: "/docs/sectors/education", icon: () => <GraduationCap className="w-4 h-4 text-current" /> },
-			{ title: "Healthcare", href: "/docs/sectors/healthcare", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
-		],
-	},
 ];
 
 export const examples: Content[] = [
+
 
 
 
