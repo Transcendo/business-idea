@@ -2,6 +2,11 @@ import type { Folder, Root } from "fumadocs-core/page-tree";
 import type { LucideIcon } from "lucide-react";
 import {
 	Activity,
+	FileSearch,
+	Globe,
+	GraduationCap,
+	Headphones,
+	HeartPulse,
 	AppWindow,
 	Binoculars,
 	Briefcase,
@@ -2990,22 +2995,25 @@ export const contents: Content[] = [
 		Icon: () => <Briefcase className="w-4 h-4 text-current" />,
 		list: [
 			{ title: "Overview", href: "/docs/companies", icon: () => <Book className="w-4 h-4 text-current" /> },
-			{ title: "Sierra", href: "/docs/companies/sierra", icon: () => <Book className="w-4 h-4 text-current" /> },
-			{ title: "Hebbia", href: "/docs/companies/hebbia", icon: () => <Book className="w-4 h-4 text-current" /> },
-			{ title: "Nimble", href: "/docs/companies/nimble", icon: () => <Book className="w-4 h-4 text-current" /> },
-			{ title: "Sycamore", href: "/docs/companies/sycamore", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Sierra", href: "/docs/companies/sierra", icon: () => <Headphones className="w-4 h-4 text-current" /> },
+			{ title: "Hebbia", href: "/docs/companies/hebbia", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
+			{ title: "Nimble", href: "/docs/companies/nimble", icon: () => <Globe className="w-4 h-4 text-current" /> },
+			{ title: "Sycamore", href: "/docs/companies/sycamore", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
-		title: "Themes",
+		title: "Sectors",
 		Icon: () => <Binoculars className="w-4 h-4 text-current" />,
 		list: [
-			{ title: "Overview", href: "/docs/themes", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Overview", href: "/docs/sectors", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Education", href: "/docs/sectors/education", icon: () => <GraduationCap className="w-4 h-4 text-current" /> },
+			{ title: "Healthcare", href: "/docs/sectors/healthcare", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
 		],
 	},
 ];
 
 export const examples: Content[] = [
+
 
 
 	{
