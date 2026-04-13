@@ -2999,6 +2999,12 @@ export const contents: Content[] = [
 			{ title: "Hebbia", href: "/docs/companies/hebbia", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "Nimble", href: "/docs/companies/nimble", icon: () => <Globe className="w-4 h-4 text-current" /> },
 			{ title: "Sycamore", href: "/docs/companies/sycamore", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
+			{ title: "智谱", href: "/docs/companies/zhipu", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
+			{ title: "月之暗面", href: "/docs/companies/moonshot", icon: () => <Globe className="w-4 h-4 text-current" /> },
+			{ title: "MiniMax", href: "/docs/companies/minimax", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
+			{ title: "百川智能", href: "/docs/companies/baichuan", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
+			{ title: "阶跃星辰", href: "/docs/companies/stepfun", icon: () => <Activity className="w-4 h-4 text-current" /> },
+			{ title: "零一万物", href: "/docs/companies/01ai", icon: () => <Zap className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
