@@ -2989,39 +2989,37 @@ export const contents: Content[] = [
 		title: "Business Ideas",
 		Icon: () => <Briefcase className="w-4 h-4 text-current" />,
 		list: [
-			{ title: "Daily Picks", href: "/docs/business-ideas", icon: () => <Book className="w-4 h-4 text-current" /> },
-			{ title: "2026-04-10 Sierra", href: "/docs/business-ideas/daily-picks/2026-04-10%20-%20Sierra", icon: () => <Book className="w-4 h-4 text-current" /> },
-			{ title: "2026-04-11 Hebbia", href: "/docs/business-ideas/daily-picks/2026-04-11%20-%20Hebbia", icon: () => <Book className="w-4 h-4 text-current" /> },
-			{ title: "2026-04-12 Nimble", href: "/docs/business-ideas/daily-picks/2026-04-12%20-%20Nimble", icon: () => <Book className="w-4 h-4 text-current" /> },
-			{ title: "2026-04-13 Sycamore", href: "/docs/business-ideas/daily-picks/2026-04-13%20-%20Sycamore", icon: () => <Book className="w-4 h-4 text-current" /> },
-		],
-	},
-	{
-		title: "AI Card",
-		Icon: () => <FileBoxIcon className="w-4 h-4 text-current" />,
-		list: [
-			{ title: "ASI", href: "/docs/ai-card/asi", icon: () => <Book className="w-4 h-4 text-current" /> },
-			{ title: "AIGC", href: "/docs/ai-card/aigc", icon: () => <Book className="w-4 h-4 text-current" /> },
-		],
-	},
-	{
-		title: "NestHub",
-		Icon: () => <Home className="w-4 h-4 text-current" />,
-		list: [
-			{ title: "字节跳动（北京）租房避坑指南", href: "/docs/nesthub/bytedance-beijing-renting-guide", icon: () => <Book className="w-4 h-4 text-current" /> },
-			{ title: "字节跳动（北京）租房地图", href: "/docs/nesthub/bytedance-beijing-area-map", icon: () => <Navigation className="w-4 h-4 text-current" /> },
-		],
-	},
-	{
-		title: "Career",
-		Icon: () => <Briefcase className="w-4 h-4 text-current" />,
-		list: [
-			{ title: "金三银四大厂投递入口汇总", href: "/docs/career/spring-referral-and-apply-hub-2026", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{
+				title: "Daily Picks",
+				href: "/docs/business-ideas",
+				icon: () => <Book className="w-4 h-4 text-current" />,
+			},
+			{
+				title: "2026-04-10 Sierra",
+				href: "/docs/business-ideas/daily-picks/2026-04-10%20-%20Sierra",
+				icon: () => <Book className="w-4 h-4 text-current" />,
+			},
+			{
+				title: "2026-04-11 Hebbia",
+				href: "/docs/business-ideas/daily-picks/2026-04-11%20-%20Hebbia",
+				icon: () => <Book className="w-4 h-4 text-current" />,
+			},
+			{
+				title: "2026-04-12 Nimble",
+				href: "/docs/business-ideas/daily-picks/2026-04-12%20-%20Nimble",
+				icon: () => <Book className="w-4 h-4 text-current" />,
+			},
+			{
+				title: "2026-04-13 Sycamore",
+				href: "/docs/business-ideas/daily-picks/2026-04-13%20-%20Sycamore",
+				icon: () => <Book className="w-4 h-4 text-current" />,
+			},
 		],
 	},
 ];
 
 export const examples: Content[] = [
+
 	{
 		title: "Examples",
 		href: "/docs/examples/next",
