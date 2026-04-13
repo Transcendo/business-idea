@@ -2995,6 +2995,8 @@ export const contents: Content[] = [
 		Icon: () => <BotIcon className="w-4 h-4 text-current" />,
 		list: [
 			{ title: "Overview", href: "/docs/ai-agents", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Sierra", href: "/docs/companies/sierra", icon: () => <Headphones className="w-4 h-4 text-current" /> },
+			{ title: "Sycamore", href: "/docs/companies/sycamore", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
@@ -3034,10 +3036,38 @@ export const contents: Content[] = [
 		],
 	},
 	{
-		title: "Robotics & Industrial",
+		title: "Embodied AI",
 		Icon: () => <Activity className="w-4 h-4 text-current" />,
 		list: [
-			{ title: "Overview", href: "/docs/robotics-industrial", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Overview", href: "/docs/embodied-ai", icon: () => <Book className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
+		title: "Robotics",
+		Icon: () => <Activity className="w-4 h-4 text-current" />,
+		list: [
+			{ title: "Overview", href: "/docs/robotics", icon: () => <Book className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
+		title: "Emotional Companions",
+		Icon: () => <HeartPulse className="w-4 h-4 text-current" />,
+		list: [
+			{ title: "Overview", href: "/docs/emotional-companions", icon: () => <Book className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
+		title: "Gaming",
+		Icon: () => <GraduationCap className="w-4 h-4 text-current" />,
+		list: [
+			{ title: "Overview", href: "/docs/gaming", icon: () => <Book className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
+		title: "Open World",
+		Icon: () => <Globe className="w-4 h-4 text-current" />,
+		list: [
+			{ title: "Overview", href: "/docs/open-world", icon: () => <Book className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
@@ -3062,6 +3092,7 @@ export const contents: Content[] = [
 ];
 
 export const examples: Content[] = [
+
 
 
 
