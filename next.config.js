@@ -1,7 +1,7 @@
 import { createMDX } from "fumadocs-mdx/next";
 
 const isGithubPages = process.env.GITHUB_ACTIONS === "true";
-const repoName = "content-show";
+const repoName = "business-idea";
 const basePath = isGithubPages ? `/${repoName}` : "";
 
 /** @type {import('next').NextConfig} */
