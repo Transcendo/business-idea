@@ -103,6 +103,14 @@ export const contents: Content[] = [
 		],
 	},
 	{
+		title: "Business Ideas",
+		Icon: () => <Briefcase className="w-4 h-4 text-current" />,
+		list: [
+			{ title: "Overview", href: "/docs/business-ideas", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Luminai", href: "/docs/business-ideas/daily-picks/luminai", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
 		title: "AI Agents",
 		Icon: () => <BotIcon className="w-4 h-4 text-current" />,
 		list: [
