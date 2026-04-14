@@ -90,6 +90,7 @@ export const contents: Content[] = [
 		Icon: () => <Briefcase className="w-4 h-4 text-current" />,
 		list: [
 			{ title: "Overview", href: "/docs/weekly-picks", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Luminai", href: "/docs/weekly-picks/luminai", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
 			{ title: "Sierra", href: "/docs/weekly-picks/sierra", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "Hebbia", href: "/docs/weekly-picks/hebbia", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "Nimble", href: "/docs/weekly-picks/nimble", icon: () => <Globe className="w-4 h-4 text-current" /> },
@@ -105,10 +106,7 @@ export const contents: Content[] = [
 	{
 		title: "Business Ideas",
 		Icon: () => <Briefcase className="w-4 h-4 text-current" />,
-		list: [
-			{ title: "Overview", href: "/docs/business-ideas", icon: () => <Book className="w-4 h-4 text-current" /> },
-			{ title: "Luminai", href: "/docs/business-ideas/daily-picks/luminai", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
-		],
+		list: [{ title: "Overview", href: "/docs/business-ideas", icon: () => <Book className="w-4 h-4 text-current" /> }],
 	},
 	{
 		title: "AI Agents",
