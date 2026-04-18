@@ -90,6 +90,8 @@ export const contents: Content[] = [
 		Icon: () => <Briefcase className="w-4 h-4 text-current" />,
 		list: [
 			{ title: "Overview", href: "/docs/weekly-picks", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Parasail", href: "/docs/weekly-picks/parasail", icon: () => <Zap className="w-4 h-4 text-current" /> },
+			{ title: "EdSights", href: "/docs/weekly-picks/edsights", icon: () => <GraduationCap className="w-4 h-4 text-current" /> },
 			{ title: "Luminai", href: "/docs/weekly-picks/luminai", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
 			{ title: "Sierra", href: "/docs/weekly-picks/sierra", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "Hebbia", href: "/docs/weekly-picks/hebbia", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
@@ -122,7 +124,16 @@ export const contents: Content[] = [
 		Icon: () => <Zap className="w-4 h-4 text-current" />,
 		list: [
 			{ title: "Overview", href: "/docs/developer-tools", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Parasail", href: "/docs/developer-tools/parasail", icon: () => <Zap className="w-4 h-4 text-current" /> },
 			{ title: "Nimble", href: "/docs/companies/nimble", icon: () => <Globe className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
+		title: "Education",
+		Icon: () => <GraduationCap className="w-4 h-4 text-current" />,
+		list: [
+			{ title: "Overview", href: "/docs/education", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "EdSights", href: "/docs/education/edsights", icon: () => <GraduationCap className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
