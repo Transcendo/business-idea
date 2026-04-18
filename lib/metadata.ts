@@ -7,9 +7,9 @@ export function createMetadata(override: Metadata): Metadata {
 		openGraph: {
 			title: override.title ?? undefined,
 			description: override.description ?? undefined,
-			url: "https://better-auth.com",
+			url: baseUrl,
 			images: "/og.png",
-			siteName: "Better Auth",
+			siteName: "AI 分类研究库",
 			...override.openGraph,
 		},
 		twitter: {

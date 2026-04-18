@@ -17,6 +17,9 @@ const nextConfig = {
 			"@radix-ui/react-scroll-area",
 		],
 	},
+	turbopack: {
+		root: import.meta.dirname,
+	},
 	images: {
 		unoptimized: true,
 		remotePatterns: [

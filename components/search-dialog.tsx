@@ -52,7 +52,7 @@ export default function CustomSearchDialog(props: SharedProps) {
 					<div className="inline-flex items-center gap-2 text-fd-muted-foreground">
 						<ArrowRight className="size-4" />
 						<p>
-							Jump to{" "}
+							跳转到{" "}
 							<span className="font-medium text-fd-foreground">
 								{page.name}
 							</span>
@@ -101,7 +101,7 @@ export default function CustomSearchDialog(props: SharedProps) {
 				/>
 				<SearchDialogFooter>
 					<span className="text-xs text-fd-muted-foreground">
-						Search powered by the local Fumadocs index
+						搜索结果来自本地 Fumadocs 索引
 					</span>
 				</SearchDialogFooter>
 			</SearchDialogContent>

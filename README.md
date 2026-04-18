@@ -1,106 +1,78 @@
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="public/branding/better-auth-logo-wordmark-dark.svg" />
+# AI 分类研究库
 
-  <source media="(prefers-color-scheme: light)" srcset="public/branding/better-auth-logo-wordmark-light.svg" />
+这是一个面向中文读者的公开 AI 研究项目，用来按分类长期整理公司、产品切口和方向变化。
 
-  <img alt="Better Auth" src="public/branding/better-auth-logo-wordmark-dark.svg" width="280" />
-</picture>
+项目不是日报堆叠，也不是营销稿合集。新的研究内容会先做来源核查，再沉淀到稳定分类里，例如 AI 智能体、开发者工具、基础模型、医疗健康和垂直 AI。
 
-### Fumadocs Frontend
-
-Standalone Better Auth documentation frontend built with Next.js and Fumadocs.
-
-[![Website](https://img.shields.io/badge/better--auth.com-000?style=flat\&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNDUiIHZpZXdCb3g9IjAgMCA2MCA0NSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTAgMEgxNVYxNUgzMFYzMEgxNVY0NUgwVjMwVjE1VjBaTTQ1IDMwVjE1SDMwVjBINDVINjBWMTVWMzBWNDVINDVIMzBWMzBINDVaIiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==\&logoColor=white)](https://better-auth.com)
-[![GitHub Stars](https://img.shields.io/github/stars/better-auth/better-auth?style=flat\&logo=github\&label=stars\&color=24292e)](https://github.com/better-auth/better-auth)
-[![License](https://img.shields.io/badge/license-MIT-blue?style=flat)](LICENSE)
-
-***
-
-## Quick Start
+## 快速开始
 
 ```bash
-# install
 pnpm install
-
-# develop
 pnpm dev
 ```
 
-Open **[localhost:3000/docs/introduction](http://localhost:3000/docs/introduction)** to preview.
-
-## Stack
-
-- **Framework**: Next.js 16 (App Router, Turbopack)
-- **Styling**: Tailwind CSS 4
-- **Docs**: Fumadocs
-- **Search**: Fumadocs static search
-- **Icons**: Lucide React
-- **Fonts**: Geist Sans & Geist Mono
-
-## Structure
-
-```
-├─ app/
-│  ├─ page.tsx              # Redirects to the docs
-│  ├─ api/search/           # Static Fumadocs search index
-│  └─ docs/[[...slug]]/     # Documentation pages
-│
-├─ components/
-│  ├─ docs/                 # Documentation components
-│  ├─ ui/                   # Shared primitives
-│  └─ icons/                # Brand icons & logo
-│
-├─ content/docs/            # MDX documentation files
-│
-├─ lib/
-│  ├─ source.ts             # Fumadocs content source
-│  └─ utils.ts              # Utilities
-│
-└─ public/
-   └─ branding/             # Logo assets (SVG + PNG)
-```
-
-## Scripts
+打开 [localhost:3000](http://localhost:3000) 预览首页。如果 3000 端口被占用，可以使用：
 
 ```bash
-pnpm dev          # Start dev server (Turbopack)
-pnpm build        # Production build
-pnpm start        # Serve the static out/ build
-pnpm typecheck    # Type-check the app
+pnpm exec next dev --port 3001
 ```
 
+## 技术栈
 
-## GitHub Pages Deployment
+- 框架：Next.js 16
+- 文档系统：Fumadocs
+- 样式：Tailwind CSS 4
+- 包管理器：pnpm
+- 部署目标：静态导出 / GitHub Pages
 
-This project is already configured for **static export** with Next.js:
+## 目录结构
 
-- `next.config.js` uses `output: "export"`
-- production output is generated into `out/`
+```text
+app/
+  page.tsx                 首页
+  docs/                    Fumadocs 路由与文档布局
+  api/search/              搜索索引接口
 
-### Local production check
+components/
+  docs/                    文档外壳与海报导出组件
+  ui/                      通用 UI 组件
+
+content/docs/
+  weekly-picks/            当前周推荐，只保留本周内容
+  ai-agents/               AI 智能体方向
+  developer-tools/         开发者工具与基础设施
+  foundation-models/       基础模型、平台与终端落地
+  cybersecurity/           网络安全方向
+  fintech/                 金融科技方向
+  healthcare/              医疗健康方向
+  education/               教育方向
+  climate-energy/          气候与能源方向
+  embodied-ai/             具身智能方向
+  robotics/                机器人方向
+  emotional-companions/    情感陪伴方向
+  gaming/                  游戏方向
+  open-world/              开放世界方向
+  vertical-ai/             垂直 AI 方向
+  themes/                  主题框架与判断方法
+
+AI Knowledge/              研究草稿与知识笔记
+references/                写作规范与来源策略
+skills/                    本地研究工作流技能
+```
+
+## 内容规则
+
+- 先找可信公开来源，再写判断。
+- 区分事实、解释和待验证问题。
+- 本周推荐只展示当前周项目，过期后从该栏目移除。
+- 值得长期保留的内容迁入对应分类。
+- 尽量先做内容结构调整，不轻易改框架代码。
+
+## 常用命令
 
 ```bash
-pnpm install
-pnpm build
-pnpm start
+pnpm dev          # 启动本地开发服务
+pnpm build        # 生产构建
+pnpm start        # 预览 out/ 静态产物
+pnpm typecheck    # TypeScript 类型检查
 ```
-
-Then open the locally served static site.
-
-### Deploy with GitHub Actions
-
-This repository includes a GitHub Actions workflow:
-
-- `.github/workflows/deploy-github-pages.yml`
-
-To enable deployment:
-
-1. Go to **GitHub → Settings → Pages**
-2. Under **Build and deployment**, set **Source** to **GitHub Actions**
-3. Push to `main`
-4. GitHub Actions will build the site and deploy the `out/` directory to Pages
-
-### Notes
-
-- If you later publish under a repository subpath (for example `https://<user>.github.io/content-show/`), you may also need to configure `basePath` and `assetPrefix` in `next.config.js`.
-- If you deploy to a custom domain or root domain via GitHub Pages, the current setup is the simplest path.

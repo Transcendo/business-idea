@@ -64,7 +64,7 @@ export function ExportPosterButton({
 			}}
 		>
 			<Download className="size-4" />
-			{loading ? "Exporting..." : "Export 600×800（旧）"}
+			{loading ? "导出中..." : "导出海报"}
 		</button>
 	);
 }

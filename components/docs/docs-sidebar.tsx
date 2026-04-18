@@ -82,7 +82,7 @@ export function DocsSidebar() {
 				onClick={() => setOpenSearch(true)}
 			>
 				<Search className="size-4 shrink-0" />
-				<span className="truncate">Search</span>
+				<span className="truncate">搜索</span>
 				<kbd className="ml-auto inline-flex items-center gap-0.5 shrink-0 text-[10px] font-mono text-foreground/40 border border-foreground/10 rounded-md px-1.5 py-0.5">
 					<span className="text-[11px]">&#8984;</span>K
 				</kbd>
@@ -148,7 +148,7 @@ export function DocsSidebar() {
 			{/* Footer: GitHub + Theme Toggle */}
 			<div className="flex items-center gap-1 p-2 border-t border-foreground/5 text-foreground/40">
 				<a
-					href="https://github.com/better-auth/better-auth"
+					href="https://github.com/Transcendo/business-idea"
 					target="_blank"
 					rel="noreferrer noopener"
 					className="inline-flex items-center justify-center size-8 hover:text-foreground/70 hover:bg-foreground/5 transition-colors"
@@ -184,7 +184,7 @@ function SidebarSection({
 		<div className="pt-0 pb-1">
 			{section.href && (
 				<SidebarLink href={section.href} active={pathname === section.href}>
-					Overview
+					概览
 				</SidebarLink>
 			)}
 			{section.list.map((item, i) => {

@@ -13,7 +13,7 @@ export function ThemeToggle() {
 			onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}
 			suppressHydrationWarning
 		>
-			{/* Sun icon - visible in light mode */}
+			{/* 浅色模式图标 */}
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="1em"
@@ -49,7 +49,7 @@ export function ThemeToggle() {
 				</g>
 				<circle cx="12" cy="12" r="6" fill="#424242" />
 			</svg>
-			{/* Moon icon - visible in dark mode */}
+			{/* 深色模式图标 */}
 			<svg
 				className="hidden [html.dark_&]:block h-6 w-5"
 				viewBox="0 0 32 32"
@@ -62,7 +62,7 @@ export function ThemeToggle() {
 					fill="#fff"
 				/>
 			</svg>
-			<span className="sr-only">Toggle theme</span>
+			<span className="sr-only">切换主题</span>
 		</Button>
 	);
 }

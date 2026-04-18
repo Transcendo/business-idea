@@ -1,13 +1,16 @@
 {
-  "title": "guide",
+  "title": "AI 分类研究库",
   "root": true,
   "pages": [
+    "index",
     "weekly-picks",
     "ai-agents",
     "developer-tools",
+    "foundation-models",
     "cybersecurity",
     "fintech",
     "healthcare",
+    "education",
     "climate-energy",
     "embodied-ai",
     "robotics",
@@ -15,6 +18,6 @@
     "gaming",
     "open-world",
     "vertical-ai",
-    "companies"
+    "themes"
   ]
 }
