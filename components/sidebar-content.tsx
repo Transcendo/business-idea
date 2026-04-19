@@ -90,6 +90,10 @@ export const contents: Content[] = [
 		Icon: () => <Briefcase className="w-4 h-4 text-current" />,
 		list: [
 			{ title: "概览", href: "/docs/weekly-picks", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "NeuBird", href: "/docs/weekly-picks/neubird", icon: () => <Activity className="w-4 h-4 text-current" /> },
+			{ title: "Hightouch", href: "/docs/weekly-picks/hightouch", icon: () => <Briefcase className="w-4 h-4 text-current" /> },
+			{ title: "Gitar", href: "/docs/weekly-picks/gitar", icon: () => <Zap className="w-4 h-4 text-current" /> },
+			{ title: "InsightFinder", href: "/docs/weekly-picks/insightfinder", icon: () => <Activity className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
@@ -108,6 +112,9 @@ export const contents: Content[] = [
 			{ title: "概览", href: "/docs/developer-tools", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "Parasail", href: "/docs/developer-tools/parasail", icon: () => <Zap className="w-4 h-4 text-current" /> },
 			{ title: "Nimble", href: "/docs/developer-tools/nimble", icon: () => <Globe className="w-4 h-4 text-current" /> },
+			{ title: "NeuBird", href: "/docs/developer-tools/neubird", icon: () => <Activity className="w-4 h-4 text-current" /> },
+			{ title: "Gitar", href: "/docs/developer-tools/gitar", icon: () => <Zap className="w-4 h-4 text-current" /> },
+			{ title: "InsightFinder", href: "/docs/developer-tools/insightfinder", icon: () => <Activity className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
@@ -184,6 +191,7 @@ export const contents: Content[] = [
 		list: [
 			{ title: "概览", href: "/docs/vertical-ai", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "Hebbia", href: "/docs/vertical-ai/hebbia", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
+			{ title: "Hightouch", href: "/docs/vertical-ai/hightouch", icon: () => <Briefcase className="w-4 h-4 text-current" /> },
 		],
 	},
 ];
