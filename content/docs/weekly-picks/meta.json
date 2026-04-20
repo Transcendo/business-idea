@@ -1,4 +1,11 @@
 {
   "title": "本周推荐",
-  "pages": ["index", "neubird", "hightouch", "gitar", "insightfinder"]
+  "pages": [
+    "index",
+    "neubird",
+    "hightouch",
+    "gitar",
+    "insightfinder",
+    "factory"
+  ]
 }
