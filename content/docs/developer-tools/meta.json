@@ -2,6 +2,7 @@
   "title": "开发者工具",
   "pages": [
     "index",
+    "agentmail",
     "qodo",
     "parasail",
     "nimble",
