@@ -1,0 +1,57 @@
+---
+title: Capsule Security
+description: Capsule Security 值得看，因为它不是在给 AI agent 加“提醒”，而是在补一层更硬的 runtime 防火墙；如果 agent 真要进企业生产环境，这种“先拦住再执行”的安全层会比很多花哨的编排工具更接近刚需。
+created: 2026-04-25
+tags:
+  - capsule-security
+  - weekly-picks
+  - cybersecurity
+---
+# Capsule Security
+
+## 一句话判断
+Capsule Security 值得看，因为它不是在给 AI agent 加“提醒”，而是在补一层更硬的 runtime 防火墙；如果 agent 真要进企业生产环境，这种“先拦住再执行”的安全层会比很多花哨的编排工具更接近刚需。
+
+## 为什么推荐
+1. **切的是 agent 规模化落地的第一道硬门槛。** 企业愿意试 agent，不代表愿意放任 agent 直接调用工具、读敏感数据、发外部请求。Capsule 解决的正是“能不能让 agent 在生产里被信任”这个最现实的问题。
+2. **它抓住了安全团队的语言。** 不是讲抽象的 AI 安全，而是讲 runtime 控制、异常动作阻断、审计轨迹、敏感数据泄露、权限边界。这类表述更容易进入预算讨论，而不是停留在 PoC 演示。
+3. **产品位置很像 agent 时代的基础设施。** 它不替代 Claude Code、Copilot、Agentforce 之类上层产品，而是横插在执行路径里做监控和拦截；如果做成，这层会很难被上层产品自己完全替掉。
+4. **团队背景对口。** 创始人明显是安全老兵路线，不是“AI 转行做安全”的包装项目。这个方向需要的不是想象力，而是对企业安全、治理和攻击面的长期理解。
+
+## 产品 / 项目解析
+Capsule 的核心思路很直接：**别等 agent 出事后再看日志，而是在它真正执行动作之前就判断风险。**
+
+它公开强调的能力包括：
+- 运行时持续监控 agent 行为
+- 在调用工具、访问数据、执行动作时做实时判断
+- 阻断危险命令、越权访问、敏感信息外泄、异常动作链
+- 提供审计和治理所需的 telemetry
+- 通过无代理/低侵入方式接入现有 agent 平台
+
+从产品形态看，它更像一层“guardian agent / runtime policy layer”，而不是传统意义上的安全告警工具。这个位置很重要，因为 agent 的风险不是静态漏洞，而是**在任务执行过程中逐步偏航**：比如 prompt injection、被污染的数据源诱导、过度授权、工具滥用、连锁式外泄。
+
+如果说很多企业 AI 安全产品在做“事后取证”，Capsule 试图做的是“事中阻断”。这条路更难，但也更值钱。
+
+## 投资人视角的批判与风险
+1. **赛道会很拥挤，而且会被平台顺手做掉一部分。** OpenAI、Anthropic、Microsoft、ServiceNow、Salesforce 这些平台天然有动力把安全和治理做进自己的 agent 栈里。Capsule 必须证明自己不是过渡层。
+2. **安全产品卖的是信任，不是 demo。** 只要它允许误报、漏报、延迟执行，客户就会犹豫；但如果放宽策略，又可能失去防护价值。这个平衡非常难，尤其在 enterprise 里。
+3. **采购门槛高，销售周期不会短。** 安全团队愿意看，不代表业务团队愿意立刻改工作流。它需要跨安全、IT、平台和业务 owner 多方共识，落地成本可能不低。
+4. **“runtime security for agents” 概念成立，不代表独立公司一定成立。** 这类能力可能最后变成更大安全平台、MCP 网关、身份治理或 agent 平台的一部分，独立估值能否持续，要看它能否形成真正可复用的控制面。
+
+## 官方链接 / 关键外链
+- 官网: https://www.capsulesecurity.io/
+- 产品页: https://www.capsulesecurity.io/
+- 融资公告: https://www.businesswire.com/news/home/20260415670902/en/Capsule-Security-Exits-Stealth-With-%247M-to-Stop-AI-Agents-From-Going-Rogue-at-Runtime
+- 相关报道: https://venturebeat.com/business/capsule-security-exits-stealth-with-7m-to-stop-ai-agents-from-going-rogue-at-runtime/
+
+## 后续跟踪点
+- 它能不能拿到真正的企业安全预算，而不是只停留在 AI 团队试用
+- 误报/漏报/性能开销这几个核心指标能不能过生产门槛
+- 是否能沉淀出可复用的 agent policy / governance 标准，而不是每个客户都重做一遍
+- 大平台是否把类似 runtime guardrail 直接内建，压缩它的独立空间
+
+## 最终落盘的本地文档路径
+`~/Documents/djd-obsidian/djd/AI Startups/Daily Picks/2026-04-25 - Capsule Security.md`
+
+## 最终一句话
+Capsule Security 不是最炫的 AI 创业故事，但它盯的是 agent 真正会出事的地方：执行时刻；如果企业 agent 时代真的到来，这种 runtime 保护层会比很多上层应用更接近“卖水的人”。

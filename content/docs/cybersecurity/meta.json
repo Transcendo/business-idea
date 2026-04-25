@@ -1,4 +1,7 @@
 {
   "title": "网络安全",
-  "pages": ["index"]
+  "pages": [
+    "index",
+    "capsule-security"
+  ]
 }
