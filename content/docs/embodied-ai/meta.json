@@ -1,4 +1,7 @@
 {
   "title": "具身智能",
-  "pages": ["index"]
+  "pages": [
+    "index",
+    "antioch"
+  ]
 }

@@ -90,6 +90,7 @@ export const contents: Content[] = [
 		Icon: () => <Briefcase className="w-4 h-4 text-current" />,
 		list: [
 			{ title: "概览", href: "/docs/weekly-picks", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Antioch", href: "/docs/weekly-picks/antioch", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Capsule Security", href: "/docs/weekly-picks/capsule-security", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "AgentMail", href: "/docs/weekly-picks/agentmail", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Abridge", href: "/docs/weekly-picks/abridge", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
@@ -172,7 +173,10 @@ export const contents: Content[] = [
 	{
 		title: "具身智能",
 		Icon: () => <Activity className="w-4 h-4 text-current" />,
-		list: [{ title: "概览", href: "/docs/embodied-ai", icon: () => <Book className="w-4 h-4 text-current" /> }],
+		list: [
+			{ title: "概览", href: "/docs/embodied-ai", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Antioch", href: "/docs/embodied-ai/antioch", icon: () => <Activity className="w-4 h-4 text-current" /> },
+		],
 	},
 	{
 		title: "机器人",
