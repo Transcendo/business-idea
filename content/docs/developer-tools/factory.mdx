@@ -1,11 +1,11 @@
 ---
 title: Factory
-description: 一家试图把企业软件工程里的长周期任务，交给可治理、可切换模型、可嵌入现有流程的 coding agent 系统的公司。
-created: 2026-04-20
+description: 企业级 AI coding agent 平台，试图把代码改写、PR、CI、调试与跨工具协同代理化。
+created: 2026-04-27
 tags:
   - factory
   - coding-agent
-  - enterprise-software
+  - enterprise-ai
   - developer-tools
   - ai-agents
 ---
@@ -13,52 +13,42 @@ tags:
 # Factory
 
 ## 一句话判断
-Factory 值得看，不是因为“AI 写代码”这个题材还热，而是因为它在往一个更难、也更值钱的位置走：让大企业把软件工程里的长周期工作，逐步交给可治理、可切换模型、可嵌入现有流程的 agent 系统。
+Factory 是我今天更愿意认真盯着的企业级 AI coding/agent 平台：它不是在卖“更聪明的聊天框”，而是在赌企业软件工程会被代理化，但它的护城河还远没到能高枕无忧的程度。
 
 ## 为什么推荐
-1. **它不是做给独立开发者爽一下的工具，而是在碰真正复杂的企业工程组织。** 官方和公开报道里出现的客户包括 Nvidia、Adobe、EY、Palo Alto Networks、Morgan Stanley、Adyen，这种客户画像说明它卖的不是玩具，而是要进严肃生产环境。
-2. **它的产品方向不是“更会补全代码”，而是“把工程任务组织成可长期运行的 agent workflow”。** 官网在强调 Missions、Desktop、always-on agents、governance，这比单点代码生成更接近企业真正愿意持续付费的价值。
-3. **多模型路由这件事，放在企业场景里比在个人开发者场景里更重要。** 一家公司内部会同时考虑性能、成本、地区合规、供应商风险和特定任务表现。Factory 如果真把“interface and vendor agnostic”做扎实，价值不只是更灵活，而是更接近企业级 control plane。
-4. **它开始试图定义评估标准，而不是只消费别人的 benchmark。** Legacy-Bench 这个动作我比较看重，因为它在把注意力从现代 web stack 拉回到真实企业遗留系统，这比很多 agent 公司只秀 demo 成绩更有判断力。
+1. **切入点够硬**：它做的是企业研发流程里的高频重活——代码改写、PR、CI、调试、跨工具协同，不是泛泛的 AI 助手。
+2. **产品形态更接近真落地**：官网和文档都强调终端、IDE、Web、Slack/Teams、CI/CD、war room 等工作流接入，说明它在往“工具层”而不是“演示层”走。
+3. **融资和客户信号都强**：公开信息里它刚拿到大额融资，且对外披露了企业客户和使用规模，这至少说明市场验证不是空的。
+4. **模型可切换是现实主义路线**：支持在不同 foundation model 间切换，意味着它不是把未来押在单一模型上，企业也更容易接受。
 
 ## 产品 / 项目解析
-从公开信息看，Factory 的核心不是再做一个 IDE 插件，而是在做一层“agent-native software development”的操作系统。
+Factory 的核心叙事是 **agent-native software development**。它把“Droid”作为执行单元，试图覆盖开发者日常从本地编码、代码审查，到 CI、迁移、维护、事故处理的全链路。
 
-它目前的产品叙事大致有三层：
-- **Droids**：不是一次性生成代码片段，而是能在真实工程环境里持续完成任务的 agent。
-- **Missions**：把多步、长周期、跨上下文的工作拆成可执行的任务结构，这明显是在对准企业工程里最难自动化的部分。
-- **Desktop + enterprise integrations**：说明它不满足于浏览器里的 demo，而是要进入本地系统、开发工具链和更完整的软件业务流程。
+从投资人的角度看，这个项目不是在做“AI 编程 IDE”那么简单，而是在争夺企业工程组织里的操作层：谁能理解代码上下文、权限边界、工具链状态、发布风险，并把建议真正落成 PR/脚本/动作，谁就有机会吃到更大的预算池。
 
-我觉得它真正有意思的地方，不在“还能不能比 Cursor 多写一点代码”，而在于它想把软件生产从“人盯着模型逐步生成”推向“人做监督，agent 并行推进多个工作单元”。
-
-这背后的商业含义很大：
-- 如果只是 code generation，最后容易卷到模型能力和 UI 体验。
-- 如果能往任务编排、验证、治理、长时执行、模型路由走，产品重心就从“副驾驶”变成“工程产能层”。
-
-另外，Factory 公布的 Legacy-Bench 也值得注意。企业真实软件世界里有大量 COBOL、Fortran、Java 7、C 这类老系统，最值钱的工程自动化不一定发生在 greenfield AI app，而更可能发生在这些没人想碰、但业务极关键的老系统改造里。愿意正面打这块，说明它想吃的是企业预算，不只是开发者流量。
+但也要注意：这类产品的难点不在生成代码，而在 **稳定、可控、可审计**。一旦进入企业环境，真正决定续费的往往不是 demo 效果，而是错误率、权限治理、和事故成本。
 
 ## 投资人视角的批判与风险
-1. **赛道拥挤，而且最强对手不只是创业公司。** Cursor、Anthropic、Cognition、GitHub Copilot 甚至未来更多基础模型厂商都会往 enterprise coding 走。Factory 必须证明自己不是“又一个会接多个模型的 coding agent”。
-2. **现在的高估值，很大程度上是在提前贴现未来组织级渗透。** 150M 美元 Series C、15 亿美元估值当然说明资本看好，但也意味着后面市场会要求它拿出非常明确的扩张证据，包括部署深度、净留存、任务完成率和大客户扩容。
-3. **企业工程 agent 最大的难点不是生成，而是责任边界。** 谁批准、谁回滚、谁对错误修改负责、怎么做审计、怎么管模型升级后的不确定性，这些都决定了它能不能从“好用工具”变成“默认基础设施”。
-4. **多模型策略既是卖点，也是执行负担。** 模型切换听起来很好，但要真的把不同模型的能力差异、成本结构、稳定性、合规要求和工具调用行为统一抽象起来，产品复杂度非常高。
-5. **它讲的是平台故事，平台故事最怕边界失控。** 一旦既做 agent、又做 orchestration、又做 desktop、又做 benchmark、又做 governance，团队如果节奏不稳，很容易产品面太宽、价值点反而变模糊。
+- **竞争极其拥挤**：Cursor、Claude Code、Cognition、以及一堆企业内部/开源方案都在抢同一块“AI 写代码”的蛋糕，Factory 需要证明自己不是又一个高估值跟风盘。
+- **价值主张容易被平台吞掉**：如果基础模型厂商持续下沉到代码代理和企业工作流，应用层的独立空间会被压缩。
+- **企业落地门槛高**：真正的大客户会卡 SSO、审计、权限、数据隔离、私有部署、可观测性；这些都很重，交付成本可能吞掉增长速度。
+- **“自动化”越强，风险越大**：它越接近自动改代码/执行动作，就越容易在安全、合规、责任归属上碰壁。
 
 ## 官方链接 / 关键外链
-- 官网: https://factory.ai/
-- 官方融资公告: https://factory.ai/news/series-c
-- Legacy-Bench: https://factory.ai/news/legacy-bench
-- TechCrunch 融资报道: https://techcrunch.com/2026/04/16/factory-hits-1-5b-valuation-to-build-ai-coding-for-enterprises/
+- 官方站点：<https://www.factory.ai/>
+- 企业页：<https://factory.ai/enterprise>
+- 官方融资公告：<https://factory.ai/news/series-c>
+- TechCrunch 报道：<https://techcrunch.com/2026/04/16/factory-hits-1-5b-valuation-to-build-ai-coding-for-enterprises/>
+- 文档页：<https://docs.factory.ai/enterprise>
 
 ## 后续跟踪点
-- 它能否披露更具体的企业使用数据，比如 seat 扩张、任务量、部署部门数、净收入留存
-- Missions 这种长周期 agent workflow，真实完成率和人工介入率到底怎么样
-- 多模型路由是不是实打实带来成本和质量优势，还是更多停留在销售叙事
-- 它在 legacy code、合规治理、审计回放这些企业刚需上，能否形成明显领先
-- 大客户会把它当成团队效率工具，还是逐渐把它纳入正式的软件交付流程
+- 大客户是否真的把它放进关键研发流程，而不只是试点。
+- 续费和扩展使用率，是否能证明“代理”比“Copilot 式补全”更值钱。
+- 它在权限控制、审计、私有化/隔离部署上的进展。
+- 是否能在市场开始价格战前，建立足够清晰的差异化。
 
-## 最终落盘的本地文档路径
-`~/Documents/djd-obsidian/djd/AI Startups/Daily Picks/2026-04-20 - Factory.md`
+## 最终判断
+Factory 值得看，但我会把它当成 **“高赔率、也高竞争”的企业 AI 基础设施候选**，不是已经赢了的故事。
 
-## 备注
-今天我没有选那种“看起来增长会更快”的轻型 AI 应用，而是选了一个更重、更难、但如果做成会更深地嵌进企业预算和流程的公司。Factory 的问题不是值不值得看，而是它最后能不能从一波 agent 热潮里，真正长成企业软件工程的新控制层。
+## 来源路径
+`/Users/djd/Documents/djd-obsidian/djd/AI Startups/Daily Picks/2026-04-27 - Factory.md`
