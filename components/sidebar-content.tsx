@@ -90,6 +90,7 @@ export const contents: Content[] = [
 		Icon: () => <Briefcase className="w-4 h-4 text-current" />,
 		list: [
 			{ title: "概览", href: "/docs/weekly-picks", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Era World", href: "/docs/weekly-picks/era-world", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Antioch", href: "/docs/weekly-picks/antioch", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Capsule Security", href: "/docs/weekly-picks/capsule-security", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "AgentMail", href: "/docs/weekly-picks/agentmail", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
@@ -161,9 +162,24 @@ export const contents: Content[] = [
 		],
 	},
 	{
+		title: "AI 硬件",
+		Icon: () => <Activity className="w-4 h-4 text-current" />,
+		list: [
+			{ title: "概览", href: "/docs/ai-hardware", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Era World", href: "/docs/ai-hardware/era-world", icon: () => <Activity className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
 		title: "教育",
 		Icon: () => <GraduationCap className="w-4 h-4 text-current" />,
-		list: [{ title: "概览", href: "/docs/education", icon: () => <Book className="w-4 h-4 text-current" /> }],
+		list: [
+			{ title: "概览", href: "/docs/education", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Chalkie", href: "/docs/education/chalkie", icon: () => <GraduationCap className="w-4 h-4 text-current" /> },
+			{ title: "MagicSchool", href: "/docs/education/magicschool", icon: () => <GraduationCap className="w-4 h-4 text-current" /> },
+			{ title: "Brisk", href: "/docs/education/brisk", icon: () => <GraduationCap className="w-4 h-4 text-current" /> },
+			{ title: "EnlightenAI", href: "/docs/education/enlightenai", icon: () => <GraduationCap className="w-4 h-4 text-current" /> },
+			{ title: "Amira", href: "/docs/education/amira", icon: () => <GraduationCap className="w-4 h-4 text-current" /> },
+		],
 	},
 	{
 		title: "气候与能源",
