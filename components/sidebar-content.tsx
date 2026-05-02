@@ -124,6 +124,7 @@ export const contents: Content[] = [
 			{ title: "AgentMail", href: "/docs/developer-tools/agentmail", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Qodo", href: "/docs/developer-tools/qodo", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Langfuse", href: "/docs/developer-tools/langfuse", icon: () => <Activity className="w-4 h-4 text-current" /> },
+			{ title: "E2B", href: "/docs/developer-tools/e2b", icon: () => <Zap className="w-4 h-4 text-current" /> },
 			{ title: "Parasail", href: "/docs/developer-tools/parasail", icon: () => <Zap className="w-4 h-4 text-current" /> },
 			{ title: "Nimble", href: "/docs/developer-tools/nimble", icon: () => <Globe className="w-4 h-4 text-current" /> },
 			{ title: "NeuBird", href: "/docs/developer-tools/neubird", icon: () => <Activity className="w-4 h-4 text-current" /> },
