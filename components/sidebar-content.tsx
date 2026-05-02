@@ -90,6 +90,7 @@ export const contents: Content[] = [
 		Icon: () => <Briefcase className="w-4 h-4 text-current" />,
 		list: [
 			{ title: "概览", href: "/docs/weekly-picks", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Harvey", href: "/docs/weekly-picks/harvey", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "Rebellions", href: "/docs/weekly-picks/rebellions", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Era World", href: "/docs/weekly-picks/era-world", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Antioch", href: "/docs/weekly-picks/antioch", icon: () => <Activity className="w-4 h-4 text-current" /> },
@@ -226,6 +227,7 @@ export const contents: Content[] = [
 			{ title: "概览", href: "/docs/vertical-ai", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "Hebbia", href: "/docs/vertical-ai/hebbia", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "Hightouch", href: "/docs/vertical-ai/hightouch", icon: () => <Briefcase className="w-4 h-4 text-current" /> },
+			{ title: "Harvey", href: "/docs/vertical-ai/harvey", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 		],
 	},
 ];

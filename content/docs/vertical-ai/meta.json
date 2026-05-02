@@ -1,4 +1,9 @@
 {
   "title": "垂直 AI",
-  "pages": ["index", "hebbia", "hightouch"]
+  "pages": [
+    "index",
+    "hebbia",
+    "hightouch",
+    "harvey"
+  ]
 }
