@@ -163,6 +163,7 @@ export const contents: Content[] = [
 			{ title: "概览", href: "/docs/healthcare", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "Abridge", href: "/docs/healthcare/abridge", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
 			{ title: "Nabla", href: "/docs/healthcare/nabla", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
+			{ title: "OpenEvidence", href: "/docs/healthcare/openevidence", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
 			{ title: "No Barrier", href: "/docs/healthcare/no-barrier", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
 			{ title: "Luminai", href: "/docs/healthcare/luminai", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
 			{ title: "百川智能", href: "/docs/healthcare/baichuan", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },

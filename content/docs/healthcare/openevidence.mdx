@@ -1,0 +1,67 @@
+---
+title: OpenEvidence
+description: OpenEvidence 值得看，因为它正从医生医学证据搜索入口，延伸到 EHR 内临床决策、编码、处方执行和 prior authorization 工作流。
+created: 2026-05-02
+tags:
+  - ai-startups
+  - healthcare
+  - openevidence
+  - clinical-decision-support
+  - medical-ai
+  - ehr
+---
+
+# OpenEvidence
+
+## 一句话判断
+
+OpenEvidence 值得看，因为它表面是医生版 evidence-based AI 搜索，真正更大的位置是从“回答医学问题”延伸到 EHR 内决策支持、临床编码、处方执行和 prior authorization；如果这条线跑通，它抢的不是搜索框，而是医生高频临床工作流入口。
+
+## 为什么推荐
+
+1. **它切的是医生每天都会遇到的高信任信息需求。** 医生不是缺少医学信息，而是缺少能在临床场景里快速调用、可信引用、持续更新的证据层。OpenEvidence 官网称其内容合作覆盖 NEJM、JAMA、NCCN、Wiley、Cochrane 等，这类授权和引用链对医疗 AI 很关键。
+2. **它正在从知识入口进入 EHR 工作流。** Sutter Health 合作公告称，OpenEvidence 会进入 Epic electronic health record workflows，支持自然语言查询指南、研究和临床证据。医疗 AI 能不能贴进 EHR，是从好用工具变成默认工作流的分水岭。
+3. **它已经向收入与执行链路扩张。** Coding Intelligence 指向 ICD-10、E/M、CPT 等编码建议和 reimbursement capture；Tandem 合作则把 evidence-based prescribing 接到 prescription generation、prior authorization submission、appeals、affordability 和药房路由。
+4. **官方使用量信号很强，但要谨慎引用。** 官网称 OpenEvidence 已支持超过 200M 次 AI-powered clinical consultations；Tandem 合作公告称其在美国每天支持超过 1M 次来自 logged-in verified clinicians 的 clinical consultations。这是官方口径，不等于审计后的收入质量，但足够说明它不是低频 demo。
+
+## 产品 / 项目解析
+
+OpenEvidence 最容易被误读成“医生版 Perplexity”。这个类比只能解释入口，解释不了它正在长出的商业价值。
+
+真正的产品可以拆成四层：
+
+- **医学证据问答入口**：给 verified clinicians 提供带来源、引用和医学文献 grounding 的临床问题回答。
+- **权威内容合作层**：NEJM、JAMA、NCCN、Cochrane 等内容合作提高了医生信任，也提高了普通 RAG 竞品的追赶难度。
+- **EHR 内决策支持层**：如果自然语言医学证据查询能贴进 Epic 等 EHR，OpenEvidence 就不只是医生主动打开的搜索工具，而可能变成诊疗过程中随手调用的 evidence layer。
+- **工作流操作层**：Coding Intelligence 和 Tandem partnership 暗示它想继续接住诊疗决策后的动作：编码、收费、处方、prior auth、appeal、患者负担和药房路由。
+
+我的判断是：OpenEvidence 的大机会不是“医学问答做得更准”，而是把 **可信证据层 + 临床操作层** 接在一起。前者建立信任，后者拿预算。
+
+## 投资人视角的批判与风险
+
+1. **官方数字需要打折看。** “最广泛使用”“200M consultations”“1M/day”都是官方披露，缺少 ARR、净收入留存、付费 health system 数、平均使用深度和独立审计。
+2. **临床责任边界很硬。** 医学证据回答如果影响诊疗路径，引用质量、更新延迟、hallucination、医生过度依赖和责任归属都会被放大。
+3. **EHR 平台会反击。** Epic、Oracle Health、Microsoft/Nuance、Google Cloud，以及 Abridge / Nabla 这类工作流公司，都可能把医学检索、文书、编码和 prior auth 打包成原生能力。
+4. **从问答到操作会显著变重。** Coding、prescribing、prior auth 涉及 payer 规则、药房网络、保险、患者负担和合规审计，不是模型能力强就能自动解决。
+5. **医生使用不等于采购转化。** 医生端高频使用是好入口，但 health system 付费、预算归属和长期续约仍需要更多公开证据。
+
+## 可借鉴点
+
+- 医疗 AI 不要停在“聪明回答”，要接住回答后的动作：记录、编码、处方、授权、路由、审计。
+- 在高信任行业，内容授权、引用链和更新机制本身就是产品资产，不是法务装饰。
+- 先通过医生个人入口建立使用习惯，再嵌入 health system workflow，是比一开始硬卖大平台更轻的分发路径。
+- “证据层 + 操作层”比单点 AI 工具更有机会形成预算：前者解决信任，后者证明 ROI。
+
+## 官方链接 / 关键外链
+
+- OpenEvidence About: https://www.openevidence.com/about
+- Sutter Health x OpenEvidence: https://www.openevidence.com/announcements/sutter-health-collaborates-with-openevidence-to-bring-evidence-based-ai-powered-insights-into-physician-workflows
+- OpenEvidence Coding Intelligence: https://www.openevidence.com/announcements/openevidence-launches-coding-intelligencetm-to-help-physicians-capture-every-dollar-theyve-earned
+- OpenEvidence x Tandem: https://www.openevidence.com/announcements/openevidence-and-tandem-partner-to-streamline-evidence-based-prescribing-and-prior-authorizations
+
+## 后续跟踪点
+
+- 是否披露付费客户数、ARR、net revenue retention、health system 部署深度和医生活跃留存
+- Coding Intelligence 是否拿出可量化 ROI：漏编减少、reimbursement lift、医生额外工作量下降
+- Tandem 合作是否能证明 prior auth 周期缩短、处方完成率提高或患者 abandoned therapy 下降
+- Epic / Microsoft Nuance / Abridge / Nabla 是否把相邻能力内建，压缩 OpenEvidence 的独立平台位置
