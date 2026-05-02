@@ -103,6 +103,7 @@ export const contents: Content[] = [
 			{ title: "Gitar", href: "/docs/weekly-picks/gitar", icon: () => <Zap className="w-4 h-4 text-current" /> },
 			{ title: "InsightFinder", href: "/docs/weekly-picks/insightfinder", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Factory", href: "/docs/weekly-picks/factory", icon: () => <Zap className="w-4 h-4 text-current" /> },
+			{ title: "Sapiom", href: "/docs/weekly-picks/sapiom", icon: () => <Zap className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
@@ -127,6 +128,7 @@ export const contents: Content[] = [
 			{ title: "Gitar", href: "/docs/developer-tools/gitar", icon: () => <Zap className="w-4 h-4 text-current" /> },
 			{ title: "InsightFinder", href: "/docs/developer-tools/insightfinder", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Factory", href: "/docs/developer-tools/factory", icon: () => <Zap className="w-4 h-4 text-current" /> },
+			{ title: "Sapiom", href: "/docs/developer-tools/sapiom", icon: () => <Zap className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
