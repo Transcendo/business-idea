@@ -1,0 +1,90 @@
+---
+title: Baseten
+description: 面向 AI 应用团队的生产推理平台，把模型 API、Truss 打包部署、autoscaling、环境发布和多模型 pipeline 收到同一套开发者工作流里。
+created: 2026-05-03
+tags:
+  - baseten
+  - inference
+  - model-serving
+  - developer-tools
+  - infrastructure
+---
+
+# Baseten
+
+## 一句话判断
+
+Baseten 是我愿意放进开发者工具栏目的 AI 推理基础设施公司：它不只是“把模型部署到 GPU 上”，而是在抢 AI 应用团队的生产推理操作层。
+
+## 为什么推荐
+
+1. **它切的是生产推理的真痛点。** 模型 demo 容易，稳定服务线上流量难。上线后要处理依赖、容器、GPU、冷启动、autoscaling、批处理、环境隔离、监控和发布风险，这些才是团队真正被拖慢的地方。
+2. **产品不是单点工具。** 官方资料里同时出现 Model APIs、Truss、autoscaling、Environments、Chains，说明 Baseten 想做的是一套推理生命周期平台，而不只是一个 endpoint。
+3. **它站在开放模型增长的受益面。** 如果越来越多公司把部分流量从闭源模型迁到开放模型或自定义模型，Baseten 这类托管推理平台就会吃到迁移和生产化需求。
+4. **Truss 是个不错的开发者入口。** 开源 CLI / 打包格式让 Baseten 可以进入本地开发与部署流程，而不是只停留在云端控制台。
+
+## 它属于什么赛道
+
+Baseten 最适合放在 **开发者工具 / AI 推理基础设施**。
+
+它和仓库里已有的 Parasail 都属于推理基础设施，但位置不同：
+
+- Parasail 更像分布式 GPU 供给与推理网络调度。
+- Baseten 更像开发团队直接使用的生产推理 PaaS：模型 API、部署、扩缩、发布环境、监控和多模型 pipeline。
+
+所以它不是 Parasail 的重复条目，而是同一大方向里的另一个关键样本。
+
+## 产品 / 项目解析
+
+Baseten 的核心逻辑是把模型从“能跑”推进到“能稳定服务生产流量”。从公开资料看，它有几层能力：
+
+- **Model APIs**：提供 OpenAI-compatible endpoint，开发者改 base URL 和 key 就能调用 Baseten 上的开放模型推理。
+- **Truss**：开源 CLI / 打包格式，用 Python 描述模型服务逻辑，处理容器化、依赖管理和 GPU 配置，并部署到 Baseten 或自有基础设施。
+- **Autoscaling**：按 replica、并发、利用率、scale-down delay 等参数调节容量；支持 scale-to-zero，并按部署、扩缩和请求服务时间计费。
+- **Environments**：用 staging / production 等环境管理模型发布，支持测试、评估、canary、shadow serving、环境级监控和环境级 autoscaling 设置。
+- **Chains**：用于多步骤、多模型推理 pipeline，把复杂工作流里的延迟、成本和依赖管理纳入同一套部署框架。
+
+我认为最有价值的不是“支持很多模型”，而是 Baseten 把推理服务做成了一套 release system。AI 应用进入生产阶段后，团队要买的不是漂亮 demo，而是可控的上线、扩容、回滚、监控和成本结构。
+
+## 商业模式
+
+Baseten 的变现路径很清楚：
+
+- 基础层按模型部署、扩缩容、在线推理分钟数和 GPU 使用量收费。
+- Pro / 企业层卖优先 GPU、专用计算、更高 rate limit、专属支持和工程协助。
+- 高阶客户会为安全、合规、SLA、性能优化、专用环境和大规模推理稳定性付费。
+- Truss、Model APIs、Chains 分别覆盖开发者入口、直接推理调用和复杂 workflow，最终都可以回到同一账单。
+
+## 投资人视角的批判与风险
+
+1. **云厂商会挤压这个位置。** AWS、Google Cloud、Azure、Databricks、Snowflake 都有动机把模型服务做成云内标准能力。Baseten 需要证明自己在速度、易用性和 AI 原生工作负载理解上显著更强。
+2. **推理平台容易被价格战打薄。** 如果客户只把它当更方便的 GPU endpoint，议价权会被上游算力和下游大客户同时压缩。
+3. **客户结构不轻松。** 小团队预算不稳，大客户可能自建或绑定云厂商；最理想客户是高增长 AI 公司，但这些客户也最会比较性能和成本。
+4. **抽象不能牺牲控制权。** 模型团队遇到显存、batching、engine、延迟尾部问题时，需要足够底层的调参能力。平台越想“全自动”，越容易被高级用户嫌弃不透明。
+
+## 我的判断
+
+Baseten 值得正式跟踪。
+
+如果 AI 应用公司继续从“调用大模型 API”走向“组合闭源模型、开放模型、自定义模型和多步骤推理”，生产推理层会变成一个真正的预算入口。Baseten 的机会就在这里：不是卖最便宜的 GPU，而是成为 AI 应用团队默认的模型服务与发布控制面。
+
+但我不会把它简单归类成“卖水人稳赢”。这个市场最终会奖励两类公司：要么有极强的底层性能和成本优势，要么掌握开发者默认工作流。Baseten 现在看起来在押第二条路，同时也必须把第一条做得够硬。
+
+## 后续跟踪点
+
+- Truss 是否能在 Baseten 之外形成真实开发者使用，而不是只作为托管服务的入口。
+- Model APIs 与自定义模型部署哪个贡献更多收入和留存。
+- 企业客户是否把 Baseten 放进关键生产链路，而不是只用于实验和临时部署。
+- 与 Fireworks AI、Together AI、Modal、RunPod、Replicate、Parasail、云厂商模型服务相比，Baseten 的长期差异在哪里。
+- 是否能持续降低冷启动、吞吐和延迟尾部问题；这些指标会直接决定大客户能不能放心迁移核心流量。
+
+## 可信来源
+
+- [Baseten 官网](https://www.baseten.co/)
+- [Baseten pricing](https://www.baseten.co/pricing/)
+- [Baseten docs quickstart](https://docs.baseten.co/quickstart)
+- [Baseten autoscaling docs](https://docs.baseten.co/deployment/autoscaling/overview)
+- [Baseten environments docs](https://docs.baseten.co/deployment/environments)
+- [Baseten Chains docs](https://docs.baseten.co/development/chain/overview)
+- [Truss GitHub](https://github.com/basetenlabs/truss)
+- [Truss README](https://raw.githubusercontent.com/basetenlabs/truss/main/README.md)
