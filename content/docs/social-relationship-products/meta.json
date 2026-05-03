@@ -3,6 +3,7 @@
   "pages": [
     "index",
     "luma",
-    "partiful"
+    "partiful",
+    "timeleft"
   ]
 }

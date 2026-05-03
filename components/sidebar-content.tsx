@@ -114,6 +114,7 @@ export const contents: Content[] = [
 			{ title: "概览", href: "/docs/social-relationship-products", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "Luma", href: "/docs/social-relationship-products/luma", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Partiful", href: "/docs/social-relationship-products/partiful", icon: () => <Activity className="w-4 h-4 text-current" /> },
+			{ title: "Timeleft", href: "/docs/social-relationship-products/timeleft", icon: () => <Activity className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
