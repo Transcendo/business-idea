@@ -103,6 +103,12 @@ def check_mdx_files(errors: list[str], warnings: list[str]) -> None:
                 errors.append(f"重复 slug：{slug} in {rel(mdx)} 与 {rel(seen_slugs[slug])}")
             seen_slugs[slug] = mdx
 
+        for match in re.finditer(r"<https?://[^>\s]+>", text):
+            line = text.count("\n", 0, match.start()) + 1
+            errors.append(
+                f"{rel(mdx)}:{line} 含 MDX 不兼容裸 autolink：{match.group(0)}；请改成 [url](url)"
+            )
+
         for phrase in BANNED_PHRASES:
             if phrase in text:
                 warnings.append(f"{rel(mdx)} 含疑似空话/禁词：{phrase}")
