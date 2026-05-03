@@ -108,6 +108,14 @@ export const contents: Content[] = [
 		],
 	},
 	{
+		title: "强社交关系产品",
+		Icon: () => <Activity className="w-4 h-4 text-current" />,
+		list: [
+			{ title: "概览", href: "/docs/social-relationship-products", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Luma", href: "/docs/social-relationship-products/luma", icon: () => <Activity className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
 		title: "AI 智能体",
 		Icon: () => <BotIcon className="w-4 h-4 text-current" />,
 		list: [
