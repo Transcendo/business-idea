@@ -13,7 +13,7 @@ description: 222 如何把陌生人社交从刷人、私信和约时间，压缩
 
 ## 来源
 
-- 222 官方首页：[https://222.place/](https://222.place/) — 2026-05-03 抓取时，页面 title 为 “222 - meet new people, discover your city, & deepen your relationships.”，meta description 为 “accelerating chance social encounters.”；官网可见 dinner、comedy show、happy-hour priced drinks 等体验示例。
+- 222 官方首页：[https://222.place/](https://222.place/) — 2026-05-03 抓取时，页面 title 为 “222 - meet new people, discover your city, & deepen your relationships.”；官网流程写明先做 personality test，再选择 dinner、cocktail bars、salsa nights、basketball games、saunas & ice plunges 等体验，由 222 规划；系统会匹配 5-7 个最兼容的人，体验后用 follow-up survey 继续 refine matches；官网还写到 membership 可跨 17 个城市使用。
 - Apple iTunes Search API：[https://itunes.apple.com/search?term=222%20social%20app&country=us&entity=software&limit=3](https://itunes.apple.com/search?term=222%20social%20app&country=us&entity=software&limit=3) — 返回 `222 - find your people.`，seller 为 TwoTwoTwo Inc.，bundle id `place.twotwotwo.twotwotwo-ios`，类别为 Lifestyle / Photo & Video。2026-05-03 抓取时版本 `222.5.90`，评分约 `4.69`，评分数约 `4,836`；这些数字只作当日快照。
 - App Store 描述同样来自 Apple API：222 写明 “finds you the people you'll get along with and sends you to the places you'll love”，并明确反定位：不是 dating app、不是 friend-making service、不是 networking、不是 scrolling、不是 swiping。描述还写到 no profiles、no DMs、no scrolling、no swiping；体验发生在 public 和 group setting；每个 member 在被选入体验前会被 vetted。
 
@@ -63,7 +63,7 @@ description: 222 如何把陌生人社交从刷人、私信和约时间，压缩
 
 1. 单个用户因为搬城、孤独、想探索城市、厌倦刷屏而下载。
 2. 用户完成 curation profile，表达愿意参加 nearby social experiences。
-3. 产品挑选公共场景和同组人，用户只需说 yes 并到场。
+3. 产品挑选公共场景和同组人，用户只需说 yes 并到场；官网当前写的是 5-7 个 compatible matches，而不是无限大群。
 4. 好体验形成故事：“这个 app 不让你聊天，直接把你送去和几个人见面。”
 5. 城市密度起来后，匹配池、体验供给和口碑一起变好。
 
@@ -84,6 +84,38 @@ description: 222 如何把陌生人社交从刷人、私信和约时间，压缩
 - **系统 30 秒内返回什么**：一个可执行的小组体验，包含主题、地点类型、人数结构、为什么这几类人适合坐一起、参与者轻量可信卡、低尴尬破冰问题、活动后 follow-up 建议。
 
 AI 的价值不是生成油腻邀约话术，而是压缩“选人、组局、破冰、安全边界、后续关系沉淀”的判断成本。
+
+## 迁移到旦聚旦时，Q&A 应该怎样变成小组匹配
+
+222 的启发不是“问一堆兴趣题，然后让 AI 随机凑桌”。强关系匹配必须把回答落到明确的 profile 维度，再影响谁能坐到一桌、谁不能坐到一桌、谁需要人工审核。
+
+### 三层问题
+
+1. **必须信息**：复旦身份验证、所在城市、可参加时间、职业/行业、当前关系目标、是否接受和陌生校友线下见面、可公开名片范围、硬性安全边界。
+2. **补充信息**：本周想解决的问题、愿意提供的帮助、想认识的人、社交能量、预算、场地偏好、是否接受混龄/跨行业/跨校区组合。
+3. **高级偏好**：是否接受被介绍给投资人/创业者/求职者/租房同伴，是否接受活动后互换联系方式，是否愿意担任下一桌 co-host。
+
+### answer → profile score → matching strategy
+
+| 维度 | 由哪些回答改变 | 匹配怎么变 |
+| --- | --- | --- |
+| 身份可信度 | 校友认证、职业名片、共同联系人、过往到场记录 | 低分只能进公开主题局；高分可进更私密的 founder dinner、求职互助、租房避坑局。 |
+| 关系开放度 | 是否接受新朋友、是否愿意后续联系、是否接受被介绍 | 开放度高的人适合做连接节点；低的人更适合主题明确的小范围讨论。 |
+| 互助供给度 | 能提供经验、人脉、岗位、房源、中介评价、创业资源 | 每桌至少放 1-2 个供给者，避免全是索取方。 |
+| 需求急迫度 | 求职、融资、找合伙人、搬家租房、刚到新城市 | 高急迫度需要更强主题匹配和活动后 follow-up，而不是泛兴趣局。 |
+| 社交风险敏感度 | 性别安全、酒精边界、夜间出行、陌生人接受度 | 决定场地、人数、是否需要主理人在场、是否只开放校友实名局。 |
+| 主题匹配度 | AI 创业、职业转型、上海新校友、租房互助、行业方向 | 决定桌子的主题，不让“都很优秀”这种空理由糊弄用户。 |
+| 复联价值 | 活动后互评、想继续聊的人、可帮到谁 | 决定下一次组局和一对一介绍，不把关系停在一次饭局。 |
+
+### 输出不该是“推荐用户”，而该是“这一桌为什么成立”
+
+旦聚旦的 30 秒输出应该长这样：
+
+- **给主理人**：本周建议开 2 桌：上海 AI 创业校友桌、亦庄租房避坑桌；每桌 5-6 人；谁必须审核；谁适合做暖场节点；哪些人不能放一桌。
+- **给参与者**：你被邀请是因为你的当前目标、可提供帮助和这桌主题匹配；公开显示哪些名片字段；到场前知道什么边界。
+- **给系统**：活动后收集互评、继续联系意愿、实际帮助发生情况，更新下一次匹配，而不是只统计报名数。
+
+这才是 AI-native wedge：用户不是来填问卷的，用户是来把“我该见谁、为什么见、见完怎么继续”交给一个可信的关系判断层。
 
 ## 为什么用户会来、留、传播、付钱
 
