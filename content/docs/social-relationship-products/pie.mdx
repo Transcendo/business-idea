@@ -1,0 +1,195 @@
+---
+title: Pie
+description: Pie 如何把“找朋友”改写成同城反复碰面的计划网络：先有值得出门的局，再让朋友的朋友、主理人和 AI 匹配把弱关系变强。
+---
+
+# Pie：强社交不是多聊几句，而是先有一个值得出门的共同场景
+
+## 一句话判断
+
+Pie / Pie Labs, PBC 是 Andy Dunn 做的 IRL social app。它的核心不是陌生人资料页、滑卡或群聊，而是让用户在城市里发现免费或低门槛的线下计划，看到朋友和朋友的朋友谁会去，再通过主理人活动、AI curated dinner group、group chat seed 和活动扩散，把“想认识人”变成一次可发生的现实见面。
+
+它强化的是 **弱关系转强关系、同城半熟人关系、朋友的朋友关系、线下小圈子关系、主理人与参与者之间的重复组织关系**。
+
+一句话讲清楚：**Pie 最值得学的地方，是把强社交入口从“聊起来”换成“先有一个不尴尬的共同场景”。** 用户不缺聊天工具，缺的是关系发生的理由。
+
+## 可信来源
+
+- App Store / iTunes Lookup：[https://apps.apple.com/us/app/pie-free-events-cool-people/id1509667820](https://apps.apple.com/us/app/pie-free-events-cool-people/id1509667820) — 2026-05-04 复核，应用名为 `Pie: Free Events, Cool People`，seller 为 `Pie Labs, PBC`，版本 `5.21.0`，更新时间 `2026-04-23T18:48:14Z`；描述写明覆盖 Chicago、Austin、Bay Area、Columbus，并列出 personalized feed、friends and friends-of-friends、event hosting、snowball mode、calendar sync 等机制。当日美国区评分约 `4.736`、评分数 `1,197`，只作快照。
+- Origin Ventures 投资文章：[https://www.originventures.com/blog/make-plans-like-magic-why-we-invested-in-pie](https://www.originventures.com/blog/make-plans-like-magic-why-we-invested-in-pie) — 写明 Pie 由 Bonobos co-founder / CEO Andy Dunn 领导，目标是让用户用很低摩擦加入附近线下计划；用户可以看朋友是否参加活动，不必陷入群消息协调；Pie 也可以把用户配进 AI-curated dinner group。文章称 Pie 当时 live in Chicago with tens of thousands of users。
+- Fox Business：[https://www.foxbusiness.com/lifestyle/new-social-media-app-uses-ai-help-users-make-real-world-friends](https://www.foxbusiness.com/lifestyle/new-social-media-app-uses-ai-help-users-make-real-world-friends) — 报道称 Pie 在 Chicago、Austin、San Francisco Bay Area 可用，每月有 250,000+ people viewing plans、50,000 actively joining；还提到 Sparked by Pie 这类 group match plans、AI-generated bios 与 AI seed group chats。
+- TechCrunch Found podcast：[https://techcrunch.com/podcast/former-bonobos-founder-is-rethinking-social-media/](https://techcrunch.com/podcast/former-bonobos-founder-is-rethinking-social-media/) — 摘要称 Pie 通过 common interests 的线下活动促进连接，Dunn 把组织者称为 “IRL creators”，并提到 Pie Creator Fund。
+- Business Insider：[https://www.businessinsider.com/pitch-deck-irl-social-startup-pie-raises-andy-dunn-bonobos-2024-10](https://www.businessinsider.com/pitch-deck-irl-social-startup-pie-raises-andy-dunn-bonobos-2024-10) — 可见内容称 Pie 是 Chicago-based IRL social startup，由 Andy Dunn 创立，2024 年获得 `US$11.5M` Series A，Forerunner Ventures 领投；文章还提到 app 已有 AI assistant，并在 pilot enterprise product offering。正文存在订阅墙，未把不可见内容当事实。
+
+本轮 `web_search` / `web_extract` 因 Exa credits 402 不可用，改用 iTunes Lookup API、官网/媒体/投资方页面直连抓取复核。融资、评分、城市和用户数字都是当日公开来源快照。
+
+## 它到底强化哪一种关系
+
+Pie 服务的不是亲密关系，也不是泛内容社区。它更接近 **同城生活关系生成器**：
+
+- 新搬来城市的人，从没有本地朋友到认识一批同频的人；
+- 远程办公者，从缺少办公室 social collision 到有固定线下小局；
+- 朋友的朋友，从只存在通讯录/Instagram 里，到在同一个活动里自然碰面；
+- creator / 主理人与参与者，从一次活动报名，到重复组织和重复参与；
+- 普通用户从“我想认识人”这种抽象愿望，到“今晚/周末去这个局”这种具体动作。
+
+关系强度不是靠消息数量增长，而是靠 **共同经历 + 重复互动 + 半熟人信任 + 线下见面 + 主理人持续供给**。
+
+## 真实痛点
+
+用户不缺社交 app。真正卡住的是：
+
+1. **没有出门理由**：很多人想认识朋友，但“找朋友”太抽象；一个 trivia、pickleball、Sunday Morning Club、coffee DJ 或 group dinner 才是可执行入口。
+2. **陌生人见面尴尬**：纯 swipe / chat 会把压力放到两个人身上；共同活动把压力转移到场景里。
+3. **组织成本太高**：朋友局最烦的是问时间、拉群、确认、鸽子、改地点。Origin 明确提到 Pie 避免 flood of group messages。
+4. **一次见面不够**：朋友通常不是一次聊天产生的，而是在类似场景里反复碰面，逐渐从脸熟变半熟，再变朋友。
+5. **城市信任密度不足**：纯陌生人池有安全和质量问题；朋友的朋友、主理人、固定主题和重复参与会增加基本信任。
+
+所以 Pie 的问题定义不是“如何让用户聊天”，而是：**如何用最低尴尬成本，让同城的人反复出现在同一个可被信任的场景里。**
+
+## AI-native wedge
+
+Pie 的 AI 如果只停在生成 bio，就很普通；真正有价值的位置是关系判断和组局压缩。
+
+最小楔子可以这样表达：
+
+- **用户给什么**：城市、兴趣、可用时间、朋友/朋友的朋友信号、想参加的活动类型、个人 vibe 或 bio。
+- **系统 30 秒内返回什么**：本周最值得去的 1-3 个线下计划；或者一个 AI-curated dinner group；或者给 host 一张活动页、候选名单、扩散路径和破冰群聊 seed。
+- **压缩的任务**：找局 → 判断谁会去 → 报名/邀请朋友 → 入群破冰 → 线下见面 → 活动后复联。
+
+关键不是“AI 陪你聊天”。关键是 AI 把三个关系摩擦压掉：
+
+1. **选什么局**：不是活动列表，而是按城市、兴趣、朋友信号和生活阶段排序。
+2. **跟谁坐一起**：AI dinner group 的价值在于减少“我去了会不会格格不入”的风险。
+3. **怎么开场**：AI seed group chats / intros 只有在服务真实见面时才有价值，否则就是垃圾话术生成器。
+
+## 冷启动
+
+Pie 的冷启动更像 **线下活动供给 + creator 网络 + 城市密度**，不是“先做一个全国社交平台”。
+
+合理路径是：
+
+1. 先选一个城市，把活动密度做起来。
+2. 扶持 IRL creators，让他们每周做固定主题活动。
+3. 用活动页和朋友的朋友机制传播，而不是让用户转发 app 下载链接。
+4. 用户参加 2-3 次后形成“这里真的能让我出门”的心智。
+5. 再叠加 AI group match、enterprise offering、creator tools 和商业化。
+
+这条路重，但比靠广告买泛社交流量健康。强关系产品的冷启动本来就不该幻想“一上线就自增长”。没有活动供给，Pie 就会退化成 Meetup；没有重复参与，关系就不会变强。
+
+## 有没有真实网络效应
+
+**有，但不是那种无脑社交网络效应。**
+
+真实部分：
+
+- 同城活动越多，用户越容易找到值得出门的局；
+- 朋友和朋友的朋友越多，报名决策越可信；
+- 主理人越多，供给越稳定，城市心智越强；
+- 用户参加越多，系统越知道他适合什么场景、什么人、什么频率；
+- 企业、场地、creator 进入后，可能形成 B2B/B2C 混合飞轮。
+
+脆弱部分：
+
+- 城市密度不足时，网络效应不存在；
+- creator 质量差时，信任会比增长先崩；
+- 活动后没有复联，用户只是在消费活动，不是在建立关系；
+- Luma、Partiful、Timeleft、222、Meetup、微信群、小红书同城局都会切走不同场景。
+
+所以 Pie 不是伪社交壳，但护城河不在功能表，而在 **城市活动密度、主理人供给、朋友的朋友信任和重复见面习惯**。
+
+## 为什么用户会来、留、传播、付钱
+
+### 为什么会来
+
+用户会来，因为他在某个具体生活阶段缺关系：搬城、远程办公、毕业后朋友圈变小、分手、结婚生娃后生活半径重构、想出门但没人一起。Pie 的入口不是“加入一个社交平台”，而是“这个周末有个看起来不蠢的局”。
+
+### 为什么会留
+
+留存来自现实生活的反馈：去了一个局，不尴尬；第二次又遇到类似的人；第三次开始有脸熟的人。Fox Business 报道里 Dunn 称参加至少三次 group events 后 retention 超过 70%；这是创始人口径，需要独立验证，但方向对：**三次真实见面比三十次线上点赞更能改变留存。**
+
+### 为什么会传播
+
+传播单元是具体计划，不是 app 本身：
+
+- host 转发一个活动页；
+- 参与者拉朋友一起去；
+- snowball mode 把私人活动扩到朋友网络；
+- creator 的固定活动形成城市口碑；
+- 一次 group dinner 的好体验会自然变成“下次一起去”。
+
+“快来下载我的社交 app”很弱；“周四有个校友 AI 创业小桌，你要不要来”很强。
+
+### 谁为什么付钱
+
+可能付费方有四类：
+
+1. **用户**：为 Sparked by Pie 这类 group match plans、ticketed plans 或高质量 dinner group 付钱。用户付的是“低尴尬认识靠谱人的机会”，不是 AI。
+2. **creator / organizer**：为分发、报名管理、候补、复购、社群沉淀和会员管理付钱；但个人主理人付费能力有限，得看能否帮他挣钱或省大量时间。
+3. **本地商家 / 场地**：为稳定客流、活动转化或分成付钱。
+4. **公司 / HR / workplace community**：为员工线下连接、remote/hybrid team social collisions 付钱。Business Insider 可见内容提到 enterprise product pilot，但付费规模还需要继续查。
+
+最硬的早期商业化应该是 ticketed group match / dinner，而不是泛订阅。普通用户很难为“活动发现”长期付钱，但愿意为一次高质量、低风险、有人帮忙组织的见面付钱。
+
+## 事实、判断、可复制机会、风险
+
+### 事实
+
+- Pie 是 Pie Labs, PBC 的 iOS app，公开名称为 `Pie: Free Events, Cool People`。
+- App Store 描述显示其服务城市包括 Chicago、Austin、Bay Area、Columbus，并强调 free local IRL events、friends and friends-of-friends、event hosting、snowball mode、calendar sync。
+- Origin Ventures 称 Pie 由 Bonobos co-founder / CEO Andy Dunn 领导，并描述 AI-curated dinner group、朋友参与可见、减少群聊协调等机制。
+- TechCrunch Found 摘要称 Dunn 把组织者称为 IRL creators，并启动 Pie Creator Fund。
+- Fox Business 报道称 Pie 每月 250,000+ people viewing plans、50,000 actively joining，并探索 AI-generated bios 与 AI seed group chats。
+- Business Insider 可见内容称 Pie 2024 年获得 `US$11.5M` Series A，由 Forerunner Ventures 领投，并提到 AI assistant 与 enterprise pilot。
+
+### 判断
+
+Pie 的聪明点是没有把“孤独”翻译成“更多聊天”，而是翻译成“更多低尴尬、可重复、有人组织的现实见面”。这比大多数社交产品更接近真实关系形成机制。
+
+但 Pie 也很重。线下社交是运营密度生意，不是纯软件生意。如果主理人供给、城市密度、活动质量和安全机制跟不上，它会迅速变成一个漂亮的活动列表。强关系产品最怕伪社交壳：页面很社交，关系没变强。
+
+### 可复制机会
+
+- **旦聚旦校友小局推荐器**：用户给城市、校友身份、行业/AI/创业兴趣、可用时间、想认识的人；系统返回本周一个最值得去的小局、为什么适合你、预计会遇到哪类人、一键报名/候补/转发。
+- **主理人减负操作台**：给主理人候选名单、身份可信度、互助匹配点、座位/分组建议、介绍词、活动后 follow-up 建议。
+- **朋友的朋友 / 校友的校友扩散**：传播单元不是“旦聚旦 app”，而是一张“本周上海 AI 创业校友小桌”卡片；准入来自校友身份、介绍人和主理人确认。
+- **活动后关系卡**：把参与者、共同话题、互助点、合影和下一步复联建议沉淀下来，让一次见面变成可持续关系资产。
+- **巢聚可信看房小局**：弱迁移到同校/同园区/同预算租客的线下看房或合租互助，但必须加身份认证、脱敏和反欺诈，不能做轻飘飘 snowball。
+
+### 风险
+
+- **供给重**：没有高质量局，推荐再智能也没用。
+- **安全与骚扰**：线下见面必须有身份、边界、举报和风控。
+- **主理人劣化**：creator 如果变成营销号或拉新机器，朋友的朋友信任会被稀释。
+- **AI 包装风险**：AI-generated bio 和 seed chat 如果不提高见面质量，就是噪音。
+- **商业化不稳**：用户愿意为少数高质量 group match 付费，不一定愿意为日常活动发现订阅。
+- **中国迁移阻力**：微信、小红书、飞书表单和社群工具会吃掉基础工具价值；旦聚旦必须靠身份信任、主理人减负和活动后关系沉淀差异化。
+
+## 对旦聚旦与巢聚的启发
+
+### 对旦聚旦
+
+旦聚旦不该先做泛校友社区，也不该先做资料页匹配。Pie 给的启发很直接：**先做“同城校友小计划网络”。**
+
+最小验证动作：下一场复旦/上海/杭州/北京亦庄 AI 创业或职业成长小局，不开发完整产品，只做三件事：
+
+1. 活动前让报名者填写身份、可提供帮助、想认识的人、可用时间。
+2. 活动前给主理人一份 AI 生成的候选名单、分组建议和介绍词。
+3. 活动后给每个参与者发一张关系卡：你见到了谁、可以找谁继续聊、下次该去哪一桌。
+
+衡量指标别看注册数，看报名转化、到场率、活动后 7 天内主动复联率、二次报名率、被邀请的新校友数。这个链条跑通，再谈平台。
+
+### 对巢聚 / 租房
+
+Pie 对巢聚不是直接模板，但有一个重要提醒：租房信任也不能只靠列表和聊天。可以尝试“同身份/同园区/同预算的小范围可信连接”，例如复旦校友、北京亦庄同公司员工、同预算租客的看房互助或中介评价交换。
+
+但租房比社交更危险。涉及钱、住址、合同、隐私和名誉。巢聚不能照搬 snowball 扩散，必须先做身份认证、证据脱敏、风险提示和私密协作；公开黑名单会有法律和滥用风险。
+
+## 下一步最该查
+
+1. Sparked by Pie 的具体定价、匹配方式、退款和复购如何。
+2. 50,000 actively joining 是报名、入群、实际到场，还是其他口径。
+3. Pie Creator Fund 如何补贴 creator，是否会造成虚假供给。
+4. 朋友的朋友 feed 是否真的提高报名转化和安全感。
+5. enterprise product pilot 是否已有真实付费客户。
+6. 中国版如果基于微信生态，旦聚旦应该把产品层放在活动前选人、活动中分组、活动后复联，还是独立 App。
