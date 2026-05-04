@@ -125,6 +125,7 @@ export const contents: Content[] = [
 			{ title: "Luma", href: "/docs/social-relationship-products/luma", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Partiful", href: "/docs/social-relationship-products/partiful", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Heylo", href: "/docs/social-relationship-products/heylo", icon: () => <Activity className="w-4 h-4 text-current" /> },
+			{ title: "Howbout", href: "/docs/social-relationship-products/howbout", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Mozi", href: "/docs/social-relationship-products/mozi", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Cappuccino", href: "/docs/social-relationship-products/cappuccino", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Locket", href: "/docs/social-relationship-products/locket", icon: () => <Activity className="w-4 h-4 text-current" /> },
