@@ -130,6 +130,7 @@ export const contents: Content[] = [
 			{ title: "Cappuccino", href: "/docs/social-relationship-products/cappuccino", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Locket", href: "/docs/social-relationship-products/locket", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Retro", href: "/docs/social-relationship-products/retro", icon: () => <Activity className="w-4 h-4 text-current" /> },
+			{ title: "Maia", href: "/docs/social-relationship-products/maia", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Timeleft", href: "/docs/social-relationship-products/timeleft", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "The Breakfast", href: "/docs/social-relationship-products/the-breakfast", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "222", href: "/docs/social-relationship-products/222", icon: () => <Activity className="w-4 h-4 text-current" /> },
