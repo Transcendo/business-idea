@@ -14,6 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "content" / "docs"
 SIDEBAR = ROOT / "components" / "sidebar-content.tsx"
+PUBLIC_SCAN_ROOTS = [DOCS, ROOT / "app", ROOT / "components", ROOT / "lib"]
 
 BANNED_PHRASES = [
     "赋能",
@@ -34,6 +35,15 @@ BANNED_PHRASES = [
 ]
 
 SOURCE_HEADINGS = ["可信来源", "官方链接", "关键外链", "来源", "Sources", "官方链接 / 关键外链"]
+
+PRIVATE_PATTERNS = [
+    "旦聚旦",
+    "DJD",
+    "巢聚",
+    "/Users/djd",
+    "~/Documents/djd",
+    "djd-obsidian",
+]
 
 
 def rel(path: Path) -> str:
@@ -114,6 +124,7 @@ def check_mdx_files(errors: list[str], warnings: list[str]) -> None:
                 warnings.append(f"{rel(mdx)} 含疑似空话/禁词：{phrase}")
 
 
+
 def check_sidebar(errors: list[str]) -> None:
     if not SIDEBAR.exists():
         return
@@ -123,6 +134,20 @@ def check_sidebar(errors: list[str]) -> None:
         target = page_path_from_href(href)
         if target is not None and not target.exists():
             errors.append(f"sidebar href 找不到页面：{href} -> {rel(target)}")
+
+
+def check_private_patterns(errors: list[str]) -> None:
+    suffixes = {".md", ".mdx", ".ts", ".tsx"}
+    for root in PUBLIC_SCAN_ROOTS:
+        if not root.exists():
+            continue
+        for path in root.rglob("*"):
+            if not path.is_file() or path.suffix not in suffixes:
+                continue
+            text = path.read_text(encoding="utf-8")
+            for pattern in PRIVATE_PATTERNS:
+                if pattern in text:
+                    errors.append(f"{rel(path)} 含内部项目或本地路径信息：{pattern}")
 
 
 def main() -> int:
@@ -136,6 +161,7 @@ def main() -> int:
     check_meta_pages(errors)
     check_mdx_files(errors, warnings)
     check_sidebar(errors)
+    check_private_patterns(errors)
 
     for warning in warnings:
         print(f"WARN: {warning}")

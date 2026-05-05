@@ -7,13 +7,13 @@
 
 ## 可信来源链接
 
-- 官方首页：[https://capp.fm/](https://capp.fm/)  
+- 官方首页：[https://capp.fm/](https://capp.fm/)
   - 2026-05-04 抓取时页面标题为 `Cappuccino`，页面文案是 “A daily personal audio show featuring your friends”。
-- Apple App Store / iTunes Lookup：[https://apps.apple.com/us/app/cappuccino-stay-in-touch/id1506849927](https://apps.apple.com/us/app/cappuccino-stay-in-touch/id1506849927)  
+- Apple App Store / iTunes Lookup：[https://apps.apple.com/us/app/cappuccino-stay-in-touch/id1506849927](https://apps.apple.com/us/app/cappuccino-stay-in-touch/id1506849927)
   - iTunes API 返回 `Cappuccino - stay in touch`，seller 为 `Sociaaal LLC`；2026-05-04 快照显示版本 `1.9.13`，更新时间 `2024-11-12`，美国区评分约 `4.73`，评分数约 `2,860`。描述写明它像一个由 closest friends 的 stories 组成的 mini-podcast，用户录制短音频 stories / beans，然后收听带背景音乐的 Cappuccino。
-- Google Play：[https://play.google.com/store/apps/details?id=fm.cappuccino&hl=en_US](https://play.google.com/store/apps/details?id=fm.cappuccino&hl=en_US)  
+- Google Play：[https://play.google.com/store/apps/details?id=fm.cappuccino&hl=en_US](https://play.google.com/store/apps/details?id=fm.cappuccino&hl=en_US)
   - 2026-05-04 抓取时显示 `Cappuccino`，开发者 `Sociaaal LLC`，含 in-app purchases，约 `100K+ Downloads`。页面描述写明：用户录制 short voice memo / bean，分享给 close friends and family；每天早上 8 点收听由朋友 beans 混成的 Cappuccino。
-- TechCrunch 2021：[https://techcrunch.com/2021/03/01/cappuccino-lets-you-share-short-intimate-audio-stories-with-your-friends/](https://techcrunch.com/2021/03/01/cappuccino-lets-you-share-short-intimate-audio-stories-with-your-friends/)  
+- TechCrunch 2021：[https://techcrunch.com/2021/03/01/cappuccino-lets-you-share-short-intimate-audio-stories-with-your-friends/](https://techcrunch.com/2021/03/01/cappuccino-lets-you-share-short-intimate-audio-stories-with-your-friends/)
   - 标题为 “Cappuccino lets you share short, intimate audio stories with your friends”。报道把它称作 anti-Clubhouse：不是公开音频广场，而是 close friends / family 的私密音频故事；成员录一段 bean，第二天早上收到已经 brewed 好的 morning cappuccino。
 
 ## 产品服务的关系类型
@@ -62,7 +62,6 @@ Cappuccino 压缩的任务是：
 
 > 用户给一个小圈和几段语音/活动录音；AI 在 30 秒内生成一份“今日关系摘要”：谁最近压力大、谁值得关心、哪件事可以成为下次见面的理由、该给谁发一句不尴尬的 follow-up。
 
-对旦聚旦尤其可迁移：活动后把参与者的自我介绍、讨论片段、互助需求转成“校友小局音频 recap + 下一步互助卡”，让一次见面不死在群聊里。
 
 ## 为什么用户会来 / 留 / 传播 / 付钱
 
@@ -111,22 +110,17 @@ Cappuccino 压缩的任务是：
 
 所以 Cappuccino 不是伪社交壳，但它也不是平台型大网络。它的护城河在于小圈 ritual 和声音记忆，而不是陌生人规模。
 
-## 对中国市场、旦聚旦、巢聚或用户现有项目的可迁移启发
 
-### 对旦聚旦
 
-旦聚旦不要学“语音社交”表层，要学 Cappuccino 的异步 ritual：
 
 - 活动前：主理人收集参与者 30 秒自我介绍和本次想解决的问题；
 - 活动后：AI 生成 3-5 分钟校友小局 recap，包含谁是谁、聊了什么、谁能帮谁；
 - 复联：给每个参与者生成 1-2 个下一步触达建议，而不是把大家丢进微信群；
 - 留存：每个校友小圈有连续几期的“关系记忆”，让主理人不必每次从零暖场。
 
-最小验证动作：找一个复旦/上海/杭州 AI 创业小局，活动后 24 小时内手工做一版音频 recap + 互助卡，看参与者是否愿意转发、补充、约下一次。
+最小验证动作：找一个校友/一线与新一线城市 AI 创业小局，活动后 24 小时内手工做一版音频 recap + 互助卡，看参与者是否愿意转发、补充、约下一次。
 
-### 对巢聚
 
-巢聚的关联较弱，但可以借鉴“异步语音转结构”的前台：
 
 - 租客、中介、室友看房后各录 30 秒反馈；
 - AI 汇总成房源风险、室友偏好、下一步协商点；

@@ -67,7 +67,7 @@ const methodCards = [
 	},
 	{
 		title: "看迁移",
-		description: "判断能否迁移到旦聚旦、巢聚或新的 AI 产品实验里。",
+		description: "判断机制能否迁移到更通用的产品机会、场景实验或商业模型里。",
 	},
 ];
 
@@ -142,7 +142,7 @@ export default function HomePage() {
 								别把 AI 新闻越攒越乱，整理成能复用的机会地图。
 							</h1>
 							<p className="mt-7 max-w-2xl text-lg leading-8 text-white/74">
-								这里不是项目黄页。每个样本都尽量回答三件事：用户为什么要用，商业化卡在哪里，对我们的产品实验有什么迁移价值。
+								这里不是项目黄页。每个样本都尽量回答三件事：用户为什么要用，商业化卡在哪里，哪些机制有可复用价值。
 							</p>
 							<div className="mt-9 flex flex-wrap gap-3">
 								<Link

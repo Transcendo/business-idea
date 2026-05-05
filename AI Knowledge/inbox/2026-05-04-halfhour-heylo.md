@@ -7,13 +7,13 @@
 
 ## 可信来源链接
 
-- 官网：[https://www.heylo.com/](https://www.heylo.com/)  
+- 官网：[https://www.heylo.com/](https://www.heylo.com/)
   - 官网定位为 “Your space for events, communications, and payments, for free”。页面写明适用对象包括 run club、parent group、volunteer team、cycling groups、social clubs、churches、pickleball leagues、hiking groups 等 in-person groups；核心功能包括创建活动、RSVP、签到、容量上限、waitlist、单链接 onboarding、registration、waivers、payments、members profiles、icebreakers、topic/event chats、shareable event flyers、Google / ChatGPT discoverability、membership dues、event fees、donations、sponsor perks 和 membership paywall。
-- Apple App Store / iTunes Lookup：[https://apps.apple.com/us/app/heylo-build-community-groups/id1445966180](https://apps.apple.com/us/app/heylo-build-community-groups/id1445966180)  
+- Apple App Store / iTunes Lookup：[https://apps.apple.com/us/app/heylo-build-community-groups/id1445966180](https://apps.apple.com/us/app/heylo-build-community-groups/id1445966180)
   - 2026-05-04 iTunes API 返回：`Heylo | Build community groups`，bundle 为 `com.thepiccup.Piccup`，seller 为 `Piccup, Inc.`，美国区评分约 `4.89`、评分数 `4588`。官方描述强调 event broadcast、event group chats、custom registration、private/member-only events、attendance milestones、topic chats、icebreakers、payments、waivers、custom URL、member self-service、private groups、screen new members、export member info；商业模式写明 free to use、no ads，通过收款时抽取 small percentage。
-- TechCrunch 2022：[https://techcrunch.com/2022/11/01/heylo-fundraise/](https://techcrunch.com/2022/11/01/heylo-fundraise/)  
+- TechCrunch 2022：[https://techcrunch.com/2022/11/01/heylo-fundraise/](https://techcrunch.com/2022/11/01/heylo-fundraise/)
   - TechCrunch 报道标题为 “Heylo wants to help you build your own little social circles for events”。报道称 Heylo 由前 Google 员工 Eric Winters 和 Brandon Pearcy 于 2019 年创立，先 bootstrapped to profitability，后宣布融资 150 万美元；文中点出 payments、group chats、event details、DM、booking、waitlist 等是它解决的核心组织问题。
-- Brevo case study 2024：[https://www.brevo.com/resources/success-story-heylo/](https://www.brevo.com/resources/success-story-heylo/)  
+- Brevo case study 2024：[https://www.brevo.com/resources/success-story-heylo/](https://www.brevo.com/resources/success-story-heylo/)
   - Brevo 将 Heylo 描述为 “community management platform for in-person groups”，服务 thousands of groups across the world；案例显示 Heylo 月发送约 100 万封 email，通过邮件页脚嵌入 group-creation link 带来 `+20% group creations`，并提到 Heylo 让 group leaders 的 app messages 转为个性化 email 通知，帮助成员保持同步。
 
 ## 产品服务的关系类型
@@ -67,9 +67,8 @@ Heylo 压缩的任务是：
 
 > 主理人给一场小局主题、候选成员池、城市、时间限制和收费/免费规则；AI 在 30 秒内返回活动结构、最该邀请的 20 人、5 组应该互相认识的人、候补策略、低尴尬邀请词、现场破冰问题和活动后 follow-up 清单。
 
-对旦聚旦的版本：
 
-> 给复旦校友小局的主题、报名名单、名片、互助需求和城市；系统返回“活动前身份确认 + 推荐座位/分组 + 主理人介绍词 + 活动后 5 个互助 follow-up”，把主理人的组织经验产品化。
+> 给高信任校友小局的主题、报名名单、名片、互助需求和城市；系统返回“活动前身份确认 + 推荐座位/分组 + 主理人介绍词 + 活动后 5 个互助 follow-up”，把主理人的组织经验产品化。
 
 ## 为什么用户会来 / 留 / 传播 / 付钱
 
@@ -118,30 +117,24 @@ Heylo 压缩的任务是：
 
 所以 Heylo 不是伪社交壳。它的护城河不在信息流规模，而在主理人工作流、成员身份资产、支付记录和线下重复见面的组织沉淀。
 
-## 对中国市场、旦聚旦、巢聚或用户现有项目的可迁移启发
 
-### 对旦聚旦
 
-旦聚旦最该学 Heylo 的，不是“做一个校友社区平台”，而是把校友小局从微信群手工活变成强关系组织系统：
 
 - **活动自动化**：报名、候补、签到、分组、现场破冰、活动后复联都产品化，主理人不再靠脑子记所有人。
-- **身份/名片信任层**：复旦身份、职业名片、校友背书、参与历史、互助记录，比开放广场更适合强关系。
+- **身份/名片信任层**：可信身份、职业名片、校友背书、参与历史、互助记录，比开放广场更适合强关系。
 - **主理人弱依赖**：系统替主理人处理提醒、收费、候补、介绍词和 follow-up，主理人只负责品味和关系判断。
 - **意向收集**：报名时收“我想认识谁 / 我能帮什么 / 我最近在做什么”，活动前自动生成互助配对。
 - **校友互助和同城连接**：把一次活动变成后续互助清单，而不是活动结束后大家沉进微信群。
 
-最小验证动作：先别做完整社区。做一个“复旦 AI/创业小局操作台”：用户提交 30 个候选校友名片 + 活动主题，系统输出邀请名单、分组、介绍词、候补和活动后 follow-up；人工跑 3 场，看出席率、二次联系率和主理人节省时间。
+最小验证动作：先别做完整社区。做一个“AI / 创业小局操作台”：用户提交 30 个候选校友名片 + 活动主题，系统输出邀请名单、分组、介绍词、候补和活动后 follow-up；人工跑 3 场，看出席率、二次联系率和主理人节省时间。
 
-### 对巢聚
 
-Heylo 对巢聚的启发是“租房信任小组”而不是租房社区：
 
-- 复旦/公司/园区身份认证的看房小队；
+- 校友/公司/园区身份认证的看房小队；
 - 看房报名、时间、路线、候补和中介接待安排；
 - 中介/房源的支付、承诺、黑名单风险和服务记录；
 - 同楼/同小区租客的小群互助，但边界要严，不能变成泛邻里信息流。
 
-巢聚最该复制的是组织流程和信任边界，不是聊天功能。
 
 ### 对中国市场
 

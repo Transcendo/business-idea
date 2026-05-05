@@ -7,15 +7,15 @@
 
 ## 可信来源链接
 
-- 官方首页：[https://locket.camera/](https://locket.camera/)  
+- 官方首页：[https://locket.camera/](https://locket.camera/)
   - 2026-05-04 抓取时，页面 title 为 `Locket Widget`，meta description 为 “Add your friends to your Home Screen.”
-- Apple App Store / iTunes Lookup：[https://apps.apple.com/us/app/locket-widget/id1600525061](https://apps.apple.com/us/app/locket-widget/id1600525061)  
+- Apple App Store / iTunes Lookup：[https://apps.apple.com/us/app/locket-widget/id1600525061](https://apps.apple.com/us/app/locket-widget/id1600525061)
   - iTunes API 返回 `Locket Widget`，seller 为 `Locket Labs, Inc.`；2026-05-04 快照显示版本 `2.43.0`，更新时间 `2026-04-30`，美国区评分约 `4.76`，评分数约 `506,827`。描述写明：Locket 是一个把 best friends 的 live photos 显示到 Home Screen 的 widget；用户最多只能加 20 个朋友，不追 follower count。
-- Google Play：[https://play.google.com/store/apps/details?id=com.locket.Locket&hl=en_US](https://play.google.com/store/apps/details?id=com.locket.Locket&hl=en_US)  
+- Google Play：[https://play.google.com/store/apps/details?id=com.locket.Locket&hl=en_US](https://play.google.com/store/apps/details?id=com.locket.Locket&hl=en_US)
   - 2026-05-04 抓取时显示 `Locket Widget`，Locket Labs, Inc.，contains ads / in-app purchases，约 `4.6` 星、`358K` reviews、`10M+ Downloads`。描述同样强调 live photos from your best friends right to your Home Screen。
-- TechCrunch 2022：[https://techcrunch.com/2022/01/11/locket-an-app-for-sharing-photos-to-friends-homescreens-hits-the-top-of-the-app-store/](https://techcrunch.com/2022/01/11/locket-an-app-for-sharing-photos-to-friends-homescreens-hits-the-top-of-the-app-store/)  
+- TechCrunch 2022：[https://techcrunch.com/2022/01/11/locket-an-app-for-sharing-photos-to-friends-homescreens-hits-the-top-of-the-app-store/](https://techcrunch.com/2022/01/11/locket-an-app-for-sharing-photos-to-friends-homescreens-hits-the-top-of-the-app-store/)
   - 标题为 “Locket, an app for sharing photos to friends' homescreens, hits the top of the App Store”。报道指出它把朋友 live photos 放进 iOS homescreen widget，把 widget 系统变成 private social networking platform；创始人 Matt Moss 最初为女友做出这个 app。
-- TechCrunch 2025：[https://techcrunch.com/2025/08/06/photo-sharing-app-locket-is-banking-on-a-new-celebrity-focused-feature-to-fuel-its-growth/](https://techcrunch.com/2025/08/06/photo-sharing-app-locket-is-banking-on-a-new-celebrity-focused-feature-to-fuel-its-growth/)  
+- TechCrunch 2025：[https://techcrunch.com/2025/08/06/photo-sharing-app-locket-is-banking-on-a-new-celebrity-focused-feature-to-fuel-its-growth/](https://techcrunch.com/2025/08/06/photo-sharing-app-locket-is-banking-on-a-new-celebrity-focused-feature-to-fuel-its-growth/)
   - 报道称 Locket claimed over `80 million total downloads`、`more than 9 million daily active users`、用户分享超过 `10 billion photos`，并称公司 2024 年实现盈利；同时也提到它在尝试 Celebrity Lockets 扩增长。
 
 ## 产品服务的关系类型
@@ -64,7 +64,6 @@ Locket 压缩的是这个任务：
 
 > 用户给一张近况照片和一个小圈子；AI 在 30 秒内判断这张图适合发给谁、会不会尴尬、该配一句什么不像群发垃圾话的短句，并自动生成可发给不同关系的轻量触达版本。
 
-对旦聚旦尤其可迁移：用户给一次活动照片/一句聊到的互助点，系统返回“该跟谁复联、怎么说、什么时候发”的低尴尬 follow-up。
 
 ## 为什么用户会来 / 留 / 传播 / 付钱
 
@@ -112,11 +111,8 @@ Locket 压缩的是这个任务：
 
 所以它不是伪社交壳。它的护城河不是“全网用户越多越好”，而是亲密小圈是否愿意把它放到主屏这种极高优先级位置。
 
-## 对中国市场、旦聚旦、巢聚或用户现有项目的可迁移启发
 
-### 对旦聚旦
 
-Locket 给旦聚旦的核心启发：强关系产品要占一个“低尴尬、高可见”的触达位置，而不是再建一个没人打开的校友广场。
 
 可迁移楔子：
 
@@ -125,11 +121,8 @@ Locket 给旦聚旦的核心启发：强关系产品要占一个“低尴尬、�
 - AI 根据关系强度生成不同 follow-up：给刚认识的人、给同学院校友、给潜在合作对象、给主理人；
 - 不追求所有校友都进平台，先让 3-8 人的小局形成可持续复联。
 
-旦聚旦不要学 Locket 的照片表层，要学它的“亲密边界 + 触达位置 + 极低发布成本”。
 
-### 对巢聚
 
-巢聚可以学 Locket 的低摩擦 presence，但场景要换成租房信任：
 
 - 看房后，候选室友/中介/房东的可信记录不该散在微信里；
 - 可以生成一个小范围可见的“房源/室友/中介状态卡”；

@@ -8,15 +8,15 @@
 
 ## 可信来源链接
 
-- 官网首页：[https://www.paired.com/](https://www.paired.com/)  
+- 官网首页：[https://www.paired.com/](https://www.paired.com/)
   2026-05-05 通过 Jina Reader 抓取复核：页面 title 为 `Paired - App For Couples | The #1 Relationship App`；首页写到 `The app that brings couples closer`、`5 minutes a day to a better relationship`、`1000+ expert-led quizzes and games`、`89% see positive changes in their relationship in 3 months`，并展示 `4.7`、`+195K reviews`。
-- 官网 About：[https://www.paired.com/about-us](https://www.paired.com/about-us)  
+- 官网 About：[https://www.paired.com/about-us](https://www.paired.com/about-us)
   页面写明 Paired 的任务是 `make staying in love easier`；产品切入点是 committed stage 后的沟通习惯退化；创始故事来自 co-founder Kevin Shanahan 与伴侣之间“重要话题没有深入谈，慢慢变成冲突”的问题；页面称 `More than four years and 4M couples later`。
-- 官网 Premium：[https://www.paired.com/premium](https://www.paired.com/premium)  
+- 官网 Premium：[https://www.paired.com/premium](https://www.paired.com/premium)
   页面显示订阅价格：Yearly $39.99 / $3.33 per month，Monthly $14.99；`Your partner gets Premium for free`；Premium 包含 daily activity、1000+ relationship questions/quizzes/games、relationship tips、goals and milestones content packs。
-- Apple App Store lookup API：[https://apps.apple.com/us/app/paired-couples-relationship/id1469609343](https://apps.apple.com/us/app/paired-couples-relationship/id1469609343)  
+- Apple App Store lookup API：[https://apps.apple.com/us/app/paired-couples-relationship/id1469609343](https://apps.apple.com/us/app/paired-couples-relationship/id1469609343)
   2026-05-05 复核：App 名为 `Paired: Couples & Relationship`，开发者 `Better Half Limited`，Lifestyle 类，免费下载，评分约 `4.72898`，评价数 `198,289`。描述写到 `8 million downloads`、`build better communication, manage conflict, and deepen your connection in just 5 minutes a day`。
-- Google Play：[https://play.google.com/store/apps/details?id=com.getpaired.app](https://play.google.com/store/apps/details?id=com.getpaired.app)  
+- Google Play：[https://play.google.com/store/apps/details?id=com.getpaired.app](https://play.google.com/store/apps/details?id=com.getpaired.app)
   2026-05-05 通过 Jina Reader 抓取复核：页面标题为 `Paired: Couples & Relationship`，开发者为 `Paired - Relationship Advice & Quiz for Couples`，显示约 `61K reviews`；描述写到 Daily Conversations、partner answers unlock、guided journeys、relationship goals、important dates。
 
 > 注：本轮 `web_search` / `web_extract` 因 Exa credits 402 不可用，改用 Jina Reader、Apple iTunes Lookup API 和 Google Play 页面抓取核验。官方 Premium 页与 App Store 描述对 “Apple App of the Day” 日期表述不完全一致，后续写正式页时不要把具体日期当核心事实。
@@ -114,11 +114,8 @@ Paired 目前不是典型 AI-native wedge。它的可学点反而是非 AI 关�
 - 专家背书与媒体露出。
 - 礼物/游戏场景：生日、纪念日、情人节、婚礼、异地关系。
 
-## 对中国市场、旦聚旦、巢聚或现有项目的可迁移启发
 
-### 对旦聚旦
 
-Paired 对旦聚旦的启发不是做“校友情侣 App”，而是：**强关系需要一个低尴尬、可重复的共同动作。**
 
 可迁移到校友/创业/AI 成长小圈子的版本：
 
@@ -128,9 +125,7 @@ Paired 对旦聚旦的启发不是做“校友情侣 App”，而是：**强关�
 4. **主理人弱依赖**：主理人不需要逐个撮合，只需审核高意向 pair / 小组。
 5. **校友名片信任层**：把身份、活动共同经历、互助记录沉淀成轻量关系档案。
 
-一句话：旦聚旦别先做“大社交平台”，先做“活动后关系 ritual”。
 
-### 对巢聚 / 租房信任网络
 
 Paired 的“双人共同回答 + 解锁 + 行动建议”可以迁移到合租关系：
 
@@ -154,4 +149,3 @@ Paired 的“双人共同回答 + 解锁 + 行动建议”可以迁移到合租�
 - Paired 的 89% positive changes 具体研究方法是什么？有没有公开白皮书或第三方研究？
 - 它的付费转化主要来自日常使用、冲突场景，还是节日/纪念日场景？
 - Partner invite 的激活率和长期留存是否构成真正网络效应，还是只是双人协作工具？
-- 如果迁移到旦聚旦，最小实验是否可以是“活动后 24 小时关系行动卡”，而不是完整 App？

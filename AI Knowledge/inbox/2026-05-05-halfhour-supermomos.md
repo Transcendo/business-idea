@@ -8,14 +8,14 @@
 
 ## 可信来源链接
 
-- 官网首页：<https://www.supermomos.com/>  
+- 官网首页：<https://www.supermomos.com/>
   官网称自己是 “The World’s 1st Verified In Real Life (IRL) Professional Community”，并写到有 35,000+ founders、investors、Fortune 1000 executives、technology operators。
-- 官网 Enterprise Plans：<https://www.supermomos.com/enterprise-plans>  
+- 官网 Enterprise Plans：<https://www.supermomos.com/enterprise-plans>
   列出 event pages、ticketing、approve attendees、questionnaire、guest list、RSVP、group chat、reviews、email/SMS reminders、demographic breakdown、post-event reports、gated access、automated curation 等能力；Business+ 起价 $2k/month。
-- App Store：<https://apps.apple.com/us/app/supermomos-socialize-learn/id1572195122>  
+- App Store：<https://apps.apple.com/us/app/supermomos-socialize-learn/id1572195122>
   App Store 描述包含 Socials、exclusive curated socials、1x1 Weekly Encounters、curated small peer group、interest groups、members directory；iTunes Lookup 显示类别为 Social Networking，2026-04-22 仍有版本更新。
 - Google Play 开发者页：<https://play.google.com/store/apps/dev?id=8428143351988977819&hl=en>
-- AlleyWatch 介绍：<https://www.alleywatch.com/2022/03/supermomos-best-events-nyc-tech-networking-platform-community/>  
+- AlleyWatch 介绍：<https://www.alleywatch.com/2022/03/supermomos-best-events-nyc-tech-networking-platform-community/>
   介绍其通过 curated professional communities 和 IRL events 帮 tech professionals make new friends，并提到 app-enabled interactions / gamification 用来降低破冰成本。
 
 ## 产品服务的关系类型
@@ -104,22 +104,19 @@ Supermomos 官网已经出现 **AI Sorting Hat: Find Your Professional House** �
 - App Store / Google Play。
 - Beehiiv newsletter 和活动日历。
 
-## 对中国市场、旦聚旦、巢聚的可迁移启发
 
-### 对旦聚旦
 
 最该学的是：**不要做泛校友社区，做“校友小局操作系统”。**
 
 可迁移动作：
 
-1. **身份可信名片**：复旦/校友/行业/城市/创业阶段/可提供帮助/想获得帮助，不要只做头像昵称。
+1. **身份可信名片**：校友/校友/行业/城市/创业阶段/可提供帮助/想获得帮助，不要只做头像昵称。
 2. **活动前意向收集**：报名时问 3 个问题：这次想见谁、能帮别人什么、最近卡在哪。
 3. **AI 分组与介绍词**：系统给主理人一份座位/分组建议和每组开场介绍词，降低主理人弱依赖。
 4. **低尴尬 follow-up**：活动后自动生成“你们刚刚聊过 X，他能帮你 Y，建议发这句话约 15 分钟继续聊”。
-5. **同城重复系列**：上海 AI 创业饭局、杭州产品人小局、北京亦庄产业连接，而不是一次性活动海报。
+5. **同城重复系列**：AI 创业饭局、杭州产品人小局、产业园区产业连接，而不是一次性活动海报。
 6. **会后关系资产**：照片不是重点，重点是共同记忆、互助点、下一步动作、可信名片。
 
-### 对巢聚
 
 Supermomos 的逻辑可以迁移到租房里的“可信见面 / 可信中介 / 可信室友”：
 

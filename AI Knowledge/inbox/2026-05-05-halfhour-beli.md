@@ -7,17 +7,17 @@
 
 ## 可信来源链接
 
-- 官网：[https://beliapp.com/](https://beliapp.com/)  
+- 官网：[https://beliapp.com/](https://beliapp.com/)
   - 2026-05-05 抓取：首页文案是 `Track and share your favorite restaurants with your friends`；核心功能为 Track、Share、Discover：记录去过和想去的餐厅，看朋友吃什么、喜欢什么和讨厌什么，并获得 personalized recs / top lists。
-- 官方团队页：[https://beliapp.com/meet-the-team](https://beliapp.com/meet-the-team)  
+- 官方团队页：[https://beliapp.com/meet-the-team](https://beliapp.com/meet-the-team)
   - 团队页显示 Judy Thelen 为 CEO / Co-Founder，Eliot Frost 为 CTO / Co-Founder；官方故事写到两人围绕纽约餐厅建立关系，痛点来自可靠评论和餐厅记录工具不足，目标是做一个知道用户口味并推荐餐厅的产品。
-- Apple App Store / iTunes Lookup：[https://apps.apple.com/us/app/beli/id1478375386](https://apps.apple.com/us/app/beli/id1478375386)  
+- Apple App Store / iTunes Lookup：[https://apps.apple.com/us/app/beli/id1478375386](https://apps.apple.com/us/app/beli/id1478375386)
   - 2026-05-05 iTunes API 返回：App 名称 `Beli`，seller 为 `Beli Technologies, Inc.`，类别 Food & Drink，免费，版本 `9.0.3`，当前版本更新时间 `2026-05-02`，美国区评分约 `4.86`、评分数约 `14,728`。描述强调 ranked lists / maps、朋友吃过和喜欢/讨厌的餐厅、personalized recommendations、newsfeed、tags、notes、favorite dishes、Taste Profile、和朋友的 Match Score。
-- Google Play：[https://play.google.com/store/apps/details?id=com.beliapp.myapp&hl=en_US&gl=US](https://play.google.com/store/apps/details?id=com.beliapp.myapp&hl=en_US&gl=US)  
+- Google Play：[https://play.google.com/store/apps/details?id=com.beliapp.myapp&hl=en_US&gl=US](https://play.google.com/store/apps/details?id=com.beliapp.myapp&hl=en_US&gl=US)
   - 2026-05-05 抓取：开发者 `Beli App`，`100K+ Downloads`，约 `1.56K reviews`，评分约 `4.1`，更新时间 `2026-04-18`。页面同样强调记录、分享、发现餐厅，并明确写到“See where your friends are eating and what they love and hate”。
-- TODAY 2025：[https://www.today.com/food/trends/what-is-beli-app-rcna217748](https://www.today.com/food/trends/what-is-beli-app-rcna217748)  
+- TODAY 2025：[https://www.today.com/food/trends/what-is-beli-app-rcna217748](https://www.today.com/food/trends/what-is-beli-app-rcna217748)
   - 报道标题为 “How the Beli App Is Turning Dining Out Into a Competitive Sport”，称 Beli 2021 年上线，是一个让用户 track、rank、share restaurant experiences with friends 的 social app，并把问题表述为不仅问“Where should I eat?”，还问“Where is everyone else eating?”。
-- The Harvard Crimson 2025：[https://www.thecrimson.com/article/2025/5/1/beli-judith-eliot-frost/](https://www.thecrimson.com/article/2025/5/1/beli-judith-eliot-frost/)  
+- The Harvard Crimson 2025：[https://www.thecrimson.com/article/2025/5/1/beli-judith-eliot-frost/](https://www.thecrimson.com/article/2025/5/1/beli-judith-eliot-frost/)
   - 报道称 Beli 由 Judith / Judy Thelen 和 Eliot Frost 在 Harvard Business School 期间创建，灵感来自两人约会时维护的 Google restaurant map；文中称过去一年 Beli 有 `30 million rankings`，并引用创始人说法：foodies 的餐厅 list 分散在 notes、Docs、Excel 等不适合 discovery 的工具里。
 
 ## 产品服务的关系类型
@@ -148,7 +148,6 @@ Beli 的入口承诺够具体：
 - 校园和城市密度：年轻人、留学生、城市 foodie 圈、公司同事圈容易局部爆发。
 - 餐厅/旅行内容：榜单、攻略、年度回顾可以作为内容钩子。
 
-## 对中国市场、旦聚旦、巢聚的可迁移启发
 
 ### 对中国市场
 
@@ -161,11 +160,9 @@ Beli 的入口承诺够具体：
 - 情侣/朋友共同清单：把“下次去哪”从聊天记录变成共同资产。
 - 旅行搭子：朋友去过的城市餐厅图谱，比陌生攻略更可信。
 
-### 对旦聚旦
 
-旦聚旦最值得偷的是 **“关系发生理由”**。
 
-复旦/上海/AI 成长型社交如果只做校友名片和活动报名，很容易活动后沉默。Beli 提醒我们：饭局本身就是强关系容器。
+高信任校友与 AI 成长型社交如果只做校友名片和活动报名，很容易活动后沉默。Beli 提醒我们：饭局本身就是强关系容器。
 
 可做的最小楔子：
 
@@ -173,13 +170,11 @@ Beli 的入口承诺够具体：
 
 这里的关键不是餐厅推荐，而是用餐厅作为“让校友关系发生”的低摩擦场景。
 
-### 对巢聚
 
-巢聚可以借 Beli 的“熟人信任图谱”做租房版：
 
 - 租客不是只看房源，而是看可信中介、可信小区、可信室友和熟人背书。
 - “朋友/校友/同事住过哪里、踩过什么坑、推荐哪个中介”比公开评分更有用。
-- 可以从复旦、北京亦庄、上海同城 POC 切入，做小圈租房信任地图。
+- 可以从校友、产业园区、上海同城 POC 切入，做小圈租房信任地图。
 
 但别做成公开黑榜。更安全的是证据化、私域化、圈层化的 trust prompt。
 

@@ -7,15 +7,15 @@
 
 ## 可信来源链接
 
-- 官方首页：[https://retro.app/](https://retro.app/)  
+- 官方首页：[https://retro.app/](https://retro.app/)
   - 2026-05-04 抓取时，页面主文案是 “Your friends, week to week”。
-- 官方 Ethos：[https://retro.app/ethos](https://retro.app/ethos)  
+- 官方 Ethos：[https://retro.app/ethos](https://retro.app/ethos)
   - 官方写明 Retro 是 “a social app that feels like a joy, not a habit”，是 “friends-only photo journal”；目标是让朋友知道你近况，并认为大社媒转向陌生内容娱乐后，朋友更新被挤掉。
-- Apple iTunes Search API：[https://itunes.apple.com/search?term=Retro%20private%20photo%20journal&entity=software&country=us&limit=1](https://itunes.apple.com/search?term=Retro%20private%20photo%20journal&entity=software&country=us&limit=1)  
+- Apple iTunes Search API：[https://itunes.apple.com/search?term=Retro%20private%20photo%20journal&entity=software&country=us&limit=1](https://itunes.apple.com/search?term=Retro%20private%20photo%20journal&entity=software&country=us&limit=1)
   - 返回 `Retro — Photos with Friends`，seller 为 `Lone Palm Labs, Inc.`，bundle id `io.lonepalm.Retro`，类别为 Photo & Video；2026-05-04 快照显示版本 `104.0`，评分约 `4.82`，评分数约 `3,996`。App 描述强调 weekly photo journal、real photos with real friends、private friend list、private likes、no captions required、monthly recaps、postcards。
-- Google Play：[https://play.google.com/store/apps/details?id=io.lonepalm.retro&hl=en-US](https://play.google.com/store/apps/details?id=io.lonepalm.retro&hl=en-US)  
+- Google Play：[https://play.google.com/store/apps/details?id=io.lonepalm.retro&hl=en-US](https://play.google.com/store/apps/details?id=io.lonepalm.retro&hl=en-US)
   - 2026-05-04 抓取时显示 `Retro — Photos with Friends`，Lone Palm Labs，in-app purchases，约 `4.6` 星、`5.39K` reviews、`500K+ Downloads`。描述同样强调 weekly photo journal、friends you actually care about、no pressure、group albums、monthly recaps。
-- TechCrunch：[https://techcrunch.com/2023/07/07/retro-is-a-deeply-personal-photo-journaling-app-for-close-friends/](https://techcrunch.com/2023/07/07/retro-is-a-deeply-personal-photo-journaling-app-for-close-friends/)  
+- TechCrunch：[https://techcrunch.com/2023/07/07/retro-is-a-deeply-personal-photo-journaling-app-for-close-friends/](https://techcrunch.com/2023/07/07/retro-is-a-deeply-personal-photo-journaling-app-for-close-friends/)
   - 标题为 “Retro is a deeply personal photo journaling app for close friends”。报道提到 Retro 想帮助用户与小范围朋友和家人分享生活近况，CEO Nathan Sharp 表示目标是成为 “the single best place to catch up with friends and family”。
 
 ## 产品服务的关系类型
@@ -99,13 +99,9 @@ Retro 压缩的是这个任务：
 
 所以它不是伪社交壳，但护城河也不来自“用户越多越好”。它的真护城河是私密边界、关系密度、历史记忆和低压力习惯。
 
-## 对中国市场、旦聚旦、巢聚或用户现有项目的可迁移启发
 
-### 对旦聚旦
 
-Retro 对旦聚旦的启发很直接：活动结束后，关系才刚开始。
 
-旦聚旦不要只做活动报名页，应该在每次校友小局后生成一个“只给参与者和可信校友看的记忆单元”：
 
 - 活动照片 / 合影 / 主题摘要；
 - 参与者可信名片；
@@ -115,9 +111,7 @@ Retro 对旦聚旦的启发很直接：活动结束后，关系才刚开始。
 
 真正能强化校友关系的不是“群里发几张图”，而是把一次见面沉淀成可信身份、共同经历和下一步互助。
 
-### 对巢聚
 
-巢聚不是相册产品，但可学它的私密边界：合租/看房关系也需要一个低压力、可信的小范围空间。比如多人看房后，系统生成“房源记忆卡 + 中介信任记录 + 室友偏好摘要”，只给本次相关人可见，避免信息散在微信聊天里。
 
 ### 对中国市场
 

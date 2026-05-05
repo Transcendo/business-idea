@@ -7,13 +7,13 @@
 
 ## 可信来源链接
 
-- Apple App Store / iTunes Lookup：[https://apps.apple.com/us/app/mozi-a-place-for-your-people/id6482482498](https://apps.apple.com/us/app/mozi-a-place-for-your-people/id6482482498)  
+- Apple App Store / iTunes Lookup：[https://apps.apple.com/us/app/mozi-a-place-for-your-people/id6482482498](https://apps.apple.com/us/app/mozi-a-place-for-your-people/id6482482498)
   - 2026-05-04 iTunes API 返回：`Mozi: A Place for Your People`，seller 为 `Quantum Hug, Inc.`，分类为 `Social Networking`，美国区评分约 `4.56`、评分数 `202`，发布时间 `2024-06-14`，版本更新时间 `2026-04-24`。官方描述写明：Mozi enriches contacts、按城市组织联系人、记录 Moments、让用户添加 trips / shows / events 并在和朋友重叠时提醒；没有品牌、粉丝数、广告、公开资料和 handles。
-- Fast Company 2025 访谈：[https://www.fastcompany.com/91319194/ev-williams-molly-dewolf-swenson-mozi-interview](https://www.fastcompany.com/91319194/ev-williams-molly-dewolf-swenson-mozi-interview)  
+- Fast Company 2025 访谈：[https://www.fastcompany.com/91319194/ev-williams-molly-dewolf-swenson-mozi-interview](https://www.fastcompany.com/91319194/ev-williams-molly-dewolf-swenson-mozi-interview)
   - 文章标题为 “Feeling lonely? Twitter cofounder Ev Williams has an app for that”。报道称 Mozi 由 Twitter / Medium 背后的 Ev Williams 与 Molly DeWolf Swenson 发起，2024 年 12 月上线，获 Williams 的 Obvious Ventures 600 万美元种子轮，已覆盖 135 个国家；产品让用户 check in 到某些地点/计划，让联系人可以加入，目标是促成 spontaneous, in-person interactions。
-- GeekWire 2025：[https://www.geekwire.com/2025/meet-the-seattle-based-ceo-leading-mozi-a-new-social-app-she-launched-with-twitter-co-founder/](https://www.geekwire.com/2025/meet-the-seattle-based-ceo-leading-mozi-a-new-social-app-she-launched-with-twitter-co-founder/)  
+- GeekWire 2025：[https://www.geekwire.com/2025/meet-the-seattle-based-ceo-leading-mozi-a-new-social-app-she-launched-with-twitter-co-founder/](https://www.geekwire.com/2025/meet-the-seattle-based-ceo-leading-mozi-a-new-social-app-she-launched-with-twitter-co-founder/)
   - 报道称 CEO Molly DeWolf Swenson 与 Ev Williams 共同创立 Mozi，2024 年 11 月完成 600 万美元种子轮；Mozi 的目标不是让用户长时间刷 app，而是帮助用户找到人后离开手机。文中写明：产品读取手机联系人，用户选择保留哪些联系人、哪些是 close friends，并控制谁能看到特定 updates / plans；若要聊天，Mozi 会导向短信、WhatsApp 等外部通讯工具。
-- Product Hunt：[https://www.producthunt.com/products/mozi-3](https://www.producthunt.com/products/mozi-3)  
+- Product Hunt：[https://www.producthunt.com/products/mozi-3](https://www.producthunt.com/products/mozi-3)
   - 页面文案为 “A place for your people”，描述为 “privately share with your friends where you are and where you're going”；团队页显示 Ev Williams、Molly DeWolf Swenson 等；页面显示免费、Social Media / Calendar / Community 标签。评论里 Molly 回应商业模式：会长期保留免费版，未来做 freemium / subscription premium features，不倾向广告，但可能探索和品牌合作。
 
 ## 产品服务的关系类型
@@ -65,7 +65,6 @@ Mozi 压缩的任务是：
 
 > 用户给一个城市/活动/计划和联系人池；AI 在 30 秒内返回 3-5 个最值得触达的人、触达理由、风险提示和一条有共同上下文、不尴尬、可手改的邀约。
 
-对旦聚旦的对应版本：
 
 > 用户给一次校友小局主题、报名名单、城市和参与者名片；AI 返回“最该互相介绍的 5 组人 + 每组为什么该见 + 主理人一句介绍词 + 活动后 follow-up 建议”。
 
@@ -116,26 +115,21 @@ Mozi 压缩的任务是：
 
 所以 Mozi 不是伪社交壳，但它也不是传统社交平台梦。它的网络效应来自高信任联系人密度，不来自信息流规模。
 
-## 对中国市场、旦聚旦、巢聚或用户现有项目的可迁移启发
 
-### 对旦聚旦
 
-旦聚旦最该学 Mozi 的不是“做一个校友社交 app”，而是做熟人/半熟人重逢的关系触发层：
 
 - **活动自动化**：活动前根据报名名单、城市、行业、兴趣、互助需求，自动生成最该认识的 5 组人。
-- **身份/名片信任层**：用复旦身份、职业名片、共同好友、参加过的活动建立可信边界，而不是开放广场。
+- **身份/名片信任层**：用可信身份、职业名片、共同好友、参加过的活动建立可信边界，而不是开放广场。
 - **主理人弱依赖**：主理人不必手动记每个人；系统记录“上次见过谁、聊过什么、能帮谁”。
 - **意向收集**：把“我下周去杭州 / 我想见 AI 产品负责人 / 我想找创业搭子”变成可匹配的计划信号。
 - **活动后复联**：生成不尴尬的 follow-up 和互助提醒，别让关系死在微信群。
 
-最小验证动作：选一个复旦/上海 AI 创业小局，让参与者填写 3 个计划信号：本周在哪、想见什么人、能帮别人什么。活动后人工匹配 5 组介绍，看是否促成二次见面。
+最小验证动作：选一个高信任 AI 创业小局，让参与者填写 3 个计划信号：本周在哪、想见什么人、能帮别人什么。活动后人工匹配 5 组介绍，看是否促成二次见面。
 
-### 对巢聚
 
-巢聚可以迁移“可信关系雷达”，但不要做社交外壳：
 
 - 租客输入预算、通勤、看房计划和可接受中介；系统匹配可信中介/室友/同楼看房人；
-- 通过复旦、北京亦庄、公司/园区、校友背书建立身份信任；
+- 通过校友、产业园区、公司/园区、校友背书建立身份信任；
 - 记录上次看房反馈、黑中介风险、下一步协商点，让下一次沟通不从零开始。
 
 这里的关键不是陌生人聊天，而是身份可信 + 计划重叠 + 风险提示。

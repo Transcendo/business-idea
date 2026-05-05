@@ -8,15 +8,15 @@
 
 ## 可信来源链接
 
-- 官网首页：[trycobble.com](https://www.trycobble.com/)  
+- 官网首页：[trycobble.com](https://www.trycobble.com/)
   官网定位是 “Find And Agree On What To Do”，首页强调 “More Time Together. More Fun Together.”、“Less time planning / More time together”，流程是 Plan / Share / Go。
-- 官网 About：[trycobble.com/about](https://www.trycobble.com/about)  
+- 官网 About：[trycobble.com/about](https://www.trycobble.com/about)
   Cobble 自述痛点来自 screenshots、DMs、Google searches、plans that led to nowhere、group chats that went dark；页面称每周新增 150 个 ideas、已有 1M+ saved ideas，并把自己称为 friend group 的 planner。
-- App Store：[Cobble: AI Group Planner](https://apps.apple.com/us/app/cobble-ai-group-planner/id1472811526)  
+- App Store：[Cobble: AI Group Planner](https://apps.apple.com/us/app/cobble-ai-group-planner/id1472811526)
   iTunes Lookup 显示开发者为 idk tonight, LLC，版本 7.1.15，2025-05-12 更新；描述写明 Cobble uses AI to find the best spots near you，朋友可通过链接投 yes/no/maybe，no app needed。
-- TODAY 报道：[The Cobble app is like Tinder for couples who need date plans](https://www.today.com/tmrw/cobble-app-tinder-couples-who-need-date-plans-t207725)  
+- TODAY 报道：[The Cobble app is like Tinder for couples who need date plans](https://www.today.com/tmrw/cobble-app-tinder-couples-who-need-date-plans-t207725)
   采访创始人 Jordan Scott，解释 Cobble 最初从 IDK Tonight 内容站演化而来，目标是解决情侣 “What should we do tonight?” 的反复内耗。
-- 官网 Press：[Cobble in the news](https://www.trycobble.com/press)  
+- 官网 Press：[Cobble in the news](https://www.trycobble.com/press)
   收录 TODAY、Forbes、NYT、AlleyWatch、Global Dating Insights 等早期报道线索；可作为继续查融资和媒体叙事的入口。
 
 > 本轮 `web_search` / `web_extract` 仍因 Exa credits 402 不可用，改用 Jina Reader 抓取官网、官网 About/Press、TODAY 页面，并用 Apple iTunes Lookup API 核验 App Store 条目。
@@ -110,11 +110,8 @@ Cobble 现在的 AI wedge 可以表述为：
 - TikTok / Instagram / 小红书式的“今晚去哪儿”内容种草；
 - 商家和活动方合作，把 Cobble 投票嵌进活动推广。
 
-## 对中国市场、旦聚旦、巢聚的可迁移启发
 
-### 对旦聚旦
 
-Cobble 对旦聚旦最直接的启发是：**不要让校友活动停在报名页和微信群；把“谁和谁下一次见面、去哪儿、聊什么、怎么定下来”做成一个低尴尬决策工具。**
 
 可迁移动作：
 
@@ -122,9 +119,7 @@ Cobble 对旦聚旦最直接的启发是：**不要让校友活动停在报名�
 2. **意向先行，不先建群。** 先收集 yes/no/maybe 和时间段，再决定是否拉群，避免一堆沉默群。
 3. **AI 主理人减负。** 主理人只给主题和候选人，系统生成地点、分组理由、邀约文案、提醒节奏。
 4. **关系行动卡。** 不要只沉淀照片；沉淀“我们决定了什么、谁负责订、下一步哪天发生”。
-5. **从活动平台变成关系发生器。** 旦聚旦的价值不是发更多活动，而是让校友之间发生更多低成本、可信、可复访的小连接。
 
-### 对巢聚
 
 Cobble 的机制也能迁移到租房：
 
@@ -155,4 +150,3 @@ Cobble 的机制也能迁移到租房：
 - App Store 价格从免费到 $0.99 的变化是否影响增长。
 - 投票链接 no app needed 的转化率和二次发起率。
 - 其从情侣 date night 转向 AI group planner 后，核心用户群是否变化。
-- 对旦聚旦：校友小局中，“投票定局 + AI 地点/主题推荐 + 会后关系卡”能否比直接微信群约饭带来更高到场率和复访率。
