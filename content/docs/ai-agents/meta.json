@@ -1,4 +1,9 @@
 {
   "title": "AI 智能体",
-  "pages": ["index", "sierra", "sycamore"]
+  "pages": [
+    "index",
+    "decagon",
+    "sierra",
+    "sycamore"
+  ]
 }
