@@ -76,9 +76,27 @@ export function DocsSidebar() {
 			transition={{ duration: 0.28, ease: "easeOut" }}
 			className="fixed left-0 top-(--docs-topbar-height) bottom-0 w-[22vw] max-w-[300px] hidden lg:flex flex-col z-30 bg-background border-r border-foreground/5 transition-[width] duration-300 ease-out"
 		>
+			<Link
+				href="/"
+				aria-label="返回首页"
+				className="group flex items-center gap-3 border-b border-foreground/5 px-4 py-4 text-left transition-colors hover:bg-foreground/3"
+			>
+				<span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-foreground/10 bg-foreground/[0.03] text-foreground shadow-[0_10px_24px_rgba(0,0,0,0.04)] transition-colors group-hover:border-foreground/20 group-hover:bg-foreground/[0.06]">
+					<SiteLogoMark />
+				</span>
+				<span className="min-w-0">
+					<span className="block truncate text-[15px] font-semibold tracking-tight text-foreground">
+						AI 分类研究库
+					</span>
+					<span className="mt-0.5 block text-xs leading-5 text-foreground/52">
+						创业产品信号与机会判断
+					</span>
+				</span>
+			</Link>
+
 			<button
 				type="button"
-				className="flex w-full items-center gap-2 px-4 py-[9px] border-y border-foreground/5 text-sm text-foreground/55 hover:text-foreground/80 hover:bg-foreground/3 transition-colors"
+				className="flex w-full items-center gap-2 px-4 py-[9px] border-b border-foreground/5 text-sm text-foreground/55 hover:text-foreground/80 hover:bg-foreground/3 transition-colors"
 				onClick={() => setOpenSearch(true)}
 			>
 				<Search className="size-4 shrink-0" />
@@ -168,6 +186,28 @@ export function DocsSidebar() {
 				</div>
 			</div>
 		</motion.aside>
+	);
+}
+
+function SiteLogoMark() {
+	return (
+		<svg
+			aria-hidden="true"
+			viewBox="0 0 32 32"
+			fill="none"
+			className="size-6"
+		>
+			<path
+				d="M6 19.5 12.2 8l4.4 16L20 13.2l2.2 6.3H26"
+				stroke="currentColor"
+				strokeWidth="2.4"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+			/>
+			<circle cx="12.2" cy="8" r="1.8" fill="currentColor" />
+			<circle cx="16.6" cy="24" r="1.8" fill="currentColor" />
+			<circle cx="26" cy="19.5" r="1.8" fill="currentColor" />
+		</svg>
 	);
 }
 
