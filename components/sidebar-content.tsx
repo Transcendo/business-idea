@@ -240,6 +240,7 @@ export const contents: Content[] = [
 			{ title: "Mesh / Clay", href: "/docs/social-relationship-products/mesh-clay", icon: () => <Network className="w-4 h-4 text-current" /> },
 			{ title: "Granola", href: "/docs/social-relationship-products/granola", icon: () => <NotebookTabs className="w-4 h-4 text-current" /> },
 			{ title: "Geneva / Bumble BFF", href: "/docs/social-relationship-products/geneva-bumble-bff", icon: () => <ContactRound className="w-4 h-4 text-current" /> },
+			{ title: "Kndrd", href: "/docs/social-relationship-products/kndrd", icon: () => <UsersRound className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
