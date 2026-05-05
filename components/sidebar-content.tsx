@@ -241,6 +241,7 @@ export const contents: Content[] = [
 			{ title: "Granola", href: "/docs/social-relationship-products/granola", icon: () => <NotebookTabs className="w-4 h-4 text-current" /> },
 			{ title: "Geneva / Bumble BFF", href: "/docs/social-relationship-products/geneva-bumble-bff", icon: () => <ContactRound className="w-4 h-4 text-current" /> },
 			{ title: "Kndrd", href: "/docs/social-relationship-products/kndrd", icon: () => <UsersRound className="w-4 h-4 text-current" /> },
+			{ title: "Letterloop", href: "/docs/social-relationship-products/letterloop", icon: () => <NotebookTabs className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
