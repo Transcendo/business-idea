@@ -70,33 +70,40 @@ export function DocsSidebar() {
 	}, [pathname, currentOpen]);
 
 	return (
-		<motion.aside
-			initial={{ x: -24, opacity: 0 }}
-			animate={{ x: 0, opacity: 1 }}
-			transition={{ duration: 0.28, ease: "easeOut" }}
-			className="fixed left-0 top-(--docs-topbar-height) bottom-0 w-[22vw] max-w-[300px] hidden lg:flex flex-col z-30 bg-background border-r border-foreground/5 transition-[width] duration-300 ease-out"
-		>
-			<Link
-				href="/"
-				aria-label="返回首页"
-				className="group flex items-center gap-3 border-b border-foreground/5 px-4 py-4 text-left transition-colors hover:bg-foreground/3"
+		<>
+			<motion.div
+				initial={{ x: -24, opacity: 0 }}
+				animate={{ x: 0, opacity: 1 }}
+				transition={{ duration: 0.28, ease: "easeOut" }}
+				className="fixed left-0 top-0 z-50 hidden w-[22vw] max-w-[300px] items-center border-b border-r border-foreground/5 bg-background/95 px-3 backdrop-blur supports-[backdrop-filter]:bg-background/80 lg:flex"
+				style={{ height: "var(--docs-topbar-height)" }}
 			>
-				<span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-foreground/10 bg-foreground/[0.03] text-foreground shadow-[0_10px_24px_rgba(0,0,0,0.04)] transition-colors group-hover:border-foreground/20 group-hover:bg-foreground/[0.06]">
-					<SiteLogoMark />
-				</span>
-				<span className="min-w-0">
-					<span className="block truncate text-[15px] font-semibold tracking-tight text-foreground">
-						AI 分类研究库
+				<Link
+					href="/"
+					aria-label="返回首页"
+					className="flex min-w-0 w-full items-center gap-2.5 rounded-md px-1.5 py-1 text-foreground transition-colors hover:bg-foreground/3"
+				>
+					<ResearchLogoMark className="size-7 shrink-0" />
+					<span className="min-w-0">
+						<span className="block truncate text-[13px] font-semibold leading-none">
+							AI 分类研究库
+						</span>
+						<span className="mt-0.5 block truncate text-[11px] leading-none text-foreground/55">
+							创业产品信号与机会判断
+						</span>
 					</span>
-					<span className="mt-0.5 block text-xs leading-5 text-foreground/52">
-						创业产品信号与机会判断
-					</span>
-				</span>
-			</Link>
+				</Link>
+			</motion.div>
 
+			<motion.aside
+				initial={{ x: -24, opacity: 0 }}
+				animate={{ x: 0, opacity: 1 }}
+				transition={{ duration: 0.28, ease: "easeOut" }}
+				className="fixed left-0 top-(--docs-topbar-height) bottom-0 w-[22vw] max-w-[300px] hidden lg:flex flex-col z-30 bg-background border-r border-foreground/5 transition-[width] duration-300 ease-out"
+			>
 			<button
 				type="button"
-				className="flex w-full items-center gap-2 px-4 py-[9px] border-b border-foreground/5 text-sm text-foreground/55 hover:text-foreground/80 hover:bg-foreground/3 transition-colors"
+				className="flex w-full items-center gap-2 px-4 py-[9px] border-y border-foreground/5 text-sm text-foreground/55 hover:text-foreground/80 hover:bg-foreground/3 transition-colors"
 				onClick={() => setOpenSearch(true)}
 			>
 				<Search className="size-4 shrink-0" />
@@ -185,28 +192,54 @@ export function DocsSidebar() {
 					<ThemeToggle />
 				</div>
 			</div>
-		</motion.aside>
+			</motion.aside>
+		</>
 	);
 }
 
-function SiteLogoMark() {
+function ResearchLogoMark({ className }: { className?: string }) {
 	return (
 		<svg
 			aria-hidden="true"
-			viewBox="0 0 32 32"
+			viewBox="0 0 64 64"
 			fill="none"
-			className="size-6"
+			className={className}
 		>
+			<circle cx="32" cy="32" r="29" className="fill-[#101827] dark:fill-[#f8fafc]" />
 			<path
-				d="M6 19.5 12.2 8l4.4 16L20 13.2l2.2 6.3H26"
-				stroke="currentColor"
+				d="M14 28c6.5-7 15-9.8 25-8.2 5.7.9 10.1 3.2 13 6.8"
+				className="stroke-[#a78bfa] dark:stroke-[#7c3aed]"
+				strokeWidth="5"
+				strokeLinecap="round"
+			/>
+			<path
+				d="M15.5 38c6.4-7.2 14.2-10.5 23.5-9.7 5.3.5 9.4 2.1 12.2 5"
+				className="stroke-[#60a5fa] dark:stroke-[#2563eb]"
+				strokeWidth="5"
+				strokeLinecap="round"
+			/>
+			<path
+				d="M18.5 45.5c7 4.4 17.5 5 27.5-.4"
+				className="stroke-[#34d399] dark:stroke-[#059669]"
+				strokeWidth="5"
+				strokeLinecap="round"
+			/>
+			<rect
+				x="22.5"
+				y="24.5"
+				width="19"
+				height="19"
+				rx="5"
+				className="fill-white stroke-[#101827] dark:fill-[#101827] dark:stroke-[#f8fafc]"
+				strokeWidth="3"
+			/>
+			<path
+				d="M27.5 31h9M27.5 36h5.5"
+				className="stroke-[#101827] dark:stroke-[#f8fafc]"
 				strokeWidth="2.4"
 				strokeLinecap="round"
-				strokeLinejoin="round"
 			/>
-			<circle cx="12.2" cy="8" r="1.8" fill="currentColor" />
-			<circle cx="16.6" cy="24" r="1.8" fill="currentColor" />
-			<circle cx="26" cy="19.5" r="1.8" fill="currentColor" />
+			<circle cx="38" cy="36" r="2" className="fill-[#34d399] dark:fill-[#059669]" />
 		</svg>
 	);
 }
