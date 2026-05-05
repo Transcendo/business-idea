@@ -1,291 +1,296 @@
 import Link from "next/link";
 
-import {
-	EntryPointsMarquee,
-	type EntryPoint,
-} from "@/components/entry-points-marquee";
-
-const heroImage =
-	"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1800&q=82";
-
-const imageTiles = [
+const primaryRoutes = [
 	{
-		title: "AI 基础设施",
-		href: "/docs/developer-tools",
-		image:
-			"https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=80",
-	},
-	{
-		title: "机器人",
-		href: "/docs/robotics",
-		image:
-			"https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=900&q=80",
-	},
-	{
-		title: "基础模型",
-		href: "/docs/foundation-models",
-		image:
-			"https://images.unsplash.com/photo-1555255707-c07966088b7b?auto=format&fit=crop&w=900&q=80",
-	},
-];
-
-const entryPoints: EntryPoint[] = [
-	{
-		title: "本周推荐",
-		description: "上一周内容已下架，本周推荐等待重新整理后再发布。",
-		href: "/docs/weekly-picks",
-		count: "0 个推荐",
-		kicker: "临时观察",
+		title: "强社交关系产品",
+		description: "熟人、半熟人、小圈子、线下活动和身份信任，是近期最值得持续追踪的方向。",
+		href: "/docs/social-relationship-products",
+		label: "当前主线",
 	},
 	{
 		title: "AI 智能体",
-		description: "执行型软件、企业流程、智能体治理和真实业务动作。",
+		description: "观察 AI 从聊天入口走向任务执行、业务流程和人机协作的真实产品形态。",
 		href: "/docs/ai-agents",
-		count: "2 个样本",
-		kicker: "软件执行层",
+		label: "执行层",
 	},
 	{
-		title: "基础模型",
-		description: "中国基础模型、平台化路径、多模态能力和终端落地。",
-		href: "/docs/foundation-models",
-		count: "4 个样本",
-		kicker: "模型平台",
-	},
-	{
-		title: "垂直 AI",
-		description: "围绕专业场景、数据密度和交付闭环观察 AI 应用机会。",
-		href: "/docs/vertical-ai",
-		count: "1 个样本",
-		kicker: "行业深水区",
-	},
-	{
-		title: "开发者工具",
-		description: "关注 AI 基础设施、工程效率工具和新一代开发流程。",
-		href: "/docs/developer-tools",
-		count: "2 个样本",
-		kicker: "生产工具链",
-	},
-	{
-		title: "医疗健康",
-		description: "判断医疗 AI 的真实落地空间、合规约束和服务闭环。",
-		href: "/docs/healthcare",
-		count: "2 个样本",
-		kicker: "高门槛场景",
-	},
-	{
-		title: "情感陪伴",
-		description: "观察多模态陪伴、角色交互和消费级 AI 的长期留存。",
-		href: "/docs/emotional-companions",
-		count: "1 个样本",
-		kicker: "消费入口",
-	},
-	{
-		title: "具身 AI",
-		description: "把模型能力放进物理世界，关注数据、控制和任务泛化。",
-		href: "/docs/embodied-ai",
-		count: "待补齐",
-		kicker: "物理世界",
-	},
-	{
-		title: "机器人",
-		description: "整理机器人公司、供应链、应用场景和商业化节奏。",
-		href: "/docs/robotics",
-		count: "待补齐",
-		kicker: "硬件落地",
-	},
-	{
-		title: "教育",
-		description: "观察 AI 对学习路径、内容生成和教学反馈的真实改变。",
-		href: "/docs/education",
-		count: "待补齐",
-		kicker: "学习场景",
-	},
-	{
-		title: "金融科技",
-		description: "关注风控、投研、自动化运营和金融服务里的 AI 使用边界。",
-		href: "/docs/fintech",
-		count: "待补齐",
-		kicker: "约束行业",
-	},
-	{
-		title: "气候能源",
-		description: "整理能源、气候、工业效率和 AI 优化问题之间的连接点。",
-		href: "/docs/climate-energy",
-		count: "待补齐",
-		kicker: "长期议题",
-	},
-	{
-		title: "网络安全",
-		description: "跟踪 AI 对攻击、防守、自动化检测和安全运营的影响。",
-		href: "/docs/cybersecurity",
-		count: "待补齐",
-		kicker: "攻防变化",
-	},
-	{
-		title: "游戏",
-		description: "关注生成式内容、AI NPC、玩法系统和制作管线变化。",
-		href: "/docs/gaming",
-		count: "待补齐",
-		kicker: "互动内容",
-	},
-	{
-		title: "开放世界",
-		description: "观察 AI 与开放世界、模拟系统、虚拟社会之间的可能性。",
-		href: "/docs/open-world",
-		count: "待补齐",
-		kicker: "空间叙事",
-	},
-	{
-		title: "写作规范",
-		description: "所有页面优先讲清事实、判断和风险，避免把项目研究写成营销材料。",
-		href: "/docs/themes",
-		count: "研究口径",
-		kicker: "编辑标准",
+		title: "本周推荐",
+		description: "临时收纳新看到的项目，等判断变清楚后再沉淀到对应分类。",
+		href: "/docs/weekly-picks",
+		label: "新信号",
 	},
 ];
 
-const operatingRules = [
-	"先找可信来源，再写观点。",
-	"每篇都要回答为什么值得看，也要回答为什么不能盲目乐观。",
-	"每个项目都归入一个主分类，交叉关系在正文里说明。",
+const categoryGroups = [
+	{
+		title: "应用与关系",
+		items: [
+			["消费级 AI", "/docs/consumer-ai"],
+			["强社交关系", "/docs/social-relationship-products"],
+			["情感陪伴", "/docs/emotional-companions"],
+			["游戏", "/docs/gaming"],
+			["开放世界", "/docs/open-world"],
+		],
+	},
+	{
+		title: "模型与工具",
+		items: [
+			["AI 智能体", "/docs/ai-agents"],
+			["开发者工具", "/docs/developer-tools"],
+			["基础模型", "/docs/foundation-models"],
+			["网络安全", "/docs/cybersecurity"],
+		],
+	},
+	{
+		title: "行业与硬件",
+		items: [
+			["医疗健康", "/docs/healthcare"],
+			["教育", "/docs/education"],
+			["金融科技", "/docs/fintech"],
+			["AI 硬件", "/docs/ai-hardware"],
+			["机器人", "/docs/robotics"],
+			["具身 AI", "/docs/embodied-ai"],
+			["气候能源", "/docs/climate-energy"],
+			["垂直 AI", "/docs/vertical-ai"],
+		],
+	},
+];
+
+const methodCards = [
+	{
+		title: "先看入口",
+		description: "用户为什么会来、什么时候会回来、是否有自然传播理由。",
+	},
+	{
+		title: "再看约束",
+		description: "供给、数据、信任、合规、渠道和交付难度有没有真正被解决。",
+	},
+	{
+		title: "看迁移",
+		description: "判断能否迁移到旦聚旦、巢聚或新的 AI 产品实验里。",
+	},
+];
+
+const featuredReads = [
+	{
+		title: "Luma",
+		category: "活动组织",
+		href: "/docs/social-relationship-products/luma",
+		description: "活动页不只是报名工具，而是线下关系发生前的信任包装。",
+	},
+	{
+		title: "Partiful",
+		category: "朋友聚会",
+		href: "/docs/social-relationship-products/partiful",
+		description: "把聚会邀请做成低门槛社交表达，增长来自分享动作本身。",
+	},
+	{
+		title: "Sierra",
+		category: "AI 智能体",
+		href: "/docs/ai-agents/sierra",
+		description: "企业智能体产品最难的不是会聊，而是能安全接管真实流程。",
+	},
+	{
+		title: "Perplexity",
+		category: "消费级 AI",
+		href: "/docs/consumer-ai/perplexity",
+		description: "搜索体验被 AI 改写后，入口、分发和信任关系都会重新排队。",
+	},
+];
+
+const stats = [
+	["18+", "研究分类"],
+	["40+", "项目样本"],
+	["3", "固定判断维度"],
 ];
 
 export default function HomePage() {
 	return (
 		<main className="min-h-dvh bg-[#f7f8f4] text-[#141611]">
-			<section className="relative isolate min-h-[86svh] overflow-hidden bg-[#141611] text-white">
-				<img
-					src={heroImage}
-					alt="用于表现 AI 基础设施的电子元件特写"
-					className="absolute inset-0 h-full w-full object-cover opacity-48"
-				/>
-				<div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(20,22,17,0.92),rgba(20,22,17,0.54),rgba(20,22,17,0.14))]" />
-				<div className="absolute inset-x-0 bottom-0 h-36 bg-[linear-gradient(0deg,#f7f8f4,rgba(247,248,244,0))]" />
+			<section className="relative isolate overflow-hidden border-b border-[#d9ded0] bg-[#10130f] text-white">
+				<div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(215,255,95,0.22),transparent_28%),radial-gradient(circle_at_82%_8%,rgba(211,72,54,0.20),transparent_30%),linear-gradient(135deg,#10130f_0%,#1c2118_52%,#070806_100%)]" />
+				<div className="absolute inset-x-8 top-20 hidden h-px bg-white/10 lg:block" />
+				<div className="absolute bottom-0 left-1/2 h-80 w-[46rem] -translate-x-1/2 rounded-full bg-[#d7ff5f]/12 blur-3xl" />
 
-				<div className="relative mx-auto flex min-h-[82svh] max-w-7xl flex-col justify-between px-5 py-6 sm:px-8 lg:px-10">
+				<div className="relative mx-auto max-w-7xl px-5 py-6 sm:px-8 lg:px-10">
 					<nav className="flex items-center justify-between gap-4 text-sm">
-						<Link className="font-semibold" href="/">
-							AI 分类研究库
+						<Link className="group inline-flex items-center gap-2 font-semibold" href="/">
+							<span className="grid size-7 place-items-center rounded-md bg-[#d7ff5f] text-[#10130f] transition group-hover:rotate-6">
+								<LogoGlyph />
+							</span>
+							<span>AI 分类研究库</span>
 						</Link>
-						<div className="hidden items-center gap-5 text-white/78 sm:flex">
-							<Link className="hover:text-white" href="/docs/weekly-picks">
-								本周推荐
+						<div className="hidden items-center gap-5 text-white/72 sm:flex">
+							<Link className="hover:text-white" href="/docs/social-relationship-products">
+								强社交关系
 							</Link>
 							<Link className="hover:text-white" href="/docs/ai-agents">
 								AI 智能体
 							</Link>
-							<Link className="hover:text-white" href="/docs/foundation-models">
-								基础模型
+							<Link className="hover:text-white" href="/docs/themes">
+								研究口径
 							</Link>
 						</div>
 					</nav>
 
-					<div className="grid items-end gap-10 pb-16 pt-16 lg:grid-cols-[minmax(0,1fr)_360px]">
+					<div className="grid min-h-[76svh] items-center gap-12 py-16 lg:grid-cols-[minmax(0,1.05fr)_420px] lg:py-20">
 						<div className="max-w-4xl">
-							<p className="mb-5 inline-flex rounded-md border border-white/24 bg-white/10 px-3 py-1 text-sm text-white/84 backdrop-blur">
-								公开 AI 分类研究档案
+							<p className="mb-5 inline-flex rounded-full border border-white/16 bg-white/8 px-3 py-1 text-sm text-white/76 backdrop-blur">
+								面向创业判断的公开 AI 产品档案
 							</p>
-							<h1 className="text-5xl font-semibold leading-[1.02] sm:text-6xl lg:text-7xl">
-								把 AI 项目和方向，整理成可长期复用的分类判断系统。
+							<h1 className="text-5xl font-semibold leading-[1.02] tracking-[-0.04em] sm:text-6xl lg:text-7xl">
+								别把 AI 新闻越攒越乱，整理成能复用的机会地图。
 							</h1>
-							<p className="mt-7 max-w-2xl text-lg leading-8 text-white/78">
-								这里跟踪 AI 公司、产品切口、分类变化和早期信号。内容不追求热闹，优先追求可查、可复盘、可扩展。
+							<p className="mt-7 max-w-2xl text-lg leading-8 text-white/74">
+								这里不是项目黄页。每个样本都尽量回答三件事：用户为什么要用，商业化卡在哪里，对我们的产品实验有什么迁移价值。
 							</p>
-							<div className="mt-8 flex flex-wrap gap-3">
+							<div className="mt-9 flex flex-wrap gap-3">
 								<Link
 									className="inline-flex rounded-md bg-[#d7ff5f] px-5 py-3 text-sm font-semibold text-[#141611] transition hover:bg-white"
-									href="/docs/weekly-picks"
+									href="/docs/social-relationship-products"
 								>
-									进入本周推荐
+									从强社交关系开始
 								</Link>
 								<Link
 									className="inline-flex rounded-md border border-white/28 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white hover:text-[#141611]"
-									href="/docs/ai-agents"
+									href="/docs"
 								>
-									查看分类目录
+									浏览全部目录
 								</Link>
 							</div>
 						</div>
 
-						<div className="border-l border-white/20 pl-6 text-sm text-white/74">
-							<p className="mb-4 text-white">研究口径</p>
-							<ul className="space-y-4">
-								{operatingRules.map((rule) => (
-									<li className="flex gap-3" key={rule}>
-										<span className="mt-2 h-2 w-2 shrink-0 bg-[#d7ff5f]" />
-										<span>{rule}</span>
-									</li>
+						<div className="rounded-2xl border border-white/14 bg-white/[0.07] p-5 shadow-2xl shadow-black/30 backdrop-blur">
+							<div className="flex items-center justify-between border-b border-white/12 pb-4">
+								<p className="text-sm font-semibold text-white">研究库怎么用</p>
+								<span className="rounded-full bg-[#d7ff5f]/16 px-2.5 py-1 text-xs text-[#d7ff5f]">
+									Start here
+								</span>
+							</div>
+							<div className="mt-5 space-y-3">
+								{primaryRoutes.map((route, index) => (
+									<Link
+										className="group block rounded-xl border border-white/10 bg-[#10130f]/56 p-4 transition hover:-translate-y-0.5 hover:border-[#d7ff5f]/50 hover:bg-[#10130f]/76"
+										href={route.href}
+										key={route.title}
+									>
+										<div className="flex items-start gap-3">
+											<span className="mt-0.5 text-xs text-white/42">{String(index + 1).padStart(2, "0")}</span>
+											<div>
+												<p className="text-xs font-semibold text-[#d7ff5f]">{route.label}</p>
+												<h2 className="mt-1 text-xl font-semibold">{route.title}</h2>
+												<p className="mt-2 text-sm leading-6 text-white/62">{route.description}</p>
+											</div>
+										</div>
+										<span className="mt-4 inline-flex text-sm font-semibold text-white/72 transition group-hover:translate-x-1 group-hover:text-white">
+											进入 -&gt;
+										</span>
+									</Link>
 								))}
-							</ul>
+							</div>
 						</div>
 					</div>
 				</div>
 			</section>
 
-			<EntryPointsMarquee items={entryPoints} />
+			<section className="mx-auto grid max-w-7xl gap-6 px-5 py-10 sm:px-8 lg:grid-cols-3 lg:px-10">
+				{stats.map(([value, label]) => (
+					<div className="rounded-2xl border border-[#d9ded0] bg-white p-6" key={label}>
+						<p className="text-4xl font-semibold tracking-[-0.04em]">{value}</p>
+						<p className="mt-2 text-sm text-[#60675d]">{label}</p>
+					</div>
+				))}
+			</section>
 
 			<section className="border-y border-[#d9ded0] bg-white">
-				<div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:px-10">
+				<div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[0.72fr_1.28fr] lg:px-10">
 					<div>
-						<p className="text-sm font-semibold text-[#d34836]">
-							编辑系统
-						</p>
-						<h2 className="mt-4 text-4xl font-semibold leading-tight">
-							不是信息搬运，而是把机会拆成事实、风险和下一步观察。
+						<p className="text-sm font-semibold text-[#d34836]">清晰入口</p>
+						<h2 className="mt-4 text-4xl font-semibold leading-tight tracking-[-0.035em]">
+							把目录改成能直接做决策的路线图。
 						</h2>
 						<p className="mt-6 leading-8 text-[#555b4f]">
-							项目会持续整理 AI 智能体、垂直 AI、开发者工具、机器人、医疗、金融科技、游戏与开放世界等方向。每个方向都应该能回答一个问题：现在是否真的出现了新的机会窗口。
+							首页不再用自动滚动索引硬塞所有分类，而是把近期重点、完整目录和代表样本分开。想快速看机会，从左边三条主线进；想查资料，从下面分类进。
 						</p>
 					</div>
 
-					<div className="grid gap-4 sm:grid-cols-3">
-						{imageTiles.map((tile) => (
-							<Link
-								className="group overflow-hidden border border-[#d9ded0] bg-[#f7f8f4]"
-								href={tile.href}
-								key={tile.title}
-							>
-								<img
-									src={tile.image}
-									alt={`${tile.title} 配图`}
-									className="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
-								/>
-								<div className="flex items-center justify-between p-4">
-									<p className="font-semibold">{tile.title}</p>
-									<span className="text-[#d34836]">查看</span>
-								</div>
-							</Link>
+					<div className="grid gap-4 md:grid-cols-3">
+						{methodCards.map((card, index) => (
+							<div className="rounded-2xl border border-[#d9ded0] bg-[#f7f8f4] p-6" key={card.title}>
+								<p className="text-sm font-semibold text-[#d34836]">0{index + 1}</p>
+								<h3 className="mt-8 text-2xl font-semibold tracking-[-0.03em]">{card.title}</h3>
+								<p className="mt-4 text-sm leading-7 text-[#555b4f]">{card.description}</p>
+							</div>
 						))}
 					</div>
 				</div>
 			</section>
 
-			<section className="mx-auto grid max-w-7xl gap-8 px-5 py-16 sm:px-8 lg:grid-cols-[1fr_1fr] lg:px-10">
-				<div className="border-l-4 border-[#d34836] pl-6">
-					<h2 className="text-3xl font-semibold">当前重点</h2>
-					<p className="mt-5 leading-8 text-[#555b4f]">
-						先把已经收录的项目归入明确分类，再补齐教育、医疗、金融、气候能源等分类首页。临时观察进入本周推荐，成熟内容回流到对应分类。
-					</p>
+			<section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10">
+				<div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+					<div>
+						<p className="text-sm font-semibold text-[#d34836]">分类目录</p>
+						<h2 className="mt-3 text-4xl font-semibold tracking-[-0.035em]">按问题找项目，而不是按热度刷新闻。</h2>
+					</div>
+					<Link className="text-sm font-semibold text-[#141611] underline decoration-[#d34836]/40 underline-offset-4 hover:decoration-[#d34836]" href="/docs">
+						查看完整文档
+					</Link>
 				</div>
-				<div className="grid gap-3 sm:grid-cols-2">
-					<Link className="border border-[#d9ded0] bg-white p-5 hover:border-[#141611]" href="/docs/ai-agents/sierra">
-						<p className="text-sm text-[#6e7c3a]">AI 智能体</p>
-						<p className="mt-3 text-xl font-semibold">Sierra</p>
-					</Link>
-					<Link className="border border-[#d9ded0] bg-white p-5 hover:border-[#141611]" href="/docs/vertical-ai/hebbia">
-						<p className="text-sm text-[#6e7c3a]">垂直 AI</p>
-						<p className="mt-3 text-xl font-semibold">Hebbia</p>
-					</Link>
-					<Link className="border border-[#d9ded0] bg-white p-5 hover:border-[#141611]" href="/docs/developer-tools/parasail">
-						<p className="text-sm text-[#6e7c3a]">开发者工具</p>
-						<p className="mt-3 text-xl font-semibold">Parasail</p>
-					</Link>
-					<Link className="border border-[#d9ded0] bg-white p-5 hover:border-[#141611]" href="/docs/emotional-companions/minimax">
-						<p className="text-sm text-[#6e7c3a]">多模态 AI</p>
-						<p className="mt-3 text-xl font-semibold">MiniMax</p>
-					</Link>
+
+				<div className="grid gap-5 lg:grid-cols-3">
+					{categoryGroups.map((group) => (
+						<div className="rounded-2xl border border-[#d9ded0] bg-white p-6" key={group.title}>
+							<h3 className="text-xl font-semibold">{group.title}</h3>
+							<div className="mt-5 flex flex-wrap gap-2">
+								{group.items.map(([title, href]) => (
+									<Link
+										className="rounded-full border border-[#d9ded0] bg-[#f7f8f4] px-3 py-2 text-sm text-[#4d5449] transition hover:border-[#141611] hover:text-[#141611]"
+										href={href}
+										key={href}
+									>
+										{title}
+									</Link>
+								))}
+							</div>
+						</div>
+					))}
+				</div>
+			</section>
+
+			<section className="border-t border-[#d9ded0] bg-[#10130f] text-white">
+				<div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10">
+					<div className="mb-8 max-w-3xl">
+						<p className="text-sm font-semibold text-[#d7ff5f]">代表样本</p>
+						<h2 className="mt-3 text-4xl font-semibold tracking-[-0.035em]">先读这些，能最快理解研究库的判断方式。</h2>
+					</div>
+					<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+						{featuredReads.map((read) => (
+							<Link
+								className="group flex min-h-64 flex-col justify-between rounded-2xl border border-white/12 bg-white/[0.06] p-6 transition hover:-translate-y-1 hover:border-[#d7ff5f]/50 hover:bg-white/[0.09]"
+								href={read.href}
+								key={read.href}
+							>
+								<div>
+									<p className="text-sm font-semibold text-[#d7ff5f]">{read.category}</p>
+									<h3 className="mt-4 text-2xl font-semibold tracking-[-0.03em]">{read.title}</h3>
+									<p className="mt-4 text-sm leading-7 text-white/64">{read.description}</p>
+								</div>
+								<span className="mt-8 text-sm font-semibold text-white/72 transition group-hover:translate-x-1 group-hover:text-white">
+									阅读 -&gt;
+								</span>
+							</Link>
+						))}
+					</div>
 				</div>
 			</section>
 		</main>
+	);
+}
+
+function LogoGlyph() {
+	return (
+		<svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24">
+			<path d="M4 13.5 8.2 5l3.5 14L16 8.8l4 4.7" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.3" />
+		</svg>
 	);
 }
