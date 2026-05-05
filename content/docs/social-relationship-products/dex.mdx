@@ -1,0 +1,172 @@
+---
+title: Dex
+description: Dex 如何把分散的人脉、提醒、互动历史和会前准备做成个人关系记忆层。
+---
+
+# Dex：强关系不是多聊天，是别把重要的人忘掉
+
+## 一句话判断
+
+Dex 是 personal CRM / personal relationship manager。它服务的不是陌生人扩列，而是把 LinkedIn、邮箱、日历、通讯录、WhatsApp、iMessage、Facebook、Instagram 等地方散掉的人收回来，帮助用户记住关系上下文、设置触达提醒、做会前准备和会后记录。
+
+真正值得看的是它的切口：用户不缺聊天工具，缺的是 **“我和这个人是什么关系、上次聊到哪、现在为什么该联系、怎么开口不尴尬”**。Dex 把这个判断从脑子、表格和聊天记录里抽出来，做成一个持续更新的关系操作台。
+
+## 来源
+
+- Dex 官网：[https://getdex.com/](https://getdex.com/) — 首页定位为 “One place for your relationships”，强调整合 LinkedIn、email 和日常工具，帮助用户 keep in touch、remember where you left off；官网还写明 Dex 依靠订阅而不是广告，不会把数据卖给第三方。
+- Dex Product Overview：[https://getdex.com/product](https://getdex.com/product) — 产品页列出 keep-in-touch reminders、notes、unified timeline、Facebook / LinkedIn / iCloud / Gmail import、浏览器扩展、移动端记录等功能，并写到 30,000+ people use Dex to improve relationships。
+- Dex Integrations：[https://getdex.com/integrations](https://getdex.com/integrations) — 官方列出 Gmail、Outlook、Google Calendar、two-way contact sync、Facebook、Instagram、WhatsApp、iMessage、Superhuman、CSV、Zapier、Dex MCP Server、Dex AI Skill 等集成。
+- Dex Pricing：[https://getdex.com/pricing](https://getdex.com/pricing) — 当前页面强调 7-day free trial，FAQ 写明 LinkedIn sync 等主功能需要 subscription；本轮页面正文未稳定暴露所有价格细节，所以不把第三方价格页当事实核心。
+- Apple App Store：[https://apps.apple.com/us/app/dex-rolodex-and-personal-crm/id1472132715](https://apps.apple.com/us/app/dex-rolodex-and-personal-crm/id1472132715) — Apple Lookup 显示应用名为 “Dex - Rolodex and Personal CRM”，seller 为 Dana HQ, Inc.，描述为 personal relationship manager and CRM that reminds you to keep in touch；2026-03-26 更新到 3.54.0，约 227 个评分，均分约 4.4。
+- Google Play：[https://play.google.com/store/apps/details?id=com.danahq.getdex](https://play.google.com/store/apps/details?id=com.danahq.getdex) — Android 端公开页面；本轮只把它作为移动端存在的辅助核验，不引用动态页面里难稳定抓取的指标。
+
+本轮 `web_search` / `web_extract` 仍因 Exa credits 402 不可用；补充核验改用官网直连、Apple iTunes Lookup API 和公开商店页面。
+
+## 它强化哪一种关系
+
+Dex 强化的是四类现实关系，不是泛社交关系：
+
+1. **熟人关系**：朋友、同学、前同事、校友、长期弱联系。很多关系不是不重要，而是被忙碌和信息散落磨掉。
+2. **半熟人 / 职业关系**：创始人、投资人、候选人、客户、合作伙伴、社群成员。这里的关系价值更容易被量化：融资、招聘、销售、合作、介绍。
+3. **弱关系转强关系**：见过一面、聊过一次、互相加过 LinkedIn 的人，靠提醒和上下文被重新激活。
+4. **身份信任关系**：邮箱、日历、LinkedIn、消息记录和 notes 共同构成“这个人是谁、我为什么认识他、他是否靠谱”的证据层。
+
+关系强度靠五件事增长：重复互动、共同记忆、身份聚合、互惠机会、声誉约束。Dex 没有制造新关系，它让已有关系不再因为遗忘而流失。
+
+## 真实痛点
+
+强社交产品最容易犯傻的地方，是以为用户需要一个新聊天入口。Dex 的前提更准：聊天入口已经太多了，真正稀缺的是关系上下文和触达理由。
+
+它压缩的是这些任务：
+
+- **记不住人。** 人名、公司、孩子名字、上次聊的话题、对方正在找什么、共同朋友是谁，都散在不同工具里。
+- **不知道该什么时候联系。** 关系冷掉通常不是因为讨厌，而是没有事件提醒、没有自然话题、没有下一步。
+- **会前准备太粗糙。** 见投资人、客户、候选人、校友前，如果还要翻邮箱和聊天记录，用户很容易放弃准备。
+- **介绍靠主观记忆。** Warm intro 的质量取决于用户能不能想起谁适合谁、谁最近在找什么、谁欠谁一个 follow-up。
+- **个人 CRM 太重。** Salesforce 这种销售 CRM 对私人和职业关系都过重；表格又缺少提醒、时间线和移动端即时记录。
+
+这不是“信息不足”的问题，而是判断和记忆被分散了。
+
+## 冷启动与网络效应
+
+Dex 的冷启动是 **个人工具切入**：
+
+1. 用户导入 LinkedIn、contacts、email、calendar 或手动添加关键联系人。
+2. 系统把联系人聚合成可搜索、可分组、可提醒的人脉库。
+3. 用户为关键关系设置 keep-in-touch reminder，补充 notes、tags、重要日期。
+4. 在会前、见人后、需要介绍或复联时回来使用。
+
+这个路径有一个明显优点：不用等朋友安装，单人就能获得初始价值。它也有一个硬缺点：个人 CRM 最大敌人不是竞品，是用户懒。只要导入体验差、手动记录太多、提醒不够准，7 天后就会变成又一个空工具。
+
+网络效应要说清楚：**Dex 本身没有强网络效应，更像个人关系工具。** 它不会像社交网络一样因为朋友加入而立刻变好。它的复利在个人侧：用户沉淀的 notes、timeline、tags、互动历史越多，会前准备、复联和介绍越好。产品护城河不是公开社交图谱，而是私有关系记忆、跨工具集成和使用习惯。
+
+所以 Dex 不是伪社交壳，但也不是强病毒产品。它更接近“关系数据基础设施”。
+
+## AI-native wedge
+
+Dex 当前公开材料更像 personal CRM，不是原生 AI 社交产品。但它的 Integrations 页面已经出现 Dex MCP Server 和 Dex AI Skill，这说明它正在朝“让 AI 读写关系系统”的方向靠近。
+
+真正的 AI-native wedge 不应该是“帮我写一段油腻 follow-up 文案”。更好的楔子是：
+
+> 用户给系统邮箱、日历、LinkedIn、消息记录和即将见面的人；系统在 30 秒内返回一张“关系行动卡”：这个人是谁、我和他上次聊了什么、我欠他什么、这次最自然的开场、是否适合介绍给某人、会后要记录哪三件事。
+
+再往组织侧走一步：
+
+> 主理人给系统一场活动的签到名单、报名意向、校友身份和会后反馈；系统返回“本周最该促成的 5 个连接”：谁该认识谁、为什么、谁来背书、如何低尴尬开口、是否需要先征得双方同意。
+
+这才是 AI 值钱的地方：压缩关系判断、触达时机、介绍理由和共同记忆，不是把聊天框贴到通讯录上。
+
+## 为什么用户会来、留、传播、付钱
+
+### 为什么会来
+
+第一次触发通常不是“我要整理通讯录”，而是一个具体焦虑：明天要见一个重要的人，但忘了上次聊什么；想找工作、融资、找客户，却发现自己的人脉都冷了；参加了很多活动，但没有把关系沉淀下来。
+
+Dex 的承诺比通讯录更明确：它不是给你一个名单，而是告诉你下一步该联系谁、为什么、怎么不尴尬。
+
+### 为什么会留
+
+关系数据越用越值钱。notes、interaction history、重要日期、tags、分组、会前记录和会后复盘都不是一次性内容。一旦用户把 Dex 用成 meeting prep / debrief 的固定动作，就很难退回裸通讯录。
+
+留存还来自现实事件：朋友换工作、客户融资、校友搬城市、候选人毕业、投资人更新 portfolio、前同事创业。这些事件不断创造低尴尬触达理由。
+
+### 为什么会传播
+
+Dex 的传播不是 feed 式病毒传播，而是现实互动里的口碑。一个用户如果更会记人、更会 follow up、更会做介绍，被帮助的人会自然问“你怎么管理这些关系”。
+
+它尤其适合在高关系密度人群里传播：创始人、投资人、MBA、销售、BD、招聘、社群主理人、校友组织者。但必须承认，它缺少 Locket / Partiful 那种收件人可见的强传播钩子。
+
+### 谁为什么付钱
+
+- **创始人 / 投资人 / BD / 销售**：关系直接影响融资、客户、deal flow、合作机会，愿意为提醒、集成和关系上下文付费。
+- **招聘者 / 求职者 / MBA / 校友活跃者**：维护大量弱关系，付费买系统化 follow-up 和会前准备。
+- **社群主理人 / 校友组织者**：如果 Dex 或类似产品扩展到组织版，可以为成员关系图谱、活动后介绍、主理人连接建议和反馈追踪付费。
+
+## 事实、判断、可复制机会、风险
+
+### 事实
+
+- Dex 官网把产品定位为 one place for your relationships，核心功能包括 keep-in-touch、notes、timeline、联系人导入、浏览器扩展和移动端。
+- 官方 Product Overview 写到 30,000+ people use Dex to improve relationships。
+- 官方 Integrations 页面列出 Gmail、Outlook、Google Calendar、WhatsApp、iMessage、Instagram、Facebook、Zapier、Dex MCP Server、Dex AI Skill 等入口。
+- Apple App Store Lookup 显示 Dex iOS 应用由 Dana HQ, Inc. 发布，2026-03-26 更新到 3.54.0，评分约 4.4。
+- 官网强调订阅而非广告，用户可以 export or delete data，这对关系数据类产品很关键。
+
+### 判断
+
+Dex 最强的判断是：关系维护不是社交产品，而是私人工作流。它没有逼用户迁移社交图谱，也没有假设用户想公开表达；它只是接住一个很日常但很贵的问题：你已经认识的人，正在因为记忆和行动成本流失。
+
+它对 AI 产品的启发也很清楚：AI 不该先写话术，应该先生成可信上下文和下一步动作。没有上下文的自动 follow-up 是 spam，有上下文的行动卡才可能变成用户愿意信任的关系助手。
+
+### 可复制机会
+
+- **会前关系卡**：下一场饭局、校友活动、投资人见面前，自动生成“这个人是谁、共同点、上次互动、可聊话题、风险提醒”。
+- **会后 24 小时复盘**：活动结束后让用户用 30 秒补充“见了谁、聊了什么、下一步是什么”，系统转成可提醒的关系记录。
+- **主理人连接建议**：不是让主理人全靠记忆拉群，而是每周给出 5 个高价值连接建议，并附互惠理由。
+- **低尴尬触达模板**：模板必须引用共同经历、具体话题和明确互惠点；不能生成空泛客套。
+- **组织关系记忆层**：校友会、创业小圈子、付费社群可以沉淀成员之间的共同活动、互助请求、介绍历史和反馈。
+
+### 风险
+
+- **手动维护摩擦高。** notes、tags、提醒如果需要用户大量手动输入，很容易弃用。
+- **隐私敏感。** 邮箱、日历、消息、LinkedIn、通讯录都很私人，广告模式会破坏信任。
+- **AI 容易做坏。** 如果 AI 只帮用户批量生成 follow-up，会把关系维护变成垃圾触达。
+- **系统平台可能挤压。** Apple、Google、LinkedIn、Gmail、Calendar 如果把关系提醒做深，独立 personal CRM 需要更强的跨平台和专业场景价值。
+- **网络效应弱。** 它更依赖高价值人群口碑和个人数据复利，不适合幻想成全民社交平台。
+
+## 对旦聚旦与巢聚的启发
+
+### 对旦聚旦
+
+Dex 对旦聚旦的启发很硬：活动结束后，关系不能只留在微信群里。
+
+最小可迁移楔子不是“校友社交平台”，而是 **校友关系行动卡**：
+
+1. 活动前收集身份、城市、行业、阶段、想认识谁、能提供什么帮助。
+2. 活动中记录共同桌、共同话题、互助意向。
+3. 活动后给每个参与者 1-3 张行动卡：谁值得继续聊、为什么、怎么开口、需要谁背书。
+4. 给主理人一张“本周连接建议”：优先促成高互惠、高可信、高时机相关的连接。
+5. 7 天后追踪是否联系、是否见面、是否产生帮助。
+
+这条路比做“校友广场”聪明。校友不缺一个新 feed，缺的是可信身份、共同经历、低尴尬触达和持续互助的理由。
+
+### 对巢聚 / 租房
+
+Dex 的方法也能迁移到租房信任网络，但要更谨慎。租房里的关系对象包括中介、房东、租客、合租人、转租人。它们不只是社交关系，还涉及钱、合同和风险。
+
+可迁移方向：
+
+- 为每个中介/房东/租客沉淀互动历史、承诺、爽约、看房记录、推荐结果。
+- 生成“是否值得继续聊”的关系上下文卡，而不是直接做无证据黑名单。
+- 在北京亦庄 POC 里，让靠谱中介和复旦/同城租客网络形成小圈层背书。
+- 做合租人匹配时，把作息、卫生、访客、预算、通勤、风险偏好变成可解释的匹配理由。
+
+租房场景必须有证据链和申诉机制，否则“信任层”会很快变成纠纷源。
+
+## 下一步最该查
+
+1. Dex 的高留存用户到底是谁：founders / investors / MBA / sales / job seekers 中哪一类最强？
+2. Dex MCP Server 和 Dex AI Skill 目前具体能做什么：只读联系人，还是能生成、更新、触发关系任务？
+3. Dex 是否正在从个人 CRM 转向 AI meeting prep / relationship intelligence？Dana 和 Dex 的边界需要继续核验。
+4. 组织版 personal CRM 是否成立：社群和校友组织愿不愿意为“活动后关系行动卡”付费？
+5. 在中国语境下，关系记录放在个人端、主理人端，还是活动组织端，哪一种隐私阻力最小？
