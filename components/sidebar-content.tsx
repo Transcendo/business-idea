@@ -225,6 +225,7 @@ export const contents: Content[] = [
 			{ title: "Dex", href: "/docs/social-relationship-products/dex", icon: () => <ContactRound className="w-4 h-4 text-current" /> },
 			{ title: "Supermomos", href: "/docs/social-relationship-products/supermomos", icon: () => <UsersRound className="w-4 h-4 text-current" /> },
 			{ title: "Beli", href: "/docs/social-relationship-products/beli", icon: () => <Utensils className="w-4 h-4 text-current" /> },
+			{ title: "Cobble", href: "/docs/social-relationship-products/cobble", icon: () => <UsersRound className="w-4 h-4 text-current" /> },
 			{ title: "Paired", href: "/docs/social-relationship-products/paired", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
 			{ title: "Cupla", href: "/docs/social-relationship-products/cupla", icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "Howbout", href: "/docs/social-relationship-products/howbout", icon: () => <Repeat2 className="w-4 h-4 text-current" /> },
