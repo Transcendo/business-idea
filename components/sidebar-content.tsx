@@ -422,6 +422,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/gaming", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Content Warning", href: "/docs/gaming/content-warning-steam-free-launch", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Balatro", href: "/docs/gaming/balatro-steam-review-flywheel", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Manor Lords", href: "/docs/gaming/manor-lords-steam-wishlist", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Tiny Glade", href: "/docs/gaming/tiny-glade-steam-demo", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
