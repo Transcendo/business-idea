@@ -224,6 +224,7 @@ export const contents: Content[] = [
 			{ title: "Heylo", href: "/docs/social-relationship-products/heylo", icon: () => <MessageCircle className="w-4 h-4 text-current" /> },
 			{ title: "Intros.ai", href: "/docs/social-relationship-products/intros-ai", icon: () => <Network className="w-4 h-4 text-current" /> },
 			{ title: "Dex", href: "/docs/social-relationship-products/dex", icon: () => <ContactRound className="w-4 h-4 text-current" /> },
+			{ title: "Pally", href: "/docs/social-relationship-products/pally", icon: () => <ContactRound className="w-4 h-4 text-current" /> },
 			{ title: "Supermomos", href: "/docs/social-relationship-products/supermomos", icon: () => <UsersRound className="w-4 h-4 text-current" /> },
 			{ title: "Beli", href: "/docs/social-relationship-products/beli", icon: () => <Utensils className="w-4 h-4 text-current" /> },
 			{ title: "Cobble", href: "/docs/social-relationship-products/cobble", icon: () => <UsersRound className="w-4 h-4 text-current" /> },
