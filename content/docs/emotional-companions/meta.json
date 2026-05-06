@@ -1,4 +1,8 @@
 {
   "title": "情感陪伴",
-  "pages": ["index", "minimax"]
+  "pages": [
+    "index",
+    "hume-ai",
+    "minimax"
+  ]
 }

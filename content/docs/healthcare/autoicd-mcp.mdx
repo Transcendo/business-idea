@@ -1,0 +1,55 @@
+---
+title: AutoICD MCP
+description: AutoICD MCP 把 ICD-10 / SNOMED / LOINC 等临床编码能力封装成 MCP 工具层，切入临床编码、HCC gap capture、denial risk 和 PHI 去标识化。
+created: 2026-05-06
+tags:
+  - ai-startups
+  - healthcare
+  - autoicd-mcp
+  - medical-coding
+  - mcp
+---
+
+# AutoICD MCP
+
+## 一句话判断
+
+AutoICD MCP 值得跟踪，不是因为它“用了 AI”，而是因为它把临床编码这类高价值、强流程、强规则的工作，包装成能被 AI assistant 直接调用的工具层。这个方向的创业价值在于：一旦编码、审计、缺口捕捉和去标识化能嵌进现有工作流，就不只是演示工具，而是能碰到真实回款和合规预算。
+
+## 它在做什么
+
+官方仓库写得很直接：给 AI assistants 提供 medical coding 能力，覆盖：
+
+- ICD-10-CM / ICD-11
+- ICF / LOINC
+- chart audit
+- HCC gap capture
+- RADV / denial risk
+- cross-standard translate
+- PHI de-identification
+- unified reference lookup
+
+更像是把临床编码和审计逻辑做成可调用基础设施，而不是单独做一个编码 UI。
+
+## 为什么值得看
+
+1. **买单方真实。** 编码、审计、拒付、HCC 漏编都和收入直接相关。
+2. **流程嵌入性强。** 如果能嵌进 note review、coding assistant、CDI 或 RCM 工具链，黏性会比单点助手高。
+3. **比“医生聊天”更硬。** 这个方向天然有规则、标准和责任边界，不容易沦为泛问答。
+4. **MCP 形态有分发意义。** AI assistant 生态越大，工具层越有机会变成底层接口。
+
+## 风险
+
+- 编码错误的代价高，必须有人类复核。
+- 真正难的是和 EHR / RCM 工作流整合，不是 API 本身。
+- 方向容易和 OpenEvidence、Keebler、Greenway 这类编码 / RCM 叙事撞车，必须证明自己更像工具层而不是又一个前端。
+
+## 我们的判断
+
+如果它能继续往“编码 + 审计 + 去标识化 + 标准映射”深化，这条线值得长期跟踪。它代表的不是单个功能，而是医疗后台开始把结构化规则能力暴露给 AI agent。
+
+## 可信来源
+
+- 官方仓库：[https://github.com/fcggamou/autoicd-mcp](https://github.com/fcggamou/autoicd-mcp)
+- HN 线索：Show HN: MCP server for ICD-10 and SNOMED clinical coding
+- AutoICD API 官网：[https://autoicdapi.com](https://autoicdapi.com)
