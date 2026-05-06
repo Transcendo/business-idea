@@ -420,7 +420,10 @@ export const contents: Content[] = [
 				<Gamepad2 />
 			</ModuleLogo>
 		),
-		list: [{ title: "概览", href: "/docs/gaming", icon: () => <Book className="w-4 h-4 text-current" /> }],
+		list: [
+			{ title: "概览", href: "/docs/gaming", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "UEFN / Fortnite Creator Economy", href: "/docs/gaming/uefn-fortnite-creator-economy", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
+		],
 	},
 	{
 		title: "开放世界",
