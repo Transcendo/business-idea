@@ -435,6 +435,7 @@ export const contents: Content[] = [
 			{ title: "Lethal Company", href: "/docs/gaming/lethal-company-steam-coop-horror", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Supermarket Together", href: "/docs/gaming/supermarket-together-steam-free-coop", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Buckshot Roulette", href: "/docs/gaming/buckshot-roulette-steam-itch-viral", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
+			{ title: "Bongo Cat", href: "/docs/gaming/bongo-cat-steam-free-idle-dlc", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Schedule I", href: "/docs/gaming/schedule-i-steam-early-access", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Abiotic Factor", href: "/docs/gaming/abiotic-factor-steam-early-access-to-1-0", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Backpack Battles", href: "/docs/gaming/backpack-battles-steam-demo-open-development", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
