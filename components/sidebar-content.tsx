@@ -433,6 +433,7 @@ export const contents: Content[] = [
 			{ title: "Tiny Glade", href: "/docs/gaming/tiny-glade-steam-demo", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "R.E.P.O.", href: "/docs/gaming/repo-steam-coop-horror", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "PEAK", href: "/docs/gaming/peak-steam-coop-climbing", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
+			{ title: "WEBFISHING", href: "/docs/gaming/webfishing-steam-cozy-multiplayer", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Lethal Company", href: "/docs/gaming/lethal-company-steam-coop-horror", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Supermarket Together", href: "/docs/gaming/supermarket-together-steam-free-coop", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Buckshot Roulette", href: "/docs/gaming/buckshot-roulette-steam-itch-viral", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
