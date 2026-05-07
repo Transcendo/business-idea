@@ -177,6 +177,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/weekly-picks", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Cursor（Anysphere）", href: "/docs/weekly-picks/cursor-anysphere", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "Hume AI", href: "/docs/weekly-picks/hume-ai", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
 			{ title: "Decagon", href: "/docs/weekly-picks/decagon", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "Perplexity", href: "/docs/weekly-picks/perplexity", icon: () => <Search className="w-4 h-4 text-current" /> },
@@ -272,6 +273,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/developer-tools", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Cursor（Anysphere）", href: "/docs/developer-tools/cursor-anysphere", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "AgentMail", href: "/docs/developer-tools/agentmail", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Qodo", href: "/docs/developer-tools/qodo", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Langfuse", href: "/docs/developer-tools/langfuse", icon: () => <Activity className="w-4 h-4 text-current" /> },
@@ -363,6 +365,8 @@ export const contents: Content[] = [
 		list: [
 			{ title: "概览", href: "/docs/education", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "ChatGPT Edu", href: "/docs/education/chatgpt-edu", icon: () => <GraduationCap className="w-4 h-4 text-current" /> },
+			{ title: "Gemini x Classroom", href: "/docs/education/gemini-classroom", icon: () => <GraduationCap className="w-4 h-4 text-current" /> },
+			{ title: "Khan Academy Districts + Khanmigo", href: "/docs/education/khan-academy-districts-khanmigo", icon: () => <GraduationCap className="w-4 h-4 text-current" /> },
 			{ title: "Chalkie", href: "/docs/education/chalkie", icon: () => <GraduationCap className="w-4 h-4 text-current" /> },
 			{ title: "MagicSchool", href: "/docs/education/magicschool", icon: () => <GraduationCap className="w-4 h-4 text-current" /> },
 			{ title: "Brisk", href: "/docs/education/brisk", icon: () => <GraduationCap className="w-4 h-4 text-current" /> },

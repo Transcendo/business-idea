@@ -15,35 +15,44 @@ import { cn } from "@/lib/utils";
 
 type Section = (typeof contents)[number];
 
+function normalizePath(path: string) {
+	return path.length > 1 ? path.replace(/\/+$/, "") : path;
+}
+
+function isPathMatch(pathname: string, href?: string) {
+	if (!href) return false;
+	const normalizedPathname = normalizePath(pathname);
+	const normalizedHref = normalizePath(href);
+	return (
+		normalizedPathname === normalizedHref ||
+		normalizedPathname.startsWith(`${normalizedHref}/`)
+	);
+}
+
+function getDefaultOpen(sections: Section[], pathname: string) {
+	const normalizedPathname = normalizePath(pathname);
+	const defaultValue = sections.findIndex((section) => {
+		if (isPathMatch(normalizedPathname, section.expandSectionForPathPrefix)) {
+			return true;
+		}
+
+		return section.list.some(
+			(listItem) =>
+				isPathMatch(normalizedPathname, listItem.href) ||
+				listItem.subpages?.some((sp) => isPathMatch(normalizedPathname, sp.href)),
+		);
+	});
+	return defaultValue === -1 ? 0 : defaultValue;
+}
+
 export function DocsSidebar() {
-	const pathname = usePathname();
+	const pathname = normalizePath(usePathname());
 	const { setOpenSearch } = useSearchContext();
-	const [currentOpen, setCurrentOpen] = useState(0);
+	const [currentOpen, setCurrentOpen] = useState(() => getDefaultOpen(contents, pathname));
 	const navRef = useRef<HTMLElement>(null);
 
-	const getDefaultOpen = (sections: Section[]) => {
-		const defaultValue = sections.findIndex((item) => {
-			const prefix = item.expandSectionForPathPrefix;
-			if (
-				prefix &&
-				(pathname === prefix || pathname.startsWith(`${prefix}/`))
-			) {
-				return true;
-			}
-			return item.list.some(
-				(listItem) =>
-					listItem.href === pathname ||
-					(listItem.subpages &&
-						listItem.subpages.length > 0 &&
-						pathname.startsWith(`${listItem.href}/`)) ||
-					listItem.subpages?.some((sp) => sp.href && pathname === sp.href),
-			);
-		});
-		return defaultValue === -1 ? 0 : defaultValue;
-	};
-
 	useEffect(() => {
-		setCurrentOpen(getDefaultOpen(contents));
+		setCurrentOpen(getDefaultOpen(contents, pathname));
 	}, [pathname]);
 
 	// Scroll the active item into view after section expands
