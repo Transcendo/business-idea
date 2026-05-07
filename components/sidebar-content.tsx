@@ -429,6 +429,7 @@ export const contents: Content[] = [
 			{ title: "Content Warning", href: "/docs/gaming/content-warning-steam-free-launch", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Balatro", href: "/docs/gaming/balatro-steam-review-flywheel", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Manor Lords", href: "/docs/gaming/manor-lords-steam-wishlist", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
+			{ title: "Blue Prince", href: "/docs/gaming/blue-prince-steam-puzzle-roguelite", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Tiny Glade", href: "/docs/gaming/tiny-glade-steam-demo", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "R.E.P.O.", href: "/docs/gaming/repo-steam-coop-horror", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "PEAK", href: "/docs/gaming/peak-steam-coop-climbing", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
