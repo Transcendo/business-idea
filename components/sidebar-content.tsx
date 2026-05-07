@@ -438,6 +438,7 @@ export const contents: Content[] = [
 			{ title: "Bongo Cat", href: "/docs/gaming/bongo-cat-steam-free-idle-dlc", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Schedule I", href: "/docs/gaming/schedule-i-steam-early-access", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Abiotic Factor", href: "/docs/gaming/abiotic-factor-steam-early-access-to-1-0", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
+			{ title: "Deep Rock Galactic: Survivor", href: "/docs/gaming/deep-rock-galactic-survivor-steam-ea-dlc", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Backpack Battles", href: "/docs/gaming/backpack-battles-steam-demo-open-development", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Dungeon Clawler", href: "/docs/gaming/dungeon-clawler-steam-claw-machine-roguelike", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "UEFN / Fortnite Creator Economy", href: "/docs/gaming/uefn-fortnite-creator-economy", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
