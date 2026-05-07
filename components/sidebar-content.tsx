@@ -433,6 +433,7 @@ export const contents: Content[] = [
 			{ title: "R.E.P.O.", href: "/docs/gaming/repo-steam-coop-horror", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Schedule I", href: "/docs/gaming/schedule-i-steam-early-access", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Abiotic Factor", href: "/docs/gaming/abiotic-factor-steam-early-access-to-1-0", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
+			{ title: "Backpack Battles", href: "/docs/gaming/backpack-battles-steam-demo-open-development", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "UEFN / Fortnite Creator Economy", href: "/docs/gaming/uefn-fortnite-creator-economy", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 		],
 	},
