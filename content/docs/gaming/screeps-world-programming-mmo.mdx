@@ -1,0 +1,163 @@
+---
+title: "Screeps: World：用 JavaScript AI 控制殖民地的 Steam 编程 MMO"
+description: "Screeps: World 如何把 JavaScript、AI agent、持久在线世界、资源调度和 PvP 变成硬核编程教育游戏；以及中国市场可迁移的 AI debug 教练和代码 agent 闯关机会。"
+---
+
+# Screeps: World：用 JavaScript AI 控制殖民地的 Steam 编程 MMO
+
+## 一句话判断
+
+`Screeps: World` 是今天教育游戏专项里最硬核的一类样本：它不是把编程课包一层游戏皮，而是让玩家写 JavaScript AI，控制自己的殖民地在持久在线世界里 24/7 自动运行。
+
+这件事对 AI 教育创业的启发很直接：真正有力的入口不是“AI 给你讲编程知识点”，而是 **用户写一段规则，系统立刻让一个 agent 在世界里活起来；AI coach 再解释为什么它活不下去、跑不快、打不过别人**。
+
+## 基本信息
+
+- 产品 / 游戏：Screeps: World
+- 开发商 / 发行商：Screeps, LLC（Steam Store API）
+- Steam AppID：464350
+- Steam 商店页：[Screeps: World](https://store.steampowered.com/app/464350/Screeps_World/)
+- Steam release date：2016-11-16（Steam Store API）
+- 价格信号：美国区 Steam Store API 显示 $19.99，无折扣（2026-05-08 抓取）。
+- Steam genres：Indie、Massively Multiplayer、Simulation、Strategy（Steam Store API）。
+- Steam categories：Single-player、Multi-player、MMO、PvP、Online PvP、LAN PvP、Cross-Platform Multiplayer、Steam Workshop、Stats、Steam Leaderboards 等（Steam Store API）。
+- Steam 用户标签：Programming、Strategy、Massively Multiplayer、Sandbox、Automation、Open World、Base Building、Artificial Intelligence、Economy、Hacking、RTS、PvP 等（2026-05-08 页面抓取）。
+- 语言信号：Steam Store API 的 supported languages 返回 English；官方文档站提供 `zh-cn` / `zh-tw` alternate link，但这不等于 Steam 游戏内完整中文支持。
+- 开源 / 开发者信号：GitHub `screeps/screeps` 是 standalone server for programming game Screeps，GitHub API 在 2026-05-08 返回 3,314 stars / 234 forks，ISC License。
+- 教育对象：有一定基础的青少年、大学生、成人开发者、编程社团、AI agent / automation 兴趣小组。
+- 学习目标：JavaScript、模块化、调试、状态管理、资源调度、AI agent 行为设计、tick 系统、CPU 限制、路径与扩张策略。
+- Steam / 游戏平台相关：是。它是 Steam 上明确以 Programming / Automation / Artificial Intelligence / MMO / Sandbox 标签分发的编程游戏。
+
+## 教育对象与学习目标
+
+`Screeps: World` 不适合当作零基础儿童的第一节编程课。它更像进阶型 coding playground：用户最好已经能读写一点 JavaScript，才会享受“代码控制世界”的成就感。
+
+适合的人群是：
+
+- **青少年 / 大学生**：从语法练习进入系统设计、调度、调试和长期优化。
+- **成人开发者**：用游戏目标练习 AI agent、自动化和分布式系统直觉。
+- **编程社团 / AI 社团**：把“谁的 bot 更会采矿、扩张、防守、交易”变成可对战任务。
+- **教师 / 教练**：把循环、条件、状态机、路径规划、资源约束讲成一个可运行系统。
+
+学习目标不是刷题，而是理解：程序一旦进入环境，就不再只是答案文本，而是持续行动的代理。
+
+## 产品 / 玩法或学习工作流
+
+Steam Store API 的 about text 把机制说得很清楚：`Screeps: World` 是 open source MMO strategy sandbox game for programming enthusiasts；玩家通过写 JavaScript code 控制 colony，代码会在 huge persistent online open world 中 24/7 运行。
+
+核心学习回合是：
+
+1. **定义行为**：玩家写 JavaScript 控制 creep 和 colony。
+2. **持续运行**：代码按 tick 在持久世界里执行，不需要玩家实时点单位。
+3. **观察结果**：creep 采矿、建造、扩张、交易、战斗；错误会体现在资源、领地和日志里。
+4. **debug / 重构**：玩家回来看运行结果，修路径、修状态机、修资源分配。
+5. **对抗环境**：其他玩家的代码也在同一世界运行，形成 PvP、经济和领地压力。
+
+这比传统编程课更接近真实工程：真实代码不是“判题通过就结束”，而是在环境里长期运行，并持续暴露边界情况。
+
+## AI 机制
+
+这里的 AI 不是 LLM，也不是自动生成答案。它的 AI 价值更原始，但更扎实：玩家自己写 agent。
+
+- **玩家代码就是 AI agent**：玩家写规则，让单位离线时也能感知、采集、建造、扩张和防守。
+- **环境提供真实反馈**：资源不足、路径错误、敌人入侵、CPU 限制都会让策略露馅。
+- **优化逼出抽象能力**：从能跑，到跑得稳，再到跑得快、能扩张、能对抗别人。
+- **外部工具接入**：官方文档介绍 embedded code editor，也允许通过外部工具 / IDE commit game scripts。
+
+如果今天重做，生成式 AI 应该只放在教练层：解释执行路径、标注 bug、给分层提示、生成相邻难度任务。它不该直接代写完整脚本，否则会杀掉最重要的学习回合。
+
+## 游戏化 / 互动机制
+
+- **持久世界**：代码离线也在跑，玩家会想回来检查“我的殖民地还活着吗”。
+- **资源与扩张**：采矿、建造、占领房间、交易和战斗把代码质量变成游戏进度。
+- **多人压力**：其他玩家的 bot 也在行动，策略不只面对静态题目。
+- **Steam Workshop / Leaderboards / Stats**：平台能力承担部分展示、排名和社区分发。
+- **开放文档与服务器**：官方文档、API reference、GitHub standalone server 让它更像开发者产品，而不是封闭课程。
+
+它最强的互动不是剧情，而是“我的代码在一个公共世界里替我行动”。这类反馈对 AI agent 教育特别值钱。
+
+## 用户为什么会打开
+
+- **程序员打开**：因为它把写代码变成 MMO 策略游戏，而不是算法题。
+- **学习者打开**：因为能马上看到 JavaScript 代码控制单位行动。
+- **老师 / 社团打开**：因为可把状态机、路径、资源管理、CPU 限制讲成比赛任务。
+- **AI 兴趣用户打开**：因为这比许多“AI agent 课程”更直观：agent 不是 PPT 概念，而是在地图上抢资源、建基地、被敌人打。
+
+## 留存 / 传播机制
+
+- **留存来自离线运行**：玩家不是完成一关就走，而是会回来检查代码在持久世界里的长期表现。
+- **留存来自优化压力**：资源、CPU、路径、攻防、市场都会制造下一轮改代码的理由。
+- **传播来自运行结果**：地图扩张、bot 行为、战斗日志、奇怪 bug、代码片段都能被截图或做成视频。
+- **信任来自 Steam 评论池**：Steam Reviews API 在 2026-05-08 返回 Very Positive，total_reviews 2,068，positive 1,791，negative 277。
+- **开发者信任来自 GitHub**：standalone server 开源，GitHub API 返回 3,314 stars / 234 forks。
+
+## 分发路径
+
+- **Steam**：核心 C 端渠道。Programming、Automation、Artificial Intelligence、MMO、Sandbox 等标签承担发现，评论承担信任。
+- **官方文档 / API reference**：面向程序员的学习入口，降低“这到底怎么写代码”的不确定性。
+- **GitHub**：standalone server 和开源项目增强开发者可信度。
+- **编程社区 / 游戏社区**：automation game、RTS、AI bot、JavaScript、coding challenge 用户都有自然入口。
+- **中国可迁移渠道**：B 站 coding game / AI agent 视频、小红书家长和 STEM 内容、Steam 简中玩家、少儿编程社团、校内信息科技社团、微信成果卡。
+
+Steam 的启发是：编程教育不一定先卖给学校。可以先用游戏社区验证“代码驱动世界”这件事真的好玩，再把安全、教师控制和课程报告补给机构版本。
+
+## 商业化
+
+- **买断制**：Steam Store API 显示美国区 $19.99。
+- **开发者社区资产**：文档、API、GitHub、外部 IDE workflow 让它能吸引高意愿用户。
+- **可迁移的教育版**：班级任务包、教师看板、学生 bot 对战、课程标准映射、运行结果报告。
+- **AI 增值层**：debug coach、提示分级、代码解释、任务生成、自动生成复盘卡。
+
+如果做中国版，别一上来做大型 MMO。更小的付费 wedge 是：**老师或学生选择一个编程概念，系统生成 10 分钟 agent 小任务；学生写代码控制机器人完成目标，AI coach 解释 bug，最后输出运行成果卡**。
+
+## 可信信号
+
+- Steam Store API 返回开发商 / 发行商为 Screeps, LLC，release date 为 Nov 16, 2016。
+- Steam Store API about text 明确写到 open source MMO strategy sandbox game、JavaScript code、24/7 persistent online open world。
+- Steam Store API genres 为 Indie / Massively Multiplayer / Simulation / Strategy，categories 包含 MMO、PvP、Cross-Platform Multiplayer、Steam Workshop、Stats、Steam Leaderboards。
+- Steam 页面用户标签包含 Programming、Automation、Artificial Intelligence、Sandbox、Open World、Base Building、Hacking、RTS、PvP。
+- Steam Reviews API 返回 Very Positive，total_reviews 2,068，positive 1,791，negative 277（2026-05-08 抓取）。
+- 官方文档 Introduction 写明它是 massive multiplayer online real-time strategy game，玩家在 shared persistent world 创建 colony，采矿、建造单位、征服领地。
+- 官方文档介绍 external commit：除 embedded code editor 外，用户也可以通过外部工具 / IDE 同步脚本。
+- GitHub API 返回 `screeps/screeps` 为 standalone server for programming game Screeps，2026-05-08 抓取为 3,314 stars / 234 forks，ISC License。
+
+## 风险
+
+- **入门门槛高**：JavaScript、文档、持久世界和多人压力对零基础儿童不友好。
+- **学习迁移需要引导**：玩家可能学会游戏内策略，但未必自然迁移到真实工程，需要复盘和概念映射。
+- **K12 合规较重**：多人服务器、聊天、PvP、账号、支付和未成年人保护都需要重做。
+- **AI coach 容易越界**：如果直接给完整代码，用户会失去调试和抽象训练。
+- **中国本地化不只是翻译**：需要中文任务、课程目标、教师控制、家长可读报告和安全环境。
+
+## 对中国市场 / 创业机会的迁移判断
+
+不要复刻 `Screeps: World` 的完整 MMO。那是重研发、重社区、重平衡、重运营的路线，不适合教育创业 MVP。
+
+更好的 AI-native wedge 是：
+
+> 用户写规则控制一个可视化 agent；系统在 30 秒内运行并暴露结果；AI coach 不代写，而是解释执行路径、定位 bug、给下一步提示，并生成可分享的学习成果卡。
+
+这回答四个问题：
+
+- **为什么来**：编程和 AI agent 太抽象，用户想立刻看到“我的代码让角色自己行动”。
+- **为什么留**：每次运行都有资源、地图、任务、效率和失败反馈，可以不断优化。
+- **为什么分享**：bot 行为、地图扩张、战斗结果、bug 视频和成果卡都适合 B 站 / 小红书 / 家长群。
+- **谁付费**：家长为编程素养和 AI 通识付费；少儿编程机构为互动试听课付费；学校为信息科技任务包、教师控制和安全版环境付费。
+
+可拆成三个方向：
+
+1. **AI agent 编程闯关 H5 / Web**：先做小地图、小机器人、小任务，别做 MMO。
+2. **教师关卡生成器**：输入循环、条件、函数、状态机、路径规划，生成可投屏的 10 分钟任务。
+3. **学生 bot 对战课**：班内安全沙盒，让学生的代码互相比赛，但禁聊天、禁陌生人、禁复杂支付。
+
+核心判断：教育游戏不是把课程套上积分，而是把抽象知识变成一个能行动、会失败、可优化的系统。`Screeps: World` 做对了这个底层结构；创业机会在于把它降低门槛，并补上 AI debug 与教学控制。
+
+## 来源
+
+- [Steam：Screeps: World](https://store.steampowered.com/app/464350/Screeps_World/)
+- [Steam Store API：appdetails appid 464350](https://store.steampowered.com/api/appdetails?appids=464350&cc=us&l=english)
+- [Steam Reviews API：appid 464350](https://store.steampowered.com/appreviews/464350?json=1&language=all&purchase_type=all)
+- [Screeps Documentation：Overview](https://docs.screeps.com/)
+- [Screeps Documentation：Introduction](https://docs.screeps.com/introduction.html)
+- [Screeps Documentation：Committing scripts using external tools](https://docs.screeps.com/commit.html)
+- [GitHub：screeps/screeps](https://github.com/screeps/screeps)
