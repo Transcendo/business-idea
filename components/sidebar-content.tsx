@@ -433,6 +433,7 @@ export const contents: Content[] = [
 			{ title: "Wayground / Quizizz AI", href: "/docs/gaming/wayground-quizizz-ai", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Kahoot! AI tools", href: "/docs/gaming/kahoot-ai-tools", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Duolingo Max / Adventures", href: "/docs/gaming/duolingo-max-adventures", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
+			{ title: "Curipod AI Writing Feedback", href: "/docs/gaming/curipod-ai-writing-feedback", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Content Warning", href: "/docs/gaming/content-warning-steam-free-launch", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Balatro", href: "/docs/gaming/balatro-steam-review-flywheel", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Manor Lords", href: "/docs/gaming/manor-lords-steam-wishlist", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
