@@ -429,6 +429,7 @@ export const contents: Content[] = [
 		list: [
 			{ title: "概览", href: "/docs/gaming", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "while True: learn()", href: "/docs/gaming/while-true-learn-steam-ai-education-game", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
+			{ title: "The Farmer Was Replaced", href: "/docs/gaming/the-farmer-was-replaced-steam-coding-game", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "CodeCombat AI HackStack", href: "/docs/gaming/codecombat-ai-hackstack", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Synthesis Tutor / Teams", href: "/docs/gaming/synthesis-tutor-teams", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "Wayground / Quizizz AI", href: "/docs/gaming/wayground-quizizz-ai", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
