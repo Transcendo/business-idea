@@ -177,6 +177,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/weekly-picks", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Firecrawl", href: "/docs/weekly-picks/firecrawl", icon: () => <Globe className="w-4 h-4 text-current" /> },
 			{ title: "Cursor（Anysphere）", href: "/docs/weekly-picks/cursor-anysphere", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "Hume AI", href: "/docs/weekly-picks/hume-ai", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
 			{ title: "Decagon", href: "/docs/weekly-picks/decagon", icon: () => <Headphones className="w-4 h-4 text-current" /> },
@@ -274,6 +275,7 @@ export const contents: Content[] = [
 		list: [
 			{ title: "概览", href: "/docs/developer-tools", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "Cursor（Anysphere）", href: "/docs/developer-tools/cursor-anysphere", icon: () => <Code2 className="w-4 h-4 text-current" /> },
+			{ title: "Firecrawl", href: "/docs/developer-tools/firecrawl", icon: () => <Globe className="w-4 h-4 text-current" /> },
 			{ title: "AgentMail", href: "/docs/developer-tools/agentmail", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Qodo", href: "/docs/developer-tools/qodo", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Langfuse", href: "/docs/developer-tools/langfuse", icon: () => <Activity className="w-4 h-4 text-current" /> },

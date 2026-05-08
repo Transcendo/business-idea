@@ -3,6 +3,7 @@
   "pages": [
     "index",
     "cursor-anysphere",
+    "firecrawl",
     "agentmail",
     "qodo",
     "langfuse",
