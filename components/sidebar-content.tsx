@@ -465,6 +465,7 @@ export const contents: Content[] = [
 			{ title: "Once Human", href: "/docs/gaming/once-human-cross-platform-open-world-survival", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "Light No Fire", href: "/docs/gaming/light-no-fire-procedural-open-world", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "No Man's Sky", href: "/docs/gaming/no-mans-sky-procedural-open-world-live-service", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
+			{ title: "Convai", href: "/docs/gaming/convai-ai-npc-open-world-infrastructure", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
