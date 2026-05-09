@@ -463,6 +463,7 @@ export const contents: Content[] = [
 			{ title: "BitCraft Online", href: "/docs/gaming/bitcraft-online-single-world-mmo", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "Dune: Awakening", href: "/docs/gaming/dune-awakening-open-world-survival-rpg", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "Once Human", href: "/docs/gaming/once-human-cross-platform-open-world-survival", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
+			{ title: "Light No Fire", href: "/docs/gaming/light-no-fire-procedural-open-world", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
