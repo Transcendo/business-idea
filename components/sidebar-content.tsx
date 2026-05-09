@@ -460,6 +460,7 @@ export const contents: Content[] = [
 			{ title: "UEFN / Fortnite Creator Economy", href: "/docs/gaming/uefn-fortnite-creator-economy", icon: () => <Gamepad2 className="w-4 h-4 text-current" /> },
 			{ title: "开放世界 / Open World", separator: true, icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "Enshrouded", href: "/docs/gaming/enshrouded-survival-craft-open-world", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
+			{ title: "BitCraft Online", href: "/docs/gaming/bitcraft-online-single-world-mmo", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
