@@ -468,6 +468,7 @@ export const contents: Content[] = [
 			{ title: "Convai", href: "/docs/gaming/convai-ai-npc-open-world-infrastructure", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "NVIDIA ACE", href: "/docs/gaming/nvidia-ace-ai-characters-open-world-inference", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "World Creator", href: "/docs/gaming/world-creator-terrain-open-world-toolchain", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
+			{ title: "Palworld", href: "/docs/gaming/palworld-open-world-survival-automation", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
