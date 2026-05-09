@@ -467,6 +467,7 @@ export const contents: Content[] = [
 			{ title: "No Man's Sky", href: "/docs/gaming/no-mans-sky-procedural-open-world-live-service", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "Convai", href: "/docs/gaming/convai-ai-npc-open-world-infrastructure", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "NVIDIA ACE", href: "/docs/gaming/nvidia-ace-ai-characters-open-world-inference", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
+			{ title: "World Creator", href: "/docs/gaming/world-creator-terrain-open-world-toolchain", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
