@@ -461,6 +461,7 @@ export const contents: Content[] = [
 			{ title: "开放世界 / Open World", separator: true, icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "The Planet Crafter", href: "/docs/gaming/the-planet-crafter-terraforming-open-world", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "Valheim", href: "/docs/gaming/valheim-procedural-coop-open-world", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
+			{ title: "Kenshi", href: "/docs/gaming/kenshi-squad-sandbox-open-world", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "Enshrouded", href: "/docs/gaming/enshrouded-survival-craft-open-world", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "BitCraft Online", href: "/docs/gaming/bitcraft-online-single-world-mmo", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "Dune: Awakening", href: "/docs/gaming/dune-awakening-open-world-survival-rpg", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
