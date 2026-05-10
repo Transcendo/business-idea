@@ -1,0 +1,167 @@
+---
+title: The Planet Crafter：开放世界 survival craft 的差异点不是打怪，而是把星球改造成进度条
+description: 从 The Planet Crafter 看开放世界生存建造如何用 terraforming 指标、基地机器、沉船探索和 1-10+ co-op，把“我现在该干嘛”变成结构化行动问题。
+---
+
+# The Planet Crafter：开放世界 survival craft 的差异点不是打怪，而是把星球改造成进度条
+
+**一句话判断：** The Planet Crafter 的核心不是传统开放世界里“更大地图 + 更多敌人”，而是把整颗星球的生态变化做成玩家可见的长期进度条：探索、采矿、建造、放置机器、提高氧气 / 热量 / 压力，最终让荒漠世界长出水、植物和生物。
+
+对创业者更有用的启发：AI 不该先做“开放世界自动生成一切”的大而空承诺，而该做 **world progression auditor / terraforming plan card**：读取玩家当前世界状态、资源、机器布局和目标阶段，输出下一步最值得做的行动卡。
+
+## 基本信息
+
+| 项目 | 信息 |
+| --- | --- |
+| 游戏 | The Planet Crafter |
+| 团队 | Miju Games，自研自发行；官方 press kit 称项目 2021 年由法国南部一对伴侣 Brice 与 Amélie 作为两人项目开始，2023 年扩展为 6 人远程团队 |
+| Steam AppID | 1284190 |
+| Steam 发行日期 | Steam API 与官方 press kit 均标注 2024-04-10 正式发布；官方 press kit 说明 2022 年 3 月进入 Steam Early Access |
+| 类型 | Space survival open world terraforming crafting game |
+| 商业模式 | Steam 买断制；Steam Store API 本轮显示美国区价格 USD 23.99 |
+| 语言 | Steam API 显示支持简体中文、繁体中文、英语、法语、德语、日语、韩语等多语言 |
+| 多人 | Steam API 标注 Single-player、Multi-player、Co-op、Online Co-op；官方 press kit 写作 1-10+ online co-op |
+
+## 开放世界定位
+
+这不是靠战斗密度撑起来的开放世界，而是靠“环境从死到活”的可视化变化撑起来的开放世界。
+
+玩家打开游戏时，不是在问“今天刷哪个怪”，而是在问：
+
+1. 我现在缺什么资源？
+2. 哪个星球改造指标卡住了？
+3. 我该扩建基地、探索沉船、上新机器，还是先解决氧气 / 水 / 食物？
+4. 和朋友一起玩时，谁负责采集、谁负责建造、谁负责探索？
+
+这类开放世界的强点是目标感清楚：星球本身就是任务板。弱点也明显：一旦资源路线、机器布局、探索目标不清晰，玩家会在“很大但不知道干嘛”的中后期疲劳里掉线。
+
+## 产品 / 玩法工作流
+
+官方 Steam short description 与 press kit 都把循环讲得很直：
+
+1. 在 hostile planet 上生存，管理 thirst、oxygen、temperature、health。
+2. 收集资源，建造基地和科学机器。
+3. 通过机器生成 oxygen、heat、pressure。
+4. 逐步把不适合人类居住的星球改造成可生存的 biosphere。
+5. 探索世界与 procedurally generated shipwrecks，寻找稀有资源。
+6. 后期创建植物和 creatures，进一步改变生态。
+
+这个循环比普通 survival craft 更适合被 AI 拆成行动建议，因为目标变量是结构化的：氧气、热量、压力、资源库存、机器产能、基地位置、探索点、蓝图解锁。
+
+## 关键系统观察
+
+### 1. 地图结构：荒芜星球作为长期画布
+
+地图不是“景点列表”，而是一个会被玩家行动持续改变的 terraforming canvas。世界变化本身就是奖励：从沙尘、缺氧，到水体、植被、生物。
+
+### 2. 探索动机：资源 + 蓝图 + 沉船
+
+官方 press kit 提到 procedurally generated shipwrecks，用探索提供 rare loot。这里的探索不是纯观光，而是为了突破基地发展和星球改造瓶颈。
+
+### 3. 任务系统：不是 NPC 发任务，而是生态指标发任务
+
+The Planet Crafter 的好设计在于：任务感来自世界状态本身。氧气不够、热量不够、压力不够、资源不够，就是天然的下一步任务。
+
+### 4. 多人协作：1-10+ co-op 把基地运营变成分工问题
+
+多人不是简单“多一个人打怪”，而是把采集、建造、探索、物流和指标推进拆成角色分工。这正是 AI co-op planner 能切入的地方。
+
+### 5. 长期内容供给：Early Access + 大版本 + patch cadence
+
+官方 press kit 说 Early Access 两年内有 7 个 major updates；Steam News API 最近仍能看到 2.0 update 后的 patch、development branch 与 main branch 更新。这个节奏说明它不是一次性发售后沉默，而是通过版本节奏维持社区信任。
+
+## AI / 技术机制机会
+
+公开资料不能支持 The Planet Crafter 本身是 AI-native 产品。它更适合作为开放世界“判断层”的样本。
+
+更现实的 AI-native wedge 是：
+
+**用户给 X：** 当前存档状态截图 / 导出、星球指标、基地机器列表、资源库存、解锁蓝图、队友人数。
+
+**系统 30 秒返回 Y：** 下一阶段 terraforming action card：先建什么、去哪采什么、谁负责什么、预期推进哪个指标、风险是什么。
+
+可拆成几个轻量产品：
+
+1. **Terraforming bottleneck auditor**：判断玩家卡在 oxygen、heat、pressure、resource、energy 还是 exploration。
+2. **Base layout critic**：根据截图或手动输入指出基地扩建、储物、发电、生产链瓶颈。
+3. **Co-op role card**：给 2-10 人小队分配本局任务：探索、搬运、建造、资源补给、蓝图推进。
+4. **Exploration route planner**：根据已解锁装备和缺口资源，生成最小绕路探索路线。
+5. **Patch-aware save advisor**：结合 Steam News / changelog，告诉老玩家 2.0 后该回来看什么、避开什么 mod / version 兼容坑。
+
+关键：这不是“再造一个开放世界游戏”，而是站在开放世界玩家最痛的判断点上——我现在该干嘛。
+
+## 用户为什么打开、留下、传播、付费
+
+- **为什么打开：** open world survival craft 玩家想要比砍树打怪更清晰的长期目标；“把星球从死地改造成生命世界”比普通建家更容易一句话讲清楚。
+- **为什么留下：** 星球生态变化是长期可见进度，基地扩建和指标推进不断制造下一个目标。
+- **为什么传播：** before / after 星球变化、基地规模、朋友协作事故、稀有沉船探索都能变成截图 / 视频素材。
+- **谁付费：** 中度 survival craft 玩家为买断制内容付费；多人 co-op 会被朋友带动购买；后续 DLC / 大版本可围绕新星球、新生态、新机器、新生物扩展，但具体商业化必须以官方披露为准。
+
+## 分发路径
+
+- **Steam：** 商店页、玩家评测、Steam News、Early Access 到 1.0 的可验证交付节奏是核心信任入口。
+- **官方社区：** Miju Games 官网、Discord、YouTube、Twitter / X；Steam News 文末也引导 newsletter、YouTube、Twitter、官方 Reddit 等。
+- **内容传播：** 适合 YouTube / B站做“星球改造前后对比”“多人基地”“新手别踩坑”“2.0 回坑指南”。
+- **中国迁移：** Steam 简中支持降低首购门槛；B站 / 抖音容易用视觉变化展示核心卖点，但移动端复刻会被操作复杂度、内容体量和长期更新压力卡住。
+
+## 商业化
+
+The Planet Crafter 当前可核验的主模型是 Steam 买断制。Steam Store API 本轮显示美国区价格 USD 23.99。
+
+围绕这个样本可拆出的商业机会主要在外围：
+
+1. **玩家工具：** terraforming bottleneck auditor、co-op session planner、资源路线卡、基地布局建议。
+2. **创作者工具：** patch notes 到回坑指南、基地展示脚本、星球 before / after 短视频脚本。
+3. **开发者工具：** world progression QA、地图密度审计、探索奖励诊断、多人版本 / mod 兼容问题聚类。
+
+如果只支持单款游戏，它更像攻略工具；如果能覆盖 The Planet Crafter、Valheim、Satisfactory、Enshrouded、Soulmask、Palworld 这类开放世界生存建造游戏，才更像产品。
+
+## 可信信号
+
+本轮使用 Steam 官方接口 / 页面与 Miju Games 官方页面核验；没有使用 Reddit、X / Twitter、GitHub 或 Hacker News 作为事实来源。
+
+- Steam Store API 显示：开发商 / 发行商均为 Miju Games；正式发布日期 2024-04-10；支持单人、多人、在线合作；short description 明确写作 open world terraforming crafting game，designed for 1 to 10 players。
+- Steam Reviews API 本轮返回：`Overwhelmingly Positive`，total_reviews 69699，total_positive 66933，total_negative 2766。这是抓取时点的 Steam 接口信号，不代表销量或收入。
+- 官方 press kit：说明项目 2021 年从两人项目开始，2022 年 3 月 Steam Early Access，Early Access 两年有 7 个 major updates，1.0 前已有 25000+ overwhelmingly positive reviews，2023 年团队扩展为 6 人远程团队。
+- Steam News API：最近仍有 v2.005-v2.008、2.0 update patch、development branch / main branch 更新，且反复提示多人需同版本、mod 问题需更新或移除，说明 co-op 与 mod 兼容是实际运营问题。
+
+## 风险
+
+1. **中后期重复劳动：** terraforming 指标清楚，但资源搬运和机器扩张可能变成重复劳动，AI planner 可以缓解，但游戏本体必须给足阶段变化。
+2. **地图密度问题：** 星球改造前后的视觉变化很强，但探索点如果稀薄，会掉进“开放世界大但空”的老坑。
+3. **多人版本一致性：** Steam News 反复提醒 co-op 玩家保持同版本；多人 / 插件 / 存档兼容会增加运营成本。
+4. **小团队内容压力：** 6 人左右团队能靠 Early Access 社区反馈推进，但不适合承诺无限内容型 live-service。
+5. **移动端迁移难：** 核心乐趣依赖 3D 空间、基地布局、长期存档和 co-op，直接搬到手机会重；更适合先做 companion / guide / planner，而不是复刻本体。
+
+## 对中国市场 / 创业机会的迁移判断
+
+别学“做一个国产开放世界 survival craft”，那是成本陷阱。更聪明的切口是做 **开放世界玩家判断层**。
+
+可落地机会：
+
+1. **Steam 中文玩家 open-world action card**
+
+   面向 The Planet Crafter、Valheim、Satisfactory、Enshrouded、Soulmask、Palworld 等中重度游戏，输入当前阶段与目标，输出“今晚 2 小时该做什么”。
+
+2. **B站 / 抖音攻略视频生成器**
+
+   读取 patch notes、玩家问题和游戏机制，生成“新版本回坑指南”“新手 10 个坑”“基地布局升级路线”的脚本草稿。价值在创作者生产，不在玩家聊天。
+
+3. **多人服务器 session planner**
+
+   给 co-op 群主用：今晚谁上线、目标是什么、缺什么资源、上次进度到哪、每个人分工是什么。这个比泛社交产品更硬，因为它绑定具体游戏任务。
+
+4. **开放世界密度审计工具**
+
+   面向小团队开发者：导入地图 / 任务 / 资源点 / 玩家路径数据，指出哪些区域空、奖励弱、路线回报低、任务太罐头。The Planet Crafter 这种“世界变化就是奖励”的设计，恰好说明密度不是怪物数量，而是玩家行动后的可感知变化。
+
+一句狠话：开放世界本体是大厂绞肉机，小团队最好先卖铲子，别一上来跳坑当矿工。
+
+## 来源
+
+- [Steam 商店页：The Planet Crafter](https://store.steampowered.com/app/1284190/The_Planet_Crafter/)
+- [Steam Store API：appdetails](https://store.steampowered.com/api/appdetails?appids=1284190&cc=us&l=en)
+- [Steam Reviews API：appreviews](https://store.steampowered.com/appreviews/1284190?json=1&language=all&purchase_type=all&num_per_page=0)
+- [Steam News API：GetNewsForApp](https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?appid=1284190&count=5&maxlength=500&format=json)
+- [Miju Games 官方首页](https://mijugames.com/)
+- [Miju Games 官方 press kit：The Planet Crafter](https://mijugames.com/pages/planetcrafter/presskit.html)
