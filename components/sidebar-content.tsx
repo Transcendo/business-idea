@@ -467,6 +467,7 @@ export const contents: Content[] = [
 			{ title: "V Rising", href: "/docs/gaming/v-rising-vampire-survival-open-world", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "Soulmask", href: "/docs/gaming/soulmask-tribe-automation-open-world", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "Nightingale", href: "/docs/gaming/nightingale-realm-cards-open-world", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
+			{ title: "Aloft", href: "/docs/gaming/aloft-sky-island-survival-open-world", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "Enshrouded", href: "/docs/gaming/enshrouded-survival-craft-open-world", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "BitCraft Online", href: "/docs/gaming/bitcraft-online-single-world-mmo", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
 			{ title: "Dune: Awakening", href: "/docs/gaming/dune-awakening-open-world-survival-rpg", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
