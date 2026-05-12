@@ -1,4 +1,19 @@
 {
   "title": "医疗健康",
-  "pages": ["index", "drswarm", "autoicd-mcp", "abridge", "nabla", "openevidence", "no-barrier", "bitboard", "infinitus", "qualified-health", "mandolin", "luminai", "baichuan"]
+  "pages": [
+    "index",
+    "drswarm",
+    "autoicd-mcp",
+    "abridge",
+    "nabla",
+    "openevidence",
+    "no-barrier",
+    "bitboard",
+    "infinitus",
+    "qualified-health",
+    "mandolin",
+    "luminai",
+    "baichuan",
+    "suki-nursing-assistant"
+  ]
 }

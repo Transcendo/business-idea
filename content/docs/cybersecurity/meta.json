@@ -2,6 +2,7 @@
   "title": "网络安全",
   "pages": [
     "index",
-    "capsule-security"
+    "capsule-security",
+    "mcp-agent-security-gateway"
   ]
 }

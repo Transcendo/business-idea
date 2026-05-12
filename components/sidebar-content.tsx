@@ -317,6 +317,7 @@ export const contents: Content[] = [
 		list: [
 			{ title: "概览", href: "/docs/cybersecurity", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "Capsule Security", href: "/docs/cybersecurity/capsule-security", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
+			{ title: "MCP Agent Security Gateway", href: "/docs/cybersecurity/mcp-agent-security-gateway", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
@@ -344,6 +345,7 @@ export const contents: Content[] = [
 			{ title: "No Barrier", href: "/docs/healthcare/no-barrier", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
 			{ title: "Luminai", href: "/docs/healthcare/luminai", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
 			{ title: "百川智能", href: "/docs/healthcare/baichuan", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
+			{ title: "Suki Nursing Assistant", href: "/docs/healthcare/suki-nursing-assistant", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
 		],
 	},
 	{
