@@ -1,0 +1,165 @@
+---
+title: Agent Session Supervision Layer
+description: Claude Code、Codex、OpenCode 这类 agent 开始并行跑任务后，真正的新痛点不是“再造一个 IDE”，而是把多个 agent session 变成可观察、可接管、可交接的工作单元。
+created: 2026-05-12
+tags:
+  - ai-coding
+  - developer-tools
+  - agent-workflow
+  - ai-agents
+---
+
+# Agent Session Supervision Layer
+
+## 一句话判断
+
+Claude Code、Codex、OpenCode 这类 agent 开始并行跑任务后，真正的新痛点不是“再造一个 IDE”，而是把多个 agent session 变成可观察、可接管、可交接的工作单元。
+
+这和 control plane 不完全一样。control plane 解决预算、权限、验证和审计。session supervision 解决的是另一件事：人怎么同时带几个 agent 干活，并且不被终端、日志、上下文和半成品淹死。
+
+## 赛道 / 产品信号
+
+本轮看到几条同向信号：
+
+- Anthropic 发布 Claude Code 的 Agent View，官方描述是 one place to manage all your Claude Code sessions。大厂已经承认“多 session 管理”是 Claude Code 的正式使用场景。
+- Agent FM 把 Claude Code 和 Codex session 做成 ambient radio。README 写得很直白：Global Mix、station listening、blocker alerts、progress、decisions、errors、attention requests。
+- Tessera 把 Claude Code、Codex、OpenCode session 组织成 projects、collections、tabs、panes、tasks、Git worktrees、Kanban、tool logs、diffs、PRs。它还放了 Product Hunt launch 和 team design partner waitlist，说明方向不只是玩具。
+- HN 上同时出现 Agent View、Agent FM、Tessera、Sigmashake、MartinLoop、BrowserCode 等帖子。单个热度不大，但主题非常集中：agent 不再是聊天窗口，而是后台 worker。
+- Ask HN 里对 Cursor / VSCode / Claude Code desktop / Codex 的抱怨也很有用：用户嫌 bloat、慢、工具太多、终端太散。这说明“工作台”如果做重，会直接踩坑。
+
+判断：早期市场不是缺一个更花哨的 agent IDE，而是缺一个轻的 session ops 层。
+
+## 用户痛点是什么
+
+重度用户现在的问题很具体：
+
+1. **看不过来。** 一个 agent 跑还行，三个 agent 同时跑就变成终端考古。
+2. **不知道谁卡住了。** agent 可能在等审批、等输入、卡测试、重复修同一个错误。人要自己翻日志才知道。
+3. **上下文散。** 任务、分支、worktree、diff、工具调用、失败原因、下一步都散在不同窗口。
+4. **半成品难交接。** 今天跑到一半，明天很难知道“这个 agent 到底做了什么、还差什么”。
+5. **团队不可见。** 个人能在本机开十个窗口，团队却缺一个轻量看板知道 agent workers 正在处理哪些票。
+
+痛点不是“AI 不够聪明”。痛点是 agent 开始占用工程流程后，人的监督带宽被打爆。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户把本地 Claude Code / Codex / OpenCode session 接入一个 lightweight supervisor；系统自动生成每个 session 的 live status、blocker、current diff、next action 和 handoff card。**
+
+第一版不做完整 IDE。只做四件事：
+
+- session registry：识别当前有哪些 agent run、对应哪个 repo / branch / worktree / task。
+- live digest：把长日志压成状态：doing、blocked、needs decision、ready for review、failed。
+- handoff card：每个 session 输出一张卡：目标、已改文件、失败点、下一步、需要人判断的问题。
+- review bridge：把 diff、tool log、test result、handoff card 放到 PR / GitHub issue / Linear ticket。
+
+它压缩的是“监督多个 agent 的认知成本”，不是压缩写代码本身。
+
+## 为什么现在
+
+- Coding agent 从补全走到长任务执行，session 数量开始上升。
+- Claude Code、Codex、OpenCode、Cursor、Gemini CLI 的入口分散，用户不想被锁在单一 IDE 里。
+- Git worktree 和多分支并行变成 agent-heavy 开发的常见技巧，但原生命令行没有任务视图。
+- Agent View、Agent FM、Tessera 在同一时间出现，说明 builder 已经撞到同一个使用时刻。
+- 团队开始关心 agent 产出的可审查性。只看最终 diff 不够，还要知道 agent 是怎么到这里的。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+用户已经在同时跑 Claude Code / Codex。第一次需求通常是：“哪个 agent 卡了？哪个可以 review？哪个在浪费时间？”
+
+**为什么留：**
+
+只要 agent 变成日常 worker，session supervision 就每天有用。它会变成开发者的 agent dashboard，不是一次性工具。
+
+**为什么传播：**
+
+最适合传播的是 handoff card：
+
+- `Agent A 已修复登录 bug，改动 6 个文件，测试失败在 auth/session.test.ts，需要人确认 cookie 迁移。`
+- `Agent B 卡在第三方 API mock，建议补一个 fixture 后继续。`
+- `三个 agent 中 1 个 ready for review，2 个 blocked。`
+
+这种卡能贴进 PR、Slack、Linear、Discord、飞书群，比“我用了 AI 写代码”更像真实生产力证据。
+
+**谁付费：**
+
+早期是 AI-heavy 开发者、AI-native agency、开源 maintainer、创业团队 CTO。团队版卖 workspace、共享 session view、权限、PR / issue 集成、历史 handoff、私有部署。
+
+## MVP 实验
+
+### 7 天 MVP
+
+做一个本地 supervisor，只支持读取 session 日志和 git 状态，不接管编辑器：
+
+```bash
+agent-watch add ./repo --provider claude-code --task "fix checkout bug"
+agent-watch list
+agent-watch card <session-id>
+```
+
+输出一张 Markdown：
+
+```md
+Status: blocked
+Goal: fix checkout bug
+Repo: app-web
+Branch: agent/checkout-fix
+Changed files: 6
+Tests: failed, pnpm test auth/session.test.ts
+Needs human: confirm cookie migration path
+Next action: add fixture for expired session case
+```
+
+### 30 天验证
+
+- 找 15 个每天至少跑 3 个 agent session 的开发者或小团队。
+- 不要求他们换 IDE，只让他们把 session 接进 supervisor。
+- 观察他们是否每天打开 dashboard、是否复制 handoff card、是否减少“翻终端日志”的时间。
+- 重点验证 blocker alert 是否真的让人更早介入，而不是制造噪音。
+
+## 可验证指标
+
+- 单人同时管理的 agent session 数是否上升。
+- 从 agent 卡住到人类介入的时间是否下降。
+- 每个 session 生成 handoff card 的比例。
+- handoff card 被贴进 PR / issue /团队聊天的比例。
+- reviewer 理解 agent 改动所需时间是否下降。
+- 7 天后用户是否仍保留 supervisor，而不是回到纯终端。
+- 团队是否愿意为共享 view、历史记录、权限和私有部署付费。
+
+## 商业化路径
+
+1. **开源本地工具。** 支持 Claude Code、Codex、OpenCode 日志摘要和 git diff 读取。
+2. **桌面 / 菜单栏层。** 不抢 IDE，只做 session status、blocker alert、handoff card。
+3. **团队 workspace。** 共享任务板、agent assignment、PR / GitHub issue / Linear 集成。
+4. **企业版。** SSO、权限、日志保留策略、私有部署、审计导出。
+5. **Agent runtime SDK。** 给 coding agent、browser agent、CI agent 提供统一 session status schema。
+
+## 反例 / 风险
+
+1. **平台会吃掉基础能力。** Anthropic 已经做 Agent View。独立公司不能只做“列出 session”，必须跨 provider、跨 repo、跨团队流程。
+2. **容易做成重 IDE。** 用户已经嫌工具重。MVP 应该像菜单栏和轻 dashboard，而不是又一个 Electron 巨物。
+3. **摘要不准会害人。** 如果 blocker、next action、test result 判断错，用户会失去信任。第一版宁可少判断，也要证据清楚。
+4. **个人用户付费弱。** 单人开发者可能愿意用免费开源，但团队付费要等 agent session 进入正式交付流程。
+5. **和 control plane 边界会混。** 预算、权限、审计可以后接，但第一切口要保持“监督和交接”，别一开始做成大平台。
+
+## 来源
+
+- Anthropic：Agent view in Claude Code，官方描述为 one place to manage all your Claude Code sessions：[https://claude.com/blog/agent-view-in-claude-code](https://claude.com/blog/agent-view-in-claude-code)
+- HN：Agent View in Claude Code，2026-05-12：[https://news.ycombinator.com/item?id=48104699](https://news.ycombinator.com/item?id=48104699)
+- GitHub：Agent FM，把 Claude Code / Codex session 做成 ambient radio，支持 Global Mix、station listening、blocker alerts：[https://github.com/agentfm-ai/agent-fm](https://github.com/agentfm-ai/agent-fm)
+- HN：Show HN: Agent FM，2026-05-12：[https://news.ycombinator.com/item?id=48104863](https://news.ycombinator.com/item?id=48104863)
+- GitHub：Tessera，组织 Claude Code / Codex / OpenCode sessions、Git worktrees、tool logs、diffs、PRs：[https://github.com/horang-labs/tessera](https://github.com/horang-labs/tessera)
+- Product Hunt：Tessera launch：[https://www.producthunt.com/posts/tessera-6](https://www.producthunt.com/posts/tessera-6)
+- HN：Show HN: Tessera，2026-05-12：[https://news.ycombinator.com/item?id=48104348](https://news.ycombinator.com/item?id=48104348)
+- HN：What do you NOT like about Cursor / VSCode / Claude Code desktop / Codex / etc.，2026-05-11：[https://news.ycombinator.com/item?id=48102087](https://news.ycombinator.com/item?id=48102087)
+
+## 后续跟踪点
+
+- Anthropic Agent View 是否会覆盖跨 repo、跨 provider、跨团队协作，还是只服务 Claude Code 自家用户。
+- Tessera 的 Product Hunt 和 design partner 信号能否转成真实团队试用。
+- Agent FM 这种 ambient audio 形态是主入口，还是更像 blocker alert 的一个输出通道。
+- handoff card 能不能成为 agent PR 的默认附件。
