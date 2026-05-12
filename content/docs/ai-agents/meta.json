@@ -2,6 +2,7 @@
   "title": "AI 智能体",
   "pages": [
     "index",
+    "browser-agent-execution-harness",
     "decagon",
     "sierra",
     "sycamore"

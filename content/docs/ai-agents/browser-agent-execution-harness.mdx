@@ -1,0 +1,157 @@
+---
+title: Browser Agent Execution Harness
+description: Browser agent 的机会不只是“让 AI 点网页”。更硬的缺口是执行 harness：持久浏览器、登录态接管、任务 replay、失败恢复、基准评测和可审计 run card。
+created: 2026-05-12
+tags:
+  - ai-agents
+  - browser-agents
+  - workflow-automation
+  - ai-infrastructure
+---
+
+# Browser Agent Execution Harness
+
+## 一句话判断
+
+Browser agent 的机会不只是“让 AI 点网页”。更硬的缺口是执行 harness：持久浏览器、登录态接管、任务 replay、失败恢复、基准评测和可审计 run card。
+
+网页自动化以前是 RPA、爬虫、Playwright 脚本。现在热，是因为 LLM 能读页面、理解模糊目标、临时处理页面变化。但真实生产环境里，登录、验证码、弹窗、DOM 变化、异步加载、风控和失败恢复才是硬骨头。
+
+所以创业 wedge 不该是“浏览器里的 ChatGPT”。应该是：把一句网页任务变成可回放、可接管、可评测、可追责的执行单元。
+
+## 赛道 / 产品信号
+
+本轮看到四类公开信号在同一方向上收敛：
+
+- ClawBench 做浏览器 AI agents benchmark。GitHub 描述写得很直接：153 个日常网页任务，覆盖 144 个 live websites，5-layer recording、DOM-match、LLM judge，top score 33.3%。这说明浏览器 agent 还远没到“稳定可交付”。
+- Browser Use Box（bux）把 Claude Code、真实 Chromium、持久 cookies、Telegram bot、web terminal 和人工接管链接打包到一台用户自己的机器上。README 里的关键点不是炫技，而是“登录态保留、遇到 2FA / CAPTCHA 给 live view URL、等人接管”。
+- Stagehand 已经是 2.2 万 star 级别的 browser agents SDK。Notte 也明确强调 hybrid workflows：确定性脚本 + AI，只在需要时用 AI，以降低成本、提高可靠性。
+- HN 上 OpenGravity 这种零安装、BYOK、浏览器内 agent workspace 能拿到讨论，说明开发者对“无需完整 IDE、能快速跑 agent workspace”的需求存在。但 OpenGravity 更像早期 UI / runtime 实验，不等于商业模式已经成立。
+
+判断：浏览器 agent 的大方向热，但通用 agent 平台会很挤。更有机会的是底层执行可靠性、失败恢复、benchmark、托管登录态、审计和垂直流程模板。
+
+## 用户痛点是什么
+
+用户不是想看 AI 在网页上动来动去。用户想把重复网页流程交出去，同时别把账号、钱和业务流程搞砸。
+
+典型痛点：
+
+1. **网页任务脆。** 按钮文案变了、弹窗多了、页面慢了、列表分页了，脚本就断。
+2. **登录态麻烦。** 真实业务后台有 SSO、2FA、验证码、设备风控。纯 API 或无头浏览器经常绕不过去。
+3. **失败不可解释。** agent 失败后只说没完成。用户不知道卡在元素识别、权限、网络、风控，还是模型乱点。
+4. **人工接管不顺。** 很多任务不该硬闯验证码或 MFA，而是应该把 live session 交给人，完成后继续执行。
+5. **没有可复用资产。** 今天跑通一次，不代表明天能跑。用户真正想要的是稳定 workflow、replay、修复记录和回归测试。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户给一句任务和目标网站；系统返回一个可运行 browser workflow，包含截图 replay、失败点说明、人工接管入口、回归测试和 run card。**
+
+第一版不要做完整浏览器 IDE。只做一个 browser execution harness：
+
+- 持久浏览器：保存 cookies、profile、常用登录态。
+- 结构化观察：截图、DOM、accessibility tree、网络状态、关键元素候选。
+- 混合执行：确定性步骤走 Playwright，模糊页面理解交给 AI。
+- 人工接管：遇到 2FA / CAPTCHA / 权限弹窗，生成 live view URL，用户接管后继续。
+- Replay：每次运行输出截图时间线、点击路径、表单输入、失败原因。
+- Eval：把成功的流程变成回归测试，页面变化后自动报错。
+
+它压缩的不是“打开网页”这一步，而是把脆弱网页操作变成可维护自动化的时间。
+
+## 为什么现在
+
+- LLM 的视觉和页面理解能力已经够用，能把自然语言目标映射到页面控件。
+- 企业和个人有大量“只有网页、没有好 API”的流程：后台报表、CRM、招聘系统、电商后台、内部管理台。
+- Browser agent SDK 已经有大规模开发者信号，Stagehand、Notte、browser-use 这类项目在把基础能力模块化。
+- Benchmark 开始出现，说明行业开始从 demo 走向“到底能不能稳定完成任务”。ClawBench 的 top score 33.3% 反而是机会：可靠性层还缺。
+- Agent 从单次问答变成长时间 worker 后，持久 session、登录态、接管、审计会变成刚需。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+用户有一个每天重复的网页流程，人工做烦，写脚本又脆。比如下载 SaaS 报表、检查电商 SKU、筛招聘候选人、同步 CRM 字段。
+
+**为什么留：**
+流程一旦稳定，每天都跑。登录态、失败恢复、回归测试、replay 和 run card 会持续产生价值。
+
+**为什么传播：**
+最适合传播的是 replay 卡片：
+
+- `这个 agent 自动完成了 27 个候选人筛选，2 个需要人工接管。`
+- `这次电商价格监控在第 14 步遇到验证码，已暂停并生成接管链接。`
+- `页面改版后回归测试失败，定位到“导出 CSV”按钮从 header 移到更多菜单。`
+
+这种卡片能被转进 Slack、飞书、GitHub issue、运营群。比“我们有 AI browser agent”具体。
+
+**谁付费：**
+早期付费方是销售运营、招聘运营、电商运营、数据运营、QA 团队、AI-native agency。收费可以按 browser runtime 分钟、并发 session、workflow 数、托管登录态、企业审计和私有部署来收。
+
+## MVP 实验
+
+### 7 天 MVP
+
+做一个只服务 3 类流程的 browser harness：
+
+1. SaaS 后台导出报表。
+2. 招聘网站筛候选人并生成 shortlist。
+3. 电商后台检查 SKU 价格和库存。
+
+输入：自然语言任务 + 目标网站 + 用户手动登录一次。
+
+输出：
+
+- 可运行 Playwright / Stagehand 脚本。
+- 每一步截图 replay。
+- 失败原因分类。
+- 人工接管链接。
+- 下一次可复用的 workflow。
+
+### 30 天验证
+
+- 找 15 个已经在浏览器里重复干活的运营 / founder / agency 用户。
+- 每人只接 1 个高频网页流程，不做通用 agent。
+- 记录 30 次运行：成功率、人工接管次数、失败修复时间、用户是否愿意第二天继续跑。
+- 把每次失败沉淀成 regression case，看系统是否越跑越稳。
+
+## 可验证指标
+
+- 首次配置一个网页 workflow 需要多久。
+- 同一 workflow 连续 7 天运行成功率。
+- 每次失败平均定位时间。
+- 人工接管后继续执行成功率。
+- replay / run card 被分享给团队的比例。
+- 用户是否愿意为第二个 workflow 付费。
+- 页面改版后，系统能否自动定位失败步骤。
+
+## 商业化路径
+
+1. **开源 CLI / SDK。** 用本地 browser profile + replay 建开发者信任。
+2. **托管 browser runtime。** 按分钟、并发、任务数收费。
+3. **登录态和接管层。** 企业愿意为安全保存 session、人工接管、权限审计付费。
+4. **垂直 workflow 模板。** 招聘、电商、销售运营、财务报表，每个行业有专门模板和失败库。
+5. **Benchmark / regression suite。** 给 browser agent 团队和企业 QA 提供 live-web eval。
+
+## 反例 / 风险
+
+1. **大厂会吃掉通用入口。** OpenAI、Anthropic、Google、Browserbase、RPA 厂商都会做 browser agent。小团队要避开“万能浏览器助手”，切垂直流程或可靠性层。
+2. **验证码和风控不能靠蛮力。** 产品必须把人工接管当成正常路径，而不是承诺全自动绕过。
+3. **维护成本可能吞掉毛利。** 每个网站都在变。如果没有 workflow 模板、失败聚类和 regression，服务会变成人肉外包。
+4. **合规边界敏感。** 登录态、cookie、企业后台、个人邮箱都很敏感。必须本地优先、最小权限、审计清楚。
+5. **用户可能只想要一次性脚本。** MVP 要验证复用频次和付费意愿，不然容易变成低毛利自动化定制。
+
+## 来源
+
+- HN：OpenGravity — zero-install, BYOK vanilla JS clone of Antigravity，2026-05-11：[https://news.ycombinator.com/item?id=48100192](https://news.ycombinator.com/item?id=48100192)
+- GitHub：OpenGravity README，zero-install agentic workspace、BYOK、WebContainer、xterm.js、本地文件同步：[https://github.com/ab-613/OpenGravity](https://github.com/ab-613/OpenGravity)
+- GitHub：ClawBench，browser AI agents benchmark，153 个 everyday online tasks、144 个 live websites、5-layer recording、DOM-match、LLM judge：[https://github.com/reacher-z/ClawBench](https://github.com/reacher-z/ClawBench)
+- GitHub：Browser Use Box（bux），24/7 Claude Code agent with Browser Harness、持久 Chromium、Telegram bot、live view URL：[https://github.com/browser-use/bux](https://github.com/browser-use/bux)
+- GitHub：Browserbase Stagehand，AI Browser Automation Framework / SDK for Browser Agents：[https://github.com/browserbase/stagehand](https://github.com/browserbase/stagehand)
+- GitHub：Notte，web agent framework，hybrid workflows、serverless web automation、secrets vaults、digital personas：[https://github.com/nottelabs/notte](https://github.com/nottelabs/notte)
+
+## 后续跟踪点
+
+- ClawBench 这类 live-web benchmark 是否会成为 browser agent 团队的默认回归测试。
+- Browser agent 用户是否更愿意买“托管运行时”，还是买“垂直流程模板”。
+- 人工接管链接能否显著提升完成率和信任感。
+- 哪类网页流程最愿意持续付费：招聘、电商、销售运营、财务报表，还是 QA。
