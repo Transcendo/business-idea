@@ -1,0 +1,156 @@
+---
+title: AI Coding Agent Control Plane
+description: Claude Code、Codex、Cursor 这类 coding agent 已经开始碰真实仓库。下一层机会不是再做一个更会写代码的 agent，而是给 agent run 加预算刹车、权限边界、验证门、回滚证据和审计记录。
+created: 2026-05-12
+tags:
+  - ai-coding
+  - developer-tools
+  - agent-governance
+  - ai-infrastructure
+---
+
+# AI Coding Agent Control Plane
+
+## 一句话判断
+
+Claude Code、Codex、Cursor 这类 coding agent 已经开始碰真实仓库。下一层机会不是再做一个更会写代码的 agent，而是给 agent run 加预算刹车、权限边界、验证门、回滚证据和审计记录。
+
+这个赛道还早，很多项目星数不高，HN 热度也不夸张。但信号很干净：开发者已经从“agent 能不能写代码”走到“我敢不敢让它自己跑一晚”。
+
+## 赛道 / 产品信号
+
+本轮看的是一组同向早期信号：
+
+- MartinLoop 在 GitHub 上定位为 autonomous AI coding agents 的 control plane。README 直接写预算、policy checks、verifier gates、rollback evidence、inspectable run records，还把“47 retries、no hard stop、no rollback、no audit trail”当成典型失败场景。
+- AgentLint 做 real-time guardrails for AI coding agents。它不是 review 结束后再报错，而是试图在 agent 会话里拦 secrets、force-push、跳过测试、越权路径和 token 使用压力。
+- wb-red-team 做 agentic AI apps 的白盒 / 黑盒红队。它强调读代码、识别 tools、roles、guardrails，再生成和具体实现有关的攻击链。
+- BrowserCode、Agent FM 这类项目说明 coding agent 的运行方式正在扩散：浏览器里跑 Claude Code，本机多个 agent session 并行，需要远程观察和 blocker alert。agent 越多，治理层越像基础设施。
+- HN 上 MartinLoop、Sigmashake Desktop、Agent FM、BrowserCode 的帖子热度不算大，但主题集中：guardrails、audit trail、browser-hosted agent CLI、agent session monitoring。
+
+判断：这不是成熟大市场的证明，而是早期基础设施缺口。越多团队把 coding agent 放进真实 repo、CI、nightly job、agency delivery，越需要独立控制层。
+
+## 用户痛点是什么
+
+用户痛点不是“AI 不够会写代码”。真正麻烦在 agent 变成长期执行体之后：
+
+1. **预算失控。** agent 会重试、换模型、跑测试、再修复。一次看似便宜的任务，可能在循环里烧掉几十倍 token 或 API 费用。
+2. **改动范围漂移。** 人类让它修一个 bug，它可能顺手改配置、迁移脚本、依赖、CI、文档。diff 能看到结果，看不到它什么时候开始偏题。
+3. **验证责任不清。** agent 说“done”不等于真的完成。团队需要知道它跑过什么测试、哪些失败被忽略、哪些命令被阻止。
+4. **review 缺证据。** PR 只给最终 diff。负责人还想知道：花了多少钱、失败几次、用了哪些工具、有没有碰禁止路径、是否需要回滚。
+5. **安全半径变大。** coding agent 会读 repo、跑 shell、改 infra、装依赖、调用云服务。风险从“生成烂代码”升级到“操作真实系统”。
+
+## AI-native wedge
+
+最小 wedge 不该是另一个 IDE，也不该是大而全的工程管理平台。
+
+更尖的 wedge 是：
+
+**用户把 Claude Code / Codex CLI / Cursor agent run 包进一个本地 wrapper；系统在每次任务结束后输出一份可审计 run receipt，并在过程中执行预算、路径、命令、测试和回滚规则。**
+
+第一版只做五件事：
+
+- 预算：每个任务设置 max USD、max tokens、max iterations。超出就硬停。
+- Scope：允许路径、禁止路径、禁止文件类型、依赖变更审批。
+- Verifier：必须通过的命令，比如 typecheck、unit test、lint、指定脚本。
+- Rollback：每轮尝试前后记录 patch，可以回到安全点。
+- Receipt：输出成本、迭代次数、工具调用、失败分类、最终 diff、验证结果、停止原因。
+
+它压缩的不是“写代码”本身。coding agent 已经在压缩那件事。它压缩的是工程负责人复盘和信任 agent 的时间。
+
+## 为什么现在
+
+- Coding agent 已经从补全工具变成能连续执行任务的 worker。长循环一出现，预算和停止条件就变成硬需求。
+- Claude Code、Codex、Cursor、Gemini CLI、Continue.dev 等入口变多。单一 IDE 内置控制不够，跨 agent 的中立层更有空间。
+- 团队开始尝试 overnight / CI / 多 agent 并行。人不可能盯每个终端，必须有 run 级别的证据。
+- 安全风险开始从 prompt 层下沉到文件系统、shell、依赖、云命令、MCP tools。传统 code review 看到得太晚。
+- 开源项目正在试不同切面：budget、guardrail、red-team、browser runtime、session monitoring。这说明问题已被多批 builder 同时撞到。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+团队已经在用 coding agent，但不敢让它长时间无人值守。第一个购买理由是“别让它乱花钱、乱改文件、乱合代码”。
+
+**为什么留：**
+只要 agent 每天跑，receipt、budget、scope guard、verifier gate 就每天有用。它更像 agent 的安全带，不是一次性检查器。
+
+**为什么传播：**
+最适合传播的是 run receipt：
+
+- `这个 agent run 迭代 11 次，花 $8.70，第 7 次开始偏离允许路径，被拦下。`
+- `这次 PR 通过 4 个 verifier，跳过 0 个测试，回滚 2 次。`
+- `这个 agent 试图改 production Terraform，按 policy 需要人工审批。`
+
+这种卡片能进 PR、Slack、GitHub issue、团队复盘。它比“我们有 AI governance”具体得多。
+
+**谁付费：**
+早期是重度 AI coding 团队、AI-native agency、平台工程团队、开发工具创业公司。付费方式可以按 seat、repo、agent run volume、团队策略模板、私有部署收。企业版卖 SSO、审计导出、policy-as-code、SIEM / GitHub / CI 集成。
+
+## MVP 实验
+
+### 7 天 MVP
+
+做一个 CLI wrapper，只支持 Claude Code / Codex CLI：
+
+```bash
+agent-run start --budget 5 --allow src/** --deny infra/** --verify "pnpm test"
+agent-run receipt last
+agent-run rollback last
+```
+
+最小策略：
+
+- max USD / max iterations / max wall-clock time
+- allowlist / denylist 路径
+- 禁止 `rm -rf`、force push、生产云命令、密钥打印
+- 必须通过指定 verifier
+- 自动生成 Markdown receipt
+
+### 30 天验证
+
+- 找 20 个已经让 coding agent 改真实 repo 的团队。
+- 只要求他们在本地或 CI 里包一层 wrapper，不迁移 IDE。
+- 对照两组任务：有 wrapper / 无 wrapper。
+- 记录 review 时间、agent 失败定位时间、越权改动次数、预算触顶次数、receipt 是否被贴进 PR。
+
+## 可验证指标
+
+- 每个 agent run 的平均成本是否下降。
+- 超预算 / 超迭代硬停次数。
+- 被拦截的路径越权、危险命令、依赖变更次数。
+- receipt 被复制到 PR / Slack 的比例。
+- reviewer 理解 agent 过程所需时间是否下降。
+- 7 天后 wrapper 仍被保留的团队比例。
+- 团队是否愿意为策略模板、历史审计、私有部署付费。
+
+## 商业化路径
+
+1. **开源本地 CLI。** 免费 wrapper + receipt，建立开发者信任。
+2. **团队策略库。** 按 repo / team 管理预算、路径、verifier、approval rule。
+3. **CI / PR 集成。** 每个 agent PR 自动附 receipt，失败类型进入 GitHub Check。
+4. **企业审计层。** SSO、私有部署、审计导出、SIEM、policy-as-code、成本中心。
+5. **agent 平台 SDK。** 给 AI IDE、agent orchestration、browser agent、MCP runtime 做嵌入式控制层。
+
+## 反例 / 风险
+
+1. **平台会内置一部分。** Anthropic、OpenAI、Cursor、GitHub 都可能加预算、权限和审计。独立公司要赢在跨平台、中立、企业集成和更深策略。
+2. **开源 wrapper 容易被抄。** 只包 CLI 没壁垒。壁垒在真实 run 数据、失败分类、团队策略模板、CI / PR / 安全系统集成。
+3. **成本估算很难准。** 不同模型、代理服务、缓存、重试策略都会影响账单。估算不准会伤信任。
+4. **太烦会被关掉。** guardrail 如果误报太多，开发者会绕开。默认规则必须少而准。
+5. **市场可能先小后大。** 现在只有最激进的 AI coding 团队痛感强。普通团队还没把 agent 放到足够危险的位置。
+
+## 来源
+
+- HN：MartinLoop — budget caps and audit trails for AI coding agents，2026-05-11：[https://news.ycombinator.com/item?id=48098126](https://news.ycombinator.com/item?id=48098126)
+- GitHub：MartinLoop README，control plane / budgets / policy checks / verifier gates / rollback evidence / run records：[https://github.com/Keesan12/martin-loop](https://github.com/Keesan12/martin-loop)
+- GitHub：AgentLint，real-time guardrails for AI coding agents，支持 Claude Code、Cursor、Codex 等入口：[https://github.com/mauhpr/agentlint](https://github.com/mauhpr/agentlint)
+- GitHub：wb-red-team，针对 agentic AI apps 的白盒 / 黑盒红队框架：[https://github.com/sundi133/wb-red-team](https://github.com/sundi133/wb-red-team)
+- HN：Sigmashake Desktop — AI Coding Agent Guardrails，2026-05-12：[https://news.ycombinator.com/item?id=48103540](https://news.ycombinator.com/item?id=48103540)
+- GitHub：BrowserCode，在浏览器里运行 AI Agent CLI：[https://github.com/leaningtech/browsercode](https://github.com/leaningtech/browsercode)
+- GitHub：Agent FM，把 Claude Code / Codex session 做成 ambient radio / blocker alert：[https://github.com/agentfm-ai/agent-fm](https://github.com/agentfm-ai/agent-fm)
+
+## 后续跟踪点
+
+- 哪些团队已经让 coding agent 在 CI、overnight、agent fleet 模式运行。
+- receipt 能否成为 AI PR 的默认附件。
+- 预算硬停和路径 guardrail 是否会被开发者长期保留。
+- 独立控制层更适合卖给 AI coding 团队、agent 平台、还是传统企业安全团队。
