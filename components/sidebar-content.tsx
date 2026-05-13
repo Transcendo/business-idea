@@ -280,6 +280,7 @@ export const contents: Content[] = [
 			{ title: "Lovable", href: "/docs/developer-tools/lovable", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "Cursor（Anysphere）", href: "/docs/developer-tools/cursor-anysphere", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "AI Coding Agent Control Plane", href: "/docs/developer-tools/ai-coding-agent-control-plane", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
+			{ title: "InsForge Agentic Backend", href: "/docs/developer-tools/insforge-agentic-backend", icon: () => <Boxes className="w-4 h-4 text-current" /> },
 			{ title: "Agent Session Supervision Layer", href: "/docs/developer-tools/agent-session-supervision-layer", icon: () => <NotebookTabs className="w-4 h-4 text-current" /> },
 			{ title: "Firecrawl", href: "/docs/developer-tools/firecrawl", icon: () => <Globe className="w-4 h-4 text-current" /> },
 			{ title: "AgentMail", href: "/docs/developer-tools/agentmail", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
