@@ -363,6 +363,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/ai-hardware", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "MiniCPM-V Edge Multimodal Agents", href: "/docs/ai-hardware/minicpm-v-edge-multimodal-agents", icon: () => <Boxes className="w-4 h-4 text-current" /> },
 			{ title: "Era World", href: "/docs/ai-hardware/era-world", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Rebellions", href: "/docs/ai-hardware/rebellions", icon: () => <Activity className="w-4 h-4 text-current" /> },
 		],
