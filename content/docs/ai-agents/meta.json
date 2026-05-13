@@ -3,6 +3,7 @@
   "pages": [
     "index",
     "browser-agent-execution-harness",
+    "statewright-agent-state-machine-guardrails",
     "decagon",
     "sierra",
     "sycamore"

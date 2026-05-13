@@ -262,6 +262,7 @@ export const contents: Content[] = [
 		list: [
 			{ title: "概览", href: "/docs/ai-agents", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "Browser Agent Execution Harness", href: "/docs/ai-agents/browser-agent-execution-harness", icon: () => <Globe className="w-4 h-4 text-current" /> },
+			{ title: "Statewright Agent State Machine Guardrails", href: "/docs/ai-agents/statewright-agent-state-machine-guardrails", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Decagon", href: "/docs/ai-agents/decagon", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "Sierra", href: "/docs/ai-agents/sierra", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "Sycamore", href: "/docs/ai-agents/sycamore", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },

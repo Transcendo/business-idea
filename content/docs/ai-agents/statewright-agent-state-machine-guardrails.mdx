@@ -1,0 +1,165 @@
+---
+title: Statewright Agent State Machine Guardrails
+description: Agent 可靠性的新切口不是继续堆 prompt，而是把长任务拆成可执行的状态机，在每个阶段限制工具、权限和下一步动作。
+created: 2026-05-13
+tags:
+  - ai-agents
+  - agent-reliability
+  - developer-tools
+  - mcp
+---
+
+# Statewright Agent State Machine Guardrails
+
+## 一句话判断
+
+Agent 可靠性的新切口不是继续堆 prompt，而是把长任务拆成可执行的状态机，在每个阶段限制工具、权限和下一步动作。
+
+Statewright 的信号很清楚：当 Claude Code、Codex、Cursor、opencode 这类工具开始接管真实工程任务，用户不只想知道 agent 做错了什么，更想在它做错之前把行动空间收窄。
+
+## 赛道 / 产品信号
+
+本轮看到的强信号：
+
+- Statewright 在 HN 的 Show HN 帖拿到 60+ points、20+ comments。评论没有停留在“酷不酷”，而是在问 MCP code mode、缓存成本、研究复现、状态说明粒度、Windsurf 支持。
+- GitHub README 的定位非常直接：State machine guardrails that control which tools your AI agent can use in each phase。
+- 它支持 Claude Code、Codex、Cursor、opencode、Pi，并把 workflow phase 映射到工具权限：planning 只读，implementation 解锁编辑，testing 只允许测试命令。
+- 官方 README 声称在一个 5-task SWE-bench subset 上，部分本地模型在 state constraints 后从 2/10 提升到 10/10。这个结果需要复现，但方向对：结构化限制能让较小模型少乱跑。
+- 同一天 HN 还出现 MCP testing、agent analytics、coding agent guardrails、agent diff review 等帖子，说明市场正在从“agent 能不能做事”转向“agent 怎么被约束、验证和交接”。
+
+判断：这是 agent runtime / reliability 赛道里很实的一刀。它不是观测日志，也不是又一个 IDE，而是运行时协议层的 workflow enforcement。
+
+## 用户痛点是什么
+
+重度 agent 用户的痛点很脏：
+
+1. **工具太多。** 给模型几十个工具，它会读错、反复读、乱选工具，或者在错误阶段做危险动作。
+2. **长任务会漂移。** 一开始说修 bug，跑着跑着可能改架构、改配置、碰不该碰的文件。
+3. **prompt 约束不硬。** “请先计划再执行”只是建议，不是边界。
+4. **本地小模型更脆。** 小模型未必缺能力，而是缺任务空间收缩。工具空间太大时，它根本稳不住。
+5. **团队无法复用流程。** 一个资深工程师会人工约束 agent，但这个经验很难沉淀成可执行流程。
+
+用户真正要的不是“更聪明的 agent”。他们要的是：让 agent 在正确阶段只能做正确类别的事。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户把一个工程任务绑定到状态机；系统在每个状态只暴露允许的工具，并要求 agent 用显式 transition 进入下一阶段。**
+
+一个 bugfix workflow 可以这样拆：
+
+```txt
+planning: Read / Search / Inspect only
+implementing: Edit allowed, shell write and destructive commands blocked
+testing: only npm test / pytest / targeted checks
+review: diff summary / risk card / handoff
+completed: no more tools
+```
+
+这压缩的不是“写代码时间”，而是压缩 agent 失控、漂移、误用工具和反复翻文件的成本。
+
+## 为什么现在
+
+- Coding agent 已经从 autocomplete 走到 terminal worker。它开始读文件、写代码、跑命令、碰密钥环境和网络。
+- MCP 和 tool-calling 让工具接入更容易，也让权限边界更乱。
+- Observability 只能事后解释。团队更想要事前限制：这个阶段能不能写文件、能不能联网、能不能跑 destructive command。
+- 本地小模型、开源 coding agent、企业私有部署都需要更强结构。不是每家公司都愿意把所有任务交给最大云模型。
+- 多 agent 并行后，流程标准化会比单个 prompt 更重要。谁都不想每次手写一段“你现在只能读，不能改”。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+第一次使用动机很具体：agent 老是乱读文件、反复试错、改出 scope、或者在不该执行命令的时候执行命令。
+
+**为什么留：**
+
+如果状态机能稳定减少 agent 卡死、乱改和重复读文件，它会变成团队的默认 agent workflow template。每个 repo、每类任务都可以有固定流程。
+
+**为什么传播：**
+
+最容易传播的是 workflow card：
+
+```txt
+Bugfix workflow: planning -> implementing -> testing -> review
+blocked: destructive shell command rejected
+next: run allowed targeted test command
+```
+
+这种卡能贴进 PR、issue、团队聊天，也能让开源项目维护者公开自己的 agent workflow。
+
+**谁付费：**
+
+早期是 AI-heavy 工程团队、AI-native agency、开源 maintainer、做私有 agent 平台的企业。付费点在团队 workflow library、权限策略、provider 适配、审计日志、私有部署、CI / PR 集成。
+
+## MVP 实验
+
+### 7 天 MVP
+
+不做完整 visual builder。先做一个 CLI + MCP proxy：
+
+```bash
+agent-state init bugfix
+agent-state start bugfix --repo ./app
+agent-state transition implementing
+agent-state status
+```
+
+支持三类硬约束：
+
+- 当前状态允许哪些工具。
+- 当前状态禁止哪些 shell command / 文件路径 / 网络请求。
+- 每次 transition 必须生成一张简短 evidence card。
+
+### 30 天验证
+
+找 10 个每天使用 Claude Code / Codex 的开发者团队：
+
+- 给他们 3 个默认 workflow：bugfix、refactor、docs update。
+- 对比有无状态机时的任务完成率、重复读文件次数、scope drift、测试失败修复轮次。
+- 重点看 rejected tool call 是否真的救了事故，而不是制造噪音。
+- 让用户自己改 workflow。如果他们愿意维护模板，说明这是流程资产，不只是安全玩具。
+
+## 可验证指标
+
+- 每个任务的 tool call 数是否下降。
+- 重复读取同一文件 5 次以上的比例是否下降。
+- scope drift 文件数是否下降。
+- 被拒绝的高风险命令是否真有价值。
+- 从任务开始到 first valid edit 的时间是否变短。
+- test pass 前的迭代轮次是否下降。
+- workflow template 被复用、分享、fork 的次数。
+- 团队是否愿意为共享模板、审计和私有部署付费。
+
+## 商业化路径
+
+1. **开源本地 runtime。** 先做 Claude Code / Codex / opencode 的 workflow enforcement。
+2. **团队模板库。** 常见任务流程：bugfix、dependency update、security patch、migration、docs。
+3. **CI / PR 集成。** PR 附带 agent workflow trace：在哪个状态做了什么，被拒绝过什么。
+4. **企业策略层。** 路径权限、命令白名单、网络策略、密钥隔离、审计导出。
+5. **Agent platform SDK。** 给其他 agent 产品提供 state-machine policy engine。
+
+## 反例 / 风险
+
+1. **模型可能讨厌频繁换工具列表。** HN 评论已经提到 cache bust。状态切换如果让上下文缓存失效，成本会上升。
+2. **流程太死会降低速度。** 对简单任务，状态机会显得像官僚流程。MVP 要先服务高风险任务。
+3. **研究结果需要复现。** README 里的 SWE-bench subset 提升很强，但样本小。不能把它当成铁证。
+4. **平台可能内置。** Claude Code、Cursor、Codex 都可能把基础 workflow phase 做进产品。独立公司要跨 provider、跨 repo、跨团队策略。
+5. **只做可视化不够。** 真价值在 runtime enforcement，不在画流程图。漂亮画布很容易变成玩具。
+
+## 来源
+
+- GitHub：Statewright README，State machine guardrails for AI agents：[https://github.com/statewright/statewright](https://github.com/statewright/statewright)
+- HN：Show HN: Statewright – Visual state machines that make AI agents reliable，2026-05-12：[https://news.ycombinator.com/item?id=48108778](https://news.ycombinator.com/item?id=48108778)
+- Statewright 官方网站，描述为 visual workflow builder with protocol-level enforcement：[https://statewright.ai](https://statewright.ai)
+- Statewright docs，State machine guardrails for AI agents：[https://statewright.ai/docs](https://statewright.ai/docs)
+- Manufact 博客：MCP testing 的痛点是 slow install loops、client behavior difference、tool calling correctness：[https://manufact.com/blog/mcp-testing](https://manufact.com/blog/mcp-testing)
+- Falco：Prempti 把 runtime security 视角带到 AI coding agents：[https://falco.org/blog/introducing-prempti/](https://falco.org/blog/introducing-prempti/)
+
+## 后续跟踪点
+
+- Statewright 是否公开完整复现实验，尤其是 SWE-bench subset 的任务、模型、prompt、workflow。
+- workflow enforcement 是通过 MCP proxy、plugin、shell wrapper，还是 agent 原生 API 最稳。
+- 企业用户更愿意为 security policy 付费，还是为 reliability / throughput 付费。
+- Claude Code / Codex 是否会内置 phase-based tool permission，压缩独立产品空间。
