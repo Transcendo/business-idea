@@ -1,0 +1,179 @@
+---
+title: Code Agent Git Boundary Guardrails
+description: AI coding agent 真正进入日常工程后，最容易出事故的边界不是聊天窗口，而是 commit、push、rebase、CI 这些 Git 动作。机会在 repo-local 的硬规则层：让 agent 和人类都必须经过同一套提交边界。
+created: 2026-05-13
+tags:
+  - ai-coding
+  - agent-security
+  - cybersecurity
+  - developer-tools
+---
+
+# Code Agent Git Boundary Guardrails
+
+## 一句话判断
+
+AI coding agent 真正进入日常工程后，最容易出事故的边界不是聊天窗口，而是 commit、push、rebase、CI 这些 Git 动作。机会不在再写一段“请小心”的提示词，而在 repo-local 的硬规则层：让 agent 和人类都必须经过同一套提交边界。
+
+## 赛道 / 产品信号
+
+RipStop 是一个很早期的小项目，但它暴露的问题很准：作者在 HN 里说，自己遇到过 Claude Code 擦掉未暂存改动、试图回滚 commit 的事故，所以做了 Git hooks 和 CI guardrails。
+
+它的 README 把产品边界写得很清楚：不替代 sandbox、branch protection、secret scanning 或 code review，而是在 commit、commit message、push、rebase、CI 这些 Git 边界上加 repo-local enforcement。内置检查包括 PII、受保护路径、test skip、force push / branch delete、guardrail 文档是否过期、reflog witness。
+
+这个信号和近期 agent security 项目同向：Prempti、AgentShield、MCP security gateway 都在补 agent 执行权的安全缺口。RipStop 的差异是更窄：不管代码是谁写的，只要要进 Git 历史，就必须过规则。
+
+## 用户痛点是什么
+
+AI coding agent 让“改代码”变快，但也放大了工程团队最讨厌的几类事故：
+
+1. agent 把未暂存的人类改动覆盖掉。
+2. agent 为了修错，偷偷删测试、skip 测试、改保护文件。
+3. agent force push、删分支、回滚历史，破坏可恢复性。
+4. agent 把 PII、密钥片段、调试日志塞进 commit。
+5. 团队不知道某次危险变更是人类决定，还是 agent 自作主张。
+
+这些不是模型“再聪明一点”就能解决的事。模型可能忘规则，prompt 会被上下文挤掉，真正可靠的边界要落在 Git hook、CI、branch policy 和审计记录上。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户把一个 AI-heavy repo 接入 `agent-git-guard`；系统在 30 秒内生成 guardrails 配置、agent-readable 规则文件，并在 commit / push / CI 时拦住危险动作。**
+
+第一版只做五个动作：
+
+- 保护路径：`.env`、部署配置、auth、billing、migration、guardrail 文件改动必须带审批 trailer。
+- 测试保护：新增 `skip`、`only`、`xfail`、删除关键测试时阻断或要求 ticket。
+- 历史保护：阻断 protected branch 的 force push 和 delete。
+- 隐私扫描：commit 前抓常见 PII / secret-like 片段。
+- 审计 witness：每次阻断输出一张 Markdown 卡，记录规则、文件、命令、建议下一步。
+
+它不是完整 AppSec 平台。它先抓 AI coding 团队每天都会碰到的 Git 边界。
+
+## AI 是否真的压缩任务
+
+能压缩，但核心不是“AI 判断安全”。
+
+它压缩的是这条链：
+
+- 以前：团队靠 code review、口头规范、README、PR 模板提醒大家不要乱改。
+- 现在：agent 先读 repo-local 规则，Git hook 在动作发生时硬拦，CI 在远端复查，审计卡直接贴回 PR。
+
+AI 的价值在解释和修复建议：被拦后告诉 agent 为什么不能这么做、该补哪个 ticket、该拆哪个 commit、该把敏感字段换成什么占位。执行边界必须是确定性规则。
+
+## 为什么现在
+
+- Claude Code、Codex、Cursor、OpenCode 这类工具已经能长时间修改 repo，不再只是补全。
+- 使用者开始并行跑多个 agent session，危险动作更难靠人肉盯住。
+- 企业采用 coding agent 的阻力不只是“代码质量”，还有“它会不会破坏历史、泄露数据、绕过测试”。
+- HN 上的 RipStop 讨论虽然声量小，但作者给出的事故很具体。这类痛点早期常先出现在重度用户的小工具里。
+- Git hook / CI 是开发者已经理解的部署面，比“买一个大安全平台”更容易进入小团队。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+第一次被 agent 搞坏分支、删掉未暂存改动、跳过测试，用户就会想装一个安全带。恐惧是很强的入口。
+
+**为什么留：**
+
+只要 agent 每天改 repo，Git 边界每天都在。它像 `prettier`、`lint-staged`、`secret scanning`，装上以后不需要每天想起它。
+
+**为什么传播：**
+
+最适合传播的是事故卡：
+
+```md
+Blocked: agent tried to force-push main
+Rule: history-guard
+Suggested fix: create a new branch and open PR
+```
+
+这比“我们支持 AI 安全”更具体，适合贴到 PR、HN、团队聊天和 README。
+
+**谁付费：**
+
+个人开发者可能只愿意用开源版。真正付费在 AI-heavy 工程团队、AI-native agency、devtools 公司、企业平台团队。付费点是共享规则、集中审计、GitHub App、SSO、策略模板、CI 报告和私有部署。
+
+## MVP 实验
+
+### 7 天 MVP
+
+做一个 CLI，不碰 IDE：
+
+```bash
+agent-git-guard init
+agent-git-guard install-hooks
+agent-git-guard audit-last
+```
+
+默认支持 GitHub repo 和本地 hooks。初始化后生成两份文件：
+
+1. `.agent-guard.yaml`：确定性规则。
+2. `AGENT_GIT_RULES.md`：给 Claude Code / Codex / Cursor 看的自然语言规则。
+
+只验证三类阻断：
+
+- agent 尝试修改受保护路径但没有审批 trailer。
+- agent 新增 test skip。
+- agent 对 protected branch 做 force push / delete。
+
+### 30 天验证
+
+找 20 个真实使用 coding agent 的小团队。不要让他们换工具，只把 guard 装进现有 repo。看三件事：
+
+- 是否愿意保留 hooks 超过 7 天。
+- 是否出现真实阻断，而不是只产生噪音。
+- 阻断后 agent 能否按建议修正，而不是卡死。
+
+## 可验证指标
+
+- 安装后 7 天留存。
+- 每 repo 每周阻断次数。
+- 阻断后成功修正并重新提交的比例。
+- 误报导致用户关闭规则的比例。
+- `AGENT_GIT_RULES.md` 被 agent 读取后，重复违规率是否下降。
+- 团队版中，审计卡被贴进 PR / issue 的比例。
+- 付费转化：团队是否愿意为 GitHub App、集中策略、审计留存、SSO 付费。
+
+## 商业化路径
+
+1. **开源 CLI。** 先成为 AI-heavy repo 的默认安全带。
+2. **GitHub App。** 远端 CI 复查、本地 hooks 漏掉时兜底、PR 评论事故卡。
+3. **策略模板。** 按 Next.js、Rails、Python、infra、data repo 提供默认规则。
+4. **团队控制台。** 多 repo 策略、规则例外、审计保留、Slack / Linear / Jira 集成。
+5. **企业版。** SSO、私有部署、SIEM 导出、合规报告、集中 agent policy。
+
+## 传播路径
+
+传播物不是白皮书，而是可截图的阻断结果：
+
+- `Your coding agent tried to skip 4 tests in auth.`
+- `Protected file changed: billing/migration.sql requires approval.`
+- `Force-push blocked on main; recovery path preserved.`
+
+这种卡有恐惧、有证据、有行动建议。它适合在 GitHub issue、HN、团队聊天里自然扩散。
+
+## 反例 / 风险
+
+1. **平台会吸收基础能力。** GitHub、Anthropic、OpenAI、Cursor 都可能内置一部分保护。独立产品要靠跨工具、跨 repo、团队审计和策略模板拉开差异。
+2. **Git hooks 容易被绕过。** 本地 hook 不是安全边界，必须有 CI / GitHub App 远端复查。
+3. **误报会让开发者关掉。** 如果规则太烦，它会像糟糕的 lint 一样被禁用。
+4. **企业采购不一定早。** 个人事故多，但预算在团队。开源入口要足够强。
+5. **只做规则不够。** 被拦后要给 agent 可执行的修复路径，否则它会反复撞墙。
+
+## 来源
+
+- HN：Show HN: RipStop – Git guardrails to reduce impact if your code agent goes wild，2026-05-12：[https://news.ycombinator.com/item?id=48105699](https://news.ycombinator.com/item?id=48105699)
+- GitHub：RipStop repo，Git hook and CI guardrails for AI-assisted software development：[https://github.com/jonverrier/RipStop](https://github.com/jonverrier/RipStop)
+- GitHub：RipStop README，内置 checks 和 `RIPSTOP.md` agent context：[https://raw.githubusercontent.com/jonverrier/RipStop/main/README.md](https://raw.githubusercontent.com/jonverrier/RipStop/main/README.md)
+- GitHub：Falco Prempti，rule-based guardrails for coding agents：[https://github.com/falcosecurity/prempti](https://github.com/falcosecurity/prempti)
+- GitHub：AgentShield，AI agent security scanner：[https://github.com/affaan-m/agentshield](https://github.com/affaan-m/agentshield)
+
+## 后续跟踪点
+
+- RipStop 这类 Git-boundary 工具能否从个人事故防护走到团队默认依赖。
+- AI IDE 是否会内置相同能力，还是只做提示层。
+- 团队真正愿意为哪类事故付费：历史破坏、测试绕过、隐私泄漏，还是审计缺口。
+- agent-readable policy 文件是否能减少违规，还是只有 hook / CI 拦截才有用。

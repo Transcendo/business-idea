@@ -323,6 +323,7 @@ export const contents: Content[] = [
 			{ title: "概览", href: "/docs/cybersecurity", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "Capsule Security", href: "/docs/cybersecurity/capsule-security", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "MCP Agent Security Gateway", href: "/docs/cybersecurity/mcp-agent-security-gateway", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
+			{ title: "Code Agent Git Boundary Guardrails", href: "/docs/cybersecurity/code-agent-git-boundary-guardrails", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 		],
 	},
 	{

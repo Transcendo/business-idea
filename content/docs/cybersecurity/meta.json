@@ -3,6 +3,7 @@
   "pages": [
     "index",
     "capsule-security",
-    "mcp-agent-security-gateway"
+    "mcp-agent-security-gateway",
+    "code-agent-git-boundary-guardrails"
   ]
 }
