@@ -506,6 +506,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/vertical-ai", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Hypercubic Hopper", href: "/docs/vertical-ai/hypercubic-hopper-mainframe-agents", icon: () => <Briefcase className="w-4 h-4 text-current" /> },
 			{ title: "Hebbia", href: "/docs/vertical-ai/hebbia", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "Hightouch", href: "/docs/vertical-ai/hightouch", icon: () => <Briefcase className="w-4 h-4 text-current" /> },
 			{ title: "Harvey", href: "/docs/vertical-ai/harvey", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
