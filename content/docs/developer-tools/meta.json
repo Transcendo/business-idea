@@ -7,6 +7,7 @@
     "ai-coding-agent-control-plane",
     "insforge-agentic-backend",
     "agent-session-supervision-layer",
+    "tiny-tool-calling-router",
     "firecrawl",
     "agentmail",
     "qodo",

@@ -1,0 +1,168 @@
+---
+title: Tiny Tool-Calling Router
+description: 小模型不负责聊天，而是专门把自然语言稳定翻译成工具调用，让本地 CLI、桌面软件、IoT 和边缘 agent 用更低成本完成动作。
+created: 2026-05-14
+tags:
+  - developer-tools
+  - ai-infra
+  - tool-calling
+  - edge-ai
+---
+
+# Tiny Tool-Calling Router
+
+## 一句话判断
+
+26M 级别的 tool-calling 模型火起来，不是因为大家突然缺一个更小的聊天机器人。
+
+真正的机会是：很多软件只需要把一句模糊指令变成一个安全、可验证的函数调用。让大模型全程在线处理这件事，太慢、太贵，也不适合本地设备和高频操作。
+
+更好的创业切口不是“做一个更小的通用模型”，而是做一层专用路由：本地解析意图、选择工具、生成参数、交给业务系统验证执行。
+
+## 赛道 / 产品信号
+
+本轮信号很集中：
+
+- HN 上 Needle 的 Show HN 帖在 2026-05-12 拿到 635 points 和 181 comments，标题直接写成“把 Gemini tool calling 蒸馏成 26M 模型”。
+- Needle GitHub repo 描述是“26m function call model that runs on incredibly small devices”，2026-05-14 查询时有 1,308 stars。
+- README 写到 Needle 在 Cactus 上可跑到 6000 tokens/sec prefill、1200 tokens/sec decode，并开放 Hugging Face 权重和数据生成流程。
+- Cactus 本身定位是 mobile devices & wearables 的低延迟 AI engine，GitHub 2026-05-14 查询时有 4,858 stars。
+- HN 评论里用户马上把它映射到 CLI 自然语言参数解析、游戏/MOO 命令解析、Siri-like core。这说明开发者不是只在围观模型参数，而是在想怎么嵌进真实软件。
+
+判断：这是 AI infra 的小切口，但可能落到很多产品里。大模型负责理解复杂任务，小模型负责高频、低风险、低延迟的工具选择。
+
+## 用户痛点是什么
+
+开发者现在卡在几个具体问题：
+
+1. **全都调大模型太重。** 一个 CLI 参数、一个桌面菜单、一个智能家居动作都走云端大模型，延迟、成本和隐私都别扭。
+2. **传统 parser 太硬。** 用户说“把昨天会议里提到的两个人加到 follow-up 列表”，普通命令行参数很难自然承接。
+3. **工具调用需要稳定格式。** 业务系统不想要一段漂亮回答，只想要 `{tool, args, confidence}`，再由规则层决定能不能执行。
+4. **边缘设备需要离线能力。** 手机、穿戴、车机、小型机器人、企业内网工具，不都适合把每一步发到云端。
+5. **开发者缺少可嵌入的轻量方案。** 大模型 API 很好试，但要嵌到每个软件的本地操作层，会遇到成本、权限、审计和部署问题。
+
+用户真正要的不是“更聪明的聊天”。他们要的是：把自然语言可靠变成下一步动作。
+
+## AI-native wedge
+
+最小 wedge：
+
+**开发者定义一组工具 schema；系统自动生成本地小模型 router + 测试集 + fallback 策略。运行时只输出工具名、参数、置信度和是否需要升级到大模型。**
+
+输出应该长这样：
+
+```json
+{
+  "input": "把这个项目里上周改过的接口列出来，按风险排序",
+  "tool": "git_change_risk_report",
+  "args": {
+    "since": "7d",
+    "scope": "current_project",
+    "sort": "risk"
+  },
+  "confidence": 0.82,
+  "fallback": "ask_for_confirmation"
+}
+```
+
+AI 在这里压缩的任务不是写长文。它压缩的是：让每个软件都能用自然语言触发已有能力，同时保留参数检查、权限边界和执行确认。
+
+## 为什么现在
+
+- Agent 产品越来越多，但很多 agent 的关键动作只是 tool selection，不需要完整 reasoning chain。
+- MCP、function calling、OpenAI-compatible tool schema 把“工具列表 + 参数 schema”变成了通用接口。
+- 本地 AI runtime 开始成熟，Cactus 这类项目把移动端和小设备低延迟推理变成可讨论的工程选项。
+- 开发者对云端大模型成本更敏感。高频工具调用如果每次都走大模型，账单和延迟都会变成产品阻力。
+- 安全压力上升。越接近系统操作、代码、文件、付款、设备控制，越需要本地预判、权限检查和可审计的工具调用层。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+开发者想给 CLI、桌面应用、浏览器插件、企业内部工具加自然语言入口，但不想把每次指令都发给大模型。
+
+**为什么留：**
+
+只要 router 能持续降低延迟和 API 成本，并把错误调用挡在执行前，它就会变成工具层基础设施。
+
+**为什么传播：**
+
+可传播单元是 demo，不是论文：
+
+```txt
+Before: toolcli --repo . --since 7d --risk-sort --include-tests false
+After:  toolcli 上周哪些接口改动风险最大？
+```
+
+开发者会转发这种对比，因为它立刻让人看到“自然语言不是聊天，而是更短的操作路径”。
+
+**谁付费：**
+
+早期付费用户是 devtool、桌面软件、内部平台、IoT/机器人团队、浏览器自动化产品、企业内网 agent 平台。付费点在私有 schema 训练、router SDK、评测集、权限策略、离线部署、调用日志和 fallback 控制。
+
+## MVP 实验
+
+### 7 天 MVP
+
+不训练通用模型。先做一个 SDK + hosted benchmark：
+
+1. 用户上传 10-50 个 tool schemas。
+2. 系统生成 200 条合成自然语言测试指令。
+3. 用现有小模型或规则 + 小模型混合方案做工具选择和参数生成。
+4. 输出准确率、误调用率、需要确认的比例、平均延迟、相对大模型 API 成本。
+5. 给每个 schema 生成“最容易误判的 10 个指令”。
+
+### 30 天验证
+
+找 20 个开发者团队测试三个场景：CLI、桌面应用、内部运营工具。
+
+- 每个团队接入一个真实工具集。
+- 对比纯大模型、规则 parser、小模型 router 三种方案。
+- 只允许 router 输出结构化调用，不允许直接执行危险动作。
+- 记录哪些指令必须升级到大模型，哪些可以本地解决。
+- 访谈开发者是否愿意为 SDK、测试集和本地部署付费。
+
+## 可验证指标
+
+- tool selection top-1 准确率。
+- 参数字段准确率。
+- 危险误调用率。
+- 需要用户确认的比例。
+- 相比云端大模型的平均延迟下降。
+- 相比云端大模型的调用成本下降。
+- 开发者完成首次接入所需时间。
+- 用户是否保留自然语言入口，而不是退回传统表单或命令参数。
+
+## 商业化路径
+
+1. **开源 router SDK。** 让开发者用自己的 tool schema 跑起来。
+2. **schema-to-tests 生成器。** 自动生成测试集、边界样例、歧义指令。
+3. **router benchmark。** 比较小模型、规则、大模型 fallback 的成本和错误率。
+4. **私有部署。** 给企业内网、桌面软件、IoT/机器人团队本地运行。
+5. **权限与审计层。** 对高风险工具调用做确认、拒绝、升级到大模型或转人工。
+6. **模型微调服务。** 按客户工具集训练专用 router。
+
+## 反例 / 风险
+
+1. **通用能力可能不够。** 26M 小模型适合窄场景，不适合复杂推理。产品要主动定义“不处理什么”。
+2. **错误调用代价高。** 小模型一旦把“删除草稿”理解成“删除项目”，事故比聊天幻觉更严重。
+3. **大模型价格继续下降。** 如果云端大模型又快又便宜，小模型 router 的成本优势会变弱。
+4. **ToS 和蒸馏风险。** HN 评论已经提醒，蒸馏商业模型可能碰到服务条款问题。创业公司不能把合规风险建在核心资产里。
+5. **评测难。** 工具调用不是只看格式对不对，还要看上下文、权限、业务规则和用户真实意图。
+6. **容易被框架吸收。** LangChain、MCP client、IDE、操作系统助手都可能内置轻量路由。独立产品要靠测试、权限和部署体验站稳。
+
+## 来源
+
+- HN：Show HN: Needle: We Distilled Gemini Tool Calling into a 26M Model，2026-05-12：[https://news.ycombinator.com/item?id=48111896](https://news.ycombinator.com/item?id=48111896)
+- GitHub：cactus-compute/needle，26m function call model that runs on incredibly small devices：[https://github.com/cactus-compute/needle](https://github.com/cactus-compute/needle)
+- Hugging Face：Cactus-Compute/needle 权重页面：[https://huggingface.co/Cactus-Compute/needle](https://huggingface.co/Cactus-Compute/needle)
+- GitHub：cactus-compute/cactus，mobile devices & wearables low-latency AI engine：[https://github.com/cactus-compute/cactus](https://github.com/cactus-compute/cactus)
+- GitHub Search API 查询时间：2026-05-14 08:00-09:00 Asia/Shanghai，needle 1,308 stars，cactus 4,858 stars。
+
+## 后续跟踪点
+
+- Needle 的数据集和 tokenizer 访问问题是否解决。
+- 小模型 router 在真实 tool schema 上的误调用率。
+- 开发者是否愿意为本地 router 付费，还是把它当开源依赖。
+- MCP client / IDE 是否会快速内置类似能力。
+- 合规上能否避免依赖商业模型蒸馏。
