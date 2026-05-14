@@ -1,0 +1,159 @@
+---
+title: Agent Traffic Analytics Layer
+description: AI agent 开始替人访问网站和使用产品后，网站主需要知道哪些 agent 来了、读了什么、是否完成任务，以及哪些页面让 agent 误判。
+created: 2026-05-14
+tags:
+  - ai-agents
+  - analytics
+  - ai-search
+  - developer-tools
+---
+
+# Agent Traffic Analytics Layer
+
+## 一句话判断
+
+AI agent 流量分析会从普通 web analytics 里拆出来，因为 agent 不是“另一个 referral source”。它会替用户读网页、比较方案、调用工具、甚至绕过原来的转化路径。
+
+机会不在做一个“AI 版 Google Analytics”。更好的切口是：告诉网站主哪些 agent 访问了什么、agent 为什么没读懂、下一步该改哪段页面或接口。
+
+## 赛道 / 产品信号
+
+本轮看到三类信号同时出现：
+
+- HN 上 Voker 的 Launch HN 帖定位是 Analytics for AI Agents，2026-05-12 拿到 55 points、22 comments。它从产品内 agent 质量出发，强调“agent 是否真的帮到用户”。
+- Arrivl 的 Show HN 帖直接写成 Analytics for AI agent traffic on your site。官网描述是追踪 AI agents 如何发现、阅读、互动网站，并展示 ChatGPT、Claude、Perplexity、Gemini、Grok 等 agent 来源。
+- Product Hunt Atom feed 里出现 IndexedAI 这类“Your site scores X/100 for AI agents with next steps”的产品，说明站点可读性、agent-readiness、AI visibility 正在被产品化。
+- GitHub 上 Langfuse 已经有 27k+ stars，OpenLIT 也在做 OpenTelemetry-native LLM observability。它们证明 LLM/agent observability 是真需求，但站点侧 agent traffic analytics 仍是另一层：它面向增长、内容、产品和开发团队，不只面向模型工程师。
+
+判断：这是 AI search、agent browser、LLM observability 的交叉地带。短期会很吵，但真实痛点存在。
+
+## 用户痛点是什么
+
+网站主现在的盲区很具体：
+
+1. **看不见 agent 访问。** ChatGPT、Claude、Perplexity 或浏览器 agent 可能已经在读站点，但 GA4 / PostHog 里的口径很难解释“agent 替谁来、读懂了什么”。
+2. **不知道页面哪里对 agent 不友好。** 人能看懂的页面，agent 未必能抓到价格、限制、API 文档、购买路径、政策条款。
+3. **转化路径被改写。** 用户可能不再点 10 个页面，而是让 agent 摘要、比较、下结论。原来的 funnel 变短，也变黑箱。
+4. **AI search 和 agent action 混在一起。** 一部分是被引用，一部分是被读取，一部分是被自动操作。只看 referral 不够。
+5. **改站没有优先级。** 团队知道要做 llms.txt、结构化数据、docs 改写，但不知道先改哪 5 页。
+
+用户真正要的不是更多报表。他们要的是：哪些页面正在被 agent 用错，以及怎么修。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户接入一段脚本或 server log parser；系统识别 AI agent / AI referrer / agent-like browsing session，生成一张“agent 可读性修复卡”。**
+
+修复卡应该长这样：
+
+```txt
+Page: /pricing
+Agent source: ChatGPT / Perplexity / Claude-like crawler
+Problem: plan limits hidden in interactive accordion; no machine-readable summary
+Impact: agent answer likely misses annual pricing and usage cap
+Fix: add plain-text pricing table + FAQ anchors + llms.txt route
+Evidence: 31 agent sessions, 18 left after pricing page, 7 copied stale plan text
+```
+
+AI 在这里压缩的任务不是“生成更多 SEO 文案”。它压缩的是：从杂乱日志、页面结构、agent user-agent、引用页面和转化结果里找出可执行的修站动作。
+
+## 为什么现在
+
+- AI search 正在把一部分发现路径从搜索结果页搬到答案页。
+- Browser agent 和 workflow agent 让“替用户访问网站”从爬虫变成真实使用场景。
+- MCP、actions、connectors 让网站不只是被读，还可能被 agent 操作。
+- 传统 analytics 更关心 human session。agent session 的目标、节奏、失败形态不同。
+- 市场已经出现多种相邻产品：Voker 看产品内 agent 质量，Arrivl 看网站 agent 行为，IndexedAI 看 agent 可读性评分，Langfuse/OpenLIT 看 LLM 应用观测。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+增长团队发现 AI search / AI assistants 带来的线索变多，但现有 analytics 解释不了来源、页面和转化。
+
+**为什么留：**
+
+如果每周都能指出“哪几个页面让 agent 误解产品”，它会变成内容、docs、growth、developer relations 的固定检查项。
+
+**为什么传播：**
+
+可传播单元不是 dashboard，而是评分卡：
+
+```txt
+AI Agent Readiness: 68/100
+Top issue: pricing page unreadable to agents
+Top fix: add static plan table and machine-readable usage limits
+```
+
+这种卡天然适合发给老板、营销团队、工程团队，也适合被 agency 用来获客。
+
+**谁付费：**
+
+早期付费用户是 B2B SaaS、devtools、AI 产品、API 公司、内容型软件公司、做 AI search/GEO 服务的 agency。付费点在站点扫描、agent traffic 归因、修复建议、告警、团队报告、API/docs 监控。
+
+## MVP 实验
+
+### 7 天 MVP
+
+不做全量 analytics。先做一个轻量站点扫描 + log 上传工具：
+
+1. 用户输入域名和 30 天 server logs / Cloudflare logs。
+2. 系统识别常见 AI crawlers、AI referrers、agent-like sessions。
+3. 抓取 top 20 被 agent 访问页面。
+4. 用 LLM 检查每页是否有清晰标题、价格、限制、CTA、API 入口、结构化 FAQ。
+5. 输出 10 张修复卡。
+
+### 30 天验证
+
+找 20 个 B2B SaaS / devtools 网站测试：
+
+- 免费生成 agent-readiness report。
+- 让用户选择 3 个建议实际改站。
+- 对比修改前后 AI crawler 访问深度、AI referral lead、docs 页面停留、contact / signup 转化。
+- 访谈 marketing、docs、growth 负责人，看他们是否愿意每月付费拿修复队列。
+
+## 可验证指标
+
+- 是否能识别出用户在 GA4/PostHog 里看不到的 agent-like traffic。
+- 每份报告中用户愿意执行的修复建议数量。
+- 修复后 agent 访问深度是否提高。
+- AI referral / assistant referral 是否带来更高意向线索。
+- 用户是否愿意把评分卡发给团队。
+- 7 天后用户是否回来查看新页面评分。
+- 从 report 到付费的转化率。
+
+## 商业化路径
+
+1. **免费 agent-readiness scan。** 用评分卡获客。
+2. **网站日志接入。** Cloudflare、Vercel、Nginx、Segment、PostHog。
+3. **修复队列。** 每周给 growth/docs 团队一组可执行建议。
+4. **AI search / agent attribution。** 追踪 AI referrer、引用页面、agent-like session 到 lead。
+5. **Agency / consultant mode。** 给服务商批量扫描客户网站，生成 branded report。
+6. **API/docs 专版。** 面向 devtools 公司，监控 agent 是否能正确读懂 API、SDK、pricing、rate limit。
+
+## 反例 / 风险
+
+1. **agent 来源难识别。** 很多 agent 可能伪装成普通浏览器，user-agent 不稳定。产品不能只靠 UA。
+2. **AI search 归因可能被平台封住。** ChatGPT、Claude、Perplexity 未必长期开放足够 referral 信息。
+3. **容易变成 SEO 套壳。** 如果只是“多写关键词”，用户会很快失望。必须回到页面可读性、任务完成和真实线索。
+4. **建议可能太泛。** “加结构化数据”“写清楚 FAQ”谁都能说。MVP 要把建议绑定到具体页面、证据和预期影响。
+5. **大 analytics 平台会跟进。** PostHog、GA、Cloudflare、Vercel 都可能加基础 agent traffic 面板。独立产品要靠跨平台修复建议和 agent-readiness workflow 活下去。
+
+## 来源
+
+- HN：Launch HN: Voker (YC S24) – Analytics for AI Agents，2026-05-12：[https://news.ycombinator.com/item?id=48109962](https://news.ycombinator.com/item?id=48109962)
+- Voker 官网：Analytics for AI Agents，强调判断 agent 是否真的帮助用户：[https://voker.ai](https://voker.ai)
+- HN：Show HN: Arrivl – Analytics for AI agent traffic on your site，2026-05-13：[https://news.ycombinator.com/item?id=48126836](https://news.ycombinator.com/item?id=48126836)
+- Arrivl 官网：追踪 AI agents 如何发现、阅读、互动网站：[https://arrivl.ai](https://arrivl.ai)
+- Product Hunt Atom feed：IndexedAI，描述为 Your site scores X/100 for AI agents with next steps：[https://www.producthunt.com/feed?category=artificial-intelligence](https://www.producthunt.com/feed?category=artificial-intelligence)
+- GitHub：Langfuse，open source LLM engineering platform / LLM observability：[https://github.com/langfuse/langfuse](https://github.com/langfuse/langfuse)
+- GitHub：OpenLIT，OpenTelemetry-native LLM observability / guardrails / evaluations：[https://github.com/openlit/openlit](https://github.com/openlit/openlit)
+
+## 后续跟踪点
+
+- AI crawler / agent user-agent 能否稳定识别，哪些信号必须来自 server logs。
+- llms.txt、schema、static pricing table、docs summary 对 agent answer quality 的真实提升。
+- 站点 owner 愿意为“agent traffic report”付费，还是只愿意买“带来 lead 的 AI attribution”。
+- PostHog、Cloudflare、Vercel 是否把基础 AI traffic analytics 内置。

@@ -4,6 +4,7 @@
     "index",
     "browser-agent-execution-harness",
     "statewright-agent-state-machine-guardrails",
+    "agent-traffic-analytics-layer",
     "decagon",
     "sierra",
     "sycamore"
