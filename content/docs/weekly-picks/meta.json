@@ -1,5 +1,5 @@
 {
-  "title": "本周推荐",
+  "title": "精选案例",
   "pages": [
     "index",
     "lovable",
@@ -9,6 +9,7 @@
     "decagon",
     "perplexity",
     "harvey",
+    "rebellions",
     "era-world",
     "antioch",
     "capsule-security",
@@ -21,7 +22,6 @@
     "gitar",
     "insightfinder",
     "factory",
-    "sapiom",
-    "rebellions"
+    "sapiom"
   ]
 }

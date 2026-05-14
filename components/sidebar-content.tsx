@@ -67,8 +67,10 @@ interface Content {
 }
 
 const moduleLogoStyles = {
-	weekly:
+	weeklyNew:
 		"bg-amber-50 text-amber-700 ring-amber-200 dark:bg-amber-950/35 dark:text-amber-300 dark:ring-amber-800/60",
+	weekly:
+		"bg-stone-50 text-stone-700 ring-stone-200 dark:bg-stone-900/60 dark:text-stone-300 dark:ring-stone-700/70",
 	consumer:
 		"bg-sky-50 text-sky-700 ring-sky-200 dark:bg-sky-950/35 dark:text-sky-300 dark:ring-sky-800/60",
 	social:
@@ -169,7 +171,35 @@ export function getPageTree(): Root {
 
 export const contents: Content[] = [
 	{
-		title: "本周推荐",
+		title: "本周新增",
+		Icon: ({ className }: SVGProps<any> = {}) => (
+			<ModuleLogo className={className} variant="weeklyNew">
+				<CalendarDays />
+			</ModuleLogo>
+		),
+		list: [
+			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "2026-05-14", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Agent Traffic Analytics Layer", href: "/docs/ai-agents/agent-traffic-analytics-layer", icon: () => <Activity className="w-4 h-4 text-current" /> },
+			{ title: "Tiny Tool-Calling Router", href: "/docs/developer-tools/tiny-tool-calling-router", icon: () => <Zap className="w-4 h-4 text-current" /> },
+			{ title: "Agent Structural Memory Layer", href: "/docs/developer-tools/agent-structural-memory-layer", icon: () => <BrainCircuit className="w-4 h-4 text-current" /> },
+			{ title: "Agent Context Sandbox Layer", href: "/docs/developer-tools/agent-context-sandbox-layer", icon: () => <Boxes className="w-4 h-4 text-current" /> },
+			{ title: "Browser Agent Execution Harness", href: "/docs/ai-agents/browser-agent-execution-harness", icon: () => <Globe2 className="w-4 h-4 text-current" /> },
+			{ title: "2026-05-13", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Statewright Guardrails", href: "/docs/ai-agents/statewright-agent-state-machine-guardrails", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
+			{ title: "InsForge Agentic Backend", href: "/docs/developer-tools/insforge-agentic-backend", icon: () => <Code2 className="w-4 h-4 text-current" /> },
+			{ title: "Hypercubic Hopper", href: "/docs/vertical-ai/hypercubic-hopper-mainframe-agents", icon: () => <Briefcase className="w-4 h-4 text-current" /> },
+			{ title: "Code Agent Git Guardrails", href: "/docs/cybersecurity/code-agent-git-boundary-guardrails", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
+			{ title: "MiniCPM-V Edge Agents", href: "/docs/ai-hardware/minicpm-v-edge-multimodal-agents", icon: () => <Activity className="w-4 h-4 text-current" /> },
+			{ title: "2026-05-12", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "MCP Agent Security Gateway", href: "/docs/cybersecurity/mcp-agent-security-gateway", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
+			{ title: "Suki Nursing Assistant", href: "/docs/healthcare/suki-nursing-assistant", icon: () => <HeartPulse className="w-4 h-4 text-current" /> },
+			{ title: "AI Coding Agent Control Plane", href: "/docs/developer-tools/ai-coding-agent-control-plane", icon: () => <Code2 className="w-4 h-4 text-current" /> },
+			{ title: "Agent Session Supervision Layer", href: "/docs/developer-tools/agent-session-supervision-layer", icon: () => <Binoculars className="w-4 h-4 text-current" /> },
+		],
+	},
+	{
+		title: "精选案例",
 		Icon: ({ className }: SVGProps<any> = {}) => (
 			<ModuleLogo className={className} variant="weekly">
 				<Briefcase />

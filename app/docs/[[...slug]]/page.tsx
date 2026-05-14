@@ -97,8 +97,8 @@ const legacyDocsRoutes: Record<
 	"business-ideas/daily-picks": {
 		title: "每日推荐已归档",
 		description: "过期推荐不再保留为当前推荐页。",
-		target: "/docs/weekly-picks",
-		label: "查看本周推荐状态",
+		target: "/docs/weekly-new",
+		label: "查看本周新增",
 	},
 	"business-ideas/daily-picks/luminai": {
 		title: "Luminai 已迁移",

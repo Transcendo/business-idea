@@ -11,9 +11,9 @@ export default function NotFound() {
 				</p>
 				<Link
 					className="mt-7 inline-flex rounded-md bg-[#141611] px-5 py-3 text-sm font-semibold text-white hover:bg-[#d34836]"
-					href="/docs/weekly-picks"
+					href="/docs/weekly-new"
 				>
-					查看本周推荐
+					查看本周新增
 				</Link>
 			</div>
 		</div>

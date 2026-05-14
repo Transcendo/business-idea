@@ -14,9 +14,9 @@ const primaryRoutes = [
 		label: "执行层",
 	},
 	{
-		title: "本周推荐",
-		description: "临时收纳新看到的项目，等判断变清楚后再沉淀到对应分类。",
-		href: "/docs/weekly-picks",
+		title: "本周新增",
+		description: "按周查看最新沉淀的 AI 创业机会，避免旧精选被误读成新推荐。",
+		href: "/docs/weekly-new",
 		label: "新信号",
 	},
 ];

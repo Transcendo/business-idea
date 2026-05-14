@@ -3,6 +3,7 @@
   "root": true,
   "pages": [
     "index",
+    "weekly-new",
     "weekly-picks",
     "consumer-ai",
     "social-relationship-products",
