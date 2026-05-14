@@ -1,0 +1,185 @@
+---
+title: Agent Structural Memory Layer
+description: Coding agent 和 browser agent 的下一层机会不是再做一个更会“想”的 agent，而是让它们跨会话、跨仓库、跨网站记住结构化上下文，并把记忆变成可查询、可更新、可撤销的运行层。
+created: 2026-05-14
+tags:
+  - ai-coding
+  - agent-memory
+  - developer-tools
+  - ai-infrastructure
+---
+
+# Agent Structural Memory Layer
+
+## 一句话判断
+
+Coding agent 和 browser agent 的下一层机会不是再做一个更会“想”的 agent，而是让它们跨会话、跨仓库、跨网站记住结构化上下文，并把记忆变成可查询、可更新、可撤销的运行层。
+
+现在很多 agent 的瓶颈不是模型不会推理，而是每次都像失忆员工：重新读 repo、重新理解函数关系、重新摸网站结构、重新问团队约定。创业机会在“agent 的工作记忆基础设施”，不是又一个聊天窗口。
+
+## 赛道 / 产品信号
+
+本轮看到的信号来自 Hacker News 和 GitHub，方向很集中：
+
+- HN 在 2026-05-13 出现 Graphmind：给 Claude Code 做 persistent memory、graph、MCP、CLI、GUI。分数只有 2，说明它还不是大众热点，但痛点很清楚：Claude Code 会话结束后，之前读过的结构和决策没有稳定沉淀。
+- GitHub 上，Memtrace 把自己定位成 structural memory for AI coding agents。它强调 bi-temporal graph、MCP-native、zero LLM calls，并覆盖 Cursor、Claude Code、Codex、Hermes、VS Code、Windsurf。这说明“跨 agent 的记忆层”已经被独立 builder 当成产品边界。
+- site-memory 把同样问题放到 browser automation：浏览器 agent 每次访问同一个网站都要重新摸页面结构。README 直接给出强主张：在 WebVoyager benchmark 上降低 70% 到 90% 成本，任务快 4 倍，不损失准确率。
+- SwarmVault、devnexus、agent-loom、YourMemory 这些项目虽然各自切口不同，但都在回答同一件事：agent 需要长期上下文，不然每次运行都在烧 token、烧时间、重复犯错。
+
+判断：这不是“记忆功能”这么轻。真正值得做的是 agent 的结构化工作台账：代码结构、调用关系、网站结构、决策记录、失败历史、团队规则、可撤销版本。谁能把这些喂给 agent，同时不制造错误记忆和隐私风险，谁就可能占住 agent runtime 的关键层。
+
+## 用户痛点是什么
+
+用户痛点不是“我想让 AI 记住我喜欢什么”。开发者和运营团队更痛的是：
+
+1. **每次 agent 都从零开始。** 新会话要重新读 README、目录、关键文件、接口关系、历史决策。成本高，结果还不稳定。
+2. **上下文不是文本堆。** repo 里的函数调用、类型关系、测试覆盖、业务边界、owner、变更历史，不适合只塞进长 prompt。
+3. **记忆会过期。** 代码改了、网页改版了、流程变了。旧记忆如果不自动失效，会比没有记忆更危险。
+4. **跨工具记忆断裂。** Cursor、Claude Code、Codex、Windsurf、CI agent、浏览器 agent 各读各的，团队没有一份共同的 agent context。
+5. **复盘缺证据。** agent 为什么选这个文件、为什么跳过那个 API、为什么重复尝试同一个失败路径，用户看不到。
+
+这些痛点会随着 agent 使用频率上升而变重。一天跑一次 agent 时可以忍。一个团队每天跑几十个 agent run 时，失忆会变成成本黑洞。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户把一个 repo 或一个常用网站接入 memory layer；系统在 30 秒内生成结构图、长期记忆索引、可查询 MCP tools，并在每次 agent run 后自动更新或废弃记忆。**
+
+第一版不要做“大脑”。做一层很窄的结构化记忆：
+
+- Repo memory：文件树、模块边界、函数 / class 调用、测试映射、危险路径、owner 注释。
+- Decision memory：人类确认过的架构决策、不能改的约束、历史失败和修复路径。
+- Site memory：常用网页的登录入口、关键按钮、表单字段、分页规则、导出路径、改版检测。
+- Agent interface：通过 MCP / CLI 暴露 `search_memory`、`get_related_files`、`why_this_rule`、`record_decision`、`invalidate_memory`。
+- Review receipt：每次使用记忆后输出一张卡：用了哪些记忆、哪些过期、哪些被更新、是否影响最终 diff。
+
+它压缩的不是“生成代码”本身，而是 agent 建立上下文、找正确入口、少走重复弯路的时间。
+
+## AI 是否真的压缩任务
+
+能，而且压缩点很硬：
+
+- 以前：agent 每次从 README、grep、目录遍历、网页点击开始，靠长上下文临时拼理解。
+- 现在：agent 先查结构化记忆，直接拿到相关文件、调用链、测试、历史决策、网站路径，再决定下一步。
+
+但这里的 AI 不能负责全部判断。核心应该是确定性索引 + 图结构 + 时间版本 + 人类确认。LLM 负责解释、归纳、生成查询和更新建议。记忆写入必须有证据和过期机制。
+
+## 为什么现在
+
+- Coding agent 已经从补全变成长期 worker。Claude Code、Codex、Cursor 这类工具会连续读 repo、改文件、跑命令。失忆成本迅速放大。
+- Browser agent 也在走向重复任务。每次重新学习同一个后台页面很蠢，site-memory 这类项目正是从这个浪费点切入。
+- MCP 给记忆层提供了自然入口。记忆不必塞进某个 IDE，可以作为工具给不同 agent 调用。
+- 长上下文不是解法。上下文再长，也不等于结构化、可更新、可审计。成本、延迟、错误记忆都会继续存在。
+- GitHub 上已经有多个早期项目在不同切面试水：Memtrace 做代码结构记忆，site-memory 做网页结构记忆，Graphmind 做 Claude Code 记忆图，SwarmVault 做本地知识图谱。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+用户第一次发现 agent 第五次问同一个问题、第五次重读同一批文件、第五次点错同一个网页入口，就会想要一层记忆。
+
+**为什么留：**
+
+只要 agent 每天跑，记忆层每天都在省 token、省时间、省 review 成本。它会变成 repo 或 workflow 的基础设施，而不是一次性工具。
+
+**为什么传播：**
+
+最适合传播的是前后对比卡：
+
+```md
+Before memory: 35 browser steps, 8 minutes, 14k tokens.
+After memory: 5 steps, 30 seconds, 2k tokens.
+```
+
+或者：
+
+```md
+Agent used 6 confirmed repo memories, skipped 18 irrelevant files, found the right test in 9 seconds.
+```
+
+这种卡能被贴到 PR、HN、GitHub issue、团队聊天里。它比“我们有长期记忆”具体。
+
+**谁付费：**
+
+个人开发者会用开源版。真正预算在 AI-heavy 工程团队、AI-native agency、browser automation 团队、QA 团队、内部工具团队。付费理由是减少 agent 运行成本、缩短 review 时间、提高重复任务成功率、沉淀团队级 agent context。
+
+## MVP 实验
+
+### 7 天 MVP
+
+做一个本地 CLI + MCP server，只支持两类入口：
+
+```bash
+agent-memory index-repo .
+agent-memory serve-mcp
+agent-memory receipt last
+```
+
+最小能力：
+
+1. 扫 repo：函数 / class / import / test 文件关系。
+2. 读规则：从 `AGENTS.md`、README、docs、PR 记录里抽取候选记忆，但写入前要求人工确认。
+3. 暴露 MCP tools：给 Claude Code / Codex 查询相关文件、历史决策、测试入口。
+4. 更新机制：每次 diff 后标记哪些记忆可能过期。
+5. Receipt：记录本次 agent 查了哪些记忆、命中了哪些文件、是否减少搜索步骤。
+
+不要一开始做企业知识库。先证明：一个 AI-heavy repo 接上 memory 后，agent 少读文件、少跑错测试、少重复犯错。
+
+### 30 天验证
+
+找 15 个已经重度使用 coding agent 的小团队。每队选 1 个活跃 repo，跑两组任务：
+
+- A 组：正常使用 agent。
+- B 组：agent 先通过 memory MCP 查上下文。
+
+看四件事：
+
+- 首次定位相关文件时间是否下降。
+- agent 总 token / wall-clock 是否下降。
+- reviewer 看懂 agent 过程的时间是否下降。
+- 团队是否愿意把确认过的决策继续写进记忆层。
+
+## 可验证指标
+
+- 每个任务 agent 读取文件数下降比例。
+- 首次命中相关文件的时间。
+- token 成本和运行时长下降比例。
+- 因过期记忆导致错误的次数。
+- 人工确认记忆的比例。
+- 记忆被不同 agent / IDE 复用的次数。
+- Receipt 被贴进 PR / issue / Slack 的比例。
+- 7 天后团队是否保留 MCP memory server。
+
+## 商业化路径
+
+1. **开源本地 memory server。** 本地优先，降低开发者对代码和隐私的担心。
+2. **团队版记忆图。** 多 repo、多 agent、多成员共享确认过的结构记忆和决策。
+3. **CI / PR 集成。** PR 自动提示哪些记忆需要更新，哪些 agent 决策用了过期上下文。
+4. **垂直模板。** Web app、infra、data pipeline、mobile、browser automation 各有默认索引和评估方式。
+5. **企业私有部署。** SSO、权限、审计、数据留存、SIEM / GitHub / Linear 集成。
+
+## 反例 / 风险
+
+1. **记忆错了会更糟。** 错误记忆会把 agent 带偏，还让用户以为它有依据。必须有证据、版本、过期、人工确认。
+2. **平台会内置基础记忆。** Cursor、Anthropic、OpenAI、GitHub 都可能做一部分。独立机会在跨工具、跨 repo、可审计和本地优先。
+3. **团队懒得维护。** 如果写入记忆需要太多人工，留存会差。产品要从代码结构和运行记录自动生成候选，只让人确认关键决策。
+4. **长上下文会缓解一部分痛点。** 模型上下文变长会减少短期重读，但不会解决结构化、版本化、跨工具复用和审计。
+5. **隐私和安全敏感。** 代码、网页登录路径、内部规则都很敏感。早期必须本地优先，默认不上传源码和密钥。
+
+## 来源
+
+- HN：Graphmind — Persistent Memory and Graph for Claude Code，2026-05-13：[https://news.ycombinator.com/item?id=48118017](https://news.ycombinator.com/item?id=48118017)
+- GitHub：Graphmind，persistent memory and graph for Claude Code：[https://github.com/aouicher/graphmind](https://github.com/aouicher/graphmind)
+- GitHub：Memtrace，structural memory for AI coding agents，MCP-native、bi-temporal graph：[https://github.com/syncable-dev/memtrace-public](https://github.com/syncable-dev/memtrace-public)
+- GitHub：site-memory，persistent memory for browser automation AI agents：[https://github.com/LittleYier/site-memory](https://github.com/LittleYier/site-memory)
+- GitHub：SwarmVault，本地优先知识图谱 / RAG / agent memory store：[https://github.com/swarmclawai/swarmvault](https://github.com/swarmclawai/swarmvault)
+- HN：devnexus — persistent context across repos, sessions, and engineers，2026-04-18：[https://news.ycombinator.com/item?id=47812829](https://news.ycombinator.com/item?id=47812829)
+- HN：AI memory with biological decay，2026-04-26：[https://news.ycombinator.com/item?id=47914367](https://news.ycombinator.com/item?id=47914367)
+
+## 后续跟踪点
+
+- Memory layer 是先从 coding agent、browser agent，还是企业知识库切入更容易付费。
+- 记忆写入需要多少人工确认，才不会变成新负担。
+- 跨 IDE / 跨 agent 的 MCP memory server 是否会比单个 IDE 内置记忆更有吸引力。
+- “过期记忆检测”能不能成为产品壁垒，而不是只做一个向量库外壳。
