@@ -30,6 +30,26 @@ Browser agent 的机会不只是“让 AI 点网页”。更硬的缺口是执�
 
 判断：浏览器 agent 的大方向热，但通用 agent 平台会很挤。更有机会的是底层执行可靠性、失败恢复、benchmark、托管登录态、审计和垂直流程模板。
 
+## 2026-05-14 增量信号：浏览器正在变成 agent runtime
+
+这一轮新增信号更集中：市场不只在做“AI 控制浏览器”，而是在重写浏览器和 DevTools 给 agent 用。
+
+- Rotunda 在 HN 上以“agent-first browser + simulated typing”出现。README 开门见山：给 agent 浏览网页很强，但 CAPTCHA、浏览器行为和人类操作差异会卡住自动化。
+- browser-use GitHub 2026-05-14 查询时有 93,798 stars，描述是“Make websites accessible for AI agents”。这说明需求已经从 demo 扩散到开发者基础设施。
+- Stagehand 有 22,637 stars，定位是 browser agent SDK。它代表“自然语言 + 代码”混合自动化，而不是纯聊天。
+- Chrome DevTools MCP 有 39,500 stars，README 写明让 Gemini、Claude、Cursor、Copilot 等 coding agent 控制和检查 live Chrome，用于可靠自动化、调试和性能分析。
+- Vercel agent-browser 有 32,916 stars，做的是给 AI agents 用的原生 Rust 浏览器自动化 CLI。
+- BrowserOS 有 10,913 stars，把 agentic browser 做成开源 Chromium fork，强调本地模型和隐私。
+
+新的判断：浏览器 agent 的创业机会正在分层。
+
+1. **执行层。** 谁能让 agent 更稳定地看页面、点页面、等页面、处理错误。
+2. **接管层。** 谁能把登录、2FA、CAPTCHA、权限弹窗从“失败”变成“交给人处理后继续”。
+3. **审计层。** 谁能告诉团队 agent 做了什么、为什么失败、下次怎么修。
+4. **垂直流程层。** 谁能把招聘、电商、销售运营、财务报表这些高频网页任务包装成可复用 workflow。
+
+如果创业者只做一个“会打开网页的 AI 助手”，很容易被大模型公司、浏览器厂商和 RPA 厂商压扁。更好的切口是：把浏览器任务变成可回放、可接管、可测试、可审计的 runtime。
+
 ## 用户痛点是什么
 
 用户不是想看 AI 在网页上动来动去。用户想把重复网页流程交出去，同时别把账号、钱和业务流程搞砸。
@@ -148,6 +168,12 @@ Browser agent 的机会不只是“让 AI 点网页”。更硬的缺口是执�
 - GitHub：Browser Use Box（bux），24/7 Claude Code agent with Browser Harness、持久 Chromium、Telegram bot、live view URL：[https://github.com/browser-use/bux](https://github.com/browser-use/bux)
 - GitHub：Browserbase Stagehand，AI Browser Automation Framework / SDK for Browser Agents：[https://github.com/browserbase/stagehand](https://github.com/browserbase/stagehand)
 - GitHub：Notte，web agent framework，hybrid workflows、serverless web automation、secrets vaults、digital personas：[https://github.com/nottelabs/notte](https://github.com/nottelabs/notte)
+- HN：Rotunda - A browser built for agents with simulated typing，2026-05-13：[https://news.ycombinator.com/item?id=48121824](https://news.ycombinator.com/item?id=48121824)
+- GitHub：MonkeySee-AI/rotunda，agent-first web browser：[https://github.com/MonkeySee-AI/rotunda](https://github.com/MonkeySee-AI/rotunda)
+- GitHub：browser-use/browser-use，Make websites accessible for AI agents：[https://github.com/browser-use/browser-use](https://github.com/browser-use/browser-use)
+- GitHub：Chrome DevTools MCP，Chrome DevTools for coding agents：[https://github.com/ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp)
+- GitHub：Vercel agent-browser，Browser automation CLI for AI agents：[https://github.com/vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser)
+- GitHub：BrowserOS，open-source Chromium fork that runs AI agents natively：[https://github.com/browseros-ai/BrowserOS](https://github.com/browseros-ai/BrowserOS)
 
 ## 后续跟踪点
 
