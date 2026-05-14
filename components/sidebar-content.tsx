@@ -284,6 +284,7 @@ export const contents: Content[] = [
 			{ title: "InsForge Agentic Backend", href: "/docs/developer-tools/insforge-agentic-backend", icon: () => <Boxes className="w-4 h-4 text-current" /> },
 			{ title: "Agent Session Supervision Layer", href: "/docs/developer-tools/agent-session-supervision-layer", icon: () => <NotebookTabs className="w-4 h-4 text-current" /> },
 			{ title: "Agent Structural Memory Layer", href: "/docs/developer-tools/agent-structural-memory-layer", icon: () => <BrainCircuit className="w-4 h-4 text-current" /> },
+			{ title: "Agent Context Sandbox Layer", href: "/docs/developer-tools/agent-context-sandbox-layer", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Tiny Tool-Calling Router", href: "/docs/developer-tools/tiny-tool-calling-router", icon: () => <Zap className="w-4 h-4 text-current" /> },
 			{ title: "Firecrawl", href: "/docs/developer-tools/firecrawl", icon: () => <Globe className="w-4 h-4 text-current" /> },
 			{ title: "AgentMail", href: "/docs/developer-tools/agentmail", icon: () => <BotIcon className="w-4 h-4 text-current" /> },

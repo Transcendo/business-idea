@@ -8,6 +8,7 @@
     "insforge-agentic-backend",
     "agent-session-supervision-layer",
     "agent-structural-memory-layer",
+    "agent-context-sandbox-layer",
     "tiny-tool-calling-router",
     "firecrawl",
     "agentmail",

@@ -1,0 +1,188 @@
+---
+title: Agent Context Sandbox Layer
+description: AI coding agent 的新痛点不是模型不会写代码，而是工具输出把上下文窗口烧穿。机会在把大输出隔离到 sandbox / index，只把结论、证据和可复查 receipt 喂回 agent。
+created: 2026-05-14
+tags:
+  - ai-coding
+  - developer-tools
+  - agent-runtime
+  - mcp
+---
+
+# Agent Context Sandbox Layer
+
+## 一句话判断
+
+AI coding agent 的新痛点不是模型不会写代码，而是工具输出把上下文窗口烧穿。机会在把大输出隔离到 sandbox / index，只把结论、证据和可复查 receipt 喂回 agent。
+
+这类产品不是“再做一个 agent”。它更像 agent runtime 的上下文防火墙：读文件、跑测试、抓网页、查 issue、看日志都可以发生，但原始噪音不要直接灌进模型。
+
+## 赛道 / 产品信号
+
+本轮看到的强信号来自 Hacker News 和 GitHub：
+
+- Context Mode 在 HN 上的标题很直白：MCP server that reduces Claude Code context consumption by 98%。Algolia 记录显示该帖 570 points、30 条评论。
+- Context Mode 的 GitHub repo 在 2026-05-14 抓取时约 14.6k stars。README 把痛点写得很具体：Playwright snapshot 56 KB、20 个 GitHub issues 59 KB、一个 access log 45 KB；工具输出会持续侵占上下文窗口。
+- 项目给出的核心方式不是“压缩提示词”，而是 sandbox tools：让 agent 写脚本处理原始数据，只把 stdout 结果送回对话。README 还写了 315 KB 变 5.4 KB、98% reduction。
+- 同一天 GitHub 搜索里还出现 Torrix、Future AGI、Deco CMS、Orca 这类项目。它们分别在做 agent observability、eval/guardrails、agent control plane、多 agent IDE。共同信号是：agent 从玩具变成日常 worker 后，运行过程、成本、上下文和工具权限都开始产品化。
+
+判断：这是 coding agent 爆发后的“第二层基础设施”。第一层是模型和 IDE；第二层是上下文、权限、记忆、成本、评估、审计。Context sandbox 是其中最直接、最容易被开发者感知的一层。
+
+## 用户痛点是什么
+
+开发者已经会用 Claude Code、Codex、Cursor、OpenCode、Hermes 这类工具。新的痛点不是“AI 不够聪明”，而是：
+
+1. **工具输出太大。** 测试日志、网页 snapshot、GitHub issue 列表、API 返回、构建错误会把上下文窗口挤满。
+2. **agent 会忘掉真正重要的东西。** 模型 compact 后，原本的用户约束、任务目标、关键决策可能被噪音冲掉。
+3. **花钱买上下文，却拿去装垃圾。** 很多 token 不是推理，而是重复塞原始文件、日志和网页文本。
+4. **无法复查 agent 怎么处理大输出。** agent 说“我看过日志了”，但用户很难知道它看了什么、过滤了什么、错过了什么。
+5. **多平台配置碎。** Claude Code、Cursor、Gemini CLI、VS Code Copilot、OpenCode、Codex CLI 都有各自的 MCP / hook / rule 配置，团队很难统一。
+
+这个痛点会随使用频率指数级放大。偶尔跑一次 agent，可以忍。每天让 agent 扫 repo、跑测试、修 bug、查 issue，就不能把原始输出都塞进模型肚子里。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户把 coding agent 的大输出工具接入 sandbox；agent 继续调用工具，但系统只把精简结果、证据片段、统计数据和可复查 receipt 送回上下文。**
+
+第一版可以只做四件事：
+
+- Sandbox execution：让 agent 用脚本处理文件、日志、网页 snapshot、API response，而不是直接读全量原文。
+- Output budget：每次工具调用有 token / byte 预算，超出就必须先过滤、聚合、索引。
+- Evidence receipt：每次输出都附“读取了哪些文件 / 日志 / issue，保留哪些片段，丢弃哪些大块噪音”。
+- Cross-agent config：同一套规则可用于 Claude Code、Codex、Cursor、OpenCode、VS Code Copilot。
+
+它压缩的是 agent 的“感知输入成本”。以前是 agent 把原始世界吞进上下文。现在是 agent 写小程序调查世界，只把调查结果带回来。
+
+## AI 是否真的压缩任务
+
+能，但压缩点不在生成文本，而在减少无效上下文搬运。
+
+典型流程变化：
+
+```md
+以前：
+agent 读取 50 个文件 / 2MB 日志 / 完整 DOM snapshot → 模型在上下文里筛选 → compact 后遗失部分目标。
+
+现在：
+agent 在 sandbox 里写脚本统计、过滤、定位 → 只返回 20 行关键证据 + 可复查 receipt → 模型继续决策。
+```
+
+这里的 AI 负责决定“要查什么、如何写过滤脚本、如何解释结果”。确定性 sandbox 负责执行、隔离、记录和预算控制。这个组合比纯 prompt 压缩硬得多。
+
+## 为什么现在
+
+- Coding agent 已经进入真实工程流。它们会读 repo、跑测试、查文档、看日志、改文件，不再只是补全几行代码。
+- MCP 让工具面暴涨。工具越多，定义和调用结果越容易吃掉上下文。
+- 长上下文不是免费午餐。窗口变长会缓解短期问题，但延迟、费用、注意力稀释、compact 丢目标仍然存在。
+- 开发者开始能感知这件事。Context Mode 能在 HN 拿到高分，说明“上下文被工具输出烧穿”不是小众抱怨。
+- 多 agent 并行会加重问题。一个人同时跑多个 coding agent 时，成本、日志、状态、receipt 会变成管理负担。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+用户遇到一次 agent 因为日志太长、网页 snapshot 太大、上下文 compact 后跑偏，就会搜索解决方案。痛点很具体，不需要教育太久。
+
+**为什么留：**
+
+只要每天跑 agent，context sandbox 每天都省 token、省等待、省返工。它不是一次性插件，而是 agent 工作流里的保险丝。
+
+**为什么传播：**
+
+最适合传播的是 before / after 卡：
+
+```md
+Before: Playwright snapshot 56 KB entered context.
+After: sandbox returned 12 relevant fields + 3 selectors + 299 bytes.
+```
+
+或者：
+
+```md
+This agent run saved 92% context, skipped 18 irrelevant files, kept 7 cited evidence lines.
+```
+
+这种卡能贴到 HN、GitHub issue、PR、团队聊天里，比“我们优化了上下文”更有杀伤力。
+
+**谁付费：**
+
+个人开发者会偏向开源免费。真正付费方是 AI-heavy 工程团队、AI-native agency、内部平台团队、QA / DevOps 团队。付费理由不是抽象效率，而是可计量的 token 成本、agent 成功率、review 时间和审计需求。
+
+## MVP 实验
+
+### 7 天 MVP
+
+做一个本地 MCP server + CLI，只拦截三类大输出：
+
+```bash
+ctx-sandbox run-tests -- npm test
+ctx-sandbox scan-log app.log --query "auth error"
+ctx-sandbox fetch-issues --repo owner/repo --filter "bug auth"
+```
+
+最小能力：
+
+1. 原始输出默认不进模型上下文。
+2. agent 必须写 query / script / filter 来提取结果。
+3. 每次返回包含：结论、证据片段、原始数据大小、返回大小、节省比例。
+4. 本地保存 receipt，用户可打开复查。
+5. 支持 Claude Code 或 Codex CLI 其中一个平台即可，不要一开始铺 15 个集成。
+
+### 30 天验证
+
+找 20 个重度使用 coding agent 的开发者，让他们在同一个 repo 上跑两组任务：
+
+- A 组：正常让 agent 读文件、跑测试、看日志。
+- B 组：大输出必须经过 context sandbox。
+
+验证四个指标：
+
+- 单任务输入 token 是否下降 50% 以上。
+- compact / 上下文重置后，agent 是否更少跑偏。
+- reviewer 是否更容易复查 agent 的证据链。
+- 用户是否愿意保留它作为默认 MCP / hook。
+
+## 可验证指标
+
+- 每次工具调用原始输出大小 vs 返回上下文大小。
+- 每个 agent run 的 token 节省比例。
+- 因上下文污染导致的任务失败次数。
+- compact 后任务目标保持率。
+- receipt 被打开 / 分享 / 贴进 PR 的比例。
+- 安装后 7 天留存。
+- 用户主动把哪些命令纳入 sandbox 白名单。
+- 团队版里每人每周节省的 token 成本和等待时间。
+
+## 商业化路径
+
+1. **开源本地版。** 先赢得开发者信任。默认本地运行，不上传源码、日志、issue 内容。
+2. **团队配置层。** 统一管理哪些工具必须 sandbox、哪些命令禁止、哪些输出要生成 receipt。
+3. **成本仪表盘。** 按 agent、repo、成员统计 token 节省、失败率、上下文健康度。
+4. **企业审计。** 记录 agent 查过什么、丢弃什么、为什么返回这些证据，支持 SSO、权限、留存策略。
+5. **平台集成。** 给 Cursor、Claude Code、Codex、OpenCode、VS Code Copilot 做低摩擦插件。
+
+## 反例 / 风险
+
+1. **平台会内置。** Anthropic、OpenAI、Cursor、GitHub 都可能把上下文预算和工具输出压缩做成原生能力。独立产品要赢在跨平台、可审计、本地优先和团队策略。
+2. **过度过滤会丢证据。** 如果 sandbox 只返回摘要，agent 可能错过关键异常。必须保留可复查原文和引用定位。
+3. **配置太麻烦会死。** 开发者不想维护复杂 hook。MVP 要从“默认保护最吵的 5 类工具”开始。
+4. **安全边界要硬。** 让 agent 写脚本处理数据，本身就有执行风险。必须限制权限、路径、网络、环境变量暴露。
+5. **节省比例容易被质疑。** 98% 这类数字适合传播，但销售时要按真实团队任务复测，不能只拿 demo 数据说事。
+
+## 来源
+
+- HN：MCP server that reduces Claude Code context consumption by 98%，Algolia 记录 570 points / 30 comments：[https://news.ycombinator.com/item?id=47193064](https://news.ycombinator.com/item?id=47193064)
+- Context Mode 官方博客：Stop Burning Your Context Window — We Built Context Mode：[https://mksg.lu/blog/context-mode](https://mksg.lu/blog/context-mode)
+- GitHub：mksglu/context-mode，Context window optimization for AI coding agents：[https://github.com/mksglu/context-mode](https://github.com/mksglu/context-mode)
+- npm：context-mode package：[https://www.npmjs.com/package/context-mode](https://www.npmjs.com/package/context-mode)
+- GitHub：Torrix self-hosted AI observability，MCP tool proxy / cost cap / trace grouping：[https://github.com/torrix-ai/install](https://github.com/torrix-ai/install)
+- GitHub：Future AGI，agent eval / tracing / guardrails platform：[https://github.com/future-agi/future-agi](https://github.com/future-agi/future-agi)
+
+## 后续跟踪点
+
+- Context sandbox 是作为独立 MCP server 更容易传播，还是作为 IDE / agent 插件更容易留存。
+- 用户愿意为“省 token”付费，还是更愿意为“防止 agent 跑偏 + 可审计”付费。
+- 哪些工具输出最值得优先保护：Playwright、日志、GitHub issues、test output、web fetch、database query。
+- receipt 能否成为传播单元，而不是只停留在本地 debug 工具。
