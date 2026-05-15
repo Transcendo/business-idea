@@ -1,0 +1,186 @@
+---
+title: Realtime Voice Agent Runtime
+description: 实时语音 agent 的机会不只是“电话里接入 LLM”。更硬的缺口是低延迟音频、打断、转接、测试、电话接入和可审计执行记录组成的运行时。
+created: 2026-05-15
+tags:
+  - ai-agents
+  - voice-ai
+  - workflow-automation
+  - ai-infrastructure
+---
+
+# Realtime Voice Agent Runtime
+
+## 一句话判断
+
+实时语音 agent 的机会不只是“电话里接入 LLM”。更硬的缺口是低延迟音频、打断、转接、测试、电话接入和可审计执行记录组成的运行时。
+
+文本 agent 可以等几秒。电话 agent 不行。人一沉默、抢话、重复确认、听错地址、不会转人工，用户就挂了。语音 agent 真正要卖的不是模型能力，而是让一个业务电话稳定完成任务。
+
+## 赛道 / 产品信号
+
+本轮看到三类公开信号同时出现：
+
+- GitHub 上 `livekit/agents` 有 10,482 stars，README 定位是“building realtime, programmable participants”，支持 STT / LLM / TTS / Realtime API 组合、电话接入、语义 turn detection、测试框架。
+- `TEN-framework/ten-framework` 有 10,565 stars，定位是 open-source real-time multimodal conversational AI framework。
+- Hugging Face 的 `speech-to-speech` 有 4,739 stars，README 直接写“Build local voice agents with open-source models”，拆成 VAD、STT、LM、TTS 的级联管线。
+- Stream 的 `Vision-Agents` 有 7,810 stars，强调 voice + vision agent 和低延迟视频体验。
+- HN 近期连续出现 voice agent 相关小信号：低延迟 voice agents、给 AI 编程加语音入口、房地产中介 voice agent、企业实时语音模型测试等。单条热度不大，但方向密度在升高。
+
+判断：这里不是又一个“AI 电话客服”页面。更像 agent 执行层的一条新分支：实时语音任务运行时。
+
+## 用户痛点是什么
+
+电话和语音任务的坑很具体：
+
+1. **延迟杀体验。** 回答慢 800ms，用户已经觉得机器人卡了。
+2. **打断难处理。** 人会插话、改口、纠正、叹气、沉默。文本 agent 的轮次假设不够用。
+3. **业务动作要可靠。** 预约、改签、催收、报价、回访、报修不是聊天，必须写入 CRM、日历、工单或支付系统。
+4. **转人工不能丢上下文。** agent 失败时要把摘要、意图、证据、风险点交给真人。
+5. **质量难回放。** 电话完成了没有？哪里听错？用户什么时候失去耐心？没有 transcript、音频片段、工具调用记录和评分，很难运营。
+6. **行业规则多。** 医疗、保险、地产、教育、金融里的话术、合规和身份确认都不同。
+
+真正痛点是：企业想把高频语音任务交给 agent，但不能接受“像 demo 一样偶尔能聊”。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户给一类高频电话任务和现有系统入口；系统生成一个可接电话、能转人工、能写业务系统、能回放质检的 voice-agent run。**
+
+第一版不要做全行业语音平台。只咬住一个任务，例如：
+
+- 诊所预约确认。
+- 房产中介线索初筛。
+- SaaS 试用用户回访。
+- 本地服务报价和排期。
+- 招聘候选人电话预筛。
+
+运行时必须包括：
+
+- 音频层：VAD、turn detection、barge-in、噪声处理。
+- 模型层：STT / LLM / TTS 或 native realtime audio model 的可替换接口。
+- 工具层：CRM、日历、工单、短信、邮件。
+- 接管层：低置信度、合规风险、用户生气、支付/身份敏感动作转真人。
+- 质检层：transcript、音频片段、工具调用、失败原因、评分和复盘卡。
+
+AI 压缩的不是“把电话转文字”。它压缩的是从接电话、理解意图、查系统、确认信息、写回系统、必要时转人工到质检复盘的整段人力。
+
+## 为什么现在
+
+- Realtime audio model、STT、TTS、VAD、turn detection 的可用性在提升，开发者不再只能拼一个脆弱 demo。
+- LiveKit、TEN、Hugging Face speech-to-speech 这类开源栈正在把底层音频 agent 组件标准化。
+- 企业已经被文字客服 agent 教育过，下一步自然会问：电话、语音、会议能不能也交出去。
+- 电话任务仍然有强商业价值。很多行业的成交、预约、催办、回访还停在电话和语音消息里。
+- 文本聊天窗口太拥挤，语音 agent 可以嵌进电话、网页、App、车载、眼镜、门店设备和内部工作台。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+老板或运营负责人已经有一堆没人及时接的电话、重复确认和低价值回访。用人太贵，外包质量不稳，普通 IVR 又太蠢。
+
+**为什么留：**
+
+如果系统每周都能稳定完成一批电话任务，并留下可抽检记录，它会进入运营流程。留存来自业务完成率，不来自“语音很像真人”。
+
+**为什么传播：**
+
+可传播单元不是语音 demo，而是任务完成卡：
+
+```txt
+本周自动完成 312 通预约确认
+平均等待 0.7s
+成功改期 47 次
+转人工 29 次
+高风险话术 0 次
+节省人工 21 小时
+```
+
+这种卡老板会转给运营、客服、销售负责人。
+
+**谁付费：**
+
+本地服务、医疗诊所、教育机构、房产中介、招聘外包、B2B SaaS 销售运营、保险经纪、售后服务团队。付费点是通话量、任务类型、系统集成、质检、合规模板、号码接入、真人接管席位。
+
+## MVP 实验
+
+### 7 天 MVP
+
+只做一个窄任务：例如“房产中介线索初筛电话”。
+
+输入：
+
+- 一段业务话术。
+- 10 个常见问题。
+- 一个日历或 CRM 测试账号。
+- 30 条历史线索。
+
+输出：
+
+- 可接入电话或网页语音按钮的 agent。
+- 每通电话的摘要、意向等级、关键信息缺口、转人工原因。
+- CRM 写入记录。
+- 质检卡：延迟、打断次数、听错字段、工具调用是否成功。
+
+第一版只承诺“筛选和记录”，不要承诺“自动成交”。
+
+### 30 天验证
+
+- 找 5 个高频电话团队，每个团队跑 100 通低风险电话。
+- 对比人工首响时间、完成率、转人工率、重复确认次数。
+- 抽检 50 通录音，记录听错地址、金额、时间、姓名的比例。
+- 看业务负责人是否愿意把某一类电话长期交给 agent。
+
+## 可验证指标
+
+- 首响延迟 P50 / P95。
+- 用户打断后恢复成功率。
+- 每通电话任务完成率。
+- 转人工比例和转人工后上下文完整度。
+- 关键信息抽取准确率：姓名、时间、地址、预算、需求。
+- CRM / 工单写入成功率。
+- 每 100 通电话的人工复查成本。
+- 业务方是否愿意把更多任务类型接入。
+
+## 商业化路径
+
+1. **任务模板。** 从一个行业的一种电话任务切入，例如预约确认或线索初筛。
+2. **托管 voice-agent runtime。** 收通话分钟数、并发、号码、模型成本。
+3. **系统集成。** CRM、日历、工单、短信、邮件、支付前置确认。
+4. **质检和合规。** transcript、录音切片、禁语检测、抽检队列、审计记录。
+5. **人工接管席。** 低置信度或高价值电话转真人，agent 负责摘要和后续记录。
+6. **垂直包。** 房产、医疗、教育、招聘、本地服务各自沉淀话术、字段、风险规则。
+
+## 反例 / 风险
+
+1. **平台会压价。** Twilio、LiveKit、OpenAI、Google、电话客服厂商都能提供底层能力。早期创业公司不能只卖“接入语音模型”。
+2. **延迟和稳定性是硬门槛。** Demo 里 2 秒可接受，真实电话里会直接损失用户。
+3. **合规风险高。** 录音告知、身份确认、敏感行业话术、自动拨打规则都可能踩雷。
+4. **转人工成本不能假装不存在。** 好产品应该主动转人工，而不是硬撑到翻车。
+5. **用户未必喜欢机器人电话。** 对外呼尤其敏感。更好的切入可能是入站电话、预约确认、内部语音工作流。
+6. **垂直数据不足会变笨。** 没有行业话术、字段和异常案例，agent 很快露馅。
+
+## 创业判断
+
+实时语音 agent 值得跟，但不要做泛语音聊天壳。
+
+更好的早期产品是“某个垂直任务的 voice-agent runtime”：低延迟接入、可中断对话、能写业务系统、能转人工、能回放质检。
+
+如果一个团队能把某类低风险电话的人工处理时间压掉 60%，同时把失败电话清楚转给真人，它就不只是 demo，会进入预算。
+
+## 来源
+
+- GitHub：LiveKit Agents，framework for building realtime voice AI agents，2026-05-15 查询 10,482 stars：[https://github.com/livekit/agents](https://github.com/livekit/agents)
+- GitHub：TEN Framework，open-source framework for conversational voice AI agents，2026-05-15 查询 10,565 stars：[https://github.com/TEN-framework/ten-framework](https://github.com/TEN-framework/ten-framework)
+- GitHub：Hugging Face speech-to-speech，Build local voice agents with open-source models，2026-05-15 查询 4,739 stars：[https://github.com/huggingface/speech-to-speech](https://github.com/huggingface/speech-to-speech)
+- GitHub：Stream Vision Agents，voice and vision agents / low-latency video experiences，2026-05-15 查询 7,810 stars：[https://github.com/GetStream/Vision-Agents](https://github.com/GetStream/Vision-Agents)
+- HN：Building low-latency voice agents in 3 lines of code with GPT Realtime 2 and AG2，2026-05-14：[https://news.ycombinator.com/item?id=48138922](https://news.ycombinator.com/item?id=48138922)
+- HN：Show HN: 1-800-CODER, macOS app where you call an AI developer to edit your page，2026-05-14：[https://news.ycombinator.com/item?id=48136879](https://news.ycombinator.com/item?id=48136879)
+
+## 后续跟踪点
+
+- Native realtime audio model 是否会吞掉 STT / LLM / TTS 级联方案的优势。
+- 企业买单更偏“入站接听”还是“外呼自动化”。
+- 转人工和质检记录是否成为 voice agent 的核心采购理由。
+- 垂直行业是否愿意提供真实录音和失败样本来训练流程。

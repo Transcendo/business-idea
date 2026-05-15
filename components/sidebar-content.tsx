@@ -181,6 +181,7 @@ export const contents: Content[] = [
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-15", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Realtime Voice Agent Runtime", href: "/docs/ai-agents/realtime-voice-agent-runtime", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "Agent Identity Policy Runtime", href: "/docs/cybersecurity/agent-identity-policy-runtime", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Failure Regression Harness", href: "/docs/developer-tools/agent-failure-regression-harness", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "Agent Database Branching Sandbox", href: "/docs/developer-tools/agent-database-branching-sandbox", icon: () => <Database className="w-4 h-4 text-current" /> },
@@ -297,6 +298,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/ai-agents", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Realtime Voice Agent Runtime", href: "/docs/ai-agents/realtime-voice-agent-runtime", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "Browser Agent Execution Harness", href: "/docs/ai-agents/browser-agent-execution-harness", icon: () => <Globe className="w-4 h-4 text-current" /> },
 			{ title: "Statewright Agent State Machine Guardrails", href: "/docs/ai-agents/statewright-agent-state-machine-guardrails", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Traffic Analytics Layer", href: "/docs/ai-agents/agent-traffic-analytics-layer", icon: () => <Activity className="w-4 h-4 text-current" /> },
