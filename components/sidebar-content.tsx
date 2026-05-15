@@ -179,6 +179,8 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "2026-05-15", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Agent Identity Policy Runtime", href: "/docs/cybersecurity/agent-identity-policy-runtime", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-14", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "Agent Traffic Analytics Layer", href: "/docs/ai-agents/agent-traffic-analytics-layer", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Tiny Tool-Calling Router", href: "/docs/developer-tools/tiny-tool-calling-router", icon: () => <Zap className="w-4 h-4 text-current" /> },
@@ -355,6 +357,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/cybersecurity", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Agent Identity Policy Runtime", href: "/docs/cybersecurity/agent-identity-policy-runtime", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Capsule Security", href: "/docs/cybersecurity/capsule-security", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "MCP Agent Security Gateway", href: "/docs/cybersecurity/mcp-agent-security-gateway", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Code Agent Git Boundary Guardrails", href: "/docs/cybersecurity/code-agent-git-boundary-guardrails", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },

@@ -1,0 +1,203 @@
+---
+title: Agent Identity Policy Runtime
+description: 多 agent 开始替人读代码、调工具、访问 SaaS、触发 workflow 后，安全问题不再只是“拦截危险 tool call”。更深的机会在给每个 agent、子 agent、工具调用和人类授权生成可传递、可审计、可撤销的身份与策略链。
+created: 2026-05-15
+tags:
+  - agent-security
+  - ai-infrastructure
+  - cybersecurity
+  - identity
+---
+
+# Agent Identity Policy Runtime
+
+## 一句话判断
+
+Agent 安全的下一层不是再写一堆 prompt guardrail，而是让 agent 运行时知道：谁授权了它，它代表谁，能做什么，权限从哪来，什么时候过期，出了事怎么复盘。
+
+这会变成 agent 时代的身份层、策略层和审计层。
+
+## 赛道 / 产品信号
+
+几个公开信号开始指向同一个方向：
+
+- Hacker News 上的 Keycard 文章把问题说得很直：现代 AI agents 不再是单体 assistant，而是会委派任务给子 agent、调用外部工具、跨系统执行动作的分布式系统。传统“用户登录一次，然后系统代办所有事”的模型不够用了。
+- Microsoft 开源 Agent Governance Toolkit，强调 agent 的治理、风险、审计和策略模板。大厂开始把 agent 当成需要治理的执行体，而不是普通聊天功能。
+- agentgateway 这类项目把自己定位成 agent connectivity / policy / gateway 层。它不只处理 MCP 连接，还关心工具调用、A2A 通信、流量治理和策略执行。
+- Pydantic AI、Vercel Workflow 这类框架说明另一个事实：agentic app 正在进入普通工程栈。只要 agent workflow 进入生产，身份、权限、日志、审批就会被补上。
+
+现在的早期项目常把问题拆成 MCP gateway、agent firewall、workflow runtime、secret proxy。下一步会合并成更基础的运行时问题：agent identity 怎么贯穿整条执行链。
+
+## 用户痛点是什么
+
+团队真正怕的不是“模型回答错了”。
+
+他们怕的是：
+
+1. **不知道 agent 到底代表谁。** 是用户本人？某个团队账号？CI job？客服机器人？还是另一个 agent 委派出来的子任务？
+2. **权限继承很混乱。** 人类授权 A agent，A 又调用 B agent，B 再调 GitHub、Slack、数据库。下游系统看到的往往只是一个 API token，看不见委派链。
+3. **审计日志断裂。** 出事后只能看到“某 token 调用了某 API”。看不到原始用户意图、agent 决策、工具参数、人类批准和策略判断。
+4. **审批太粗。** 现在常见做法是弹窗问“允许这个 tool call 吗”。这对个人 demo 勉强够用，对企业流程太糙。
+5. **撤权和过期难。** agent run 结束后，临时权限是否失效？子 agent 是否还能继续调用？外部 SaaS 是否还认这个 token？很多系统没答案。
+
+用户要的不是一个更会讲安全故事的 agent。用户要的是每次 agent 行动都有一张可追责的“通行证”。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户把一个 agent workflow 接进 sidecar；sidecar 为每次 agent run 生成短期身份、策略判断和审计 receipt。**
+
+第一版只做三件事：
+
+- `who`: 给 agent run、sub-agent、tool call 生成身份。记录 human owner、session、repo、workspace、task、delegation chain。
+- `can`: 用小规则判断动作能不能做。比如只读、写文件、发外部请求、改 GitHub、访问生产、花钱 API。
+- `receipt`: 每次高风险动作输出一张审计卡：谁授权、agent 想做什么、为什么允许 / 拒绝、涉及哪些资源、权限何时过期。
+
+不要一上来做“企业级 agent governance 平台”。那会又重又慢。
+
+更好的入口是本地开发者和 AI coding team：他们已经在运行 Claude Code、Codex、OpenCode、Cline、Cursor agent、MCP server。恐惧够具体，安装路径也够短。
+
+## AI 是否真的压缩任务
+
+能压缩，但模型不是唯一核心。
+
+它压缩的是这条链：
+
+- 以前：开发者或安全团队手动看 agent 配置、API token、日志、Git diff、CI 记录，事后猜某个动作为什么发生。
+- 现在：sidecar 自动把 agent 的自然语言目标、工具调用、权限来源、策略判断和结果串成一条时间线。
+
+AI 的作用在两处：
+
+1. 把模糊任务意图归类成风险动作：读、写、外发、购买、删除、生产变更。
+2. 把日志翻译成给开发者、安全团队、管理者都能看懂的 run receipt。
+
+但真正的安全边界必须由确定性策略执行。只靠 LLM 判断“这个动作是否安全”很危险。
+
+## 为什么现在
+
+- Agent 正在从聊天变成执行体。它们读 repo、改文件、跑命令、调 SaaS、生成 PR、触发 workflow。
+- 多 agent / 子 agent 会让身份链变长。一个 human request 可能拆成 planner、coder、reviewer、browser agent、MCP tool 多段执行。
+- 企业已经熟悉人类身份治理、服务账号、OAuth、审计、SIEM，但 agent identity 还没有默认标准。
+- Microsoft、agentgateway、Keycard 这些公开材料都在把问题从“prompt 安全”推向“agent governance / runtime / identity”。
+- AI coding 和 workflow automation 的采用速度很快。权限事故会逼团队补安全带。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+第一次让 agent 调 GitHub、Linear、Slack、数据库、云服务时，团队会害怕：这个东西到底拿了什么权限？出了事算谁的？
+
+**为什么留：**
+
+只要 agent 每天跑，identity sidecar 就每天产生日志、策略判断和可复盘记录。它不是一次性扫描器，是运行时安全带。
+
+**为什么传播：**
+
+run receipt 天生适合在 PR、incident review、security review 里传播。比如：
+
+- `Agent run #184 tried to push to main. Denied because human approval missing.`
+- `Sub-agent inherited read-only GitHub scope. Slack write action blocked.`
+- `Production API token requested. Replaced with scoped 15-minute token.`
+
+这些卡片具体、有画面，比“我们做 agent governance”好传播得多。
+
+**谁付费：**
+
+个人开发者可能只愿意付小钱。真正预算在三类人：
+
+1. AI coding 团队：想让多个 agent 安全跑在真实 repo。
+2. Devtools / agent 平台：需要内置身份和策略层，减少事故。
+3. 企业安全团队：需要 agent 操作进入 SSO、SIEM、审计和合规流程。
+
+## MVP 实验
+
+### 7 天 MVP
+
+做一个本地 CLI / sidecar：
+
+```bash
+agent-id run -- claude-code "fix this issue"
+agent-id policy init
+agent-id receipt last
+```
+
+只支持 3 个入口：
+
+- Claude Code / Codex CLI wrapper
+- MCP tool call proxy
+- GitHub token broker
+
+只支持 5 类规则：
+
+- repo 只读 / 可写
+- shell 命令 allowlist
+- 外部 HTTP egress allowlist
+- GitHub issue / PR 可写，main branch 不可写
+- secret / env 只允许代理注入，不允许进入 prompt 输出
+
+每次 run 生成两个文件：
+
+1. `agent-run.jsonl`：机器可读事件流。
+2. `receipt.md`：人能看懂的审计卡。
+
+### 30 天验证
+
+- 找 20 个重度 coding agent 用户，让他们用 wrapper 跑真实任务。
+- 统计他们是否愿意让 wrapper 常驻，而不是只看一次 demo。
+- 收集被拒绝动作类型：push、delete、external POST、secret access、production token。
+- 让 3 个小团队把 receipt 贴进 PR 或内部 review，看它是否真的减少沟通成本。
+
+## 可验证指标
+
+- 安装后 7 日仍通过 sidecar 跑 agent 的比例。
+- 每日 agent run 数、tool call 数、高风险动作数。
+- 被拒绝动作中，用户确认“确实应该拦”的比例。
+- 人类审批次数是否下降，还是被弹窗骚扰拉满。
+- `receipt.md` 被复制到 PR / issue / incident review 的次数。
+- 团队是否愿意接入 SSO、GitHub、SIEM，进入付费流程。
+
+## 商业化路径
+
+1. **开发者 CLI。** 免费生成 receipt，付费保留历史、策略模板、多工具支持。
+2. **团队控制台。** 管 agent 身份、权限模板、审批记录、run history、异常告警。
+3. **平台 SDK。** 给 AI IDE、workflow runtime、MCP gateway、browser agent 提供 identity / policy / receipt 组件。
+4. **企业治理。** 接 SSO、SCIM、SIEM、DLP、GitHub audit log、云 IAM。卖审计、合规和事故追踪。
+
+## 传播路径
+
+传播物不是官网文案，而是审计卡。
+
+最有杀伤力的内容像这样：
+
+- `Your coding agent delegated to 3 sub-agents. Only one had write permission.`
+- `This tool call was denied because the agent lost human context after delegation.`
+- `A 15-minute scoped token replaced a permanent GitHub PAT.`
+- `Here is the full chain from user request to production change.`
+
+这种卡片会在 HN、GitHub issue、团队 Slack、devtools 社区传播。它讲的是一个真实风险，而不是“AI 安全很重要”的废话。
+
+## 反例 / 风险
+
+1. **大平台会吸收基础功能。** OpenAI、Anthropic、Microsoft、GitHub、Cursor 都可能内建 agent 权限和审计。独立公司必须跨平台，或者更深接企业安全栈。
+2. **标准未定。** Agent identity、MCP auth、A2A、delegation receipt 还在早期。押错接口会返工。
+3. **开发者讨厌摩擦。** 如果每个动作都弹审批，用户会关掉。策略要默认合理，解释要短。
+4. **企业销售周期慢。** 早期别直接卖 CISO。先从 AI coding team、平台 SDK、开源 sidecar 获得分发。
+5. **责任边界敏感。** 审计 receipt 可能变成甩锅工具。产品要记录事实，不要替组织判责。
+6. **日志隐私。** Agent run 可能包含代码、客户数据、密钥痕迹。必须本地优先、脱敏、最小化采集。
+
+## 来源
+
+- HN：Keycard, decentralized identity for AI agents，2026-05-14：[https://news.ycombinator.com/item?id=48125985](https://news.ycombinator.com/item?id=48125985)
+- Keycard：What every builder should know about agentic identity：[https://keycard.com/blog/what-every-builder-should-know-about-agentic-identity](https://keycard.com/blog/what-every-builder-should-know-about-agentic-identity)
+- GitHub：Microsoft Agent Governance Toolkit：[https://github.com/microsoft/agent-governance-toolkit](https://github.com/microsoft/agent-governance-toolkit)
+- GitHub：agentgateway，connect, secure and observe agent-to-agent and agent-to-tool communication：[https://github.com/agentgateway/agentgateway](https://github.com/agentgateway/agentgateway)
+- GitHub：Pydantic AI，agent framework and MCP / tools support：[https://github.com/pydantic/pydantic-ai](https://github.com/pydantic/pydantic-ai)
+- GitHub：Vercel Workflow，durable workflows for apps and AI agents：[https://github.com/vercel/workflow](https://github.com/vercel/workflow)
+
+## 后续跟踪点
+
+- Agent identity 会先被 AI IDE、MCP gateway、workflow runtime，还是企业 IAM 吃掉。
+- 是否出现类似 OpenTelemetry 的 agent trace / receipt 标准。
+- MCP auth、A2A communication、OAuth token exchange 是否会收敛。
+- 开发者是否愿意让 agent wrapper 常驻，而不是只在安全事故后使用。
