@@ -182,6 +182,7 @@ export const contents: Content[] = [
 			{ title: "2026-05-15", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "Agent Identity Policy Runtime", href: "/docs/cybersecurity/agent-identity-policy-runtime", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Failure Regression Harness", href: "/docs/developer-tools/agent-failure-regression-harness", icon: () => <Code2 className="w-4 h-4 text-current" /> },
+			{ title: "Text-to-CAD Hardware Agents", href: "/docs/robotics/text-to-cad-hardware-design-agents", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-14", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "Agent Traffic Analytics Layer", href: "/docs/ai-agents/agent-traffic-analytics-layer", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Tiny Tool-Calling Router", href: "/docs/developer-tools/tiny-tool-calling-router", icon: () => <Zap className="w-4 h-4 text-current" /> },
@@ -454,7 +455,10 @@ export const contents: Content[] = [
 				<BotIcon />
 			</ModuleLogo>
 		),
-		list: [{ title: "概览", href: "/docs/robotics", icon: () => <Book className="w-4 h-4 text-current" /> }],
+		list: [
+			{ title: "概览", href: "/docs/robotics", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Text-to-CAD Hardware Agents", href: "/docs/robotics/text-to-cad-hardware-design-agents", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
+		],
 	},
 	{
 		title: "情感陪伴",

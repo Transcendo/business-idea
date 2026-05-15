@@ -1,0 +1,153 @@
+---
+title: Text-to-CAD Hardware Design Agents
+description: CAD Skills / text-to-cad 的信号不是“让模型画 3D”。更值得盯的是：AI coding agent 开始进入机械设计、机器人描述文件和硬件原型链路，把自然语言需求压成可审查、可复现、可导出的工程文件。
+created: 2026-05-15
+tags:
+  - robotics
+  - ai-hardware
+  - developer-tools
+  - agents
+---
+
+# Text-to-CAD Hardware Design Agents
+
+## 一句话判断
+
+CAD Skills / text-to-cad 的创业信号不是“AI 生成一个漂亮 3D 模型”。更硬的判断是：**当 coding agent 能生成、导出、预览、迭代 CAD / URDF / SDF 这类工程文件，硬件团队会需要一层“可复现的设计 agent 工作台”。**
+
+这不是通用文生 3D。它切的是机械设计、机器人、夹具、外壳、BOM 和仿真文件之间那条很脏的工程链路。
+
+## 赛道 / 产品信号
+
+公开信号够新，也够集中：
+
+- GitHub `earthtojake/text-to-cad` 在 2026-04-22 创建。2026-05-15 观察到 2,735 stars、315 forks、3 个 open issues，2026-05-14 仍有 push。
+- README 把项目定位为 “A collection of agent skills for CAD, robotics and hardware design”。
+- README 明确支持 coding agents like Codex and Claude Code，输出 STEP、STL、3MF、DXF、GLB、topology data，以及 URDF / SDF / SRDF robot descriptions。
+- 官方 docs 写得更直接：agents use CAD skills to generate, source, and render 3D models, robot description files, and more。
+- docs 还把能力拆成 CAD、step.parts、CAD Explorer、URDF、SRDF、SDF。这个拆法很像早期 agent-native workflow stack，而不是单点 demo。
+
+判断：热度不是来自单个 repo，而是 agent 从纯软件开发外溢到“物理世界设计文件”。一旦输出对象变成可制造、可采购、可仿真的工程文件，机会会比普通文生 3D 更窄，但付费也更真实。
+
+## 用户痛点是什么
+
+早期用户不是“想玩 3D 生成的人”。更像这几类：
+
+1. **机器人 / 硬件创业团队。** 需要快速试夹具、支架、外壳、传感器安装件、机器人链接和 joint 描述。
+2. **机械工程师。** 很多小改动不是创意问题，而是反复改参数、导 STEP、检查干涉、补标准件。
+3. **3D 打印 / maker 用户。** 他们知道自己要什么，但不会熟练写 CAD 脚本，也不想从零建模。
+4. **仿真团队。** URDF、SDF、SRDF 文件写错一个 frame、joint、inertial，后面调试很恶心。
+5. **AI coding agent 用户。** 他们已经接受“让 agent 改代码”，下一步自然会问：能不能让 agent 改硬件设计文件？
+
+痛点不是缺少 CAD 软件。痛点是：硬件设计里的小迭代很多，但每次都要在人脑、CAD UI、标准件目录、导出文件、仿真检查之间来回切。
+
+## AI-native wedge
+
+最小 wedge 应该是：
+
+**用户给一个硬件设计任务；agent 生成参数化 CAD 源文件，拉取标准件，导出 STEP / STL / URDF，打开可视化预览，并给出可审查的修改 diff。**
+
+它压缩的是这条路径：
+
+```text
+口头需求 → 工程师手建模型 → 找标准件 → 导出 → 截图评审 → 改尺寸 → 再导出 → 写机器人描述文件
+```
+
+压成：
+
+```text
+需求 / 草图 / 尺寸约束 → agent 生成参数化源文件 → 导出工程文件 → 可视化预览 → 人类按 diff 审查 → 继续迭代
+```
+
+关键不是“一次生成完美模型”。关键是把硬件设计变成 agent 可执行、可回放、可审查的循环。
+
+## 为什么现在
+
+- AI coding agent 已经把“自然语言 → 源文件 → 测试 → diff review”训练成用户习惯。
+- build123d、OpenCascade、STEP / STL / URDF 这类开放工具链，让 agent 有可操作的中间层，不必硬控商业 CAD UI。
+- 机器人和硬件团队越来越需要仿真先行。URDF / SDF / SRDF 不是漂亮模型，而是机器人软件栈的入口文件。
+- 3D 打印、桌面制造、低成本传感器和机器人开发板，让“小批量硬件迭代”更频繁。
+- 普通文生 3D 容易停在视觉效果；工程 CAD 一旦能导出、检查、复现，就有更明确的付费任务。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+他们已经在用 Codex、Claude Code、Cursor 处理软件任务。看到 agent 能生成 STEP、URDF、标准件组合，会想立刻试一个夹具、外壳、支架或机器人 link。
+
+**为什么留：**
+留存不来自“生成惊艳”，而来自项目文件沉淀：尺寸约束、标准件引用、历史版本、导出文件、评审图和仿真描述。一旦设计库有了，下一次小改就不想回到纯手工。
+
+**为什么传播：**
+传播单元很清楚：
+
+- `一句话生成一个可打印夹具，附 STEP / STL / 渲染图。`
+- `把机器人草图变成 URDF，再丢进仿真。`
+- `agent 自动找螺丝、轴承、连接器 STEP，并给装配预览。`
+
+这种内容适合 GitHub、X、YouTube、B 站、maker 社群和机器人开发者社区。
+
+**谁付费：**
+硬件创业团队、机器人公司、3D 打印服务商、工业设计工作室、教育实验室、maker prosumer。收费方式可以是团队工作台、私有部署、标准件库、设计 review、仿真导出、制造前检查和企业权限审计。
+
+## MVP 实验
+
+### 7 天 MVP
+
+不要做完整 CAD 平台。先做一个窄任务：
+
+```text
+用户输入：我要一个固定 RealSense / 摄像头 / LiDAR 的支架，给定孔距、厚度、安装面。
+系统输出：参数化源文件 + STEP + STL + 预览图 + 尺寸检查清单。
+```
+
+只覆盖 3 类对象：支架、外壳、转接板。每类限定参数，不做开放世界建模。
+
+### 30 天验证
+
+找 10 个机器人 / maker / 硬件团队做真实任务：
+
+- 让他们带来一个本来要手工建模的小零件。
+- agent 生成第一版，用户只通过参数和文字改 3 轮。
+- 记录是否打印 / 加工、是否装得上、人工修改比例、从需求到可打印文件的时间。
+
+如果输出只能截图好看，不能制造、装配、仿真，那就是玩具。
+
+## 可验证指标
+
+- 从需求到可打印 / 可导入 CAD 文件的中位时间。
+- 第一版模型通过尺寸检查的比例。
+- 需要人工打开 CAD 软件重做的比例。
+- 标准件匹配成功率和人工替换率。
+- URDF / SDF 文件能否被仿真工具直接加载。
+- 30 天内同一团队是否发起第二个真实硬件任务。
+- 用户是否愿意为团队设计库、私有标准件库、制造前检查付费。
+
+## 商业化路径
+
+1. **机器人 / maker 设计工作台。** 先服务小团队的夹具、支架、外壳和机器人描述文件。
+2. **标准件 + 约束库。** 卖的不是模型生成，而是可靠的 screws、bearings、connectors、motors、electronics parts 引用和尺寸校验。
+3. **团队设计记忆。** 保存尺寸约束、BOM、历史 diff、评审图、失败打印记录。
+4. **制造前检查。** 自动检查壁厚、孔径、干涉、可打印性、单位错误和导出格式。
+5. **企业版。** 权限、私有部署、审计、设计文件保密、内部件库接入。
+
+## 反例 / 风险
+
+1. **CAD 容错率低。** 一个孔距错 2mm，模型再漂亮也废。
+2. **工程责任重。** 硬件失败可能烧钱、伤设备、伤人，不能像网页 UI 一样随便试。
+3. **商业 CAD 巨头会跟进。** Autodesk、Dassault、Onshape、PTC 都有入口优势。
+4. **通用模型空间理解不稳。** 文本描述复杂装配时容易漏约束，必须靠参数化和检查清单兜底。
+5. **付费人群窄。** 普通消费者只是玩票；真正愿意付费的是高频硬件迭代团队。
+
+## 来源
+
+- GitHub：earthtojake/text-to-cad，README 定位为 CAD、robotics、hardware design agent skills，并列出 STEP、STL、3MF、DXF、GLB、URDF、SDF、SRDF 等输出：[https://github.com/earthtojake/text-to-cad](https://github.com/earthtojake/text-to-cad)
+- GitHub repository metadata：2026-05-15 观察到 2,735 stars、315 forks、2026-04-22 创建、2026-05-14 仍有 push：[https://github.com/earthtojake/text-to-cad](https://github.com/earthtojake/text-to-cad)
+- 官方 docs：CAD Skills，说明 agents use CAD skills to generate, source, and render 3D models, robot description files, and more：[https://www.cadskills.xyz](https://www.cadskills.xyz)
+- 官方 demo：CAD Explorer，定位为 Browse cached CAD parts, assemblies, and prompt-ready references：[https://demo.cadskills.xyz](https://demo.cadskills.xyz)
+
+## 后续跟踪点
+
+- 是否出现真实机器人团队用它交付可打印件或可仿真的 URDF。
+- 是否能从 GitHub demo 走向团队协作、版本管理和制造前检查。
+- CAD / PLM 巨头是否把类似能力直接塞进现有工作流。
+- 标准件库和参数化约束是否比模型本身更有护城河。
