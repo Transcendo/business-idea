@@ -1,0 +1,169 @@
+---
+title: Agent Failure Regression Harness
+description: Coding agent 和 tool-using agent 的新机会不是再加一个 trace dashboard，而是把一次失败运行变成可回放、可断言、可进 CI 的回归测试。
+created: 2026-05-15
+tags:
+  - ai-coding
+  - developer-tools
+  - agent-evaluation
+  - ai-agents
+---
+
+# Agent Failure Regression Harness
+
+## 一句话判断
+
+Coding agent 和 tool-using agent 的新机会不是再加一个 trace dashboard，而是把一次失败运行变成可回放、可断言、可进 CI 的回归测试。
+
+这比普通 LLM observability 更窄，也更像刚需。团队不是缺一张漂亮链路图，而是缺一个回答：这次 agent 为什么失败，下次发布会不会再犯。
+
+## 赛道 / 产品信号
+
+本轮信号集中在同一个点：agent 的失败正在从“看日志”走向“生成测试资产”。
+
+- Raindrop Workshop 在 HN 以 Local Agent Debugger 出现，GitHub README 写得很直接：看 agent 的 token、tool call、decision，让 Claude Code 读取 trace、写 eval、修复失败，再跑到 assertion 通过。
+- Skar 的定位更窄：把 captured AI agent trace 变成 committed pytest regression test。它还暴露 MCP tools：capture session、generate pytest regression、validate trace、inspect trace。
+- AGEF 做 Agent Governance Evidence Format：把 agent session 证据做成 portable、content-addressed、tamper-evident bundle。它不是测试工具，但指向同一件事：agent 运行过程需要可转移、可验证、可复查。
+- HN 同一天还出现 Scope MCP、Containarium、Clyra hidden action paths、Klent blast-radius 这类帖子。热度不都高，但主题很一致：agent 进入真实工具链后，运行证据、权限、沙箱、回放和合规开始产品化。
+
+判断：agent eval 会从“离线 benchmark”转向“生产失败 trace 自动沉淀成 regression pack”。
+
+## 用户痛点是什么
+
+开发者现在最烦的不是“模型答错了一句”。是 agent 做了一串动作后失败，没人能稳定复现。
+
+典型痛点：
+
+1. **失败链路太长。** prompt、上下文、tool schema、文件状态、环境变量、外部 API、测试数据都可能影响结果。
+2. **人工复盘太慢。** 人要翻 transcript、tool log、diff、测试输出，才知道 agent 是从哪一步开始跑偏。
+3. **修完也不放心。** 今天手动修掉一个失败，明天换模型、换 prompt、换工具版本，又可能回来。
+4. **trace 不能直接进工程流程。** 只存 trace 不够。团队要的是能进 PR、CI、release gate 的测试对象。
+5. **隐私和本地代码敏感。** coding trace 里有源码、路径、业务逻辑甚至密钥片段。很多团队不会先把全量 trace 交给云端。
+
+真正痛点是：agent 失败没有变成可持续积累的工程资产。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户把一次失败的 agent run 丢进本地 harness；系统自动切出关键 trace、生成最小复现环境、写出 regression eval，并把它作为 CI gate 跑起来。**
+
+第一版只做 coding agent，不做所有 agent：
+
+- capture：记录 prompt、工具调用、文件 diff、测试输出、关键环境摘要。
+- minimize：把一长串运行压缩成失败关键路径。
+- assert：把失败转成可执行断言，例如 pytest、Vitest、Playwright component test 或 repo 内自定义 eval。
+- replay：下次 agent 修改同一模块前自动复测。
+- receipt：输出一张 PR 可读卡片：失败原因、生成的测试、通过率变化、仍需人工判断的点。
+
+AI 压缩的不是“写更多代码”。它压缩的是“从混乱失败到可执行回归测试”的人力。
+
+## 为什么现在
+
+- Coding agent 已经从 autocomplete 变成长任务 worker。长任务越多，失败越不像普通单元测试能覆盖。
+- Claude Code、Codex、Cursor、OpenCode、agent framework 都在制造更多 tool call trace。原始数据开始足够多。
+- Langfuse、Braintrust、Future AGI 等把 tracing / eval 讲成生产基础设施，但很多团队仍缺“从一次失败自动长出一个测试”的轻入口。
+- 本地优先开始重要。代码、客户数据、prompt 和 trace 不一定能出公司网络。
+- AI 生成代码的速度越快，团队越需要回归刹车。不然 agent 只是把 bug 生产速度也提高了。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+用户刚经历过一次 agent 失败：改错文件、误删逻辑、漏跑测试、在错误上下文里反复修。此时他要的不是 dashboard，而是“把这次坑记住”。
+
+**为什么留：**
+
+每次失败都能变成一个 eval pack。测试集越积越厚，团队对 agent 的信任越高。留存来自“历史失败不再白白浪费”。
+
+**为什么传播：**
+
+最容易传播的是 regression receipt：
+
+```md
+Agent failure captured: checkout retry bug
+Generated: tests/agent_regression/test_checkout_retry.py
+Before: failed at tool-call 7
+After: passed 5/5 replay cases
+Still needs human: confirm payment provider fixture
+```
+
+这比“我们有 agent observability”更能打动工程团队。
+
+**谁付费：**
+
+AI-heavy engineering teams、agent framework 团队、AI-native agency、金融/医疗/企业软件团队。付费点是私有部署、CI 集成、trace 脱敏、团队规则、历史 regression library、审计导出。
+
+## MVP 实验
+
+### 7 天 MVP
+
+做一个本地 CLI，只支持一个语言栈，例如 Python repo：
+
+```bash
+agent-regress capture --provider claude-code --out traces/run-001.json
+agent-regress generate traces/run-001.json --target pytest
+agent-regress replay tests/agent_regression/test_run_001.py
+```
+
+输入：一次失败 agent run 的 transcript、tool calls、git diff、测试输出。
+
+输出：
+
+- `tests/agent_regression/test_run_001.py`
+- `trace_summary.md`
+- `receipt.md`
+
+先不追求全自动修复。只验证生成的测试是否能稳定复现失败。
+
+### 30 天验证
+
+- 找 10 个每天使用 coding agent 的开发者团队。
+- 每队收集 5 条真实失败 trace，本地脱敏后生成 regression tests。
+- 对比人工写复现测试和 harness 生成测试的时间。
+- 观察这些测试是否真的被保留在 repo，并在后续 PR 中拦到回归。
+
+## 可验证指标
+
+- 失败 trace 转成可运行测试的成功率。
+- 从失败发生到生成首个 regression test 的时间。
+- 生成测试的人工修改比例。
+- 7 天后测试仍留在仓库的比例。
+- 下次 agent / 人类修改中实际拦截回归的次数。
+- trace 摘要中包含敏感信息的误报 / 漏报率。
+- 团队是否愿意把它接进 CI，而不是只当调试玩具。
+
+## 商业化路径
+
+1. **开源本地 CLI。** 先赢开发者信任，支持 Claude Code / Codex transcript、pytest / Vitest。
+2. **CI 插件。** PR 中自动跑 agent regression pack，生成失败卡片。
+3. **团队库。** 管理历史失败、标签、owner、覆盖模块、模型版本、工具版本。
+4. **私有部署。** 提供 trace 脱敏、权限、SSO、保留策略和审计导出。
+5. **垂直包。** 面向 browser agent、客服 agent、sales ops agent 做专用失败 taxonomy 和 replay harness。
+
+## 反例 / 风险
+
+1. **trace 格式碎片化。** 每个 agent 的 transcript、tool log、权限模型不同。没有适配层会很痛。
+2. **生成测试可能很脆。** 如果测试只复刻偶然环境状态，会制造假安全感。
+3. **平台可能内置。** Claude Code、Cursor、LangSmith、Langfuse、Braintrust 都可能把基础 replay / eval 做掉。
+4. **隐私是硬门槛。** 不能默认上传源码和 trace。第一版必须本地优先，且有脱敏检查。
+5. **市场容易误解成 observability。** 如果只做 trace viewer，会掉进红海。必须咬住“失败变测试”。
+6. **不是所有 agent 任务都适合断言。** 研究、写作、设计类任务更难回放。先从 coding / browser / workflow agent 切。
+
+## 创业判断
+
+这个方向值得看，因为它把 agent 的不稳定性变成工程资产。
+
+普通 observability 回答“发生了什么”。Agent failure regression harness 回答“下次怎么不再发生”。
+
+最好的早期切口不是大而全 AI QA 平台，而是本地、窄场景、可进 CI 的失败捕获工具。只要它能把真实失败复现时间从一小时压到五分钟，就有购买理由。
+
+## 来源
+
+- HN：Raindrop – Local Agent Debugger，2026-05-14：[https://news.ycombinator.com/item?id=48142655](https://news.ycombinator.com/item?id=48142655)
+- GitHub：Raindrop Workshop，本地 agent debugger / eval loop：[https://github.com/raindrop-ai/workshop](https://github.com/raindrop-ai/workshop)
+- HN：Skar – turn a captured AI agent trace into a pytest regression test，2026-05-14：[https://news.ycombinator.com/item?id=48136198](https://news.ycombinator.com/item?id=48136198)
+- GitHub：Skar，captured trace to committed pytest regression test：[https://github.com/kalisky/skar](https://github.com/kalisky/skar)
+- HN：AGEF, an open evidence format for AI agent sessions，2026-05-14：[https://news.ycombinator.com/item?id=48132513](https://news.ycombinator.com/item?id=48132513)
+- GitHub：AGEF，portable tamper-evident AI-agent session bundles：[https://github.com/radotsvetkov/agef](https://github.com/radotsvetkov/agef)
+- GitHub：Future AGI，agent evaluation / tracing / simulation / guardrails：[https://github.com/future-agi/future-agi](https://github.com/future-agi/future-agi)

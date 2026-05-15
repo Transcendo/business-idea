@@ -5,6 +5,7 @@
     "lovable",
     "cursor-anysphere",
     "ai-coding-agent-control-plane",
+    "agent-failure-regression-harness",
     "insforge-agentic-backend",
     "agent-session-supervision-layer",
     "agent-structural-memory-layer",
