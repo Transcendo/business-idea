@@ -1,0 +1,158 @@
+---
+title: Mobile GUI Agent Runtime
+description: 手机 agent 的机会不是再做一个聊天 App，而是把真实 Android / iOS 屏幕、权限、点击、输入、回放和人工接管变成可验证的任务运行时。
+created: 2026-05-16
+tags:
+  - ai-agents
+  - mobile-agents
+  - gui-agents
+  - workflow-automation
+---
+
+# Mobile GUI Agent Runtime
+
+## 一句话判断
+
+手机 agent 的机会不是再做一个聊天 App，而是把真实 Android / iOS 屏幕、权限、点击、输入、回放和人工接管变成可验证的任务运行时。
+
+现在大量 AI 产品还停在“聊天框问答”。但很多真实任务发生在手机 App 里：外卖、出行、社交、短视频、客服后台、移动办公、银行、会员系统、门店工具。它们没有稳定 API，也不是浏览器自动化能覆盖的地方。
+
+所以创业 wedge 不该是“AI 帮你玩手机”。应该是：用户给一个手机任务，系统在真实或云手机环境里观察屏幕、执行动作、记录过程、失败可接管，并输出 run card。
+
+## 赛道 / 产品信号
+
+本轮看到的信号很集中：移动 GUI agent 正从论文 demo 往开发者 runtime 走。
+
+- mobileClaw 是开源 Android AI agent runtime。README 直接写明它能看屏幕、控制 App、构建工具、记忆上下文、路由技能；核心链路是 `user goal -> task type -> role scheduler -> planner -> allowed skills -> observe -> act -> verify`。
+- iOS MCP 把越狱 iPhone 暴露成 MCP server，提供触控手势、截图、App 管理、设备信息等 34 个工具。它不是大众产品，但说明开发者正在把手机变成 agent 可调用的执行环境。
+- AIOPE 把 Android 助手做成 46 工具 agent，包含 Linux terminal、浏览器自动化、SSH、动态 UI、MCP 和多模型路由。方向很糙，但暴露出同一个需求：手机上的 AI 不只聊天，要能接工具和执行。
+- AndroidWorld 提供 live Android emulator benchmark，覆盖 20 个 App 的 116 个手工任务。这个基准的存在说明“手机 App 自动操作”已经是可评测问题，不只是产品想象。
+- Mobile-Agent / GUI-Owl 系列持续更新到跨桌面、移动、浏览器的 GUI agent，并接入云手机场景。模型侧在补齐屏幕理解和动作执行能力。
+
+判断：移动 GUI agent 还很早，但有创业窗口。模型公司会做通用能力，创业公司更适合做执行 runtime、垂直工作流、云手机/真机池、回放评测和合规接管层。
+
+## 用户痛点是什么
+
+用户不是想让 AI 随便点手机。用户想把“只能在 App 里做、每天重复、没有 API、人工容易漏”的任务交出去。
+
+典型痛点：
+
+1. **移动 App 是流程黑箱。** 很多业务只在手机端完成，后台没有 API，网页也没有等价入口。
+2. **人工操作太碎。** 门店巡检、优惠券配置、App 回归测试、客服查单、短视频发布、移动办公填报，都很耗人。
+3. **脚本维护难。** Android ROM、iOS 权限、WebView、Flutter、React Native、弹窗和版本更新会让传统自动化经常断。
+4. **失败不可审计。** agent 点错、漏点、卡住后，团队需要知道它看到什么、点了哪里、为什么失败。
+5. **权限风险高。** 手机里有支付、隐私、通讯录、相册、位置。没有权限边界和人工确认，用户不会放心。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户给一个移动 App 任务；系统返回可运行的手机 workflow，包含屏幕观察、动作序列、权限边界、失败回放、人工接管入口和可复测指标。**
+
+第一版不要做万能手机助手。只做 mobile GUI execution runtime：
+
+- 观察层：截图、accessibility tree、OCR、可点击区域、当前 App / Activity。
+- 执行层：tap、swipe、input、back/home、启动 App、等待、滚动。
+- 任务层：把任务分类成测试、运营、客服、发布、采集等模式，限制可用工具。
+- 接管层：遇到登录、验证码、支付、敏感权限，暂停并让人确认。
+- 回放层：每次执行输出截图时间线、动作日志、失败原因和下一次修复建议。
+- 评测层：把成功流程转成 regression case，App 更新后自动跑。
+
+AI 压缩的不是“点击屏幕”这一步，而是把模糊手机任务变成可重复、可审计、可交接的执行资产。
+
+## 为什么现在
+
+- 多模态模型能读屏幕、识别按钮、理解 UI 状态，手机 GUI 从不可读变成可推理。
+- MCP 和 agent tool calling 正在把设备能力标准化，手机也开始成为 agent 的工具端点。
+- AndroidWorld、OSWorld、Mobile-Agent 这类 benchmark / framework 让 GUI agent 从 demo 进入可比较阶段。
+- 企业移动流程越来越多，但很多 App 没有开放 API。RPA 在桌面和网页里成熟，手机端仍缺好用 runtime。
+- 云手机、模拟器、真机农场已经存在，缺的是 AI-native 的任务编排、回放、接管和评测层。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+用户有一个只能在手机 App 里做的重复任务，人工做太烦，写自动化又太脆。比如移动 App QA、门店巡检、客服查单、运营发布、竞品价格检查。
+
+**为什么留：**
+一旦 workflow 稳定，它会每天跑。回放、失败修复、权限策略、App 版本回归测试会形成持续价值。
+
+**为什么传播：**
+传播单元不是产品口号，而是 run card：
+
+- `这个 agent 在 12 台 Android 真机上跑完 48 个回归任务，7 个失败集中在登录弹窗。`
+- `门店巡检 App 自动填报 31 条记录，3 条需要人工确认照片。`
+- `新版本 App 发布后，付款流程第 5 步按钮文案变化导致回归失败。`
+
+这种卡片能被转进 QA 群、飞书、GitHub issue、运营群。
+
+**谁付费：**
+早期付费方是移动 QA 团队、App 开发团队、AI-native agency、连锁门店运营、客服/BPO、需要管理大量手机流程的出海团队。收费可以按设备并发、workflow 数、执行分钟、回放存储、私有部署和权限审计来收。
+
+## MVP 实验
+
+### 7 天 MVP
+
+只做 3 类任务，不做通用手机助手：
+
+1. Android App 回归测试：登录、下单、搜索、资料编辑。
+2. 移动运营流程：发布内容、检查状态、填表、截图留证。
+3. 客服查单流程：在 App 内查询订单状态并生成摘要。
+
+输入：App、任务描述、测试账号或人工登录一次。
+
+输出：
+
+- 可复跑的动作序列。
+- 每一步截图 replay。
+- 失败点和原因分类。
+- 敏感步骤人工确认。
+- 下一次回归测试入口。
+
+### 30 天验证
+
+- 找 10 个移动 QA / 运营团队，每个团队只接一个高频手机流程。
+- 每个流程跑 30 次，记录成功率、人工接管次数、失败修复时间。
+- 对同一 App 新旧版本都跑一遍，验证是否能定位 UI 变化。
+- 用 run card 让团队成员评估：这东西能不能替代一天里最烦的那段手机操作。
+
+## 可验证指标
+
+- 首个 workflow 从描述到可运行需要多久。
+- 同一 workflow 连续 7 天成功率。
+- 失败后定位到具体 UI 步骤的比例。
+- 人工接管后继续执行成功率。
+- 单次任务节省的人力分钟数。
+- run card 被分享到团队工具的比例。
+- 用户是否愿意为第二条 workflow 或第二台设备付费。
+
+## 商业化路径
+
+1. **开源 runtime / SDK。** 用 Android 端或云手机样例获取开发者信任。
+2. **托管执行环境。** 提供云手机、模拟器、真机池、并发调度和执行日志。
+3. **QA regression suite。** 给移动团队做版本回归、崩溃前步骤、失败聚类。
+4. **垂直 workflow 模板。** 门店巡检、客服查单、内容发布、价格监控、出海 App 测试。
+5. **企业权限与审计。** 敏感动作审批、账号隔离、日志留存、私有部署。
+
+## 反例 / 风险
+
+1. **平台限制很硬。** iOS 非越狱场景受限，Android 也有无障碍权限、厂商 ROM、后台保活问题。
+2. **安全边界敏感。** 手机里有支付、通讯录、相册、位置和私密消息。没有本地优先、最小权限、人工确认，很难被信任。
+3. **通用助手会被大厂压。** 小团队不该和系统级 AI 助手正面打，要切 QA、运营、BPO、出海测试这种明确付费场景。
+4. **维护成本可能很高。** App 更新、弹窗、活动页、A/B 测试都会导致流程漂移。必须用回放和 regression 降低维护成本。
+5. **用户可能只要一次脚本。** MVP 要验证复用频次，不然容易变成低毛利自动化外包。
+
+## 来源
+
+- GitHub：eggbrid2/mobileClaw，open Android AI agent runtime，屏幕观察、App 控制、skill routing、task runtime：[https://github.com/eggbrid2/mobileClaw](https://github.com/eggbrid2/mobileClaw)
+- GitHub：witchan/ios-mcp，jailbroken iPhone MCP server，34 个 iOS 设备自动化工具：[https://github.com/witchan/ios-mcp](https://github.com/witchan/ios-mcp)
+- GitHub：XNet-NGO/AIOPE，Android AI assistant with 46 tools、Linux terminal、browser automation、MCP：[https://github.com/XNet-NGO/AIOPE](https://github.com/XNet-NGO/AIOPE)
+- GitHub：Google Research AndroidWorld，live Android emulator benchmark，116 tasks across 20 apps：[https://github.com/google-research/android_world](https://github.com/google-research/android_world)
+- GitHub：X-PLUG MobileAgent，Mobile-Agent / GUI-Owl / GUI agent research and code：[https://github.com/X-PLUG/MobileAgent](https://github.com/X-PLUG/MobileAgent)
+- GitHub：xlang-ai OSWorld，desktop / OS GUI agent benchmark，可作为跨端 GUI agent 可靠性参考：[https://github.com/xlang-ai/OSWorld](https://github.com/xlang-ai/OSWorld)
+
+## 后续跟踪点
+
+- mobileClaw / iOS MCP 这类项目是否从开发者玩具变成团队工作流工具。
+- AndroidWorld / Mobile-Agent 的评测指标是否会被产品团队用于真实 App 回归。
+- 云手机厂商是否会开放更适合 agent 的观察、接管、回放 API。
+- 哪类移动流程最先付费：QA、运营、客服、门店，还是出海 App 测试。
