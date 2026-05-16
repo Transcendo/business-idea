@@ -1,0 +1,208 @@
+---
+title: AI SOC Triage Runtime
+description: 安全团队缺的不是又一个会总结告警的聊天框，而是把告警、日志、工具调用、MITRE 映射、处置建议和复盘证据串成可回放 triage run 的运行时。
+created: 2026-05-16
+tags:
+  - cybersecurity
+  - ai-agents
+  - soc
+  - security-operations
+---
+
+# AI SOC Triage Runtime
+
+## 一句话判断
+
+AI SOC 的创业机会不在“让 LLM 帮安全分析师写摘要”。摘要太薄，预算也不稳。
+
+更好的 wedge 是：把一次安全告警从触发、富化、调查、工具调用、判断、处置建议到复盘证据，变成一条可回放、可审计、可评测的 triage run。
+
+## 赛道 / 产品信号
+
+几个公开信号在同时冒出来：
+
+- GitHub 上的 [AiSOC](https://github.com/beenuar/AiSOC) 在 2026-05-02 创建，2026-05-16 已有 900+ star。它直接定位成 self-hostable AI SOC，强调 agent 的 prompts、tool calls、rationale 都能 step-by-step 记录和 replay。
+- [pentest-ai](https://github.com/0xSteph/pentest-ai) 把 offensive security 包成 MCP server 和 CLI，README 写的是 autonomous pentests、real tools、working PoCs、audit-ready reports。这说明安全 agent 不只会“读报告”，而是在接真实工具链。
+- [ProcMon-MCP](https://github.com/0xhackerfren/ProcMon-MCP) 把 Windows processes、ETW traces、event logs、services、drivers、static PE analysis 暴露给 AI assistant。这个方向很粗糙，但信号很清楚：安全 agent 需要看见真实系统状态。
+- [Adrian](https://github.com/secureagentics/Adrian) 做 agent runtime security monitoring，盯 malicious tool use、prompt injection、policy drift。它和 AI SOC 是同一条链的两端：一个看企业安全事件，一个看 agent 自身行为。
+- arXiv 的 [ExploitGym](https://arxiv.org/abs/2605.11086) 把 AI agent 从漏洞到真实 exploit 的能力做成 benchmark。攻防两边都在 agent 化，安全团队会被迫补自动化 triage、可控执行和证据回放。
+
+这不是一个孤立产品点。它像一条新安全工作流：告警进入，agent 调工具查证，系统记录证据，人类批准高风险动作，最后输出可复盘的 run card。
+
+## 用户痛点是什么
+
+SOC 分析师现在的痛点不是“没有告警”。告警多到烦。
+
+真正痛的是这几件事：
+
+1. **告警富化太碎。** SIEM、EDR、云日志、IAM、GitHub、邮件、安全情报都分散。分析师要自己查、复制、拼上下文。
+2. **一线 triage 重复度高。** 判断误报、查资产、看最近登录、查进程树、映射 MITRE、找同类事件，大量步骤像机械活。
+3. **经验在脑子里，不在系统里。** 老分析师知道下一步该查什么，新人只会照 runbook 点按钮。
+4. **证据链不完整。** 事后复盘时，常常只有几段日志和结论，看不清当时为什么判断为真阳性或误报。
+5. **自动处置风险高。** 安全团队不敢让 agent 直接封账号、杀进程、改防火墙。没有审批、回滚和责任记录，就只能停在建议层。
+
+所以用户要的不是“AI 安全顾问”。用户要的是一个不会乱动生产、但能把调查链路跑完并留下证据的 triage runtime。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户接入一类告警源和三类只读调查工具；系统为每个 alert 自动生成 triage run、证据时间线、下一步建议和人类可批准动作。**
+
+第一版不要做全能 SOC。只选一个窄场景：
+
+- GitHub / cloud IAM 异常登录。
+- 可疑进程树和 Windows 事件调查。
+- Web app 高危漏洞告警的初筛。
+- EDR alert 的误报判定。
+
+每个 run 输出三样东西：
+
+1. `timeline`：告警触发、资产、用户、进程、IP、最近动作。
+2. `evidence`：agent 查了哪些系统、拿到哪些证据、哪些证据支持或反驳攻击假设。
+3. `decision card`：误报 / 可疑 / 高危，建议动作，哪些动作需要人类批准。
+
+AI 的价值不是“像安全专家聊天”。AI 的价值是把模糊告警压成可执行调查路线，并把工具结果组织成判断证据。
+
+## AI 是否真的压缩任务
+
+能压缩，但边界必须清楚。
+
+它压缩的是这条链：
+
+- 以前：分析师打开 SIEM，复制 IP，查云控制台，查 EDR，查 GitHub audit log，翻 runbook，写复盘。
+- 现在：agent 按固定 playbook 调只读工具，把证据组织成 attack hypothesis，标出缺口，再让人类决定是否处置。
+
+AI 适合做三件事：
+
+1. 把告警转成调查假设，比如 credential abuse、lateral movement、malware execution、supply-chain risk。
+2. 选择下一步该查的证据，而不是机械跑完所有查询。
+3. 把杂乱日志翻译成决策卡和复盘材料。
+
+AI 不应该单独决定封禁、删除、隔离生产资产。高风险动作必须由确定性策略、人类批准和可回滚操作控制。
+
+## 为什么现在
+
+- Agent 已经开始接真实工具。MCP server、CLI agent、tool-calling framework 让安全工作从“LLM 看文本”变成“LLM 查系统”。
+- 开源项目开始把安全 agent 包成可运行工具，而不是论文 demo。AiSOC、pentest-ai、ProcMon-MCP 都是公开信号。
+- 攻击能力也在 agent 化。ExploitGym 这种 benchmark 会让企业看到：AI agent 不只是防守助手，也可能降低攻击门槛。
+- SOC 人力长期紧张。中小团队买不起完整 MSSP，大团队也不想让一线分析师被重复 triage 淹死。
+- 企业愿意为审计、可控执行、合规证据付费。单纯摘要工具难卖，run evidence 和 approval trail 更接近预算语言。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+团队每天都在处理重复告警。只要产品能把一个常见 alert 的调查时间从 20 分钟压到 5 分钟，并且不碰生产危险动作，就有试用理由。
+
+**为什么留：**
+
+每次 alert 都产生 run history。时间越长，误报模式、资产上下文、团队处置习惯越完整。留存来自工作流嵌入，而不是模型新鲜感。
+
+**为什么传播：**
+
+可传播物是 incident run card：
+
+- `This alert was downgraded because login matched known device, VPN, and recent deploy.`
+- `This process chain matched suspicious PowerShell behavior; isolation requires approval.`
+- `Agent checked 7 evidence sources and found 2 contradictions.`
+
+这种卡片能在安全团队、CTO、incident review、GitHub README 里传播。它比“AI SOC copilot”更具体。
+
+**谁付费：**
+
+1. 中小安全团队：缺 L1/L2 分析师，希望先自动化 triage。
+2. MSSP / MDR：同样人力处理更多客户告警，且需要客户可读报告。
+3. DevSecOps 团队：需要把 GitHub、cloud、CI、runtime 安全事件串起来。
+4. 安全平台：SIEM、EDR、CNAPP、agent security vendor 需要内置 agent run layer。
+
+## MVP 实验
+
+### 7 天 MVP
+
+做一个本地或 self-hosted alert triage runner：
+
+```bash
+soc-run ingest alert.json
+soc-run triage --profile github-iam
+soc-run report last --format md
+```
+
+只支持一个窄场景：GitHub / cloud IAM 可疑登录。
+
+只接 3 类只读输入：
+
+- alert JSON。
+- GitHub audit log 或云 IAM 登录记录。
+- IP reputation / geo / device history 的公开或企业内部数据。
+
+只输出：
+
+- attack hypothesis。
+- evidence checklist。
+- confidence。
+- recommended next action。
+- human approval request。
+- Markdown run card。
+
+### 30 天验证
+
+- 找 5 个有真实告警量的小团队或安全顾问，让他们用真实历史 alert 回放。
+- 选 100 条低中危告警，比较人工 triage 和 agent-assisted triage 的时间、误报率、遗漏率。
+- 让用户标注：哪些证据真的有帮助，哪些查询是噪音。
+- 看 run card 是否会被贴进 incident ticket、Slack、客户报告或复盘文档。
+
+## 可验证指标
+
+- 每条 alert 的平均 triage 时间是否下降 50% 以上。
+- agent 建议被分析师采纳的比例。
+- 被误判为低危的真阳性数量，必须非常低。
+- run card 被复制到 ticket / incident review / 客户报告的次数。
+- 分析师手动补查证据的次数是否减少。
+- 只读模式下能覆盖多少常见告警，不靠高风险自动处置凑效果。
+- 团队是否愿意接入第二个数据源。愿意接第二源，说明不是一次性玩具。
+
+## 商业化路径
+
+1. **开源 runner。** 支持少数 alert profile，本地运行，输出 Markdown run card。
+2. **团队版。** 多数据源、run history、权限、审批、模板、Slack / Jira / Linear 集成。
+3. **MSSP 版。** 多租户、客户隔离、报告模板、SLA、审计导出。
+4. **平台 SDK。** 给 SIEM、EDR、CNAPP、agent security gateway 提供 triage run、evidence graph、approval card。
+5. **企业版。** SSO、SIEM 双向集成、私有部署、数据保留策略、合规审计。
+
+## 传播路径
+
+不要靠泛泛的“AI for SOC”营销。太多人这么讲，听起来像 PPT。
+
+传播物应该是具体案例：
+
+- `100 real alerts replayed: 63 auto-downgraded with evidence, 11 escalated, 0 production actions taken.`
+- `How an AI SOC run card found the missing GitHub audit event.`
+- `Every tool call, evidence item, and human approval in one incident timeline.`
+
+开发者和安全人愿意传播的是可复现证据，不是安全焦虑。
+
+## 反例 / 风险
+
+1. **大平台会内置。** Splunk、Microsoft Sentinel、CrowdStrike、Palo Alto、Wiz、Datadog 都可能把 AI triage 做进主产品。
+2. **数据接入很脏。** 每家日志格式、字段质量、权限模型都不一样。早期必须窄场景，不要假装通吃。
+3. **误判代价高。** 安全产品不能靠漂亮 demo。一个真阳性被降级，信任就崩。
+4. **自动处置危险。** 直接封号、杀进程、改策略容易出事故。早期应只读优先，人类批准高风险动作。
+5. **双用途敏感。** pentest agent 和 exploit benchmark 会给防守带来价值，也会降低攻击门槛。公开内容要强调授权环境、审计和防御用途。
+6. **开源项目 star 不等于付费需求。** Star 说明关注度，不说明企业愿意采购。MVP 必须测真实 alert 时间节省和报告复用。
+
+## 来源
+
+- GitHub：AiSOC，open-source self-hostable AI SOC，记录 prompts / tool calls / rationale 并支持 replay：[https://github.com/beenuar/AiSOC](https://github.com/beenuar/AiSOC)
+- GitHub：pentest-ai，offensive-security MCP server + CLI，强调 autonomous pentests、real tools、audit-ready reports：[https://github.com/0xSteph/pentest-ai](https://github.com/0xSteph/pentest-ai)
+- GitHub：ProcMon-MCP，把 Windows internals 暴露给 AI assistants：[https://github.com/0xhackerfren/ProcMon-MCP](https://github.com/0xhackerfren/ProcMon-MCP)
+- GitHub：Adrian，AI agent runtime security monitoring and control：[https://github.com/secureagentics/Adrian](https://github.com/secureagentics/Adrian)
+- arXiv：ExploitGym: Can AI Agents Turn Security Vulnerabilities into Real Attacks?：[https://arxiv.org/abs/2605.11086](https://arxiv.org/abs/2605.11086)
+- Product Hunt：AgentRail，local control plane for AI coding agents：[https://www.producthunt.com/products/agentrail](https://www.producthunt.com/products/agentrail)
+
+## 后续跟踪点
+
+- AiSOC 这类项目是否从 demo 走到真实团队部署，尤其是数据接入和 eval harness。
+- SIEM / EDR 大厂是否把 agent run receipt 做成标准功能。
+- MCP security、agent identity、SOC triage 三条线会不会合并成同一个 agent security runtime。
+- 攻击侧 agent benchmark 是否推动企业更快采购防守侧 agent 监控和 triage。

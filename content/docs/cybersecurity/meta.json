@@ -2,6 +2,7 @@
   "title": "网络安全",
   "pages": [
     "index",
+    "ai-soc-triage-runtime",
     "agent-identity-policy-runtime",
     "capsule-security",
     "mcp-agent-security-gateway",
