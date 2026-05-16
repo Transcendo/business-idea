@@ -2,6 +2,7 @@
   "title": "AI 硬件",
   "pages": [
     "index",
+    "local-llm-hardware-fit-layer",
     "minicpm-v-edge-multimodal-agents",
     "era-world",
     "rebellions"

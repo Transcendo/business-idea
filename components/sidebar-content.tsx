@@ -180,6 +180,8 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "2026-05-16", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Local LLM Hardware Fit Layer", href: "/docs/ai-hardware/local-llm-hardware-fit-layer", icon: () => <Boxes className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-15", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "Realtime Voice Agent Runtime", href: "/docs/ai-agents/realtime-voice-agent-runtime", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "Agent Identity Policy Runtime", href: "/docs/cybersecurity/agent-identity-policy-runtime", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
@@ -408,6 +410,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/ai-hardware", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Local LLM Hardware Fit Layer", href: "/docs/ai-hardware/local-llm-hardware-fit-layer", icon: () => <Boxes className="w-4 h-4 text-current" /> },
 			{ title: "MiniCPM-V Edge Multimodal Agents", href: "/docs/ai-hardware/minicpm-v-edge-multimodal-agents", icon: () => <Boxes className="w-4 h-4 text-current" /> },
 			{ title: "Era World", href: "/docs/ai-hardware/era-world", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Rebellions", href: "/docs/ai-hardware/rebellions", icon: () => <Activity className="w-4 h-4 text-current" /> },
