@@ -1,0 +1,174 @@
+---
+title: Agentic Security Evaluation Harness
+description: Agent 安全的新机会不是再喊一遍“要加权限控制”，而是把 agent、工具、身份、策略、攻击面和修复规则放进可重复运行的安全评测 harness。
+created: 2026-05-16
+tags:
+  - ai-security
+  - ai-agents
+  - evaluation
+  - cybersecurity
+---
+
+# Agentic Security Evaluation Harness
+
+## 一句话判断
+
+Agent 安全的新机会不是再喊一遍“要加权限控制”，而是把 agent、工具、身份、策略、攻击面和修复规则放进可重复运行的安全评测 harness。
+
+企业真正怕的不是 agent 回答错一句话。是 agent 拿着真实权限、真实工具、真实数据一路执行，最后没人能证明它会不会泄密、越权、误调用、被 prompt injection 带跑。
+
+## 赛道 / 产品信号
+
+本轮信号很集中：agent 安全开始从“概念风险”变成“可测、可复跑、可修复”的工程问题。
+
+- Cisco 开源 Foundry Security Spec，定位是 agentic AI security evaluation 的组织中立规格。它写的是角色、finding lifecycle、治理和安全要求，而不是又一个扫描器。
+- Tencent AICGSecEval 做 repository-level AI-generated code security evaluation benchmark，说明代码生成安全评测已经从 demo 进入 benchmark 化。
+- Claw-Eval 把 autonomous agents 的评测拆成 300 个 human-verified tasks、2,159 条 rubrics，并强调 completion、safety、robustness。
+- Capsule Security 的公开分析在 HN 上被转发，标题直接指出 AI agent skill files 中存在硬编码凭证和数据库写权限问题。即使不采信单一数字，信号也很清楚：agent skill / tool 文件本身会成为供应链攻击面。
+- Keycard 的 Agent Security Stack 把问题拆成 transport、identity、policy、runtime。这个拆法比“装一个安全插件”更接近真实采购逻辑。
+
+判断：agent 安全会长出一类新基础设施：把策略、工具权限、执行轨迹、攻击样本、修复规则和回归测试绑在一起的安全评测运行时。
+
+## 用户痛点是什么
+
+安全团队现在卡在三件事上。
+
+1. **不知道该测什么。** 普通 SAST / DAST 测代码，普通 LLM eval 测回答，但 agent 风险来自“模型 + 工具 + 身份 + 数据 + 运行时”的组合。
+2. **测了也很难复现。** Prompt injection、工具误用、权限绕过、secret 暴露经常依赖上下文和执行路径，不能只靠一次人工红队截图。
+3. **发现问题后不能沉淀。** 一次红队发现如果不能变成规则、fixture、policy test 和 CI gate，下次换模型、换 MCP server、换 skill 文件还会重来。
+
+真正痛点是：agent 安全没有从 incident / red-team finding 变成持续增长的安全资产。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户给出一个 agent 系统的工具清单、权限模型、skill / MCP 配置和几条关键业务流程；系统自动生成安全评测任务，运行 sandbox attack / misuse scenarios，输出 finding、最小复现、修复建议和回归测试。**
+
+第一版别做“大安全平台”。只切一个窄场景：企业内部 coding / ops agent 的工具权限安全。
+
+核心模块：
+
+- inventory：读取 MCP servers、skills、tool schemas、环境变量使用、OAuth scopes、文件 / shell / browser 权限。
+- scenario：生成可控攻击场景，例如 prompt injection 诱导读取密钥、越权写数据库、绕过 allowlist、调用高危 shell。
+- run：在隔离 sandbox 中执行，多次复跑，记录模型输入、工具调用、policy decision、结果证据。
+- finding：把问题归成可读安全 finding，标注影响范围、复现步骤、证据和 owner。
+- regression：把 finding 变成 policy test / eval case，进 CI 或 agent 发布 gate。
+
+AI 压缩的不是“写一份安全报告”。它压缩的是“从模糊 agent 风险到可复跑安全用例”的周期。
+
+## 为什么现在
+
+- Agent 正在获得真实工具权限。MCP、browser agent、coding agent、ops agent 把模型接进 shell、数据库、浏览器和 SaaS。
+- Skill / MCP 配置开始像软件包一样分发。供应链风险不再只在 npm / pip，也会出现在 agent skills、tool manifests、prompt policies。
+- 企业安全团队会被迫给 agent 上线做准入。没有可复跑 harness，准入只能靠文档评审和人工红队，速度跟不上业务。
+- Benchmark 信号变强。Cisco、Tencent、Claw-Eval 这类公开项目说明市场正在从“agent 很危险”走向“agent 风险如何标准化测量”。
+- 修复链路已经可做。一次 finding 可以变成规则、policy test、secure coding guide、tool allowlist 和后续 regression gate。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+公司准备上线内部 agent，安全负责人要一个能交代的准入结果：它能访问什么、哪里会越权、哪里会泄密、哪些攻击场景已经测过。
+
+**为什么留：**
+
+每次新增工具、模型、skill、prompt、SaaS scope，都要重新跑评测。留存来自“agent 发布前必跑”，不是看一次 dashboard。
+
+**为什么传播：**
+
+可传播单元不是风险白皮书，而是一张安全 receipt：
+
+```md
+Agent security run: ops-agent-v12
+Tools tested: shell, postgres, jira, slack
+Findings: 2 high, 3 medium
+Blocked: secret exfiltration via tool output
+Generated regression: policy_tests/no_db_write_without_ticket.yaml
+Status: release blocked until high findings fixed
+```
+
+工程负责人、安全负责人、平台团队都看得懂。
+
+**谁付费：**
+
+AI platform team、安全团队、DevSecOps、合规要求强的金融 / 医疗 / 企业软件公司。付费点是私有部署、CI 集成、finding workflow、policy packs、红队场景库、审计导出、团队权限和模型 / 工具版本对比。
+
+## MVP 实验
+
+### 7 天 MVP
+
+做一个本地 CLI，只支持 MCP / coding agent 配置：
+
+```bash
+agentsec inventory --repo . --out agentsec/inventory.json
+agentsec test agentsec/inventory.json --pack secrets-and-db-write
+agentsec report runs/2026-05-16 --format md
+```
+
+输入：
+
+- MCP server 配置
+- tool schema
+- skill / command 文件
+- 允许访问的环境变量摘要
+- 一组手写业务流程 prompt
+
+输出：
+
+- `findings.md`
+- `replay.jsonl`
+- `policy_tests/*.yaml`
+- `release_receipt.md`
+
+第一版只验证三类风险：secret 读取、越权写操作、tool output 注入。
+
+### 30 天验证
+
+- 找 8 个正在用 Claude Code / Cursor / Codex / 自建 MCP 的团队。
+- 每队接入 3 个真实工具：repo、数据库、工单或 Slack。
+- 让 harness 跑 20 个安全场景。
+- 记录发现的真实配置问题、误报、复跑稳定性和修复后 regression 是否有效。
+
+## 可验证指标
+
+- 每个 agent 系统首次 inventory 的耗时。
+- 每 20 个场景发现的有效高危 / 中危 finding 数。
+- finding 最小复现的成功率。
+- 修复后 regression case 的复跑通过率。
+- 误报率和人工 triage 时间。
+- 新增 tool / skill 后重新评测的耗时。
+- 安全团队是否愿意把它放进 agent 发布 gate。
+
+## 商业化路径
+
+1. **开源本地扫描 + 测试 CLI。** 先赢开发者和安全工程师信任。
+2. **团队版 policy packs。** 针对 MCP、coding agent、browser agent、ops agent 提供默认测试包。
+3. **CI / PR gate。** 配合 GitHub Actions、GitLab CI、Buildkite，在 agent 配置变化时自动跑。
+4. **私有部署控制台。** 管 finding、owner、复测、审计、模型版本、工具版本和豁免记录。
+5. **行业合规模板。** 金融、医疗、政企场景会为审计报告和留痕付费。
+
+## 反例 / 风险
+
+1. **容易变成泛安全平台。** 如果什么都测，早期会死在集成复杂度里。必须先切 MCP / coding / ops agent 的工具权限。
+2. **双用途风险。** 攻击场景要限制在授权环境、sandbox 和防御测试里，不能做成攻击自动化工具。
+3. **误报会伤信任。** 安全团队能忍慢，不能忍乱报。finding 必须有复现证据。
+4. **平台会内置一部分。** Cursor、GitHub、Anthropic、OpenAI、云厂商都可能加基础安全检查。创业公司要赢在跨平台、私有化、policy pack 和审计工作流。
+5. **标准还没稳。** MCP、agent trace、skill 格式都在变，适配层会很脏。
+6. **没有真实权限就测不出真风险。** Demo 环境容易好看，真实价值必须接近生产权限模型。
+
+## 创业判断
+
+这个方向值得看，因为 agent 安全不是“买一个扫描器”能解决的问题。
+
+Agent 的风险来自执行链路。好的产品也必须围绕执行链路长出来：inventory、scenario、run、finding、regression、release gate。
+
+早期最强切口是“agent 发布前安全评测 harness”。只要它能把一次人工红队从两天压到两小时，并把 finding 变成后续自动回归测试，就有预算理由。
+
+## 来源
+
+- GitHub：Cisco Foundry Security Spec，agentic AI security evaluation specification：[https://github.com/CiscoDevNet/foundry-security-spec](https://github.com/CiscoDevNet/foundry-security-spec)
+- GitHub：Tencent AICGSecEval，repository-level AI-generated code security evaluation benchmark：[https://github.com/Tencent/AICGSecEval](https://github.com/Tencent/AICGSecEval)
+- GitHub：Claw-Eval，300 human-verified autonomous agent tasks / safety / robustness：[https://github.com/claw-eval/claw-eval](https://github.com/claw-eval/claw-eval)
+- HN：Capsule Security analysis of vulnerable AI agent attack surface，2026-05-15：[https://news.ycombinator.com/item?id=48143167](https://news.ycombinator.com/item?id=48143167)
+- Keycard：The Agent Security Stack: Transport, Identity, Policy, Runtime：[https://www.keycard.ai/blog/agent-security-stack/](https://www.keycard.ai/blog/agent-security-stack/)

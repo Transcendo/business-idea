@@ -372,6 +372,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/cybersecurity", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Agentic Security Evaluation Harness", href: "/docs/cybersecurity/agentic-security-evaluation-harness", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "AI SOC Triage Runtime", href: "/docs/cybersecurity/ai-soc-triage-runtime", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Identity Policy Runtime", href: "/docs/cybersecurity/agent-identity-policy-runtime", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Capsule Security", href: "/docs/cybersecurity/capsule-security", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
