@@ -1,0 +1,171 @@
+---
+title: Agent Tool Distribution Layer
+description: AI agent 接工具之后，团队缺的不是更多 MCP demo，而是可安装、可复用、可审计、可回滚的技能与工具分发层。
+created: 2026-05-16
+tags:
+  - developer-tools
+  - ai-agents
+  - mcp
+  - ai-infra
+---
+
+# Agent Tool Distribution Layer
+
+## 一句话判断
+
+AI agent 接工具之后，团队缺的不是更多 MCP demo，而是可安装、可复用、可审计、可回滚的技能与工具分发层。
+
+这不是“再做一个插件市场”。更准确的机会是：把团队里少数高手沉淀出来的 prompts、skills、MCP configs、slash commands、CLI wrappers、权限规则和测试样例，变成一个能分发、升级、验签、审计、回滚的内部包管理系统。
+
+如果 AI coding assistant 变成新工作台，那 agent skills 就会像 npm package、Chrome extension、VS Code extension 一样变成分发对象。区别是：这些包不只读文件，还可能调用 shell、云服务、数据库、浏览器、公司 SaaS。分发问题和安全问题会绑在一起爆。
+
+## 赛道 / 产品信号
+
+本轮看到三个信号同时出现。
+
+- Hacker News 上，Sx 的 Show HN 标题就是“open-source package manager for AI skills, MCPs, and commands”。Algolia / HN API 记录显示 32 points、22 条评论。分数不算大，但评论区的痛点很准：有人问能否导入已有 CLI 工具，也有人讨论非技术人员怎样不用 Git 分享 skills。
+- Sx GitHub README 把自己定义成“your team's private npm for AI assets”，覆盖 skills、MCP configs、commands。它的核心叙事不是工具调用本身，而是“最佳 AI 用户的经验卡在个人机器上，团队无法自动传播”。
+- Product Hunt 同期出现 TrustClaw by Composio，定位是“Self-hosted AI agent that connects 1000+ apps on Vercel”。这说明工具连接已经从 demo 进入“部署、集成、控制”的产品叙事。
+- ScyllaDB MCP Server 的文章把 MCP 当成 AI-native developer distribution 的案例。传统文档、SDK、CLI 之外，数据库厂商开始把产品能力包装成 agent 可调用入口。
+- Product Hunt 还出现 Picsart MCP，描述是“一次连接 140+ 图像和视频 AI 模型”。这类横向连接器会继续增加工具面，反过来放大分发、权限和治理需求。
+
+判断：短期内会有大量 MCP server、agent skill、workflow command。真正能收钱的不是“工具列表”，而是团队级分发、权限、版本、审计和效果验证。
+
+## 用户痛点是什么
+
+用户不是缺一个“AI 工具商店”。用户缺的是把有效 agent 工作流安全地交给全队。
+
+典型痛点：
+
+1. **高手经验无法复制。** 团队里有几个人把 Claude Code / Cursor / Codex 配得很好，但配置、命令、MCP、规则散在本机。
+2. **安装成本高。** 一个 skill 往往依赖 CLI、环境变量、MCP config、权限、README、示例命令。普通员工不会照着文档配。
+3. **版本不可控。** prompt、schema、tool config 改了之后，旧工作流可能悄悄坏掉，没有 lockfile、release note、rollback。
+4. **权限边界模糊。** 一个 skill 能不能读 repo、连数据库、发 Slack、改 Jira、调用云命令？现在很多团队靠口头约定。
+5. **效果无法证明。** 管理者不知道某个 skill 到底节省了时间，还是只是在制造漂亮 demo。
+6. **安全团队无法接受黑盒分发。** agent tool package 可能带来 secret 泄露、越权调用、供应链污染和审计缺口。
+
+## AI-native wedge
+
+最小 wedge：
+
+**团队上传一个 agent skill / MCP config / command；系统返回可安装包、权限声明、测试样例、版本锁、使用说明、审计 receipt，并能一键推送给指定 agent 客户端。**
+
+第一版不要做公网大市场。做团队私有分发层：
+
+- Package：skills、MCP configs、commands、prompt templates、shell wrappers、examples。
+- Manifest：能力描述、依赖、权限、输入输出 schema、支持的 agent 客户端。
+- Install：本地 CLI 一键安装到 Claude Code、Cursor、Codex CLI、Hermes、OpenCode 等目录。
+- Policy：声明可读路径、可写路径、网络域名、需要人工确认的动作。
+- Test：每个 package 带 3 到 5 个 smoke tests，安装后先跑再启用。
+- Audit：每次调用记录版本、参数摘要、结果、失败原因和人工确认。
+- Rollback：出问题时回到上一版，不让坏 skill 全队扩散。
+
+AI 压缩的不是“下载文件”这一步，而是把一段非结构化的个人 AI 使用经验，压成可分发、可验证、可审计的团队资产。
+
+## 为什么现在
+
+- MCP 把工具调用接口标准化，工具数量会快速膨胀。接口越统一，分发层越有价值。
+- AI coding assistant 进入团队环境后，个人配置差异会放大生产力差距。
+- 供应链风险从 npm / pip / VS Code extension 扩展到 agent skill。agent package 的风险更高，因为它可能直接触发真实动作。
+- 企业开始要求 agent 的权限、日志、身份和审批。光有 README 不够。
+- Product Hunt、HN、GitHub 同期出现 package manager、self-hosted agent connector、MCP server 案例，说明 builder 已经在同一问题附近打转。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+团队里已经有人在用 AI agent 干活，但成果无法复制。负责人想把“某个高手的配置”变成全队默认能力。
+
+**为什么留：**
+一旦 packages 接入团队日常，它会像内部 npm registry 或 MDM profile 一样成为基础设施。版本、权限、审计、测试和回滚会持续产生价值。
+
+**为什么传播：**
+传播单元不是产品首页，而是 package receipt：
+
+- `本周 37 人安装 code-review-skill v1.4，节省 92 次人工检查，失败 6 次，已回滚 1 次。`
+- `finance-analysis-skill 申请读取 Google Drive 和生成报告，不允许发邮件，审批通过后推送给财务组。`
+- `mcp-postgres-helper v0.8 因 schema mismatch 测试失败，没有进入默认频道。`
+
+这种卡片会被转进工程群、安全群、AI adoption 群。
+
+**谁付费：**
+早期付费方是 AI-heavy engineering team、AI transformation team、咨询 / agency、内部工具团队、安全合规团队。收费可以按 seat、私有 registry、审计日志、策略引擎、SSO、私有部署、package signing、企业 agent 客户端适配来收。
+
+## MVP 实验
+
+### 7 天 MVP
+
+只支持三个对象：
+
+1. Claude Code / Codex CLI slash command。
+2. MCP server config。
+3. 一个带 README 的 prompt skill。
+
+输入：一个 Git repo 或本地文件夹，里面有 command、config、示例和说明。
+
+输出：
+
+- `agent-package.yaml` manifest。
+- 一键安装命令。
+- 权限声明。
+- 3 个 smoke tests。
+- 安装 receipt。
+- 回滚命令。
+
+第一批不要做 UI。CLI + 本地 web report 足够。
+
+### 30 天验证
+
+找 5 个正在使用 AI coding agent 的小团队，每个团队选 3 个真实 workflow：代码审查、数据库 migration 检查、PR 摘要、客服工单查询、销售邮件草稿都行。
+
+验证流程：
+
+- 让团队原本的高手把 workflow 交给系统打包。
+- 让 5 到 10 个普通成员安装。
+- 比较安装耗时、首次成功率、失败原因、7 天留存。
+- 记录每个 package 是否被修改、回滚、禁用。
+- 让安全或 team lead 审查权限声明是否足够清楚。
+
+## 可验证指标
+
+- 从本地散乱 skill 到可安装 package 的时间。
+- 非技术用户安装成功率。
+- package 首次运行成功率。
+- 7 天后仍在使用的 packages 数。
+- package 更新后回归测试通过率。
+- 因权限声明被拦截的高危动作次数。
+- 团队是否愿意把第二个 / 第三个 workflow 放进 registry。
+- 管理者是否愿意为审计和私有部署付费。
+
+## 商业化路径
+
+1. **开源 CLI。** 先用本地 package manager 获取开发者信任。
+2. **团队私有 registry。** 管 versions、channels、approval、package signing。
+3. **Agent 客户端适配。** Claude Code、Cursor、Codex CLI、Hermes、VS Code、OpenCode。
+4. **策略与审计。** 权限声明、调用日志、敏感动作审批、secret scanner。
+5. **企业分发。** SSO、SCIM、设备策略、私有部署、central admin。
+6. **Package quality layer。** smoke tests、usage analytics、失败聚类、推荐下线。
+
+## 反例 / 风险
+
+1. **大厂客户端可能内置。** Cursor、Claude Code、OpenAI、GitHub Copilot 都可能做自己的 skill registry。独立产品要做跨客户端和企业治理。
+2. **公网市场容易变成垃圾场。** agent skills 比普通插件更危险。早期应该做私有 registry，不要先追求开放市场。
+3. **安全责任重。** 一旦 package 能调用 shell、数据库、SaaS，供应链污染和越权会很麻烦。
+4. **工具标准还在变。** MCP、A2A、agent client config 都可能变。产品要做薄适配层，别被某个格式绑死。
+5. **ROI 可能被质疑。** 如果只是同步配置，价值太薄。必须把测试、权限、审计、回滚一起卖。
+6. **非技术用户不一定想碰。** “不用 Git 分享 skills”的需求真实，但产品体验必须像安装公司模板，不像维护开源包。
+
+## 来源
+
+- HN：Show HN: Sx – an open-source package manager for AI skills, MCPs, and commands，HN API 记录 32 points / 22 comments：[https://news.ycombinator.com/item?id=48151058](https://news.ycombinator.com/item?id=48151058)
+- GitHub：sleuth-io/sx，README 定义为 team private npm for AI assets，覆盖 skills、MCP configs、commands：[https://github.com/sleuth-io/sx](https://github.com/sleuth-io/sx)
+- Product Hunt：TrustClaw by Composio，self-hosted AI agent that connects 1000+ apps on Vercel：[https://www.producthunt.com/products/composio](https://www.producthunt.com/products/composio)
+- DevExp：ScyllaDB MCP Server: What AI-Native Developer Distribution Looks Like：[https://www.devexp.ai/blog/scylladb-mcp-server-case-study.html](https://www.devexp.ai/blog/scylladb-mcp-server-case-study.html)
+- Product Hunt：Picsart MCP，one connection for 140+ AI models for images and video：[https://www.producthunt.com/products/picsart](https://www.producthunt.com/products/picsart)
+
+## 后续跟踪点
+
+- Sx 是否从个人开发者工具变成团队默认 registry。
+- Composio / TrustClaw 这类连接器是否把权限、审计和分发做成付费层。
+- MCP server 是否开始要求 signing、manifest、permission review。
+- Claude Code / Cursor / Codex 是否推出官方 skill marketplace。
+- 企业是否会把 agent package 纳入安全审批，而不是让员工自由安装。

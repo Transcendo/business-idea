@@ -181,6 +181,7 @@ export const contents: Content[] = [
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-16", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Agent Tool Distribution Layer", href: "/docs/developer-tools/agent-tool-distribution-layer", icon: () => <Boxes className="w-4 h-4 text-current" /> },
 			{ title: "Mobile GUI Agent Runtime", href: "/docs/ai-agents/mobile-gui-agent-runtime", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Local LLM Hardware Fit Layer", href: "/docs/ai-hardware/local-llm-hardware-fit-layer", icon: () => <Boxes className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-15", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
@@ -330,6 +331,7 @@ export const contents: Content[] = [
 			{ title: "Agent Structural Memory Layer", href: "/docs/developer-tools/agent-structural-memory-layer", icon: () => <BrainCircuit className="w-4 h-4 text-current" /> },
 			{ title: "Agent Context Sandbox Layer", href: "/docs/developer-tools/agent-context-sandbox-layer", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Tiny Tool-Calling Router", href: "/docs/developer-tools/tiny-tool-calling-router", icon: () => <Zap className="w-4 h-4 text-current" /> },
+			{ title: "Agent Tool Distribution Layer", href: "/docs/developer-tools/agent-tool-distribution-layer", icon: () => <Boxes className="w-4 h-4 text-current" /> },
 			{ title: "Firecrawl", href: "/docs/developer-tools/firecrawl", icon: () => <Globe className="w-4 h-4 text-current" /> },
 			{ title: "AgentMail", href: "/docs/developer-tools/agentmail", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Qodo", href: "/docs/developer-tools/qodo", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },

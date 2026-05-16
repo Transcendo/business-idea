@@ -12,6 +12,7 @@
     "agent-structural-memory-layer",
     "agent-context-sandbox-layer",
     "tiny-tool-calling-router",
+    "agent-tool-distribution-layer",
     "firecrawl",
     "agentmail",
     "qodo",
