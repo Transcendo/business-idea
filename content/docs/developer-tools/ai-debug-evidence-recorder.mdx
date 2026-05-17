@@ -1,0 +1,147 @@
+---
+title: AI Debug Evidence Recorder
+description: AI 编程工具真正缺的不是又一个自动修 bug 按钮，而是把屏幕、控制台、网络、错误、复现步骤和人工标注压成 agent 可读、工程师可审查的调试证据包。
+created: 2026-05-17
+tags:
+  - ai-coding
+  - developer-tools
+  - debugging
+  - workflow-automation
+  - ai-agents
+---
+# AI Debug Evidence Recorder
+
+## 一句话判断
+
+AI 编程工具真正缺的不是又一个“自动修 bug”按钮，而是把屏幕、控制台、网络、错误、复现步骤和人工标注压成 agent 可读、工程师可审查的调试证据包。
+
+这个方向比“屏幕录制工具”更窄，也更有商业味：它卖的不是视频，而是**可复现的 debug receipt**。
+
+## 赛道 / 产品信号
+
+这轮信号来自三个方向：
+
+- Product Hunt 上的 [DevRecorder](https://www.producthunt.com/products/devrecorder) 把自己定位成 “Screen recorder with console, network, errors & annotations”。这说明开发者录屏不再只服务异步沟通，而是在往 bug 证据采集走。
+- HN 上的 [Sinain](https://news.ycombinator.com/item?id=48127505) 走得更 ambient：后台捕获 screen / audio，把事实、实体、决策沉淀成本地知识图谱，并通过 MCP 给 agent 读取。
+- GitHub 上的 [Screeder](https://github.com/jkbx1/Screeder) 虽然还很早，但 README 元数据已经把 screen recording、AI summaries、Mux 视频托管和开发者 fallback architecture 放到同一个产品里。
+
+这些不是一个大爆款信号，但它们指向同一个痛点：**AI coding agent 越强，越需要高质量、低摩擦、可回放的故障现场。**
+
+## 用户痛点是什么
+
+真实 bug 协作里，最浪费时间的不是“不会写代码”，而是信息残缺：
+
+- 用户只说“按钮点了没反应”，没有控制台错误。
+- QA 录了视频，但没有 network request、response、状态码、payload。
+- 开发者拿到 issue 后还要追问浏览器版本、账号状态、步骤、环境变量、feature flag。
+- AI coding agent 拿到一句自然语言 bug 描述，会开始猜，猜错就烧 token、改错文件、制造新 bug。
+- 客服、产品、QA 和工程师之间反复搬运上下文，没人有完整现场。
+
+传统 bug report 表单太重，普通录屏又太薄。这里的机会是：让用户像录 Loom 一样轻，但输出像 Sentry + HAR + replay + issue template 的合体。
+
+## AI-native wedge
+
+最小 wedge：
+
+> 用户点击“录制 bug”，产品自动采集屏幕、console、network、DOM 状态、用户操作步骤、错误堆栈和人工语音/文字标注；结束后生成一个 agent-ready debug packet，直接投递给 Cursor、Claude Code、GitHub Issue、Linear 或 Jira。
+
+这不是泛泛的 AI 总结。AI 要做三件具体事：
+
+1. **压缩现场**：从 5 分钟录屏、几十条 console、上百个请求里提取真正相关的 3-8 个证据。
+2. **补齐复现**：根据点击轨迹和页面状态生成可执行步骤，提示用户补问缺失条件。
+3. **转成可执行任务**：输出给 coding agent 的修复提示、相关文件猜测、验证命令和回归测试建议。
+
+如果只生成一段“这段视频讲了什么”，价值很低。真正的产品应该生成：
+
+- bug summary
+- repro steps
+- evidence timeline
+- console/network excerpts
+- suspected root cause
+- affected environment
+- agent prompt
+- human review checklist
+- replay / video link
+
+## AI 是否真的压缩任务
+
+这方向 AI 有用，因为它压缩的是“现场还原”任务，不是替用户装聪明。
+
+没有 AI 时，bug 证据采集会变成多人来回问答：QA 补截图，产品补步骤，工程师追日志，用户重录。AI 可以把这些散片在录制结束的 30 秒内整理成可行动的证据包。
+
+但边界也很清楚：AI 不应该直接断言根因，更不应该自动改代码。早期最稳的定位是**证据整理 + 修复入口**，不是全自动 debug 神棍。
+
+## 为什么现在
+
+几个变化叠在一起：
+
+- Coding agent 正在从“写一段代码”进入“修真实产品 bug”，输入质量开始决定输出质量。
+- 远程团队、异步协作、用户反馈通道越来越多，bug 现场被切碎在录屏、Slack、Linear、Sentry、日志和客服系统里。
+- 浏览器、桌面和本地 agent runtime 正在成熟，MCP 让“把证据交给 agent”变成自然动作。
+- 开发者已经被 Loom、Sentry Session Replay、LogRocket、Chrome DevTools 教育过，理解“复现现场”的价值，但还缺一个给 AI coding agent 设计的轻量入口。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：** 一个 bug 卡住了，用户不想写长 issue，开发者不想继续猜。录一次就能把现场交出去。
+
+**为什么留：** 每次修复都会留下可搜索的 debug receipt。团队越用，历史 bug、复现步骤、常见根因和回归测试建议越值钱。
+
+**为什么传播：** 最适合传播的不是产品主页，而是一张“bug evidence card”：30 秒视频 + 关键错误 + 复现步骤 + agent 修复提示。工程师会把这种卡片转发到 Linear、GitHub、Slack 和客户群。
+
+**为什么付费：** 免费层可以按录制次数走。付费点在团队证据库、私有存储、源码映射、Sentry/Datadog/Linear/GitHub 集成、敏感字段脱敏、agent handoff、保留期和权限审计。
+
+## MVP 实验
+
+不要一上来做完整 session replay 平台。MVP 可以很小：
+
+1. 做一个 Chrome extension 或 Electron 小工具。
+2. 采集屏幕录制、console log、network metadata、错误堆栈、URL、浏览器版本和用户点击时间线。
+3. 录制结束后让用户补一句“我期待什么、实际发生什么”。
+4. 调用模型生成 debug packet。
+5. 一键复制到 GitHub Issue / Linear，或生成 Cursor / Claude Code 可用的 prompt。
+6. 对 5-10 个真实开发团队测试：同一个 bug，用普通文字 issue 和 debug packet 分别交给 coding agent，看修复成功率、追问次数和总耗时。
+
+关键不是录屏画质，而是证据结构。
+
+## 商业化路径
+
+最自然的买单方不是个人开发者，而是这些团队：
+
+- 小 SaaS 团队：客服、产品、工程混在一起，bug 沟通成本高。
+- 外包 / agency：客户反馈不清楚，返工多。
+- AI coding-heavy 团队：大量 bug 交给 agent，需要更干净的输入。
+- 浏览器插件、前端复杂产品、B2B dashboard：UI 状态和网络请求复杂，文字 issue 很难讲清。
+
+定价可以按 seat + 存储 + 集成走。更强的企业版卖私有部署、敏感字段脱敏、权限、审计和保留策略。
+
+## 反例 / 风险
+
+1. **会被 Loom / Sentry / LogRocket / Linear 吸进去。** 大平台都能加 AI summary。小团队必须从 agent-ready debug packet 切入，而不是做通用录屏。
+2. **隐私和合规很麻烦。** 屏幕、请求、cookie、token、客户数据都可能被录进去。脱敏、黑名单域名、字段屏蔽和本地处理不是可选项。
+3. **AI 根因判断容易胡说。** 产品应该把 AI 输出标成“假设”，并保留原始证据。不能让工程师盲信模型。
+4. **录制摩擦会杀死使用。** 如果用户要配置一堆权限、填很多字段，普通 issue 又赢了。
+5. **弱 bug 不值得录。** 这个产品更适合复杂复现、前端状态、客户现场和 agent handoff，不适合所有 issue。
+
+## 可验证指标
+
+- 录制到生成 debug packet 的时间是否小于 60 秒。
+- 工程师追问次数是否下降 50% 以上。
+- Coding agent 首轮修复成功率是否高于普通 issue 输入。
+- 同类 bug 的复现时间是否下降。
+- debug packet 被转发到 GitHub / Linear / Slack 的比例。
+- 团队是否愿意保留历史证据库，而不是只当一次性录屏。
+
+## 来源
+
+- Product Hunt: [DevRecorder](https://www.producthunt.com/products/devrecorder) — “Screen recorder with console, network, errors & annotations”。
+- Hacker News: [Show HN: Sinain captures screen and audio in KG, shares it with agents/peers](https://news.ycombinator.com/item?id=48127505)。
+- Sinain official page: [Context OS for builders](https://anthillnet.github.io/sinain-hud/) — screen/audio to local knowledge graph, MCP access, HUD, peer sharing。
+- GitHub: [jkbx1/Screeder](https://github.com/jkbx1/Screeder) — browser-based screen recorder with AI summaries and video hosting。
+
+## 后续跟踪点
+
+- DevRecorder 是否公开更完整的功能和定价，尤其是 console/network/error 的结构化程度。
+- Sinain 这类 ambient context OS 是否真的能进入日常开发，而不是停在个人知识管理 demo。
+- Sentry / LogRocket / Linear / GitHub 是否快速补 AI bug packet 功能。
+- Coding agent 平台是否原生接收 debug receipt 格式。
+- 团队是否把它用于客户反馈，而不是只用于内部 QA。

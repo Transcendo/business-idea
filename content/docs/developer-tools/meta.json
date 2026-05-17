@@ -11,6 +11,7 @@
     "agent-session-supervision-layer",
     "agent-structural-memory-layer",
     "agent-context-sandbox-layer",
+    "ai-debug-evidence-recorder",
     "tiny-tool-calling-router",
     "agent-tool-distribution-layer",
     "firecrawl",
