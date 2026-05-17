@@ -181,6 +181,7 @@ export const contents: Content[] = [
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-17", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Agent-Native API Payment", href: "/docs/fintech/agent-native-api-payment-layer", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Computer-Use Agent Sandbox", href: "/docs/ai-agents/computer-use-agent-sandbox-runtime", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Agentic Commerce Discovery", href: "/docs/consumer-ai/agentic-commerce-product-discovery", icon: () => <Search className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-16", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
@@ -392,7 +393,10 @@ export const contents: Content[] = [
 				<Activity />
 			</ModuleLogo>
 		),
-		list: [{ title: "概览", href: "/docs/fintech", icon: () => <Book className="w-4 h-4 text-current" /> }],
+		list: [
+			{ title: "概览", href: "/docs/fintech", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Agent-Native API Payment", href: "/docs/fintech/agent-native-api-payment-layer", icon: () => <Activity className="w-4 h-4 text-current" /> },
+		],
 	},
 	{
 		title: "医疗健康",
