@@ -180,6 +180,8 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "2026-05-17", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Agentic Commerce Discovery", href: "/docs/consumer-ai/agentic-commerce-product-discovery", icon: () => <Search className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-16", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "AI SOC Triage Runtime", href: "/docs/cybersecurity/ai-soc-triage-runtime", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Tool Distribution Layer", href: "/docs/developer-tools/agent-tool-distribution-layer", icon: () => <Boxes className="w-4 h-4 text-current" /> },
@@ -251,6 +253,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/consumer-ai", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Agentic Commerce Discovery", href: "/docs/consumer-ai/agentic-commerce-product-discovery", icon: () => <Search className="w-4 h-4 text-current" /> },
 			{ title: "Perplexity", href: "/docs/consumer-ai/perplexity", icon: () => <Search className="w-4 h-4 text-current" /> },
 		],
 	},
