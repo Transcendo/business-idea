@@ -181,6 +181,7 @@ export const contents: Content[] = [
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-17", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Computer-Use Agent Sandbox", href: "/docs/ai-agents/computer-use-agent-sandbox-runtime", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Agentic Commerce Discovery", href: "/docs/consumer-ai/agentic-commerce-product-discovery", icon: () => <Search className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-16", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "AI SOC Triage Runtime", href: "/docs/cybersecurity/ai-soc-triage-runtime", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
@@ -306,6 +307,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/ai-agents", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Computer-Use Agent Sandbox Runtime", href: "/docs/ai-agents/computer-use-agent-sandbox-runtime", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Mobile GUI Agent Runtime", href: "/docs/ai-agents/mobile-gui-agent-runtime", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Realtime Voice Agent Runtime", href: "/docs/ai-agents/realtime-voice-agent-runtime", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "Browser Agent Execution Harness", href: "/docs/ai-agents/browser-agent-execution-harness", icon: () => <Globe className="w-4 h-4 text-current" /> },

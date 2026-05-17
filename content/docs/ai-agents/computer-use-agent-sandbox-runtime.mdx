@@ -1,0 +1,173 @@
+---
+title: Computer-Use Agent Sandbox Runtime
+description: Computer-use agent 的机会不是再做一个会点屏幕的助手，而是把完整桌面、浏览器、终端、文件、登录态、轨迹监控和人工接管封成安全可复跑的任务运行时。
+created: 2026-05-17
+tags:
+  - ai-agents
+  - computer-use
+  - workflow-automation
+  - ai-infrastructure
+---
+
+# Computer-Use Agent Sandbox Runtime
+
+## 一句话判断
+
+Computer-use agent 的机会不是再做一个会点屏幕的助手，而是把完整桌面、浏览器、终端、文件、登录态、轨迹监控和人工接管封成安全可复跑的任务运行时。
+
+浏览器 agent 和手机 GUI agent 已经分别有切口。更大的新缺口是“整台电脑级别”的执行环境：agent 既能看屏幕，也能操作浏览器、终端、桌面 App、文件系统和开发工具。能力越完整，风险也越完整。创业机会会长在 sandbox、回放、评测、权限、人工接管和失败诊断上。
+
+## 赛道 / 产品信号
+
+本轮信号很集中：computer-use agent 正从模型能力演示，进入运行时和评测基础设施。
+
+- Cua 的 GitHub 描述直接写“Open-source infrastructure for Computer-Use Agents”，覆盖 macOS、Linux、Windows 的 sandbox、SDK、benchmark。2026-05-17 查询时有 16,848 stars，说明开发者不是只想看 demo，而是在找可搭建、可训练、可评测的基础设施。
+- Open Computer Use 把 browser automation、terminal access、desktop control、multi-agent orchestration 放在同一层，并自称 OSWorld 82%。不管这个数字最终含金量如何，项目定位已经指向“整机自动化”，不是单网页脚本。
+- Agent-S 把目标写成“Use Computer Like a Human”，并强调 OSWorld 分数。GUI agent 的竞争焦点已经从能否点击，转向能否跨应用、跨任务、跨状态稳定完成。
+- arXiv 在 2026-05-12 到 2026-05-14 连续出现 computer-use / GUI agent 论文：Video2GUI 做交互轨迹合成，ProjGuard 做 computer-use agent 行为轨迹安全监控，Covering Human Action Space 讨论复杂低频 GUI 操作导致失败，Holistic Evaluation and Failure Diagnosis 讨论长 trace 的失败定位。
+- Product Hunt feed 里出现 Standboy 这种“agent 工作时唤醒的实体玩具”。它本身不是强商业信号，但说明用户开始接受 agent 在后台替你跑任务这件事，并需要一个可见状态物来理解“它正在干活”。
+
+判断：这个方向热，不是因为“AI 会用电脑”听起来酷，而是因为真实工作流往往跨网页、App、终端、文件和账号。API 化覆盖不了，纯浏览器 agent 又太窄。
+
+## 用户痛点是什么
+
+用户不是想看 AI 随机移动鼠标。痛点是：
+
+1. **真实任务跨应用。** 运营查数据可能要打开网页后台、下载 CSV、用表格处理、发到 Slack。开发者任务可能要看 issue、改代码、跑命令、读日志、开浏览器验证。
+2. **传统自动化太脆。** Playwright 管网页，shell 脚本管命令，RPA 管桌面，但真实流程经常夹杂模糊判断、临时弹窗、错误恢复和人工确认。
+3. **全权限很吓人。** 整机 agent 能读文件、敲命令、点支付、发消息、改生产环境。没有 sandbox 和权限边界，用户不敢让它常驻。
+4. **失败不可复盘。** Agent 没完成任务时，用户需要知道它看到什么、点了哪里、运行了什么命令、哪一步判断错了，而不是一句“任务失败”。
+5. **成功一次没价值。** 用户要的是可复跑 workflow。今天跑通一次，明天页面变化、文件路径变化、登录态过期，就可能全断。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户给一个跨应用任务；系统在隔离电脑环境里执行，输出可回放的 run card、权限记录、失败诊断、人工接管入口和下一次可复跑 workflow。**
+
+第一版不要做“万能电脑助手”。只做 computer-use sandbox runtime：
+
+- 环境层：云桌面、本地虚拟机或隔离容器，支持浏览器、终端、文件系统、常用桌面 App。
+- 观察层：截图、accessibility tree、窗口状态、文件变更、命令输出、网络 / 外部调用摘要。
+- 执行层：鼠标、键盘、shell、浏览器、文件读写，按任务模板限制可用动作。
+- 权限层：敏感目录只读、外部域名 allowlist、支付 / 删除 / 发送消息暂停确认。
+- 接管层：登录、2FA、验证码、权限弹窗、不可逆操作，交给人处理后继续。
+- 回放层：每次 run 输出截图时间线、命令日志、文件 diff、失败步骤和修复建议。
+- 评测层：成功流程转成 regression case，模型或页面变化后自动重跑。
+
+AI 压缩的不是“点击按钮”。它压缩的是把一个模糊电脑任务变成可执行、可审核、可复跑资产的时间。
+
+## 为什么现在
+
+- 多模态模型能读屏幕、理解 UI 状态，GUI agent 不再只是坐标脚本。
+- Coding agent 和 browser agent 已经让用户习惯“AI 能替我操作工具”。下一步自然是跨应用执行。
+- Cua、Open Computer Use、Agent-S 这类开源项目把 full-desktop control、sandbox、benchmark 和 SDK 推到开发者面前。
+- 评测论文开始密集出现。Video2GUI、ProjGuard、Human Action Space、Holistic Evaluation 都在补同一块短板：数据、评测、安全监控、失败诊断。
+- 企业不缺“再给 AI 一个账号”的勇气，缺的是能解释、能限制、能回放、能交责的运行时。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+用户有一个跨应用重复流程，API 不全，脚本太脆，人工太烦。比如每周财务对账、竞品巡检、数据下载清洗、QA 回归、客服查单、开发任务验证。
+
+**为什么留：**
+workflow 一旦跑起来，每天或每周都要跑。留存来自登录态、接管、失败修复、回归测试和审计记录，不是一次性自动化炫技。
+
+**为什么传播：**
+可传播单元是 run card：
+
+```md
+Computer-use run: weekly-ops-report
+Apps touched: Chrome, Numbers, terminal, Slack
+Steps: 42
+Human handoff: 1 login confirmation
+Files changed: report-2026-05-17.csv, summary.md
+Status: succeeded with 2 warnings
+Replay: screenshots + command log + diff
+```
+
+这种卡片能发到 Slack、飞书、GitHub issue、运营群。它比“我们有电脑 agent”具体得多。
+
+**谁付费：**
+早期是 AI-native agency、运营团队、QA 团队、开发者团队、数据团队。后面是企业自动化、BPO、客服运营、财务运营、IT ops。收费可以按 sandbox 分钟、并发桌面、workflow 数、回放存储、团队审计和私有部署来收。
+
+## MVP 实验
+
+### 7 天 MVP
+
+只做 3 类任务，不做万能助手：
+
+1. 网页后台下载数据 → 本地表格处理 → 生成摘要。
+2. GitHub issue → 修改小代码 → 运行测试 → 浏览器验证。
+3. SaaS 后台巡检 → 截图留证 → 发出日报草稿。
+
+输入：任务描述、目标网站 / repo、一次人工登录。
+
+输出：
+
+- 隔离桌面 session。
+- 每一步截图和命令日志。
+- 文件 diff / 下载文件清单。
+- 敏感操作确认点。
+- 失败原因分类。
+- 下次可复跑 workflow。
+
+### 30 天验证
+
+- 找 12 个真实用户，每人只接 1 个每周至少跑 3 次的跨应用流程。
+- 每个流程连续跑 10 次，记录成功率、接管次数、失败修复时间。
+- 人工执行和 agent 执行对比：节省分钟数、错误数、复盘成本。
+- 测用户是否愿意为第二个 workflow 付费，而不是只试一次。
+
+## 可验证指标
+
+- 首个 workflow 从描述到可运行需要多久。
+- 同一 workflow 连续 7 天成功率。
+- 每次失败能定位到具体屏幕 / 命令 / 文件步骤的比例。
+- 人工接管后继续执行成功率。
+- 敏感操作被正确暂停的比例。
+- run card 被转发到团队工具的比例。
+- 用户愿不愿意让它每周自动跑，以及愿不愿意为第二个 workflow 付费。
+
+## 商业化路径
+
+1. **开发者本地版。** 开源 CLI + 本地虚拟机 / macOS background computer-use，先赢信任。
+2. **托管 sandbox。** 提供隔离桌面、浏览器、终端、文件、回放和并发调度。
+3. **垂直 workflow 模板。** 财务对账、QA 回归、数据巡检、销售运营、客服查单。
+4. **团队审计。** SSO、权限策略、run history、文件 diff、敏感动作审批。
+5. **评测和 regression。** 给 agent 团队提供 desktop task benchmark、失败诊断和模型版本对比。
+
+## 反例 / 风险
+
+1. **通用电脑助手会被大厂压。** OpenAI、Anthropic、Google、Apple、Microsoft 都可能做入口。小团队要卖 runtime、sandbox、审计和垂直流程，不要卖“我也能控制电脑”。
+2. **安全半径很大。** 整机权限比浏览器权限危险。没有隔离、最小权限、人工确认和日志，用户不会长期信任。
+3. **维护成本可能高。** 跨应用流程变化更多。必须让失败变成 regression 和修复资产，否则会变成人肉自动化外包。
+4. **评测数字容易虚。** OSWorld 分数、demo 视频、榜单都可能高估真实生产稳定性。MVP 必须用用户自己的流程测。
+5. **合规和隐私敏感。** 桌面里有个人文件、客户数据、聊天记录。默认本地优先、脱敏日志、私有部署会更容易成交。
+6. **Product Hunt 式新奇玩具不是市场证明。** Standboy 这种信号只能说明用户需要 agent 工作状态可视化，不能证明愿意为整机自动化付费。
+
+## 创业判断
+
+这个方向值得看，但不能从“个人电脑助手”切入。那条路太宽、太烧、太容易被系统级入口吃掉。
+
+更好的切口是：**跨应用工作流的安全 sandbox + 可回放 run card + 人工接管 + regression。**
+
+如果一个 MVP 能把每周 30 分钟的跨应用流程压到 5 分钟接管，并且用户愿意让它下周继续跑，它就不是 demo。它开始变成工作流基础设施。
+
+## 来源
+
+- GitHub：Cua，open-source infrastructure for Computer-Use Agents，sandbox / SDK / benchmark：[https://github.com/trycua/cua](https://github.com/trycua/cua)
+- GitHub：Open Computer Use，browser automation / terminal access / desktop control / multi-agent orchestration：[https://github.com/coasty-ai/open-computer-use](https://github.com/coasty-ai/open-computer-use)
+- GitHub：Agent-S，open agentic framework that uses computers like a human：[https://github.com/simular-ai/Agent-S](https://github.com/simular-ai/Agent-S)
+- Product Hunt：Standboy，a Game Boy that wakes up while your agent works：[https://www.producthunt.com/products/standboy](https://www.producthunt.com/products/standboy)
+- arXiv：Video2GUI: Synthesizing Large-Scale Interaction Trajectories for Generalized GUI Agent Pretraining，2026-05-14：[https://arxiv.org/abs/2605.14747](https://arxiv.org/abs/2605.14747)
+- arXiv：ProjGuard: Safety Monitoring for Computer-Use Agents via Low-Dimensional Projections，2026-05-13：[https://arxiv.org/abs/2605.13631](https://arxiv.org/abs/2605.13631)
+- arXiv：Covering Human Action Space for Computer Use: Data Synthesis and Benchmark，2026-05-12：[https://arxiv.org/abs/2605.12501](https://arxiv.org/abs/2605.12501)
+- arXiv：Holistic Evaluation and Failure Diagnosis of AI Agents，2026-05-14：[https://arxiv.org/abs/2605.14865](https://arxiv.org/abs/2605.14865)
+
+## 后续跟踪点
+
+- Cua / Open Computer Use 这类项目是否从开发者试验变成团队 workflow runtime。
+- OSWorld / GUI agent benchmark 分数和真实用户流程成功率之间差多少。
+- 哪类跨应用任务最先付费：运营报表、QA、开发验证、客服查单，还是财务对账。
+- 人工接管和 run card 是否能显著降低用户对整机 agent 的恐惧。

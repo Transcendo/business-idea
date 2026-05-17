@@ -2,6 +2,7 @@
   "title": "AI 智能体",
   "pages": [
     "index",
+    "computer-use-agent-sandbox-runtime",
     "mobile-gui-agent-runtime",
     "realtime-voice-agent-runtime",
     "browser-agent-execution-harness",
