@@ -5,6 +5,7 @@
     "computer-use-agent-sandbox-runtime",
     "mobile-gui-agent-runtime",
     "realtime-voice-agent-runtime",
+    "voice-agent-qa-scorecard",
     "browser-agent-execution-harness",
     "statewright-agent-state-machine-guardrails",
     "agent-traffic-analytics-layer",
