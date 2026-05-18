@@ -1,0 +1,177 @@
+---
+title: Research Agent Citation Verifier
+description: Deep Research 变成主流 agent 应用后，下一层机会不是再写一份更长报告，而是把引用、证据、来源覆盖和结论边界压成可复查的 evidence pack。
+created: 2026-05-18
+tags:
+  - ai-agents
+  - ai-search
+  - research-agents
+  - evaluation
+---
+
+# Research Agent Citation Verifier
+
+## 一句话判断
+
+Deep Research 变成主流 agent 应用后，下一层机会不是再写一份更长报告，而是把引用、证据、来源覆盖和结论边界压成可复查的 evidence pack。
+
+研究型 agent 的用户不缺“像报告的东西”。真正痛的是：报告看起来顺，但引用是否支撑结论、有没有漏掉反例、来源是不是原始材料、哪些话只是模型推断，仍要人自己翻一遍。这个返工如果不被压掉，Deep Research 就只能停在“省一点搜索时间”，很难进入咨询、投研、法务、采购、医学、企业战略这些高信任场景。
+
+## 赛道 / 产品信号
+
+本轮看到几类信号叠在一起：
+
+- Google Gemini Deep Research 官方博客把能力描述为先生成多步 research plan，再分析 web 信息，最后给出带 key findings 和 original sources 链接的 comprehensive report。
+- Google Help 文档已经把 Deep Research 扩到 Google Search、Gmail、Drive、上传文件和 NotebookLM notebooks 等来源，并支持 share / export 到 Docs。这说明研究报告正在从聊天结果变成可分发工作产物。
+- LangChain 的 Open Deep Research README 直接写：Deep research has broken out as one of the most popular agent applications，并强调跨模型、搜索工具和 MCP servers。
+- Open Deep Research GitHub 仓库已有 1.1 万+ stars，且持续更新到 2026-05-17。开源侧已经在把 deep research 当成可组装 agent runtime，而不是单一 App 功能。
+- HN 近两天出现 Perplexity Agent Skills、AI research agent、agent research console 等讨论。热度不只在消费端问答，也在 agent 技能、研究流程和工具化层。
+- Reddit 搜索 JSON 本轮仍被 403；Product Hunt 搜索与产品页本轮也返回 403，未把它们当来源。这个缺口需要后续 slot 用可访问镜像或搜索结果补齐。
+
+判断：Deep Research 的第一波竞争是“谁能搜得多、写得长”；第二波会转向“谁能让用户敢引用、敢转发、敢拿去做决策”。
+
+## 用户痛点是什么
+
+高信任研究任务里，用户最怕这些事：
+
+1. **引用不支撑结论。** 链接是真的，但句子并没有证明报告里的判断。
+2. **来源层级混乱。** 官方文档、二手博客、论坛转述、营销页被混在一起。
+3. **反例被漏掉。** 报告只找支持性材料，没找竞争产品、失败案例、监管风险、反方论文。
+4. **时间范围不清。** 有些结论来自旧版本、旧价格、旧政策，却被写成当前事实。
+5. **人工复查成本高。** 用户要逐段打开链接，判断每句话能不能站住。
+6. **报告无法交接。** 转给老板、客户或同事时，别人不知道哪些判断可信、哪些只是猜测。
+
+真实痛点不是“没有 AI 帮我查资料”。真实痛点是：AI 写完之后，人还要承担全部判断责任。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户上传一份 Deep Research / Gemini / Perplexity / ChatGPT 报告，系统逐条抽取关键结论，检查每条结论是否被引用支撑，标出 unsupported claim、weak source、missing counterexample 和 stale source，并生成可转发的 evidence pack。**
+
+AI 压缩的是“复查报告可信度”的工作流：从读报告、点链接、比对原文、找反例、标注风险，到给出是否可转发 / 可发布 / 可进入决策会的判断。
+
+第一版只做四件事：
+
+- 抽取报告中的 20-50 条关键 claim。
+- 对每条 claim 找对应来源原文，判断 support / partial / unsupported。
+- 自动补 3 类反查：官方源、竞品源、反方或失败案例。
+- 输出一张 evidence pack：可信结论、弱证据结论、禁止外发结论、下一步人工核验问题。
+
+## 为什么现在
+
+- Deep Research 已经被 Google、Perplexity、OpenAI、开源 LangChain 项目推成主流 agent 场景，报告数量会变多。
+- 报告越像正式产物，引用风险越重要。消费搜索可以错一点，高信任工作流不能。
+- Gemini Help 文档把来源扩到 Gmail、Drive、上传文件和 NotebookLM，说明研究 agent 会混合公开源与私有资料；证据边界更难人工追踪。
+- Open Deep Research 这种开源 runtime 让更多团队能搭自己的研究 agent，但 eval 和 source verification 不会自动解决。
+- 企业已经习惯 code review / data lineage / audit trail。研究报告也会需要类似的 claim lineage。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+用户已经在用 Deep Research 写市场扫描、竞品分析、采购比较、论文综述、政策研究，但不敢直接把报告发给老板或客户。
+
+**为什么留：**
+
+只要团队每周都产出研究报告，就需要固定复查。系统一旦变成“外发前检查”，会嵌入研究、咨询、投研、BD、法务和产品战略流程。
+
+**为什么传播：**
+
+可传播单元不是完整报告，而是 evidence card：
+
+```txt
+Research Pack v3
+可直接引用：14 条
+需人工复核：6 条
+不建议外发：3 条
+缺反例：2 个主题
+最强来源：Google 官方文档 / GitHub README / 原始论文
+```
+
+老板、客户、同事不一定读完整报告，但会转发这张卡，因为它回答“这份东西能不能信”。
+
+**谁付费：**
+
+咨询公司、投研团队、企业战略部门、法务/合规研究、B2B 销售情报团队、学术/医学文献团队，以及给企业提供 Deep Research 功能的 AI workspace。付费点是报告复查次数、source crawling、私有资料连接器、团队审阅席位、导出 evidence pack、行业规则模板和审计记录。
+
+## MVP 实验
+
+### 7 天 MVP
+
+只做“AI 创业机会报告复查”。
+
+输入：
+
+- 10 篇用户用 Deep Research / Gemini / Perplexity / ChatGPT 生成的公开主题报告。
+- 每篇报告中的来源链接。
+- 一份 claim 风险规则：事实、估计、观点、推断、建议。
+
+输出：
+
+- claim table：每条判断、对应来源、支撑强度、原文摘录、风险标签。
+- missing evidence：没有来源支撑、来源太弱、时间过旧、只引用营销页。
+- counterexample queue：需要补查的反例方向。
+- export card：是否可外发、哪些段落要删、哪些结论要人工确认。
+
+第一版不需要自己做 research agent。先站在所有 Deep Research 工具后面，当“报告验收层”。
+
+### 30 天验证
+
+- 找 5 个每周写研究报告的人：创业者、咨询顾问、投资分析师、产品经理、行业研究员。
+- 每人提交 5 篇 AI 生成报告。
+- 对比人工复查和系统复查发现 unsupported claim 的数量。
+- 记录用户是否愿意在转发报告前主动跑一次 verifier。
+- 看 evidence card 是否被转发给非直接使用者。
+
+## 可验证指标
+
+- claim 抽取准确率。
+- source-to-claim support 判断与人工一致率。
+- unsupported claim 发现率。
+- stale source / weak source 发现率。
+- 反例补查命中率。
+- 单篇报告复查耗时下降。
+- 用户是否在外发前主动运行。
+- evidence card 被转发次数。
+- 复查后报告修改率。
+
+## 商业化路径
+
+1. **报告复查 SaaS。** 按报告数量、claim 数、source 数收费。
+2. **企业 workspace 插件。** 接入 Google Docs、Notion、Slack、Confluence、Microsoft 365。
+3. **研究 agent 后处理 API。** 给 Deep Research 产品、AI search 产品和企业 agent 平台做 verifier endpoint。
+4. **行业模板。** 投研看财报和公告，法务看法规和判例，医疗看论文和指南，采购看官方文档与 SLA。
+5. **审计记录。** 为外发报告生成可保存的 evidence pack 和 reviewer receipt。
+
+## 反例 / 风险
+
+1. **平台会内置基础引用检查。** Google、Perplexity、OpenAI 可以把 source card 做得更好。独立产品必须做跨平台、私有源、行业规则和团队审阅，不能只做链接检查。
+2. **LLM verifier 也会错。** 判断引用是否支撑结论不能只靠模型自评，需要原文片段、规则、人工抽检和可解释标签。
+3. **爬取来源会撞墙。** 付费墙、动态网页、PDF、登录态、企业私有文档都会增加成本。
+4. **低端用户不付费。** 普通搜索用户可能接受粗糙答案。付费客户必须是“错了有成本”的团队。
+5. **隐私边界硬。** 如果接 Gmail、Drive、企业文档，必须支持最小权限、本地处理或清晰的数据保留策略。
+
+## 创业判断
+
+这个方向不适合做成“更强 Deep Research”。那会和大模型平台正面撞。
+
+更好的切口是“研究报告外发前的证据验收层”。它不和 Google / Perplexity 比谁更会写，而是回答一个更尖的问题：这份 AI 报告里的哪些话能被证据支撑？
+
+如果它能把一篇 20 页报告的人工复查从 2 小时压到 10 分钟，并稳定抓出 unsupported claim 和缺失反例，客户会付费。因为它卖的不是搜索，而是降低误判和丢脸的概率。
+
+## 来源
+
+- Google Blog：Gemini Deep Research 先生成 research plan，再分析 web 信息，最后给出带 key findings 和 original sources 链接的 report：[https://blog.google/products/gemini/google-gemini-deep-research/](https://blog.google/products/gemini/google-gemini-deep-research/)
+- Google Help：Deep Research 可使用 Google Search、Gmail、Drive、上传文件、NotebookLM notebooks，并支持 share / export 到 Docs：[https://support.google.com/gemini/answer/15719111?hl=en](https://support.google.com/gemini/answer/15719111?hl=en)
+- LangChain Open Deep Research README：deep research 是 popular agent application，支持多模型、搜索工具和 MCP servers：[https://github.com/langchain-ai/open_deep_research](https://github.com/langchain-ai/open_deep_research)
+- GitHub API：langchain-ai/open_deep_research 约 11.4k stars，2026-05-17 仍在更新：[https://api.github.com/repos/langchain-ai/open_deep_research](https://api.github.com/repos/langchain-ai/open_deep_research)
+- HN：Designing, Refining, and Maintaining Agent Skills at Perplexity，2026-05-16：[https://news.ycombinator.com/item?id=48159261](https://news.ycombinator.com/item?id=48159261)
+- Perplexity Research：Agent Skills 文章强调 Perplexity 维护跨 technical environments、finance、law、health 等场景的 curated Skills，并把 Skill quality 当作 code quality 一样重视：[https://research.perplexity.ai/articles/designing-refining-and-maintaining-agent-skills-at-perplexity](https://research.perplexity.ai/articles/designing-refining-and-maintaining-agent-skills-at-perplexity)
+
+## 后续跟踪点
+
+- OpenAI / Google / Perplexity 是否会把 claim-level verification 做成内置功能。
+- 哪类用户最愿意为复查付费：咨询、投研、法务、采购、医学还是创业者。
+- 私有资料连接器是否会成为护城河，还是会变成合规负担。
+- evidence card 是否真的会被转发，而不是只被作者自己看一眼。
