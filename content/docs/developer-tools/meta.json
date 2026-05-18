@@ -13,6 +13,7 @@
     "agent-context-sandbox-layer",
     "ai-debug-evidence-recorder",
     "headless-coding-agent-runtime",
+    "spreadsheet-native-ai-data-analyst",
     "tiny-tool-calling-router",
     "agent-tool-distribution-layer",
     "firecrawl",

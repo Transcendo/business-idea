@@ -180,6 +180,8 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "2026-05-18", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Spreadsheet-Native AI Data Analyst", href: "/docs/developer-tools/spreadsheet-native-ai-data-analyst", icon: () => <Database className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-17", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "AI Debug Evidence Recorder", href: "/docs/developer-tools/ai-debug-evidence-recorder", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "Agent-Native API Payment", href: "/docs/fintech/agent-native-api-payment-layer", icon: () => <Activity className="w-4 h-4 text-current" /> },
@@ -340,6 +342,7 @@ export const contents: Content[] = [
 			{ title: "Agent Context Sandbox Layer", href: "/docs/developer-tools/agent-context-sandbox-layer", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "AI Debug Evidence Recorder", href: "/docs/developer-tools/ai-debug-evidence-recorder", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "Headless Coding Agent Runtime", href: "/docs/developer-tools/headless-coding-agent-runtime", icon: () => <Code2 className="w-4 h-4 text-current" /> },
+			{ title: "Spreadsheet-Native AI Data Analyst", href: "/docs/developer-tools/spreadsheet-native-ai-data-analyst", icon: () => <Database className="w-4 h-4 text-current" /> },
 			{ title: "Tiny Tool-Calling Router", href: "/docs/developer-tools/tiny-tool-calling-router", icon: () => <Zap className="w-4 h-4 text-current" /> },
 			{ title: "Agent Tool Distribution Layer", href: "/docs/developer-tools/agent-tool-distribution-layer", icon: () => <Boxes className="w-4 h-4 text-current" /> },
 			{ title: "Firecrawl", href: "/docs/developer-tools/firecrawl", icon: () => <Globe className="w-4 h-4 text-current" /> },

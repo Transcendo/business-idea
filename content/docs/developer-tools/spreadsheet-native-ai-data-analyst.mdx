@@ -1,0 +1,149 @@
+---
+title: Spreadsheet-Native AI Data Analyst
+description: AI 数据分析的新机会不是再做一个聊天式 BI，而是把 spreadsheet 变成可执行、可解释、可分享的 analyst workspace。
+created: 2026-05-18
+tags:
+  - ai-data-analyst
+  - spreadsheet
+  - developer-tools
+  - workflow-automation
+  - ai-agents
+---
+# Spreadsheet-Native AI Data Analyst
+
+## 一句话判断
+
+AI 数据分析的新机会不是再做一个聊天式 BI，而是把 spreadsheet 变成可执行、可解释、可分享的 analyst workspace。
+
+这类产品卖的不是“问数据一个问题”。它卖的是：**把 CSV、数据库、API、公式、图表、解释和复查痕迹放在同一个工作面里，让非专业分析者也能把一次模糊问题推进到可复核结论。**
+
+## 赛道 / 产品信号
+
+这轮信号来自几个方向同时冒头：
+
+- HN 上 Sourcetable 的 Superagents 把定位写得很直接：把 spreadsheet 连接到 database、API 或 MCP server，用自然语言分析 Postgres、Google Analytics、Stripe 等数据源。
+- HN 上 MLJAR Studio 的反馈更像 data analyst 工具：本地 AI data analyst，分析过程保存成 notebooks，不只是输出一段答案。
+- Quadratic 在 Product Hunt 的产品页标题就是 “The AI spreadsheet with code and connections”，官网也强调连接数据、快速理解、可解释和可分享 insight。
+- GitHub 上已经有一批小型 Excel / spreadsheet agent 项目：`sv-excel-agent`、`mcp-excel`、`agentic-spreadsheet`、`agent-calc`。规模不大，但说明 builders 正在把 LLM 接到真实 spreadsheet 操作层，而不是只做聊天框。
+- HN 近期开了多个相关 Show HN：Sourcetable Superagents、MLJAR Studio、zSpreadSheet。它们分别从连接数据源、本地分析、生成 Excel 文件切入，指向同一个缺口：普通团队的数据工作仍然卡在 spreadsheet。
+
+## 用户痛点是什么
+
+数据分析在多数公司不是高级 BI 问题，而是脏工作问题：
+
+- 数据散在 CSV、Excel、Google Sheets、Stripe、GA、Postgres、CRM 和导出的报表里。
+- 业务同学知道想问什么，但不会写 SQL、Python、公式、join、透视表和图表。
+- 分析师能做，但排期慢；一次小问题也要来回解释口径。
+- 聊天式 data agent 给了答案，却很难复查它怎么清洗、怎么计算、有没有漏行。
+- 最后结论还是要回到 spreadsheet、notebook、PPT 或 Slack 里传播。
+
+所以真正痛点不是“缺一个会聊天的 BI”。痛点是从原始表到可信结论之间的中间步骤太多、太脆、太难复查。
+
+## AI-native wedge
+
+最小 wedge：
+
+> 用户上传 CSV / Excel，或连接一个只读数据源；系统在 spreadsheet 里生成清洗步骤、公式、图表、解释和可回放的分析 receipt。用户可以改口径、锁定公式、导出 Excel / notebook / share card。
+
+这个 wedge 要坚持 spreadsheet-native，而不是把 spreadsheet 当附件。
+
+关键产品动作：
+
+1. **读懂表结构**：识别字段含义、日期、金额、ID、枚举、缺失值和异常行。
+2. **生成可见步骤**：每一步清洗、公式、筛选、join、图表都落到表格或 notebook cell，不藏在黑盒回答里。
+3. **让人能改**：用户可以改公式、改口径、锁定单元格、要求重新跑局部步骤。
+4. **输出可分享 artifact**：不是只给聊天答案，而是给可审查的 workbook、notebook、图表卡和结论摘要。
+
+## AI 是否真的压缩任务
+
+压缩得成立，但边界清楚。
+
+AI 能压缩的是“从一堆表到第一版分析”的链路：识别字段、补公式、写 SQL、生成图表、解释异常、产出初稿。过去要分析师花半小时到半天的工作，可以压到几分钟内得到可修改草稿。
+
+AI 压不掉的是业务口径、数据治理、权限、最终责任和复杂因果判断。好产品必须把 AI 输出变成可复核步骤，而不是要求用户相信一段漂亮结论。
+
+## 为什么现在
+
+几个条件叠在一起：
+
+- LLM 已经能稳定生成 SQL、Python、公式和解释性文本。
+- Tool calling / MCP 让 agent 能安全调用数据库、API 和文件工具。
+- 业务团队的数据越来越碎，传统 BI 的建模成本太重。
+- Spreadsheet 仍然是最强的协作界面：财务、运营、增长、销售都愿意在表里工作。
+- 本地运行和 notebook 保存开始被强调，因为企业数据分析天然有隐私和复查压力。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：** 用户手上已经有 Excel、CSV 或数据库导出，但不想等分析师，也不想从零学 SQL / Python / BI 建模。
+
+**为什么留：** 每次分析会留下 workbook、公式、清洗步骤、图表和口径说明。历史文件越多，团队越容易复用同一类分析模板。
+
+**为什么传播：** 最容易传播的是一张 “analysis card”：问题、数据源、关键图表、结论、异常提醒、可复查链接。它会被丢到 Slack、飞书、邮件和周报里。
+
+**为什么付费：** 个人用户可能为更好的 Excel 生成和 CSV 分析付费。真正的钱在团队版：连接数据库 / SaaS 数据源、权限、私有部署、审计日志、模板库、共享 workspace、定时刷新和合规导出。
+
+## MVP 实验
+
+MVP 不要先做完整 BI。
+
+可以这样切：
+
+1. 只支持 CSV / XLSX 上传，加一个只读 Postgres connector。
+2. 只做 5 类高频分析：销售漏斗、留存 cohort、费用异常、库存 / 供应链、广告 ROI。
+3. 输出一个 spreadsheet workbook：原始数据、清洗步骤、计算页、图表页、结论页。
+4. 每一步附上自然语言解释和可复跑 spec。
+5. 找 20 个运营 / 财务 /增长用户，让他们拿真实脱敏表测试。
+6. 对比人工分析耗时、AI 初稿可用率、用户修改次数、最终分享率。
+
+先证明“AI 能把第一版可信分析做出来”，再去做连接器市场和企业权限。
+
+## 商业化路径
+
+比较自然的付费路径：
+
+- **Pro seat**：个人或小团队按月付费，获得更大文件、更高模型额度、更多导出格式。
+- **Team workspace**：共享数据源、模板、权限、评论、定时刷新、历史版本。
+- **Enterprise / private deployment**：接内网数据库、SSO、审计、数据不出域、私有模型。
+- **Vertical templates**：财务、销售、运营、投放、电商、供应链等按模板或工作流收费。
+
+不要一开始卖 “AI BI 平台”。更好的入口是 “把你今天这张脏表变成能交差的分析”。
+
+## 反例 / 风险
+
+1. **Excel / Google Sheets / Microsoft Copilot 会吃掉基础功能。** 纯公式生成、问答和图表建议很容易被平台内置。
+2. **黑盒答案不可信。** 数据分析错一次，用户就会退回人工。必须把步骤和公式摊开。
+3. **连接器会变成脏活。** 每个 SaaS 的字段、权限、分页、口径都不同，维护成本高。
+4. **数据隐私是硬门槛。** 财务、客户、医疗、销售数据不能随便进第三方云端模型。
+5. **用户可能只要一次性工具。** 如果不能沉淀模板、刷新和团队协作，留存会弱。
+6. **复杂统计和因果分析容易过度承诺。** 小团队应先做描述性分析、异常解释和报表生产，不要假装自动做商业决策。
+
+## 可验证指标
+
+- 从上传数据到第一版可用分析的中位时间是否小于 5 分钟。
+- 用户是否愿意把 AI 生成 workbook 分享给同事，而不是重新手工整理。
+- AI 初稿中公式 / SQL / 清洗步骤的人工修正率是否低于 30%。
+- 同一用户 30 天内是否复用模板或重复上传同类数据。
+- 团队是否愿意连接只读数据库，而不是只试上传样表。
+- 用户是否能在 2 分钟内看懂一个结论的计算路径。
+- 错误口径和异常数据是否能被系统主动标出，而不是悄悄生成错结论。
+
+## 来源
+
+- HN: [Show HN: Superagents – connect spreadsheets to any database, API or MCP server](https://news.ycombinator.com/item?id=45186904) — HN API 显示 35 points、13 comments，产品入口指向 Sourcetable Superagents。
+- Sourcetable: [Superagents](https://sourcetable.com/superagents) — 页面描述为 “Connect your spreadsheet to any Database, API or MCP Server”，并强调用 AI / natural language 分析 Postgres、Google Analytics、Stripe 等数据源。
+- HN: [Show HN: Mljar Studio – local AI data analyst that saves analysis as notebooks](https://news.ycombinator.com/item?id=47985077) — HN API 显示 73 points、18 comments。
+- MLJAR: [MLJAR Studio](https://mljar.com/) — 官网描述为 “private AI data lab”，本地探索数据、运行 machine learning experiments、构建 analysis tools。
+- Product Hunt: [Quadratic](https://www.producthunt.com/products/quadratic) — 标题为 “The AI spreadsheet with code and connections”。
+- Quadratic: [The AI Spreadsheet](https://www.quadratichq.com/) — 官网强调连接数据、快速理解、可解释、可分享 insights。
+- GitHub: [SylvianAI/sv-excel-agent](https://github.com/SylvianAI/sv-excel-agent) — Excel AI agent，用 MCP tools 读取、编辑和自动化 Excel spreadsheets。
+- GitHub: [jwadow/mcp-excel](https://github.com/jwadow/mcp-excel) — MCP server for AI agents to analyze Excel spreadsheets through atomic operations。
+- GitHub: [Agent-Tracking-Mech/agentic-spreadsheet](https://github.com/Agent-Tracking-Mech/agentic-spreadsheet) — TypeScript spreadsheet agent library。
+- HN: [Show HN: Create Professional Excel Files with AI Agents](https://news.ycombinator.com/item?id=47936503) 与 [zSpreadSheet](https://zspreadsheet.com) — 指向 Excel 文件生成这个更窄的 wedge。
+
+## 后续跟踪点
+
+- Microsoft Excel / Google Sheets 的原生 AI 是否把基础生成能力吃完。
+- Sourcetable、Quadratic、Rows、Equals 是否继续往 agent / connector / audit trail 方向走。
+- 开源 Excel MCP / spreadsheet agent 项目是否出现标准化操作协议。
+- 企业用户是否更关心本地 notebook、私有部署和审计，而不是聊天体验。
+- 是否能在财务、增长、销售运营这些强表格部门跑出稳定模板复用。
