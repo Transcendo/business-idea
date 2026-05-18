@@ -12,6 +12,7 @@
     "agent-structural-memory-layer",
     "agent-context-sandbox-layer",
     "ai-debug-evidence-recorder",
+    "agent-pr-review-evidence-layer",
     "headless-coding-agent-runtime",
     "spreadsheet-native-ai-data-analyst",
     "tiny-tool-calling-router",

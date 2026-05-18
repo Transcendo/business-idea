@@ -1,0 +1,146 @@
+---
+title: Agent PR Review Evidence Layer
+description: AI coding agent 开始批量开 PR 后，工程团队缺的不是更多自动改代码按钮，而是把 agent 改动压成可审查、可追责、可合并的 PR evidence packet。
+created: 2026-05-18
+tags:
+  - ai-coding
+  - developer-tools
+  - code-review
+  - ai-agents
+  - workflow-automation
+---
+# Agent PR Review Evidence Layer
+
+## 一句话判断
+
+AI coding agent 开始批量开 PR 后，工程团队缺的不是更多自动改代码按钮，而是把 agent 改动压成可审查、可追责、可合并的 PR evidence packet。
+
+真正的机会不是“AI 帮你 review 代码”。这个市场已经挤。更尖的 wedge 是：**让人类能更快判断一个 agent PR 值不值得合并。**
+
+## 赛道 / 产品信号
+
+这轮信号很集中：
+
+- GitHub 官方文档已经把 [Copilot coding agent](https://docs.github.com/en/copilot/using-github-copilot/coding-agent) 放进 issue、pull request、agent session、custom environment 和 enterprise governance 体系。Coding agent 正在从 IDE 里的聊天框进入 GitHub 原生协作流。
+- HN 上 [Launch HN: mrge.io (YC X25) – Cursor for code review](https://news.ycombinator.com/item?id=43692476) 拿到高讨论度。标题本身就说明 code review 正在被重新产品化。
+- HN 上 [Show HN: Code review for AI native teams](https://news.ycombinator.com/item?id=45604177) 对应的 [Bottleneck repo](https://github.com/areibman/bottleneck) 明确写着：面向 background agents、多并发线程、比 GitHub web 更快地 review PR。
+- HN 上 [Show HN: Vdiff – CLI to help you review AI-generated code](https://news.ycombinator.com/item?id=47986749) 和 GitHub 上的 [flamestro/deff](https://github.com/flamestro/deff) 都指向同一件事：AI 生成的 diff 太多，传统 review 入口不够用了。
+- CodeRabbit 的官方页面把自己定位为 [AI code reviews for AI-powered teams](https://www.coderabbit.ai/)，GitHub Marketplace 也有 [CodeRabbit](https://github.com/marketplace/coderabbitai)。这说明 review bot 已经有商业入口，但也留下了“review 结果是否可信、是否可审查”的下一层空位。
+
+这些信号不是说“再做一个 code review bot”。恰恰相反：review bot 越多，团队越需要一个证据层来判断 agent PR。
+
+## 用户痛点是什么
+
+AI coding agent 带来的新痛点不是“不会写代码”，而是 review 压力变形：
+
+- 一个工程师同时收到多个 agent PR，diff 大、上下文薄、动机不清。
+- PR 描述里写“fixed issue”，但没有说明改动路径、测试覆盖、失败尝试和风险区。
+- Agent 会改到无关文件，或者顺手重构，reviewer 要花时间拆出真正的业务改动。
+- CI 绿了不代表逻辑对了，尤其是权限、数据迁移、边界条件、性能和安全影响。
+- 多个 agent 并行时，人类 reviewer 不知道哪个 PR 是安全小修，哪个需要 senior engineer 看。
+- 现有 GitHub review UI 是为人写代码、人审代码设计的，不是为 agent 批量吐 diff 设计的。
+
+这里最浪费的不是敲代码时间，而是**合并前判断成本**。
+
+## AI-native wedge
+
+最小 wedge：
+
+> 每个 agent PR 自动生成一个 review evidence packet：任务来源、意图、diff 分组、关键文件、风险点、测试命令、失败记录、可疑无关改动、人工确认清单和可回放日志。它贴在 PR 里，也能在本地 CLI / GitHub App / Slack 里查看。
+
+AI 要压缩三件事：
+
+1. **压缩 diff。** 把几十个文件分成“业务逻辑、测试、配置、重构、可疑无关改动”，而不是只做文本摘要。
+2. **压缩判断。** 给 reviewer 一个先看哪里、哪些断言需要人工确认、哪些文件可能越界的顺序。
+3. **压缩证据。** 把 agent run 的 prompt、命令、CI、失败尝试、回滚点和验证结果变成 receipt，而不是让 reviewer 去日志里翻。
+
+它不应该替人类盖章。它应该让人类更快说：能合、退回、拆 PR、要求补测试、要求人工重写。
+
+## AI 是否真的压缩任务
+
+这方向 AI 是有用的，因为它处理的是“审查前的信息压缩”，不是直接替代审查责任。
+
+普通 diff 工具只能告诉你哪里变了。AI 可以结合 issue、commit、测试、代码关系和 agent 轨迹，判断哪些改动值得先看，哪些解释站不住脚，哪些风险被 PR 描述藏掉了。
+
+但边界必须硬：产品不能把自己包装成“自动批准 PR”。早期可信定位应该是 **review prep + risk receipt + human decision**。
+
+## 为什么现在
+
+几个变化叠在一起：
+
+- GitHub Copilot coding agent、OpenAI Codex、Claude Code、Cursor background agent 这类工具把“开 PR”变成 AI 的默认出口。
+- HN 上连续出现 code review、AI-generated diff、agent workflow 的工具和讨论，说明痛点已经从“生成代码”移动到“消化代码”。
+- GitHub PR、CI、issue、review comment 是成熟工作流，团队不需要迁移到新平台；一个 GitHub App 就能切入。
+- 模型长上下文和代码理解能力够用了，可以做 diff 聚类、风险提示、测试解释、改动意图对齐。
+- 企业愿意为合并风险付费。相比“写代码更快”，减少坏 PR 合入更容易讲 ROI。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：** 团队刚开始用 coding agent，PR 数量变多，但 reviewer 不敢合。这个工具能把第一轮 review 从“读完整 diff”变成“先看证据卡”。
+
+**为什么留：** 每次 review 都留下 agent PR receipt。团队会逐渐形成规则：agent PR 没有 evidence packet，不准合。
+
+**为什么传播：** 最容易传播的是一张 PR review card：改了什么、为什么改、哪些地方危险、跑了什么测试、哪些断言需要人确认。工程师会把这种卡贴到 GitHub、Slack、Linear。
+
+**为什么付费：** 个人版可以免费处理小 PR。团队付费点在 GitHub App、私有 repo、规则模板、风险策略、审计日志、Slack/Linear/Jira 集成、历史 receipt 搜索、合并前 gate、企业私有部署。
+
+## MVP 实验
+
+不要先做完整代码审查平台。MVP 可以很窄：
+
+1. 做 GitHub App，只监听带有 `agent`、`copilot`、`codex`、`claude`、`cursor` 等标签或 bot author 的 PR。
+2. 读取 issue、PR description、diff、commit、CI、测试日志和可选的 agent run log。
+3. 输出一个 `review-evidence.md` 评论：改动分组、风险文件、测试证据、缺失验证、可疑无关改动、人工 checklist。
+4. 提供本地 CLI，让 reviewer 在终端里按风险顺序看 diff。
+5. 找 5 个正在用 coding agent 的小团队，对比普通 PR review 和 evidence packet review 的首轮耗时、返工率、坏合并率。
+
+关键指标不是 AI review comment 数量，而是 reviewer 是否更快、更敢做决定。
+
+## 商业化路径
+
+早期买单方最可能是：
+
+- AI-native SaaS 团队：agent PR 密度高，review 被淹没。
+- Agency / dev shop：多个客户项目并行，背景 agent 很诱人，但合并事故很贵。
+- 开源 maintainer：外部 AI-generated PR 增多，需要快速判断是不是垃圾。
+- 企业平台团队：内部开始允许 agent 改代码，但需要审计、策略和合规记录。
+
+定价可以按 repo / seat / PR volume 组合。企业版卖审计、私有部署、风险规则、合并 gate、数据保留策略和供应链安全集成。
+
+## 反例 / 风险
+
+1. **GitHub 会吞掉一部分。** Copilot code review、PR summary、branch protection 都会变强。创业公司必须从 agent-specific evidence 和跨 agent 轨迹切入，别做普通 summary。
+2. **AI review bot 已经很多。** CodeRabbit、Qodo、Greptile 等都在做 review。新机会要避开“多写评论”，改做“合并判断证据包”。
+3. **误报会烦死人。** 如果每个 PR 都贴 30 条风险，reviewer 很快关掉。必须按风险排序、允许团队调规则。
+4. **拿不到 agent run log。** 只看 diff 会变成普通 review 工具。MVP 要先支持可接入日志的 agent workflow，或者用 GitHub comments / CI artifacts 补证据。
+5. **责任边界敏感。** 产品不能暗示“AI 说安全就能合”。它卖的是证据和流程，不是免责符。
+
+## 可验证指标
+
+- Agent PR 首轮 review 时间是否下降 30%-50%。
+- Reviewer 打开 evidence card 后是否继续点进完整 diff。
+- 被标记为“无关改动”的文件是否被 reviewer 认可。
+- PR 因缺测试、越界改动、解释不足被退回的比例是否下降。
+- 坏合并、回滚、hotfix 是否减少。
+- 团队是否愿意把 evidence packet 作为 agent PR 的合并前要求。
+
+## 来源
+
+- GitHub Docs: [GitHub Copilot cloud agent](https://docs.github.com/en/copilot/using-github-copilot/coding-agent)。
+- GitHub Docs: [Starting GitHub Copilot sessions](https://docs.github.com/en/copilot/using-github-copilot/coding-agent/using-copilot-to-work-on-an-issue)。
+- Hacker News: [Launch HN: mrge.io (YC X25) – Cursor for code review](https://news.ycombinator.com/item?id=43692476)。
+- Hacker News: [Show HN: Code review for AI native teams](https://news.ycombinator.com/item?id=45604177)。
+- Hacker News: [Show HN: Vdiff – CLI to help you review AI-generated code](https://news.ycombinator.com/item?id=47986749)。
+- GitHub: [areibman/bottleneck](https://github.com/areibman/bottleneck)。
+- GitHub: [flamestro/deff](https://github.com/flamestro/deff)。
+- GitHub: [jasisz/aver](https://github.com/jasisz/aver)。
+- CodeRabbit: [AI Code Reviews](https://www.coderabbit.ai/)。
+- GitHub Marketplace: [CodeRabbit](https://github.com/marketplace/coderabbitai)。
+
+## 后续跟踪点
+
+- GitHub Copilot coding agent 是否把 PR evidence、测试解释、风险排序做成原生功能。
+- CodeRabbit / Qodo / Greptile 是否从 review comment 走向 agent PR receipt。
+- 开源 maintainer 是否开始显式拒绝缺少人类解释的 AI-generated PR。
+- Agent orchestrator 是否把 review evidence packet 变成默认产物。
+- 企业是否愿意把这类工具接入 branch protection，而不是只当参考评论。
