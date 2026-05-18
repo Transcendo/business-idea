@@ -1,0 +1,147 @@
+---
+title: Agent Execution Provenance Container
+description: Agent 开始替人执行代码、浏览器、合同和后台任务后，下一层机会不是再做一个 agent runner，而是把每次执行封成可验签、可转交、可审计的 provenance container。
+created: 2026-05-18
+tags:
+  - ai-agents
+  - developer-tools
+  - provenance
+  - audit
+  - workflow-automation
+---
+# Agent Execution Provenance Container
+
+## 一句话判断
+
+Agent 开始替人执行代码、浏览器、合同和后台任务后，下一层机会不是再做一个 agent runner，而是把每次执行封成可验签、可转交、可审计的 provenance container。
+
+更直白地说：agent 越能干活，团队越需要知道它到底看了什么、调用了什么、改了什么、为什么这么做，以及这些证据有没有被篡改。
+
+## 赛道 / 产品信号
+
+这轮信号很集中：
+
+- HN 上出现 [EPI – forensic evidence containers for AI agents](https://news.ycombinator.com/item?id=48169550)，对应的 [EPI GitHub repo](https://github.com/mohdibrahimaiml/epi-recorder) 把自己定义成 “Portable Evidence for AI Execution”，并标注 SCITT compatible、AIUC-1 evidence、regulatory compliance mapping。
+- IETF 有专门的 [SCITT 工作组](https://datatracker.ietf.org/group/scitt/about/)，核心是 supply chain integrity、transparency、trust。软件供应链已经在往 signed statement / transparency service 方向走，agent 执行证据很自然会借这套语言。
+- EU AI Act 的 [Article 12 record-keeping](https://artificialintelligenceact.eu/article/12/) 强调高风险 AI 系统应有自动记录能力。它不等于每个创业产品都要做合规软件，但会把“执行日志能否留痕”变成企业采购时绕不开的问题。
+- HN 同日还有 [I containerized my AI agents and dev tools](https://news.ycombinator.com/item?id=48173193) / [Agetor local-first harness orchestrator](https://news.ycombinator.com/item?id=48170517) 这类工具，说明 agent 执行正在从单次聊天进入多任务、隔离环境、工作流编排。
+- Hugging Face 上 [smolagents/computer-agent](https://huggingface.co/spaces/smolagents/computer-agent) 和 agent leaderboard / course spaces 的热度，说明 computer-use / agent education 正在扩大受众。执行次数一多，证据层就会从“锦上添花”变成基础设施。
+- Product Hunt 搜索页能看到 [Nfig AI](https://www.producthunt.com/posts/nfig-ai?embed=true) 这类 “API for AI agents to browse, click and do tasks” 信号。直接页面本轮返回 403，但公开搜索结果已经指向同一个趋势：agent 不只回答问题，而是在外部环境里执行动作。
+
+这里的机会不是又做一个 workflow builder。真正的缺口是：agent 执行完以后，别人能不能复查、验签、转交、归档、争议处理。
+
+## 用户痛点是什么
+
+今天的 agent run 很多还是“黑箱流水账”：
+
+- 工程师只看到最终 PR 或文件变更，不知道 agent 中途读了哪些文件、调用了哪些工具、失败了几次。
+- 业务团队让 agent 跑网页、填表、查资料，最后只有一段总结，没有可核验来源和动作轨迹。
+- 企业安全团队担心 agent 读到 secret、越权访问、误调用生产系统，但普通日志太散，没法按任务归档。
+- 交接时很麻烦。A 让 agent 跑过一次，B 只能翻聊天记录，不能直接打开一份标准 evidence package。
+- 出事后难追责：到底是模型幻觉、工具返回错、权限配置错、prompt 写错，还是人类确认错。
+
+这不是“日志不够多”的问题。恰恰相反，原始日志已经太多。缺的是按一次 agent task 组织好的证据容器。
+
+## AI-native wedge
+
+最小 wedge：
+
+> 每个 agent run 自动生成一个 provenance container：任务目标、输入摘要、工具调用、权限范围、关键观察、文件/网页/数据库变更、测试或验证结果、人工确认点、失败分支、最终输出、hash、签名和可分享 viewer。
+
+AI 在这里压缩三件事：
+
+1. **压缩执行轨迹。** 把 shell、browser、MCP、HTTP、文件 diff、模型消息整理成一条人能读的任务链。
+2. **压缩责任判断。** 标出哪些动作是自动执行、哪些动作经过人工确认、哪些证据来自外部系统。
+3. **压缩转交成本。** 把一堆日志变成一个可以贴到 PR、ticket、审计系统或客户交付包里的 receipt。
+
+这类产品不应该承诺“agent 一定安全”。它应该让团队更快判断：这次执行能否接受，哪里需要人复核，出了问题从哪里回放。
+
+## AI 是否真的压缩任务
+
+有用，但位置要放准。
+
+普通日志系统会保留事件。AI provenance layer 要做的是把事件压成可审查结构：哪些动作属于同一个目标，哪些工具调用影响外部状态，哪些来源支撑最终结论，哪些地方缺少验证。
+
+这正好是 LLM 擅长的信息组织任务。它不替代底层不可篡改日志，也不替代权限控制。它把散乱执行记录翻译成 reviewer、security、customer、legal 都能读的 evidence packet。
+
+## 为什么现在
+
+几个变化叠在一起：
+
+- Agent 从聊天框走向执行器：coding agent、browser agent、voice agent、workflow agent 都在调用工具和改状态。
+- 多 agent / 多任务并发会让“谁做了什么”迅速失控。手工翻终端和聊天记录撑不住。
+- 企业开始接受 agent，但采购会问审计、权限、数据留存、责任边界。
+- SCITT、software bill of materials、AI Act record-keeping 这些外部语言让“可验签执行证据”更容易被企业听懂。
+- 开源工具已经在冒头，说明 builder 社区也在撞这个痛点。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：** 团队已经在用 coding / browser / workflow agent，但不敢把执行结果直接交给生产流程。一个标准 receipt 能先解决不敢信的问题。
+
+**为什么留：** 只要这个容器进入 PR、ticket、customer handoff、security review，就会变成工作流默认附件。历史证据越多，替换成本越高。
+
+**为什么传播：** 最容易传播的是一张 run card：agent 做了什么、用过哪些工具、改了哪些东西、哪些证据可验签、哪里需要人确认。它天然适合贴到 GitHub、Linear、Slack、Jira、客户交付邮件。
+
+**为什么付费：** 个人版可以免费记录本地 agent run。团队付费点在私有 repo、SaaS 集成、签名与留存策略、权限映射、审计搜索、合规导出、SIEM / GRC / ticket 系统集成、私有部署。
+
+## MVP 实验
+
+不要先做完整 agent 平台。MVP 可以很窄：
+
+1. 做一个 CLI / SDK wrapper，先包住 coding agent、browser agent 或 MCP tool runner。
+2. 每次 run 生成 `agent-run.receipt.json` 和 `agent-run.md`，包含输入、工具、关键输出、变更、验证命令、风险提示、hash。
+3. 提供 GitHub Action 或 PR comment，把 receipt 贴到 agent PR。
+4. 提供一个本地 viewer，让 reviewer 按“外部动作 / 文件变更 / 缺验证 / 人工确认点”查看。
+5. 找 5 个已经跑 coding agent 或 browser automation 的团队，测试 receipt 是否减少追问、返工和安全 review 时间。
+
+早期不要碰“全自动合规”。先卖“每次 agent 执行都有可复查收据”。
+
+## 商业化路径
+
+早期买单方最可能是：
+
+- AI-native dev team：agent PR、后台修复、批量重构多，review 证据混乱。
+- 内部工具 / ops 团队：agent 跑后台流程，需要知道改了什么系统。
+- 安全与平台团队：允许 agent 接工具前，需要统一审计格式。
+- 垂直 SaaS：给客户交付 AI 生成的分析、合同、报告、数据处理结果时，需要附证据。
+- 合规敏感行业：金融、医疗、法务、供应链软件，不一定一开始就买，但会推动标准化要求。
+
+定价可以按 run volume、repo / workspace、retention window、签名与导出能力、私有部署分层。
+
+## 反例 / 风险
+
+1. **平台会内建一部分。** GitHub、OpenAI、Anthropic、云厂商都会加强 agent run history。创业公司要做跨 agent、跨工具、跨系统的标准 receipt，不要只做某个平台的漂亮日志。
+2. **合规话术容易吹过头。** 早期不要自称满足所有 AI Act 要求。更稳的说法是 record-keeping ready / evidence export / audit support。
+3. **日志里可能有敏感信息。** 产品必须默认 secret redaction、权限分级、保留策略和本地/私有部署，否则会把问题放大。
+4. **只有 JSON 没人看。** 人类需要 markdown card、timeline viewer、风险摘要；机器需要 schema 和签名。两边都要服务。
+5. **证据造假风险。** 如果 receipt 只由 agent 自己写，可信度很弱。关键事件要来自 wrapper、runtime、CI、tool proxy 或 signed log。
+
+## 可验证指标
+
+- Reviewer 是否能在 3 分钟内判断一次 agent run 值不值得继续看。
+- 团队是否愿意规定“没有 receipt 的 agent PR 不准合”。
+- Security review 对 agent 工具调用的追问次数是否下降。
+- 回滚、事故、客户争议发生时，receipt 是否能定位责任链。
+- Receipt 被复制到 PR、ticket、Slack、客户交付包的比例。
+- Run 失败后，下一次 agent 是否能基于 receipt 更快恢复。
+
+## 来源
+
+- Hacker News: [EPI – forensic evidence containers for AI agents](https://news.ycombinator.com/item?id=48169550)。
+- GitHub: [mohdibrahimaiml/epi-recorder](https://github.com/mohdibrahimaiml/epi-recorder)。
+- IETF: [Supply Chain Integrity, Transparency, and Trust 工作组](https://datatracker.ietf.org/group/scitt/about/)。
+- EU AI Act: [Article 12: Record-Keeping](https://artificialintelligenceact.eu/article/12/)。
+- Hacker News: [I containerized my AI agents and dev tools](https://news.ycombinator.com/item?id=48173193)。
+- GitHub: [SamInTheShell/aetherion](https://github.com/SamInTheShell/aetherion)。
+- Hacker News: [Agetor - An open-source Harness Orchestrator](https://news.ycombinator.com/item?id=48170517)。
+- GitHub: [alamops/agetor](https://github.com/alamops/agetor)。
+- Hugging Face Space: [smolagents/computer-agent](https://huggingface.co/spaces/smolagents/computer-agent)。
+- Product Hunt: [Nfig AI](https://www.producthunt.com/posts/nfig-ai?embed=true)。
+
+## 后续跟踪点
+
+- EPI / provenance tools 是否能接入真实 coding agent、browser agent、MCP tool proxy，而不是只做 demo。
+- GitHub Copilot coding agent、Claude Code、OpenAI Codex 是否开放足够 run log 给第三方生成 receipt。
+- 企业是否把 agent receipt 纳入 branch protection、change management 或安全审计流程。
+- SCITT / signed statement / transparency log 是否会被 agent runtime 借用成事实标准。
+- Product Hunt / GitHub 上是否继续出现 agent execution、tool-use audit、browser action receipt 类产品。

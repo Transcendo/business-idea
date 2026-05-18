@@ -13,6 +13,7 @@
     "agent-context-sandbox-layer",
     "ai-debug-evidence-recorder",
     "agent-pr-review-evidence-layer",
+    "agent-execution-provenance-container",
     "headless-coding-agent-runtime",
     "spreadsheet-native-ai-data-analyst",
     "tiny-tool-calling-router",
