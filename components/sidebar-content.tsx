@@ -346,6 +346,7 @@ export const contents: Content[] = [
 			{ title: "Agent Structural Memory Layer", href: "/docs/developer-tools/agent-structural-memory-layer", icon: () => <BrainCircuit className="w-4 h-4 text-current" /> },
 			{ title: "Agent Context Sandbox Layer", href: "/docs/developer-tools/agent-context-sandbox-layer", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "AI Debug Evidence Recorder", href: "/docs/developer-tools/ai-debug-evidence-recorder", icon: () => <Code2 className="w-4 h-4 text-current" /> },
+			{ title: "AI QA Release Gate", href: "/docs/developer-tools/ai-qa-release-gate", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent PR Review Evidence Layer", href: "/docs/developer-tools/agent-pr-review-evidence-layer", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Execution Provenance Container", href: "/docs/developer-tools/agent-execution-provenance-container", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Durable Agent Workflow Runtime", href: "/docs/developer-tools/durable-agent-workflow-runtime", icon: () => <Activity className="w-4 h-4 text-current" /> },

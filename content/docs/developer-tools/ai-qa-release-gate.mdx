@@ -1,0 +1,120 @@
+---
+title: AI QA Release Gate
+description: 面向 AI 生成应用和 coding agent PR 的自动 QA 放行层，把冒烟测试、视觉检查、可回放证据和人工确认压成一张 release receipt。
+---
+
+# AI QA Release Gate
+
+AI 编程工具把“写代码”压快了，但没有同等压快“确认它真的能上线”。
+
+新的痛点不是缺一个测试框架，而是：非专业开发者、独立开发者、小团队用 Lovable、Cursor、Claude Code、Bolt、Base44 一类工具快速生成页面和功能后，不知道这次改动有没有把登录、支付、表单、权限、移动端布局、空状态弄坏。
+
+机会是做一层 AI QA release gate：用户给出应用 URL、PR、产品需求或录屏路径，系统在几分钟内生成测试计划，跑关键路径，抓取截图、console、network、DOM、视觉差异和失败复现步骤，最后输出“能不能发”的 release receipt。
+
+## 产品信号
+
+这一轮信号来自三个方向同时冒出来：
+
+- Hacker News 近期出现 [Agent-QA: Open-source AI end-to-end testing for web and mobile apps](https://news.ycombinator.com/item?id=48176493)、[Frontend-VisualQA](https://news.ycombinator.com/item?id=47678328)、[record manual QA flows, get E2E test code](https://news.ycombinator.com/item?id=47504297) 这类 Show HN。说明开发者已经在把“让 agent 自己验前端”拆成独立工具。
+- Product Hunt 搜索 `agent qa` 和 `ai testing` 已经能看到 [Octomind](https://www.producthunt.com/search?q=agent%20qa)、AgenticQA、TestSprite、Cekura、TestAI、TestMu AI、QA.tech 等一串 AI QA 产品。类别密度变高，比单点 demo 更重要。
+- GitHub 上，浏览器自动化和 agent browser infra 的热度很高。截至 2026-05-19 查询，[microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp) 约 32k stars，[browserbase/stagehand](https://github.com/browserbase/stagehand) 约 22k stars，[steel-dev/steel-browser](https://github.com/steel-dev/steel-browser) 约 7k stars。它们不是同一个产品，但共同说明浏览器执行、页面理解、session 管理和可重复动作正在变成 agent 基础设施。
+
+## 用户痛点
+
+最痛的是发布前的不确定性。
+
+AI 写完代码后，用户经常只看一眼首页，就以为能发。真正会炸的地方在二级页面、老用户状态、支付回调、权限边界、移动端、长文本、空数据、慢接口、浏览器兼容和第三方登录。
+
+传统 QA 对这群用户太重：写 Playwright、维护 selector、补 fixtures、处理 flaky tests，对非工程用户太难，对小团队太耗时间。
+
+AI 如果只“帮你写测试代码”，价值还不够。更强的 wedge 是替用户做判断：这次改动能不能发，哪些路径必须先修，哪些风险可以接受。
+
+## AI-native wedge
+
+入口要短：
+
+用户给出 `app URL / preview deployment / PR link / Figma 或需求文本`，系统返回一张 release receipt。
+
+这张 receipt 至少包含：
+
+- 自动推断的关键用户路径。
+- 已运行路径：登录、注册、核心转化、表单提交、支付或预约、管理后台等。
+- 每条路径的证据：截图、DOM 摘要、console error、network error、视觉差异、复现步骤。
+- AI 判断：阻断上线、建议修复、可接受风险。
+- 可导出的 Playwright 测试或 bug ticket。
+
+AI 真正压缩的是三件事：从需求推测试路径，从失败现象压成可修复证据，从多条杂乱结果压成上线判断。
+
+## 为什么现在
+
+AI 生成应用正在把“能做出来”的门槛降到很低。门槛下降后，发布频次上升，验证债会反过来变成瓶颈。
+
+过去 QA 工具卖给工程团队；现在新买家包括：
+
+- 用 AI app builder 做内部工具的运营和产品经理。
+- 用 Cursor / Claude Code 批量做小功能的独立开发者。
+- 替客户交付网站、小程序、SaaS 原型的 agency。
+- 小团队的技术负责人，他们不想每个 PR 都亲自点一遍。
+
+这些人不是想买“测试平台”。他们想买“别让我在客户面前翻车”。
+
+## 用户为什么来、留、传播、付费
+
+来：第一次被 AI 生成应用坑过，或者准备把 AI 写的功能交给客户、用户、老板。
+
+留：每次发布前都需要一张 release receipt。只要接入 preview deployment 和 GitHub PR，它会变成发布习惯。
+
+传播：失败截图、复现录像、release receipt 很容易转给同事、客户和 AI coding agent。分享的不是产品链接，而是“这次为什么不能发”的证据包。
+
+付费：它离损失很近。一次坏掉的支付、注册、演示或客户交付，比每月几十到几百美元的 QA gate 贵得多。
+
+## MVP 实验
+
+不要先做大平台。先做一个窄到能卖的 release checker。
+
+1. 支持 Vercel / Netlify preview URL 和 GitHub PR。
+2. 用户用自然语言写 3 到 8 条关键路径。
+3. 系统用 Playwright 跑路径，AI 只负责补步骤、读页面、归纳失败。
+4. 输出一张 shareable release receipt。
+5. 失败时生成可复制给 Cursor / Claude Code 的修复 prompt。
+
+第一批客户可以是 AI app builder heavy users、独立开发者、外包 agency、早期 SaaS 团队。
+
+## 商业化路径
+
+早期按检查次数收费最清楚：免费 3 次，个人版按月给 50 次 release checks，团队版按 PR / seat / 项目收费。
+
+更贵的版本卖给 agency 和团队：白标报告、客户签收记录、Slack/GitHub 集成、历史版本对比、关键路径库、人工 QA 接管。
+
+真正的长期价值不在跑测试，而在积累每个产品的“风险地图”：哪些路径最常坏，哪些组件一改就炸，哪些 agent 修复总会引入回归。
+
+## 反例和风险
+
+最大风险是 flaky。AI QA 如果误报太多，用户会很快关掉。
+
+第二个风险是测试路径推断过度自信。AI 看懂页面不等于看懂业务，支付、权限、数据一致性经常需要人工给规则。
+
+第三个风险是被 Playwright、Browserbase、CI 平台或 app builder 内置功能挤压。创业公司不能只做“AI 写测试”，必须卡住 release receipt、证据包、客户交付和非工程用户体验。
+
+第四个风险是隐私。测试会接触登录态、客户数据、后台页面。MVP 要默认支持 sandbox 账号、secret redaction、测试数据隔离。
+
+## 可验证指标
+
+- 从 URL 到第一张 release receipt 是否小于 5 分钟。
+- 关键路径自动补全命中率是否超过 70%。
+- 阻断级 bug 的真实命中率是否高于误报率。
+- 用户是否愿意在每次 PR 或客户交付前主动运行。
+- 失败 receipt 被转发给工程师、客户或 agent 的比例。
+- 修复后复跑通过率。
+
+## 可信来源
+
+- [HN: Agent-QA open-source AI end-to-end testing](https://news.ycombinator.com/item?id=48176493)
+- [HN: Frontend-VisualQA](https://news.ycombinator.com/item?id=47678328)
+- [HN: record manual QA flows, get E2E test code](https://news.ycombinator.com/item?id=47504297)
+- [Product Hunt search: agent qa](https://www.producthunt.com/search?q=agent%20qa)
+- [Product Hunt search: ai testing](https://www.producthunt.com/search?q=ai%20testing)
+- [GitHub: microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp)
+- [GitHub: browserbase/stagehand](https://github.com/browserbase/stagehand)
+- [GitHub: steel-dev/steel-browser](https://github.com/steel-dev/steel-browser)
+- [Simon Willison: vibe coding and agentic engineering](https://simonwillison.net/2026/May/6/vibe-coding-and-agentic-engineering/)

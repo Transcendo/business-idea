@@ -12,6 +12,7 @@
     "agent-structural-memory-layer",
     "agent-context-sandbox-layer",
     "ai-debug-evidence-recorder",
+    "ai-qa-release-gate",
     "agent-pr-review-evidence-layer",
     "agent-execution-provenance-container",
     "durable-agent-workflow-runtime",
