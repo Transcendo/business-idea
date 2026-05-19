@@ -348,6 +348,7 @@ export const contents: Content[] = [
 			{ title: "AI Debug Evidence Recorder", href: "/docs/developer-tools/ai-debug-evidence-recorder", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "Agent PR Review Evidence Layer", href: "/docs/developer-tools/agent-pr-review-evidence-layer", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Execution Provenance Container", href: "/docs/developer-tools/agent-execution-provenance-container", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
+			{ title: "Durable Agent Workflow Runtime", href: "/docs/developer-tools/durable-agent-workflow-runtime", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Headless Coding Agent Runtime", href: "/docs/developer-tools/headless-coding-agent-runtime", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "Spreadsheet-Native AI Data Analyst", href: "/docs/developer-tools/spreadsheet-native-ai-data-analyst", icon: () => <Database className="w-4 h-4 text-current" /> },
 			{ title: "Tiny Tool-Calling Router", href: "/docs/developer-tools/tiny-tool-calling-router", icon: () => <Zap className="w-4 h-4 text-current" /> },
