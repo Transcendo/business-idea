@@ -1,0 +1,138 @@
+---
+title: Agent Plan Review Layer
+description: Coding agent 进入 Plan Mode 之后，机会不是再做一个更会写代码的 agent，而是把执行前计划变成可批注、可退回、可批准的 plan review receipt。
+created: 2026-05-19
+tags:
+  - ai-coding
+  - developer-tools
+  - ai-agents
+  - code-review
+  - workflow-automation
+---
+# Agent Plan Review Layer
+
+## 一句话判断
+
+Coding agent 进入 Plan Mode 之后，下一层机会不是再做一个更会写代码的 agent，而是把执行前计划变成可批注、可退回、可批准的 plan review receipt。
+
+这个 wedge 很窄，但很值钱：**在人类还没被一坨 diff 淹死之前，先拦住错误方向。**
+
+## 赛道 / 产品信号
+
+这轮信号不是大爆款，但方向很清楚：AI coding 从“直接改代码”转向“先给计划，再让人批准”。
+
+- HN 上出现 [Show HN: PlanBridge: open-source tool for precise feedback on coding agent plans](https://news.ycombinator.com/item?id=48139177)。热度不高，4 points、0 comments，但标题本身点出了一个新切口：precise feedback on coding agent plans。
+- [PlanBridge GitHub repo](https://github.com/contextbridge/planbridge) 明确写着 “Precision feedback for coding agent plans”，并在 2026-05-18 仍有更新。它不是 IDE，也不是 review bot，而是给 coding harness 的计划审批点加一层浏览器批注 UI。
+- [PlanBridge Quickstart](https://plan.contextbridge.ai/quickstart) 的流程是：一条命令安装；给支持的 AI coding harness 增加 plugin / hook；当 harness 到达正常 review point 时打开浏览器；用户批注或批准；决定再回流到 harness。
+- [PlanBridge Claude Code 用法](https://plan.contextbridge.ai/usage/claude-code/) 直接接 Claude Code 的 Plan Mode。用户用 `/plan` 或 `shift + tab` 让 Claude 先写计划，在浏览器里评论，提交反馈后 Claude 重写计划，批准后才开始实现。
+- Anthropic 官方 [Claude Code common workflows](https://docs.anthropic.com/en/docs/claude-code/common-workflows) 已经把 “plan before editing”、parallel sessions、subagents、CI/batch scripts 放进常见工作流。计划审批不再是少数 power user 的怪癖，而是 agent 工程流的正常步骤。
+- Product Hunt 搜索 [ai code review agent](https://www.producthunt.com/search?q=ai%20code%20review%20agent) 已经堆出 Cursor、Kilo Code、cubic、Humans in the Loop 等相邻产品信号。市场在围绕 agentic coding、planning、review 和 human-in-the-loop 找新入口。
+- [Kilo Code GitHub repo](https://github.com/Kilo-Org/kilocode) 自称 all-in-one agentic engineering platform，星标已经很高。越多 coding agent 负责 planning / building / fixing，越需要独立于单一 agent 的计划审查层。
+
+## 用户痛点是什么
+
+今天的 coding agent 真正让人不舒服的点，不是它不会写，而是它太容易沿着错误计划写得很快。
+
+典型场景：
+
+- Agent 的计划看起来像对的，但漏了 migration、权限、边界条件或已有抽象。
+- 人类在终端里看一段长 plan，只能说 approve / reject，很难精确标注“第 3 步方向错了，第 5 步要拆成两步”。
+- 多个 agent 并行跑时，每个 agent 都有自己的计划和终端上下文，没有一个轻量入口让 lead 批量扫计划。
+- 新人或非工程 founder 用 coding agent 做产品，能看懂目标，但看不懂 agent 会不会把系统搞乱。
+- 计划阶段没有留下 receipt，后面 PR 出问题时，团队不知道错误是需求理解、计划设计、执行偏航，还是 review 放水。
+
+这里浪费的不是写代码时间，而是**错误执行前的判断成本**。
+
+## AI-native wedge
+
+最小产品可以非常具体：
+
+> 用户让 Claude Code / Codex / Cursor agent 先出计划；系统把计划变成可批注的结构化卡片；人类按步骤标注风险、改写要求和批准条件；反馈回流给 agent；最后生成 plan receipt，附到 PR 或任务记录里。
+
+AI 在这里压缩三件事：
+
+1. **压缩计划理解。** 把 agent plan 拆成目标、文件、数据、测试、风险、未知项，而不是一段长文本。
+2. **压缩反馈表达。** 人类不用重新写 prompt，只要在具体步骤上评论、打标、要求补证据。
+3. **压缩后续追责。** 批准了什么、反对了什么、agent 如何改 plan、最终是否按 plan 执行，都留成 receipt。
+
+它不应该替人审批。它应该让审批动作更快、更准、更容易复查。
+
+## 为什么现在
+
+几个变化叠在一起：
+
+- Claude Code、Codex CLI、Cursor、Kilo Code 这类工具把 agentic coding 拉进日常工程流，计划阶段开始变成真实协作界面。
+- Agent 能一次改更多文件，错误计划造成的损失变大。事后 review 太晚，事前 plan review 更便宜。
+- Hook / plugin / CLI 生态开始成形，PlanBridge 这类工具能不重做 IDE，直接卡在 agent harness 的审批点上。
+- 开源 agentic coding 工具增长很快，团队会同时使用多个 harness。跨 harness 的 plan receipt 比单一 IDE 插件更有机会。
+- 企业采购更容易为“减少错误改动和返工”付费，而不是为又一个自动写代码按钮付费。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：** 团队已经在用 coding agent，但每次 approve plan 都心虚。一个浏览器批注页比终端里 yes/no 更像真正的 review。
+
+**为什么留：** 每次 agent 任务都会自然经过计划阶段。只要它能减少一次大返工，就会留在团队工作流里。
+
+**为什么传播：** 最适合传播的不是产品首页，而是 plan receipt：一张“这个 agent 准备怎么改、我在哪些步骤要求重写、最后批准了什么”的截图或链接。
+
+**为什么付费：** 团队为 seat、repo、agent run、审查记录保存期、GitHub / Linear / Slack 集成、SSO、审计导出付费。个人开发者可能只愿意为 Pro 版小额订阅；真正的钱在多 agent 团队。
+
+## MVP 实验
+
+不要一上来做完整平台。先做一个窄到发狠的 CLI + 浏览器本地 UI：
+
+1. 支持 Claude Code Plan Mode，能捕获 plan，打开本地网页。
+2. 网页把 plan 拆成步骤卡片：目标、涉及文件、风险、测试、未知项。
+3. 用户能对每一步批注：approve、needs change、blocked、needs evidence。
+4. 批注回写到 agent prompt，让 agent 重写 plan。
+5. 批准后生成 `plan-receipt.md`，可贴到 PR 描述或 issue comment。
+6. 记录指标：每个任务 plan 迭代次数、被拦截的错误计划、后续 PR 是否偏离计划、人工 review 时间。
+
+第一批用户不要找大公司。找 10 个正在高频使用 Claude Code / Codex / Cursor agent 的独立开发者、小型产品团队和 AI-first agency，让他们连续用一周。
+
+## 商业化路径
+
+早期可以这样分层：
+
+- 免费开源：本地 plan capture、本地批注、单人 receipt。
+- Pro：多 harness 支持、历史记录、PR 注入、模板、个人统计。
+- Team：共享 review queue、GitHub / Linear / Slack、审批权限、团队风险规则、SSO。
+- Enterprise：审计导出、私有部署、合规保留、agent harness 适配、策略包。
+
+这个市场不适合卖“更聪明的 agent”。更适合卖“更安全地让 agent 改代码”。
+
+## 反例 / 风险
+
+- **平台吃掉。** Claude Code、Cursor、Codex 可能直接把批注式 plan review 做进产品。独立产品必须跨 harness、跨 repo、跨团队审计，不能只做一个 UI 小补丁。
+- **计划质量本身太虚。** 如果 agent plan 常常是漂亮废话，批注计划没有意义。MVP 必须要求 plan 指向文件、测试、风险和未知项。
+- **用户嫌摩擦大。** 个人开发者可能宁可直接让 agent 开干。早期目标应该是“agent 改坏一次就肉疼”的团队场景。
+- **和 PR review 混淆。** 这不是事后 code review。边界要清楚：plan review 处理方向和范围，PR review 处理实现和合并。
+- **证据链断裂。** 如果最后执行偏离计划，产品要能标记 deviation，否则 receipt 会变成摆设。
+
+## 可验证指标
+
+- 计划被要求重写的比例。
+- 被 plan review 提前拦住的范围错误、文件越界、缺测试、权限风险数量。
+- 从 plan 到 PR 的偏离率。
+- Reviewer 首次判断时间是否下降。
+- Agent PR 被退回次数是否下降。
+- 团队每周 agent run 数是否增长，但坏 PR 合入率不升。
+- Plan receipt 被转发到 Slack / Linear / PR 的次数。
+
+## 适合谁先做
+
+最适合三类团队：
+
+1. 已经做 coding agent wrapper / CLI / harness 的开源作者。
+2. 服务 AI-first startup 的工程外包或 agency，他们每天都要解释 agent 改了什么。
+3. 做工程治理、code review、LLMOps 的小团队，想从 post-PR review 往 pre-implementation gate 前移。
+
+## 来源
+
+- [HN: Show HN: PlanBridge](https://news.ycombinator.com/item?id=48139177)
+- [PlanBridge GitHub](https://github.com/contextbridge/planbridge)
+- [PlanBridge Quickstart](https://plan.contextbridge.ai/quickstart)
+- [PlanBridge Claude Code integration](https://plan.contextbridge.ai/usage/claude-code/)
+- [Anthropic Claude Code common workflows](https://docs.anthropic.com/en/docs/claude-code/common-workflows)
+- [Product Hunt search: ai code review agent](https://www.producthunt.com/search?q=ai%20code%20review%20agent)
+- [Kilo Code GitHub](https://github.com/Kilo-Org/kilocode)
