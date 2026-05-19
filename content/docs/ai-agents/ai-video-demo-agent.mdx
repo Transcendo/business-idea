@@ -1,0 +1,110 @@
+---
+title: AI Video Demo Agent
+description: 面向 B2B SaaS 的 24/7 互动产品演示智能体，把排期、讲解、问答、资格判断和 CRM 记录压成一次即时 demo。
+---
+
+# AI Video Demo Agent
+
+B2B SaaS 的 demo 流程很反直觉：用户兴趣最高的时候，销售团队却让他预约、等邮件、等会议。
+
+AI video demo agent 的机会不是再做一个更像人的数字人，而是把“我想看看这个产品能不能解决我的问题”压成一次即时、可交互、可记录的产品演示。
+
+## 产品信号
+
+Product Hunt 搜索 `ai demo agent` 时，已经能看到 [Naoma AI Demo Agent](https://www.producthunt.com/posts/naoma-ai-demo-agent)、TruGen AI、Videotok 这类视频 agent 产品。Product Hunt 搜索 `ai sales agent` 也出现 GodmodeHQ、Persana、AI SDR-Kit、Sparkbase、Thunai、Peakflo 等销售智能体。
+
+[Naoma 官网](https://www.naoma.ai/)把定位说得很直接：给每个 prospect 即时 live demo，自动做 discovery、讲解、问答、资格判断，并把 transcript、qualification score 和后续动作写入 CRM。官网还声称 visitor-to-demo conversion 从传统 1–2% 提到 6–20%；这是厂商口径，不能当行业事实，但说明它卖的是转化率，不是视频玩具。
+
+[TruGen AI 的 Product Hunt 页面](https://www.producthunt.com/posts/trugen-ai)在 2026-05-19 发布，定位为能“see, hear, remember, and act in real time”的 human-like video agents，分类同时挂在 Avatar generators 和 AI Agents。这个组合说明视频 agent 正在从营销素材生成，往实时交互和业务动作移动。
+
+## 用户痛点
+
+B2B SaaS 的 demo 有三个痛点。
+
+一是响应慢。用户刚被广告、内容、朋友推荐打动，点击“Book a demo”后却进入排期流程。热意图在等待中冷掉。
+
+二是销售时间被低质量线索吞掉。很多 demo 只是重复讲基础功能、确认预算、问行业和使用场景。真正高价值的销售应该处理复杂 objections、采购推进和大客户关系。
+
+三是自助产品页无法回答具体问题。官网视频和文档只能讲通用价值，不能根据用户的角色、行业、数据规模、工具栈、权限限制和预算，实时切换演示路径。
+
+## AI-native wedge
+
+最小 wedge 应该是：用户在官网点击“看一个适合我的 demo”，系统用 3 到 5 个问题判断角色、场景、当前工具和购买阶段，然后启动一个可交互视频/语音 demo。
+
+输出不是一段录播，而是一张 demo receipt：
+
+- 用户是谁：角色、行业、公司规模、当前替代方案。
+- 他真正关心什么：成本、效率、安全、集成、迁移、审批。
+- demo 讲了哪些路径：功能、用例、价格、集成、案例。
+- 用户问了什么、卡在哪里。
+- AI 判断的购买意图和下一步：发资料、开试用、接销售、直接 checkout。
+- 写入 CRM 的结构化记录。
+
+AI 压缩的不是“生成视频”，而是把排期、讲解、问答、资格判断和销售交接压进同一次会话。
+
+## 为什么现在
+
+三个条件凑齐了。
+
+多模态和实时语音让“会说、会听、会打断、会跟着页面走”的 demo 变得可用；CRM、网站组件、日历和支付接口让 agent 能把对话变成动作；SaaS 获客成本高，团队愿意为更高的高意图线索转化率付费。
+
+更关键的是，B2B 买家已经习惯先自助研究。他们不想为了看一个基础 demo 就填表等销售。谁能在热意图时刻给出即时答案，谁就更早拿到购买信号。
+
+## 用户为什么来、留、传播、付费
+
+来：官网访客不想预约，只想立刻确认这个产品是不是适合自己。
+
+留：SaaS 团队会把它放在官网、in-app onboarding、冷启动邮件和 outbound landing page 上，长期替销售过滤线索。
+
+传播：demo receipt 可以转给销售、创始人、客户成功和采购团队。用户也会把“这个 AI demo 真的按我的场景讲了”的链接发给同事。
+
+付费：它直接贴近收入。只要能提高 visitor-to-demo、demo-to-trial 或 demo-to-opportunity 转化，B2B 团队愿意按月、按 demo 或按合格线索付费。
+
+## MVP 实验
+
+不要先做全行业通用视频 agent。先选一个窄 SaaS 场景，比如项目管理、客服工单、产品分析、销售邮件自动化或开发者工具。
+
+MVP 可以这样做：
+
+1. 让厂商上传官网 URL、产品文档、3 条标准 demo script、常见 objection、价格页和 CRM 字段。
+2. 生成一个官网浮层：访客先回答 3 个问题，再进入语音或文字驱动 demo。
+3. 第一版不必真做复杂数字人，先用屏幕录制片段、产品截图、语音合成和可点击步骤拼成半实时 demo。
+4. 每次 demo 后输出 receipt，并同步 HubSpot / Salesforce / Slack。
+5. 和人工销售 demo 做 A/B：看更多访客是否愿意启动、是否留下邮箱、是否进入试用或销售会议。
+
+## 商业化路径
+
+早期按产品站点和 demo 次数收费最清楚：基础版每月固定 demo 额度，增长版按合格线索或 CRM 同步量加价。
+
+更贵的版本卖给中高客单价 SaaS：多语言、本地化案例、行业脚本、白标、销售接管、审批链路、SOC2/隐私设置、复杂产品权限演示。
+
+长期更值钱的是 demo intelligence：哪些场景最常被问，哪些 objection 最影响转化，哪些功能讲了反而掉线，哪些渠道带来的访客最像真实买家。
+
+## 反例和风险
+
+最大风险是 AI demo 胡说产品能力。B2B 产品的承诺很贵，错讲安全、价格、集成或合规，后面会变成销售事故。
+
+第二个风险是“数字人感”压过产品判断。用户不是来看会眨眼的头像，而是想确认产品能不能解决问题。视频形态如果拖慢判断，就该退回语音、截图和交互式 walkthrough。
+
+第三个风险是长尾配置太多。每个 SaaS 的 demo script、权限、数据样例和案例都不同，冷启动成本高。MVP 必须先卡一个产品类别，不要一开始承诺横跨所有 B2B。
+
+第四个风险是被现有 sales engagement、interactive demo、CRM 和网站聊天工具内置。新产品不能只做“AI 讲解”，要卡住 demo receipt、资格评分、销售交接和即时产品上下文。
+
+## 可验证指标
+
+- 官网访客点击 demo 的比例是否高于传统 book-a-demo CTA。
+- 从点击到第一段有效产品演示是否小于 30 秒。
+- 完成 demo 后留下邮箱或进入试用的比例。
+- AI 资格评分和人工销售判断的一致率。
+- demo receipt 被销售团队打开和继续跟进的比例。
+- AI 错讲产品能力的频率。
+- 同等流量下新增 qualified opportunity 数量。
+
+## 可信来源
+
+- [Naoma AI 官网](https://www.naoma.ai/)
+- [Product Hunt: Naoma AI Demo Agent](https://www.producthunt.com/posts/naoma-ai-demo-agent)
+- [Product Hunt: TruGen AI](https://www.producthunt.com/posts/trugen-ai)
+- [Product Hunt search: ai demo agent](https://www.producthunt.com/search?q=ai%20demo%20agent)
+- [Product Hunt search: ai sales agent](https://www.producthunt.com/search?q=ai%20sales%20agent)
+- [Tech Funding News: Naoma raised $440K for instant AI video demos](https://techfundingnews.com/naoma-440k-preseed-ai-video-sales-demos/)

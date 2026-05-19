@@ -6,6 +6,7 @@
     "computer-use-agent-sandbox-runtime",
     "mobile-gui-agent-runtime",
     "realtime-voice-agent-runtime",
+    "ai-video-demo-agent",
     "voice-agent-qa-scorecard",
     "browser-agent-execution-harness",
     "statewright-agent-state-machine-guardrails",
