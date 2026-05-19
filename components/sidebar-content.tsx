@@ -180,6 +180,10 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "2026-05-19", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Geospatial FM Eval", href: "/docs/vertical-ai/geospatial-foundation-model-evaluation-layer", icon: () => <MapPinned className="w-4 h-4 text-current" /> },
+			{ title: "Durable Agent Workflow", href: "/docs/developer-tools/durable-agent-workflow-runtime", icon: () => <Activity className="w-4 h-4 text-current" /> },
+			{ title: "AI QA Release Gate", href: "/docs/developer-tools/ai-qa-release-gate", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-18", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "Research Agent Citation Verifier", href: "/docs/ai-agents/research-agent-citation-verifier", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "Voice Agent QA Scorecard", href: "/docs/ai-agents/voice-agent-qa-scorecard", icon: () => <Headphones className="w-4 h-4 text-current" /> },
@@ -590,6 +594,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/vertical-ai", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Geospatial FM Eval", href: "/docs/vertical-ai/geospatial-foundation-model-evaluation-layer", icon: () => <MapPinned className="w-4 h-4 text-current" /> },
 			{ title: "Hypercubic Hopper", href: "/docs/vertical-ai/hypercubic-hopper-mainframe-agents", icon: () => <Briefcase className="w-4 h-4 text-current" /> },
 			{ title: "Hebbia", href: "/docs/vertical-ai/hebbia", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "Hightouch", href: "/docs/vertical-ai/hightouch", icon: () => <Briefcase className="w-4 h-4 text-current" /> },

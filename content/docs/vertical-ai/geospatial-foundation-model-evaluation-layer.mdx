@@ -1,0 +1,176 @@
+---
+title: Geospatial Foundation Model Evaluation Layer
+description: 地理空间 foundation model 的机会不只是再训练一个遥感大模型，而是给灾害、农业、保险、能源和城市团队一层可复测、可解释、可采购的模型评估与任务适配层。
+created: 2026-05-19
+tags:
+  - vertical-ai
+  - geospatial-ai
+  - evaluation
+  - foundation-models
+---
+
+# Geospatial Foundation Model Evaluation Layer
+
+## 一句话判断
+
+地理空间 foundation model 正在从论文和 demo 走向灾害响应、农田边界、土地覆盖、生态监测、保险核灾、能源巡检这些高风险任务。
+
+但现在更大的创业缺口不是“再训一个遥感大模型”。真正缺的是一层评估和任务适配：用户给出区域、传感器、任务和可接受误差，系统告诉他该用哪个模型、怎么微调、质量边界在哪里、结果能不能进业务流程。
+
+这个方向不会像通用 AI 工具那样病毒传播，但它离行业预算很近。地理空间团队买的不是炫酷模型，而是少走错模型、少做无效标注、少在关键区域误判。
+
+## 赛道 / 产品信号
+
+这一轮信号来自论文、开源库和云厂商样例同时冒头。
+
+- arXiv 论文《No One Knows the State of the Art in Geospatial Foundation Models》直说：地理空间 foundation model 论文缺少统一评测、训练测试协议、权重发布和 pretraining controls。作者审计 152 篇论文，发现同一模型、benchmark、protocol 下有 46 个跨论文差异至少 10 个点；126 篇可抽取预训练数据的论文里，94 篇使用了没有其他论文复用的配置；39% 的论文没有发布模型权重。
+- Hugging Face daily papers 把这篇论文列为近期论文信号。它不是普通 leaderboard 争议，而是说明整个 GFM 社区还没有清楚的“哪个模型适合哪个任务”。
+- GitHub 上已经有 `cybergis/rs-embed` 这类项目，把 remote sensing foundation model embeddings 包成“一行代码获取任意地点、任意时间的 embedding”。这说明用户想要的不是读论文，而是把模型能力接进真实地理任务。
+- AWS sample repo 明确把 Geospatial Foundation Models 放到 earth-scale ecosystem monitoring、semantic search、change detection、natural language querying 的云端样例里。云厂商已经在教育市场：GFM 可以成为可部署的行业组件。
+- IBM 的 `peft-geofm`、`landsatbench`、农业边界提取 toolkit 这类 repo 说明需求已经分化到微调、benchmark、农田边界、Landsat 任务。模型本身会多，选择成本会更高。
+
+判断：地理空间 AI 的创业机会不在“我也有一个遥感大模型”，而在模型选择、任务评估、数据适配、误差解释和行业交付证据。
+
+## 用户痛点是什么
+
+用户不是缺一篇更漂亮的遥感论文。用户痛的是：他不知道这个模型在自己的区域、自己的传感器、自己的业务风险里到底能不能用。
+
+典型痛点：
+
+1. **评测不可比。** 论文各用各的数据、划分、预训练配置和指标，同一个模型在不同论文里表现差很多。采购方和应用团队很难判断谁是真的强。
+2. **区域迁移很脏。** 一个模型在北美农田、欧洲城市、热带森林、干旱区、山区雪线上的表现可能完全不同。平均分没法指导具体任务。
+3. **传感器和时间维度复杂。** Landsat、Sentinel、SAR、多光谱、高分辨率商业影像、季节变化、云遮挡、灾后变化检测，不是一个通用文本 prompt 能解决的。
+4. **标注成本高。** 农田边界、灾害损失、土地覆盖、屋顶光伏、道路变化都需要昂贵标注。选错模型和微调方案会直接烧钱。
+5. **错误后果重。** 保险赔付、灾害响应、粮食安全、生态监管、基础设施巡检里，错分不是体验问题，是钱、风险和责任。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户上传一个 AOI 区域、任务类型、少量样本和可接受误差；系统自动跑候选 GFM / embedding / 微调方案，输出一张 model-fit report：哪个模型最适合，哪里会错，是否需要补标注，结果能不能进入业务流程。**
+
+第一版不要做大而全 GIS 平台。只做三件事：
+
+- 模型评测：对同一 AOI 和任务跑多个公开 GFM / embedding / baseline。
+- 误差地图：把模型不确定区域、跨季节失败、云遮挡、边界混淆、类别混淆可视化。
+- 交付证据：输出可分享的 model-fit report，给项目负责人、客户、保险/农业/能源团队判断是否能用。
+
+AI 压缩的不是“看卫星图”这一步，而是把模型选择、样本设计、微调尝试和质量判断压成可复测工作流。
+
+## 为什么现在
+
+- 地理空间 foundation model 已经足够多，模型选择开始成为问题。模型多到不可比较时，评估层就有价值。
+- 高风险行业开始真的想用遥感 AI：灾害、农业、保险、能源、城市、气候监测。这些场景需要证据，不需要空泛 demo。
+- 开源和云样例正在降低接入门槛。embedding、sample workflow、PEFT、benchmark repo 让小团队可以先做评估产品，而不是从零训练大模型。
+- 论文社区暴露了标准化缺口。152 篇论文审计里的协议混乱和权重缺失，等于在公开告诉市场：这里需要一层可信比较和任务适配。
+- 企业客户会为“少选错模型”和“少花标注钱”付费。尤其是项目型预算、咨询交付和合规报告场景。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+用户手上有一个具体地理任务：灾后建筑损坏识别、农田边界、土地覆盖变化、森林砍伐、光伏屋顶、道路变化、矿区监测。他不想先读 30 篇论文、试 10 个 repo、标 1 万张图才知道方向错了。
+
+**为什么留：**
+
+地理任务不是一次性 prompt。区域会变，季节会变，传感器会变，客户要求会变。每次扩区、换数据、改类别，都要重新评估模型适配度。
+
+**为什么传播：**
+
+传播单位不是产品截图，而是 model-fit report：
+
+```txt
+AOI: 江苏沿海农田
+任务: 田块边界提取
+候选模型: rs-embed / GeoFM baseline / fine-tuned Landsat model
+风险: 水田边界和云阴影区域误差高
+建议: 补标 180 个边界样本后再交付
+```
+
+这种报告能在项目组、客户评审、投标文件、研究团队和咨询交付里流转。
+
+**谁付费：**
+
+农业科技公司、保险核灾团队、遥感咨询公司、能源巡检、ESG / 碳监测、政府承包商、气候风险团队、地图数据公司。付费理由是模型评估、区域适配、少量样本微调、报告导出、私有数据接入和项目审计。
+
+## MVP 实验
+
+### 7 天 MVP
+
+只做一个窄任务：农田边界或土地覆盖变化。
+
+输入：
+
+- 一个 AOI。
+- 一种传感器数据或公开影像源。
+- 20 到 100 个用户给的样本。
+- 任务目标：边界、分类或变化检测。
+
+输出：
+
+- 候选模型排名。
+- 每个模型的误差地图。
+- 哪些样本最该补标。
+- 一张 model-fit report。
+
+### 30 天验证
+
+找 5 个真实地理空间团队或遥感咨询项目，拿他们已经做过的任务复跑：
+
+1. 用原本人工流程或旧模型作为 baseline。
+2. 系统推荐模型和补标样本。
+3. 对比：达到同等质量需要多少标注、多少时间、多少人审。
+4. 让项目负责人判断报告能不能用于客户沟通或内部决策。
+
+不要只看 mIoU / F1。要看用户是否因为这张报告改变模型选择、减少标注量、提前发现风险区域。
+
+## 可验证指标
+
+- 从 AOI 和少量样本到第一张 model-fit report 是否小于 30 分钟。
+- 推荐模型在用户任务上的表现是否优于用户默认 baseline。
+- 补标建议能否减少 30% 以上标注量。
+- 误差地图中高风险区域的人审命中率。
+- 报告是否被转发给客户、项目经理或标注团队。
+- 用户是否愿意为第二个 AOI / 第二个任务付费。
+- 结果进入生产流程前，还需要多少人工 GIS 修补。
+
+## 商业化路径
+
+1. **评估报告按次收费。** 适合咨询项目、投标前验证、POC。
+2. **团队订阅。** 每月一定数量 AOI / task / model runs，支持私有数据和历史报告。
+3. **行业模板。** 农业边界、灾害损失、光伏屋顶、森林变化、道路巡检，每个模板有自己的指标和风险解释。
+4. **私有部署。** 政府、能源、保险、地图数据公司会要求数据不出域。
+5. **标注与微调联动。** 从误差地图生成补标任务，补标后自动微调并复测。
+
+## 反例 / 风险
+
+1. **市场比通用 AI 慢。** 地理空间团队采购慢，项目型强，销售周期不会短。
+2. **数据接入复杂。** 不同影像源、坐标系、时间序列、云遮挡、许可条款都会拖慢交付。
+3. **不能替代专家判断。** 模型评估层要让专家更快判断，不要假装 AI 能独立承担灾害或保险责任。
+4. **开源 benchmark 可能 commoditize。** 如果社区很快统一评测 harness，独立产品必须靠数据接入、行业模板、报告和 workflow 留住客户。
+5. **结果责任敏感。** 尤其保险、灾害、政府项目，报告必须写清模型边界和人审要求，不能把概率图包装成确定事实。
+6. **MVP 容易做成咨询外包。** 如果每个 AOI 都要人工专家调参，产品化会失败。必须沉淀可复用任务模板和误差类型库。
+
+## 我的判断
+
+这是一个小而硬的 vertical AI 机会。
+
+它不适合做大众产品，也不适合靠内容传播。它适合做给遥感团队、行业咨询商和高风险地理任务买方的判断层：少选错模型，少浪费标注，早发现风险区域，给客户一张能审的证据报告。
+
+如果创业者要切，别从训练大模型开始。先做 model-fit report，证明你能比用户自己更快选模型、更早发现错误、更省标注钱。
+
+## 来源
+
+- arXiv：《No One Knows the State of the Art in Geospatial Foundation Models》，152 篇论文审计、评测协议混乱、权重发布缺失、提出共享评估 harness 等标准化建议：[https://arxiv.org/abs/2605.12678](https://arxiv.org/abs/2605.12678)
+- Hugging Face Papers：同一论文页面，作为近期 geospatial foundation model 评估信号：[https://huggingface.co/papers/2605.12678](https://huggingface.co/papers/2605.12678)
+- GitHub：cybergis/rs-embed，一行代码获取 remote sensing foundation model embeddings：[https://github.com/cybergis/rs-embed](https://github.com/cybergis/rs-embed)
+- GitHub：AWS sample geospatial foundation models on AWS，earth-scale ecosystem monitoring、semantic search、change detection、natural language querying：[https://github.com/aws-samples/sample-geospatial-foundation-models-on-aws](https://github.com/aws-samples/sample-geospatial-foundation-models-on-aws)
+- GitHub：IBM peft-geofm，geospatial foundation models 的参数高效微调：[https://github.com/IBM/peft-geofm](https://github.com/IBM/peft-geofm)
+- GitHub：Landsat-Bench，Landsat foundation models 的 datasets and benchmarks：[https://github.com/isaaccorley/landsatbench](https://github.com/isaaccorley/landsatbench)
+
+## 后续跟踪点
+
+- 是否出现被行业团队采用的共享 geospatial eval harness。
+- rs-embed、AWS GeoFM sample、PEFT workflow 是否被咨询和企业团队真实使用。
+- 哪个垂直任务最愿意付费：农业边界、灾害核损、能源巡检、土地覆盖，还是气候风险。
+- 模型报告能否成为客户交付物，而不只是研究人员内部 notebook。

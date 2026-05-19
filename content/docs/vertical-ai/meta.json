@@ -2,6 +2,7 @@
   "title": "垂直 AI",
   "pages": [
     "index",
+    "geospatial-foundation-model-evaluation-layer",
     "hypercubic-hopper-mainframe-agents",
     "hebbia",
     "hightouch",
