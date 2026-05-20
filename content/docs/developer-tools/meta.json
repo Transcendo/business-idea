@@ -5,6 +5,7 @@
     "lovable",
     "cursor-anysphere",
     "ai-coding-agent-control-plane",
+    "ai-coding-token-cost-profiler",
     "agent-failure-regression-harness",
     "agent-database-branching-sandbox",
     "insforge-agentic-backend",

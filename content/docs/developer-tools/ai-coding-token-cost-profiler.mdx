@@ -1,0 +1,175 @@
+---
+title: AI Coding Token Cost Profiler
+description: AI coding agent 的新痛点不是“会不会写代码”，而是一次任务到底把 token 烧在了哪里。机会是把 Claude Code、Codex、Cursor 等会话里的上下文浪费、成本漂移、慢路径和无效重试压成可执行的成本诊断 receipt。
+created: 2026-05-20
+tags:
+  - ai-coding
+  - developer-tools
+  - cost-observability
+  - agent-runtime
+---
+
+# AI Coding Token Cost Profiler
+
+## 一句话判断
+
+AI coding agent 的新痛点不是“会不会写代码”，而是一次任务到底把 token 烧在了哪里。
+
+下一层机会是把 Claude Code、Codex、Cursor 等会话里的上下文浪费、成本漂移、慢路径和无效重试压成一份可执行的成本诊断 receipt：哪些文件不该进上下文、哪一步重试最贵、哪个 MCP / shell 调用拖慢任务、下次运行前该怎么剪上下文。
+
+这不是普通账单仪表盘。账单只能告诉你花了多少钱，profiler 要告诉你为什么花、哪里浪费、怎么少花。
+
+## 赛道 / 产品信号
+
+本轮信号很集中：开发者开始把 AI coding 的痛点从“模型质量”转向“额度、成本、上下文卫生和运行效率”。
+
+- CodeBurn 在 GitHub 上直接定位为 “See where your AI coding tokens go”，面向 Claude Code、Codex、Cursor 做交互式 TUI 成本可观测。搜索时 GitHub API 显示 6.7k+ stars，说明这个痛点已经不小众。
+- budi 的 README 写得更窄：local-first cost analytics，按 repo、branch、ticket、file 看 Claude Code、Cursor、Codex、Copilot CLI / Chat 的 token 和 money 去向。
+- AgentTrace 做本地 agent session history，覆盖 cost、tokens、time、tool failures、latency、health、diffs、reports、CI gates。
+- PrismoDev 在 HN 以 “local CLI for finding token waste in Claude Code/Codex” 出现。README 直接点名 lockfile、旧日志、generated artifacts、会话膨胀到 millions of tokens。
+- LangCost 把自己描述成 cost intelligence and fault attribution engine，方向从“看花费”往“定位浪费和故障归因”走。
+- Reddit r/ChatGPTCoding 里用户抱怨 Claude Code $20 套餐一次 meaty prompt 10 分钟就烧完额度。这不是抽象成本焦虑，是日常开发节奏被限额打断。
+
+判断：AI coding 的使用频率起来后，成本可观测会从 power user 玩具变成团队基础设施。谁先把“省 token”变成可复查、可复制、可进 CI 的工程动作，谁就有机会卡在 agent runtime 旁边。
+
+## 用户痛点是什么
+
+1. **不知道钱花在哪。** 开发者只看到额度没了、账单涨了、agent 变慢了，但不知道是 lockfile、旧日志、巨型 README、生成物、测试输出，还是 agent 重试烧掉了 token。
+2. **上下文污染看不见。** Agent 会读不该读的文件，把噪声塞进上下文。结果是更贵、更慢、更容易跑偏。
+3. **套餐限额打断工作流。** 个人开发者会被 Claude / Codex / Cursor 的额度切断；团队会遇到预算中心、成本归因和滥用问题。
+4. **多工具成本分裂。** 同一个 repo 可能有人用 Claude Code，有人用 Codex，有人用 Cursor 或 Copilot。平台各管各的，团队想看项目级成本很难。
+5. **只看账单不够。** 真正有价值的是“下次怎么少花”：该忽略哪些路径、该压缩哪些日志、该先跑哪个 verifier、该拆成几个小任务。
+
+## AI 是否真的压缩任务
+
+这里 AI 压缩的不是写代码本身，而是三件以前没人愿意做的苦活：
+
+- 从 agent 本地 session、CLI 日志、repo 文件结构、diff 和 shell output 里自动归因成本。
+- 把原始 token / 时间 / 工具调用压成开发者能行动的几条修复建议。
+- 生成下次 agent run 可以直接使用的 context budget、ignore patch、prompt patch 和 CI gate。
+
+好产品不是多画几个图，而是给出这种输出：
+
+```text
+本次 run 花费 1.42M input tokens。
+其中 38% 来自 pnpm-lock.yaml 和 generated OpenAPI 文件。
+22% 来自重复测试日志。
+建议：新增 .agentignore 4 条；把任务拆成 2 个 run；先跑 typecheck 再让 agent 修复。
+预计下次节省 52% input tokens。
+```
+
+这份 receipt 能直接贴进 PR、Slack、issue 或团队复盘。它比“成本下降 20%”更像开发者会转发的东西。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户在本地 repo 里运行一个 CLI；系统读取现有 AI coding session 和文件结构，不需要 API key，把 token 浪费、慢路径和失败重试压成一份 cost receipt，并生成下一次 agent run 的上下文瘦身方案。**
+
+第一版只做四个动作：
+
+- `doctor`：扫描 repo，找 lockfile、generated files、旧日志、大型资产、重复文档、无关目录。
+- `trace`：读取 Claude Code / Codex / Cursor / Copilot 本地会话记录，统计 token、时间、模型、工具调用、失败步骤。
+- `patch`：生成 `.agentignore`、context pack、任务拆分建议和 prompt patch。
+- `gate`：在 CI 或 agent wrapper 前检查本次任务是否会超过预算。
+
+别一上来做大平台。先让一个开发者在 5 分钟内看到“原来我的 token 是这样被烧的”。
+
+## 为什么现在
+
+- Coding agent 从补全变成长 session worker，成本不再是偶发支出，而是每天发生的开发成本。
+- Claude Code、Codex CLI、Cursor、Copilot CLI 同时存在，单一平台的账单页无法给团队级答案。
+- Agent 会读文件、跑测试、看日志、调用 MCP，token 输入不再由人手动控制，浪费会自然膨胀。
+- 本地优先的 profiler 更容易被开发者接受。代码、日志、会话记录不出机器，阻力比 SaaS 小。
+- 开源项目同时冒出多个相似切口，说明 builder 正在被同一个痛点撞到。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+额度被烧光、账单变高、agent 变慢、团队开始问“谁花的钱”。这种痛点不用教育太久。
+
+**为什么留：**
+每个 repo 的上下文卫生会持续变化。依赖升级、日志积累、生成文件变多、agent 工具变多，profiler 需要反复跑。
+
+**为什么传播：**
+最适合传播的是成本 receipt：
+
+- `删掉 4 类噪声后，本 repo agent run 输入 token 下降 52%。`
+- `这次 Claude Code 额度 31% 花在 lockfile，19% 花在重复测试日志。`
+- `Agent 第 5 次重试后收益为 0，建议预算硬停。`
+
+这类截图比“我们做 AI observability”具体得多。
+
+**谁付费：**
+个人开发者会用免费 CLI。真正付费方是 AI-heavy 工程团队、AI-native agency、内部平台团队、用 coding agent 批量交付的软件外包团队。付费点在团队 dashboard、跨工具成本归因、CI gate、policy 模板、私有部署和历史趋势。
+
+## MVP 实验
+
+### 7 天 MVP
+
+只支持本地 CLI，不碰云端账号。
+
+```bash
+agent-cost doctor
+agent-cost trace --provider claude-code
+agent-cost patch --write-agentignore
+agent-cost receipt --last
+```
+
+输出三样东西：
+
+1. `cost-receipt.md`：本次或最近 7 天 token、时间、工具调用、失败重试、最贵路径。
+2. `.agentignore` 建议：哪些目录和文件不该让 agent 默认读取。
+3. `next-run-plan.md`：下次任务该怎么拆、预算设多少、先跑哪些 verifier。
+
+### 30 天验证
+
+- 找 20 个高频使用 Claude Code / Codex / Cursor 的开发者或小团队。
+- 每个 repo 先跑一周 baseline，再跑 profiler + ignore patch。
+- 对比平均 input tokens、任务完成时间、额度耗尽次数、agent 重试次数、人工 review 时间。
+- 观察 receipt 是否被贴进 PR、issue、Slack、Discord。
+
+如果用户只看一次报告就关掉，说明它只是好奇心工具。真正成立的信号是团队把 `gate` 放进 agent wrapper 或 CI。
+
+## 商业化路径
+
+1. **开源本地 CLI。** 免费读取本地 session 和 repo 结构，建立信任。
+2. **团队成本面板。** 汇总 repo、branch、ticket、成员、agent provider 的成本趋势。
+3. **CI / PR gate。** Agent PR 自动附 cost receipt；超预算、上下文污染、无效重试进入 GitHub Check。
+4. **策略模板。** 不同行业和 repo 类型的默认 ignore、budget、retry、verifier 规则。
+5. **企业私有部署。** SSO、权限、审计导出、成本中心、采购和合规报表。
+
+## 反例 / 风险
+
+1. **平台会内置一部分。** Anthropic、OpenAI、Cursor 可能把基础 token 统计做掉。独立产品必须赢在跨工具、repo 级归因、CI gate 和可执行修复建议。
+2. **省钱不是所有人的强痛点。** 个人用户可能骂完额度就换工具，不一定付费。团队成本归因更像付费市场。
+3. **本地日志格式会变。** 各工具 session 文件不稳定，适配维护成本高。
+4. **误判会伤信任。** 如果把有用上下文当垃圾删掉，agent 成功率下降，用户会立刻卸载。
+5. **容易和 agent control plane 重叠。** 预算刹车、权限、verifier 是相邻方向。这个 wedge 必须死盯成本归因和上下文瘦身，不要变成大而全治理平台。
+
+## 可验证指标
+
+- 平均 input tokens 是否下降 30% 以上。
+- 单任务 wall-clock 是否下降。
+- Agent 失败重试次数是否下降。
+- `.agentignore` / context patch 被采纳比例。
+- Receipt 被贴进 PR / issue / Slack 的比例。
+- 7 天后 CLI 仍被使用的 repo 比例。
+- 团队是否愿意为跨工具 dashboard 和 CI gate 付费。
+
+## 来源
+
+- GitHub：CodeBurn，Claude Code / Codex / Cursor 成本可观测 TUI：[https://github.com/getagentseal/codeburn](https://github.com/getagentseal/codeburn)
+- GitHub：budi，local-first cost analytics for AI coding agents：[https://github.com/siropkin/budi](https://github.com/siropkin/budi)
+- GitHub：AgentTrace，AI coding-agent session history / cost / tokens / tool failures：[https://github.com/luoyuctl/agenttrace](https://github.com/luoyuctl/agenttrace)
+- HN：PrismoDev，local CLI for finding token waste in Claude Code / Codex：[https://news.ycombinator.com/item?id=48200057](https://news.ycombinator.com/item?id=48200057)
+- GitHub：PrismoDev，diagnose token waste, generate smaller context packs：[https://github.com/shanirsh/prismodev](https://github.com/shanirsh/prismodev)
+- GitHub：LangCost，cost intelligence and fault attribution for AI systems and coding agents：[https://github.com/vjvkrm/langcost](https://github.com/vjvkrm/langcost)
+- Reddit：r/ChatGPTCoding 用户讨论 Claude Code / Codex 套餐额度和使用压力：[https://www.reddit.com/r/ChatGPTCoding/comments/1st1diz/why_is_claude_code_so_much_more_stingey_with/](https://www.reddit.com/r/ChatGPTCoding/comments/1st1diz/why_is_claude_code_so_much_more_stingey_with/)
+
+## 后续跟踪点
+
+- CodeBurn 这类高星项目能否转化成付费团队版。
+- 不同 provider 的本地 session 格式是否稳定。
+- 用户更愿意为“省 token”付费，还是为“提高 agent 成功率 + 减少 review 时间”付费。
+- CI gate 是否会成为 AI-generated PR 的默认附件。
