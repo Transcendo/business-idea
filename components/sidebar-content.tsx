@@ -181,6 +181,7 @@ export const contents: Content[] = [
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-20", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "AI Search Visibility", href: "/docs/vertical-ai/ai-search-visibility-action-layer", icon: () => <Search className="w-4 h-4 text-current" /> },
 			{ title: "Demo-to-Agent Workflow", href: "/docs/ai-agents/demonstration-to-agent-workflow-trainer", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "AI Coding Token Cost", href: "/docs/developer-tools/ai-coding-token-cost-profiler", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Mobile AI Test Agent", href: "/docs/developer-tools/mobile-ai-test-agent", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
@@ -603,6 +604,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/vertical-ai", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "AI Search Visibility", href: "/docs/vertical-ai/ai-search-visibility-action-layer", icon: () => <Search className="w-4 h-4 text-current" /> },
 			{ title: "Geospatial FM Eval", href: "/docs/vertical-ai/geospatial-foundation-model-evaluation-layer", icon: () => <MapPinned className="w-4 h-4 text-current" /> },
 			{ title: "Hypercubic Hopper", href: "/docs/vertical-ai/hypercubic-hopper-mainframe-agents", icon: () => <Briefcase className="w-4 h-4 text-current" /> },
 			{ title: "Hebbia", href: "/docs/vertical-ai/hebbia", icon: () => <FileSearch className="w-4 h-4 text-current" /> },

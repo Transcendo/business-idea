@@ -1,0 +1,178 @@
+---
+title: AI Search Visibility Action Layer
+description: 把 AI 搜索可见性从监控报表，压成网站、内容和引用修复的行动层。
+---
+
+# AI Search Visibility Action Layer
+
+AI 搜索可见性的机会，不是再做一个“ChatGPT 会不会提到我”的排名截图。
+
+真正的缺口是：品牌、SaaS、律师事务所、本地服务和内容站点正在失去一部分发现入口，但多数团队不知道原因，也不知道该改哪一页、哪段内容、哪个 robots 规则、哪个引用来源。
+
+更像新一代 SEO 工具的窄切口：
+
+> 用户输入网站和目标问题；系统返回 AI 引擎能否访问、如何理解、为什么不引用、应该改什么，并把修复拆成可执行任务。
+
+## 产品信号
+
+Product Hunt 当日出现多个相关信号：[Insights by Omnia](https://www.producthunt.com/products/omnia-2) 主打“step-by-step action plans to improve your AI visibility”，同页 Omnia 定位为“AI visibility tool”，覆盖 prompt discovery、brand presence、competitor benchmark 和 citation improvement。
+
+Omnia 官网也把问题说得很直：营销团队需要知道品牌在 AI search 里出现在哪里、和竞品怎么比、哪些 prompt 应该监控、AI 引擎引用了哪些来源。[Omnia 官网](https://www.useomnia.com/) 已经把产品拆成 AI visibility tracking、prompt discovery、sentiment analysis、MCP/API 等模块。
+
+这不是孤例。Amplitude 也发布了 [AI Visibility Platform](https://amplitude.com/ai-visibility)，把“品牌在 AI 搜索里如何出现”变成产品线；Zapier 已经整理 [AI visibility tools](https://zapier.com/blog/best-ai-visibility-tool/)；Profound 写了 [AEO tools guide](https://www.tryprofound.com/blog/9-best-answer-engine-optimization-platforms)，说明 answer engine optimization 已经开始被工具化。
+
+社区痛点更具体。Reddit r/SEO 有帖子说，很多报告只告诉他“AI visibility low”，但不说明到底是 robots.txt、CDN、origin 还是某个 bot 被挡，于是作者做了一个 CLI 去检查 GPTBot、ClaudeBot、PerplexityBot 是否真的能访问网站：[Reddit r/SEO crawler reachability thread](https://www.reddit.com/r/SEO/comments/1tabkgw/built_a_cli_that_tells_me_if/)。HN 上也有创业者问 AI assistant referral 是否开始超过传统搜索：[Ask HN: Is LLMSEO a thing now?](https://news.ycombinator.com/item?id=44039884)。
+
+## 用户痛点
+
+传统 SEO 的反馈回路是：关键词、排名、点击、转化。
+
+AI 搜索把链路搞碎了：
+
+- 用户不一定点进网站；答案可能直接在 ChatGPT、Perplexity、Claude、Google AI Overview 里完成。
+- 品牌可能被提到，但描述错了。
+- 竞品可能被引用，因为它的内容更容易被模型读懂。
+- 网站可能不是内容差，而是 crawler 被挡、结构化信息缺失、页面信号太弱。
+- 营销团队看到 visibility score，却不知道下一步该找 SEO、工程、内容、PR 还是法务。
+
+这类工具如果只做“排名监控”，会很快变成报表软件。报表不是痛点终点。痛点终点是：今天该改什么，改完能不能验证。
+
+## AI-native wedge
+
+最小 wedge 应该是“AI 搜索修复单”，不是 dashboard。
+
+输入：
+
+- 网站 URL
+- 目标用户问题，例如“best customer support AI for B2B SaaS”
+- 竞品列表
+- 目标市场和语言
+
+输出：
+
+- AI 引擎答案截图/文本摘要
+- 是否被提到、被怎么描述、被引用什么来源
+- crawler 可达性检查：robots、CDN、origin、常见 AI bot
+- 内容缺口：缺少对比页、pricing 解释、use case、FAQ、第三方引用
+- 修复任务：工程任务、内容任务、PR/外链任务，按影响和难度排序
+- 复测日期和版本记录
+
+AI 真正压缩的是判断和拆任务：从“看一堆 prompt 结果”变成“这 5 个动作最可能让你进入答案”。
+
+## 为什么现在
+
+三件事叠在一起：
+
+1. 用户发现路径从 Google 搜索外溢到 ChatGPT、Perplexity、Claude、AI Overview。
+2. AI crawler、答案引用、品牌描述，已经变成 SEO 团队能感知但不擅长处理的新对象。
+3. 市场已有一批监控工具，下一步会从“看见问题”走向“修复问题”。
+
+这里的创业机会不是再喊“GEO”。GEO 很容易变成新瓶装旧酒。
+
+更好的机会是把 SEO、内容、技术站点健康、引用建设和竞品答案对比压到一个 action layer 里。
+
+## 为什么用户会来、留、传播、付费
+
+用户会来：
+
+- 老板问“ChatGPT 推荐我们吗？”营销负责人今天就要回答。
+- SEO 团队发现流量结构变了，但 GA/SC 看不到完整原因。
+- 创业公司想知道自己在“best X tool”类问题里有没有机会被 AI 提到。
+
+用户会留：
+
+- prompt、模型、AI 搜索产品和竞品内容都在变，复测是持续需求。
+- 每次改网站、发内容、做 PR，都需要看 AI 引擎是否重新理解。
+- 团队需要版本记录，证明哪次修复带来了 visibility 改善。
+
+用户会传播：
+
+- “AI visibility audit card”天然适合发给老板、客户或增长群。
+- agency 可以把修复清单当成销售材料。
+- 创业公司可以晒“我们进入 Perplexity/ChatGPT 答案”的证据卡。
+
+用户会付费：
+
+- B2B SaaS、律师、医疗、本地服务、金融服务都愿意为高意图线索付费。
+- agency 需要批量跑客户站点。
+- 企业需要竞品监控、权限、审计、API、报告导出和自动复测。
+
+## MVP 实验
+
+别一开始做大平台。先做一个窄、硬、可验证的版本。
+
+MVP：AI Search Visibility Fix Report
+
+- 只覆盖英文 B2B SaaS 或法律服务网站。
+- 支持 20 个目标问题。
+- 调用 3 类来源：公开 AI 搜索结果、页面 crawler 可达性、站内内容结构。
+- 产出一份修复单：10 个具体动作，标注 owner、成本、预期影响。
+- 7 天后复测，比较 answer presence、citation source、description accuracy。
+
+定价可以从一次性 audit 开始：99 美元到 499 美元。验证成立后，再做月费：监控 prompt、竞品、修复任务、复测和报告。
+
+## 商业化路径
+
+第一阶段：服务化工具。
+
+- 给 20 个 B2B SaaS 或本地高客单价服务做 audit。
+- 人工补齐修复建议，观察客户愿不愿意执行。
+- 收集哪些修复动作最常见、哪些真的影响 AI 答案。
+
+第二阶段：半自动 SaaS。
+
+- crawler reachability check 自动化。
+- prompt set 和竞品 set 模板化。
+- 修复任务自动生成 Jira/Linear/Notion ticket。
+- 每周复测并生成客户可转发 report。
+
+第三阶段：agency / API。
+
+- 多客户 dashboard。
+- 白标报告。
+- MCP/API 给内容团队、SEO 工具和 CMS 调用。
+
+## 反例和风险
+
+最大风险：AI 搜索可见性被夸大。
+
+很多行业的转化仍然来自 Google、社媒、口碑和销售触达。AI answer 目前可能只是辅助发现渠道。如果工具只卖恐惧，续费会很差。
+
+第二个风险：不可控。
+
+模型答案波动大，prompt 稍微变一下结果就变。工具必须承认边界，用抽样、趋势和可复测任务说话，不能承诺“保证进入 ChatGPT 推荐”。
+
+第三个风险：大 SEO 平台会吃掉监控层。
+
+Semrush、Ahrefs、HubSpot、Amplitude 都能加 AI visibility 模块。新公司不能停在 score 和 dashboard，要更接近执行：诊断、修复、复测、证据。
+
+第四个风险：黑帽 GEO。
+
+如果产品鼓励垃圾内容、伪引用、批量 AI 页面，会很快被搜索平台和模型供应商打击。长期可做的是技术可达性、清晰内容、可信来源和真实引用。
+
+## 可验证指标
+
+- 从输入网站到第一份修复单的时间：小于 10 分钟。
+- 客户执行率：至少 40% 修复任务被完成。
+- 复测改善：目标 prompt 中 answer presence、citation 或 description accuracy 有可见变化。
+- 报告转发率：客户是否把 audit card 发给老板、客户或群。
+- 付费转换：一次性 audit 到月费监控的转化率。
+- 留存信号：客户是否在发新页面、改 pricing、做竞品发布后主动复测。
+
+## 创业判断
+
+这条线值得收，因为它有真实预算、真实焦虑和多个公开信号。
+
+但不要做“AI SEO 仪表盘”。那会被老 SEO 工具卷死。
+
+更好的形态是：AI 搜索里的“诊断医生 + 修复工单 + 复测证据”。用户不是想看分数，他们想知道今天该改哪一处，改完怎么证明有效。
+
+## Sources
+
+- [Insights by Omnia on Product Hunt](https://www.producthunt.com/products/omnia-2)
+- [Omnia AI Visibility Software](https://www.useomnia.com/)
+- [Amplitude AI Visibility Platform](https://amplitude.com/ai-visibility)
+- [Reddit r/SEO crawler reachability thread](https://www.reddit.com/r/SEO/comments/1tabkgw/built_a_cli_that_tells_me_if/)
+- [Ask HN: Is “LLMSEO” a thing now?](https://news.ycombinator.com/item?id=44039884)
+- [Zapier: The 8 best AI visibility tools in 2026](https://zapier.com/blog/best-ai-visibility-tool/)
+- [Profound: AEO tools guide](https://www.tryprofound.com/blog/9-best-answer-engine-optimization-platforms)
