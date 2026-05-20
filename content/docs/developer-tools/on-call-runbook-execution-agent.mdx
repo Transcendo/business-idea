@@ -1,0 +1,165 @@
+---
+title: On-Call Runbook Execution Agent
+description: On-call AI 的机会不是再做一个会总结告警的聊天框，而是把告警、runbook、日志、指标、权限审批和修复动作压成可审查的 incident execution receipt。
+created: 2026-05-20
+tags:
+  - developer-tools
+  - ai-agents
+  - sre
+  - observability
+  - incident-response
+---
+
+# On-Call Runbook Execution Agent
+
+## 一句话判断
+
+On-call AI 的机会不是再做一个会总结告警的聊天框，而是把告警、runbook、日志、指标、权限审批和修复动作压成可审查的 incident execution receipt。
+
+这个方向真正卖的是半夜 3 点的判断力：系统能不能在工程师睁眼前，把“可能原因、已查证据、可执行修复、风险边界、需要批准的动作”整理到一个可信现场里。
+
+## 赛道 / 产品信号
+
+本轮信号集中在 AI on-call / runbook execution：
+
+- Relvy 的官网定位是 `Your runbooks, automated`，描述是用 AI powered on-call runbook execution 降低 MTTR。
+- HN 上 Relvy 的 Launch HN 标题直接写 `On-call runbooks, automated`，有 48 points / 25 comments。这个热度不算爆，但评论足够说明 SRE 场景有真实购买讨论。
+- Sonarly 官网把自己定位成 `Your software fixes itself`，强调 triage alerts、fix bugs and incidents、带 production system context。
+- Steadwing 官网定位是 `Your Autonomous On-Call Engineer`，说法是 5 分钟内诊断 root cause，并交付 actionable RCA 与 remediation。
+- RunbookAI 的 README 更克制：帮助 on-call engineers 从 alert 到 likely root cause，做 hypothesis-driven investigation、runbook-aware context、approval-gated remediation。
+- HN 上还出现过 Parity、HolmesGPT、RunbookAI 等 AI on-call / observability agent 讨论。供应侧已经不是单点 demo。
+
+判断：这不是“AI 写运维总结”。更尖的机会是 **runbook-aware incident executor**，介于 observability、workflow runtime 和人类 SRE 之间。
+
+## 用户痛点是什么
+
+On-call 的痛不是信息少，而是信息太碎、责任太重、时间太紧。
+
+真实事故里，工程师要同时处理：
+
+1. 告警是否是真的，还是监控噪音。
+2. 哪个服务、版本、依赖、队列、数据库或第三方 API 可能是根因。
+3. runbook 是否过期，命令是否仍然安全。
+4. 修复动作会不会扩大事故，比如重启错服务、清错缓存、重复执行 migration。
+5. 谁有权限批准危险动作。
+6. 复盘时能不能证明当时为什么这么做。
+
+普通 observability 平台擅长展示图表。普通聊天机器人擅长解释文本。SRE 需要的是“带证据的下一步”，不是更长的摘要。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户接入 PagerDuty / Slack alert、runbook 仓库、日志和指标；系统返回 hypothesis tree、证据查询、下一步命令、风险提示、审批点和 incident receipt。**
+
+第一版只做三件事：
+
+- 把告警映射到相关 runbook、服务 owner、最近 deploy、相关 dashboard 和常见根因。
+- 自动执行只读调查：查日志、查指标、查 status page、查 recent change、查历史事故。
+- 对危险动作只生成 proposal，不自动执行；工程师批准后才运行，并记录完整证据。
+
+AI 真正压缩的是“从告警到可执行判断”的 15-30 分钟，而不是把工程师替换掉。
+
+## 为什么现在
+
+几个变化叠在一起：
+
+- LLM 已经能读 runbook、PR、日志片段、指标异常和历史 incident report，适合做假设生成与证据归纳。
+- Tool calling / MCP / agent framework 让 AI 能调用 Grafana、Datadog、Kubernetes、AWS、GitHub、PagerDuty、Slack。
+- AI coding 和高频部署会增加线上变更密度，on-call 负担更重。
+- SRE 团队越来越讨厌黑盒自动修复，但愿意接受 approval-gated remediation。
+- Relvy、Sonarly、Steadwing、RunbookAI、Parity、HolmesGPT 这些信号说明市场正在从“告警总结”走向“事故执行层”。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：** 团队已经有告警、dashboard 和 runbook，但半夜还是靠人肉翻日志。入口可以很窄：`把这个 PagerDuty 告警变成一张可执行调查卡。`
+
+**为什么留：** 每次事故都会沉淀服务画像、runbook 命中率、根因证据、危险命令审批记录和复盘。历史越多，系统越懂这家公司的“事故手感”。
+
+**为什么传播：** 最容易转发的是 incident receipt：`02:13 告警触发，02:15 排除数据库，02:18 指向 recent deploy，02:20 建议回滚，02:22 owner 批准，02:25 错误率恢复。` 这张卡能进 Slack、Linear、复盘文档和管理层周报。
+
+**为什么付费：** SRE 时间贵，MTTR 贵，事故赔偿更贵。付费点在私有部署、只读调查并发、工具集成、审批策略、审计保留、runbook 健康度、RCA 自动生成、incident receipt 存档。
+
+## MVP 实验
+
+### 10 天 MVP
+
+先别碰“自动修复生产”。只做 **read-only incident investigator**。
+
+输入：
+
+- PagerDuty / Slack 告警文本。
+- 一个 GitHub runbook 目录。
+- Grafana / Datadog / CloudWatch 只读 token。
+- 最近 24 小时 deploy / PR / release 信息。
+
+输出：
+
+- hypothesis tree：3 个最可能根因，每个附证据。
+- executed checks：查过哪些日志、指标、commit、status page。
+- next action：安全命令、危险命令、人工确认点分开。
+- incident receipt：可贴进 Slack 和复盘文档。
+
+### 30 天验证
+
+找 5 个小型 SaaS / infra 团队，只跑真实告警，不跑演示数据。
+
+每队选择 10 个历史事故回放，再接 5 次真实 on-call。
+
+验证点：
+
+- 从告警到第一份可信 hypothesis 的时间是否低于 3 分钟。
+- 误导性建议是否低于团队可接受阈值。
+- 工程师是否愿意把 receipt 贴进 Slack / postmortem。
+- 是否能发现过期 runbook、缺失 dashboard、owner 不清这些组织问题。
+
+## 商业化路径
+
+推荐从 SRE / platform team 的轻量工作流切入：
+
+1. Slack / PagerDuty bot：接到告警后自动生成 investigation card。
+2. GitHub runbook sync：发现过期 runbook、缺少 owner、命令未验证。
+3. Observability connectors：Datadog、Grafana、CloudWatch、Kubernetes。
+4. Approval-gated remediation：只允许预注册动作，默认人工批准。
+5. Incident memory：把历史事故变成服务级知识库。
+6. Enterprise：私有部署、权限隔离、审计日志、合规保留。
+
+早期不要做“大而全 AIOps”。那个坑很深，买家也疲劳。先证明一件事：半夜告警来了，工程师打开 Slack 看到的是可信调查现场，不是一堆图表。
+
+## 反例 / 风险
+
+1. **误修生产是大雷。** 早期必须 read-only 或 approval-gated，不能卖“自动修一切”。
+2. **数据接入很脏。** 每家公司日志、指标、runbook、权限和服务拓扑都不一样，实施成本可能吞掉毛利。
+3. **大平台会下压。** Datadog、PagerDuty、New Relic、Grafana、Rootly、incident.io 都能加 AI。创业公司要靠窄 wedge、快接入和更好的 receipt 体验赢。
+4. **runbook 本身可能烂。** 如果客户没有基础运维纪律，AI 只会更快地执行坏流程。
+5. **SRE 信任建立慢。** 一次胡说就会被关掉。产品要把证据、置信度和禁止动作做得非常清楚。
+6. **和 AI SOC 容易混淆。** SOC triage 处理安全告警；这里处理生产可靠性和服务事故，买家、工具链、RCA 口径不同。
+
+## 可验证指标
+
+- 告警到第一份 hypothesis 的中位时间。
+- 工程师采纳第一建议的比例。
+- read-only 调查覆盖的工具数量。
+- 误导性或危险建议次数。
+- MTTA / MTTR 是否下降。
+- receipt 被贴进 Slack / postmortem 的比例。
+- 过期 runbook 被发现并修复的数量。
+- 第二个服务接入率。
+
+## 来源
+
+- Relvy 官网：`Your runbooks, automated`，AI powered on-call runbook execution：[https://www.relvy.ai](https://www.relvy.ai)
+- HN：Launch HN: Relvy (YC F24) – On-call runbooks, automated：[https://news.ycombinator.com/item?id=47702647](https://news.ycombinator.com/item?id=47702647)
+- Sonarly 官网：`Your software fixes itself`，triage alerts and fix bugs/incidents with production context：[https://sonarly.com/](https://sonarly.com/)
+- Steadwing 官网：`Your Autonomous On-Call Engineer`，root cause 与 remediation：[https://www.steadwing.com/](https://www.steadwing.com/)
+- HN：Show HN: Steadwing – Your Autonomous On-Call Engineer：[https://news.ycombinator.com/item?id=47270724](https://news.ycombinator.com/item?id=47270724)
+- RunbookAI GitHub README：hypothesis-driven investigation、runbook-aware context、approval-gated remediation：[https://github.com/Runbook-Agent/RunbookAI](https://github.com/Runbook-Agent/RunbookAI)
+- HN：Show HN: RunbookAI – Stop scrolling dashboards at 3 a.m., let AI investigate：[https://news.ycombinator.com/item?id=47039247](https://news.ycombinator.com/item?id=47039247)
+- HN：Launch HN: Parity (YC S24) – AI for on-call engineers working with Kubernetes：[https://news.ycombinator.com/item?id=41357765](https://news.ycombinator.com/item?id=41357765)
+
+## 后续跟踪点
+
+- Relvy / Sonarly / Steadwing 这类产品是否能从 alert summary 走到 approval-gated remediation。
+- Datadog / PagerDuty / Rootly / Grafana 的 AI 功能是否把独立创业窗口压窄。
+- RunbookAI / HolmesGPT 这类开源项目是否形成事实标准的 incident receipt。
+- SRE 团队是否愿意为 runbook 健康度和事故记忆单独付费。
