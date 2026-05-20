@@ -14,6 +14,7 @@
     "agent-context-sandbox-layer",
     "ai-debug-evidence-recorder",
     "ai-qa-release-gate",
+    "mobile-ai-test-agent",
     "agent-plan-review-layer",
     "agent-pr-review-evidence-layer",
     "agent-execution-provenance-container",
