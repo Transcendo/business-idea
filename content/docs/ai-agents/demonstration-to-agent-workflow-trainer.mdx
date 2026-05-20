@@ -1,0 +1,134 @@
+---
+title: Demonstration-to-Agent Workflow Trainer
+description: Agent 自动化的新切口不是让用户写更长 prompt，而是让用户录一遍真实任务，系统把点击、输入、判断点和异常处理压成可复用、可审查的 workflow agent。
+created: 2026-05-20
+tags:
+  - ai-agents
+  - workflow-automation
+  - computer-use
+  - rpa
+  - agent-training
+---
+# Demonstration-to-Agent Workflow Trainer
+
+## 一句话判断
+
+Agent 自动化下一层机会，不是再给用户一个空白聊天框，而是让用户**录一遍真实任务**，系统把点击、输入、判断点和异常处理压成可复用、可审查的 workflow agent。
+
+这比传统 RPA 更轻，比纯 prompt 更稳。关键不是“看我自动点屏幕”，而是把人的一次操作变成可改、可测、可回放的任务配方。
+
+## 赛道 / 产品信号
+
+这轮信号来自几个方向同时挤到一起：
+
+- Product Hunt 上的 [Trainer](https://www.producthunt.com/products/trainer-2) 把卖点说得很直接：用户只要录一次任务，不写 prompt、不标数据，系统捕捉点击、键盘和意图，再转成可复用 agent。
+- [OpenAdapt](https://github.com/OpenAdaptAI/OpenAdapt) 是开源 Generative Process Automation，GitHub 描述明确把屏幕动作、LLM / VLM / LAM 和流程自动化放到一起，说明“从人类操作学习流程”不是单点玩具。
+- Microsoft 的 [UFO](https://github.com/microsoft/UFO) 把 Windows GUI agent 做成可执行任务系统，仓库仍在近期更新。桌面和应用层 agent 开始从论文演示进入工具链。
+- Product Hunt 上的 [ShioriCode](https://www.producthunt.com/products/shioricode) 解决另一个相邻痛点：用户已经在同时跑 Codex、Claude Code、Cursor、Gemini 等 agent，需要可读 timeline、diff review 和长任务界面。
+- Reddit 的 r/LocalLLaMA 里有用户记录 [agent 发出 `rm -rf /` 测试命令](https://www.reddit.com/r/LocalLLaMA/comments/1thosnt/got_my_first_rm_rf_today/)。这不是八卦，是早期 agent 自动化的真实恐惧：一旦能执行，就必须能约束、回放、接管。
+
+单个产品热度不算炸，但组合信号很硬：大家不缺“会说的 agent”，缺的是把真实操作流程安全交给 agent 的方式。
+
+## 用户痛点是什么
+
+今天普通用户和小团队想自动化一件事，通常会卡在三种烂选择里：
+
+- 写一大段 prompt，agent 听懂了 70%，剩下 30% 在真实网页、后台系统、Excel、CRM、ERP 里翻车。
+- 用 Zapier / n8n / RPA 搭流程，字段、条件、权限、异常处理全要自己拆，非技术用户撑不住。
+- 找人外包脚本，第一次能跑，页面一变、权限一过期、异常一出现就坏。
+
+真正的痛点不是“缺少自动化工具”，而是**业务流程藏在人的手上**：什么时候点哪个按钮，看到哪个字段要停，哪个弹窗可以忽略，哪个订单必须转人工。这些知识很难用表单表达，但很容易通过一次操作展示出来。
+
+## AI-native wedge
+
+最小 wedge 可以很窄：
+
+> 用户录一遍跨网页 / 桌面 / SaaS 的重复任务；系统把录屏、点击、DOM、截图、输入文本和人类旁白转成结构化 workflow；用户在关键步骤确认规则；agent 后续按这个 workflow 执行，并输出 run receipt。
+
+AI 在这里压缩四件事：
+
+1. **压缩流程建模。** 不让用户画流程图，而是从操作轨迹里抽取步骤、对象、条件和终止标准。
+2. **压缩规则表达。** 用户不用写 if/else，只要在关键节点说“金额超过 5000 要转人工”“这个弹窗忽略”。
+3. **压缩执行调试。** 每次失败都有屏幕、DOM、输入、模型判断和人工接管点，不是黑盒失败。
+4. **压缩复用成本。** 一次示范可以变成团队模板，别人只要换账号、字段和审批规则。
+
+它不应该一开始就承诺“任何任务都能自动化”。更靠谱的入口是高频、低风险、半结构化的后台操作。
+
+## 为什么现在
+
+几个条件刚好到了：
+
+- 多模态模型能看屏幕、理解 UI、读文本，已经足够支持“从操作轨迹抽步骤”。
+- Browser-use、computer-use、桌面 agent、Windows GUI agent 的基础能力在变成熟，执行层不再全靠传统 RPA selector。
+- 企业和个人都开始试 agent，但 prompt-only 自动化不稳定，失败后很难解释。
+- 传统 RPA 太重，n8n / Zapier 对非技术用户仍有门槛。示范式训练把入口从“配置流程”改成“做一遍给它看”。
+- Agent 权限风险开始被真实用户感知。谁能把录制、审批、回放、权限和接管做进产品，谁就比纯 demo 更接近付费场景。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：** 用户有一堆每天重复的小后台任务，写 prompt 不稳，搭自动化太麻烦。录一次比配置半天更有吸引力。
+
+**为什么留：** 只要一个 workflow 每天跑，用户就会回来修规则、看失败、复制模板、加新任务。
+
+**为什么传播：** 最容易传播的不是产品首页，而是一张“我录了 3 分钟，agent 每天替我跑 40 分钟流程”的 workflow receipt，里面有步骤、节省时间、失败次数和接管点。
+
+**为什么付费：** 个人为本地 workflow 数量、运行次数、跨应用执行付费；小团队为共享模板、队列、审批、权限、日志、人工接管付费；企业为私有部署、审计保留、敏感字段脱敏和系统集成付费。
+
+## MVP 实验
+
+别一上来做通用桌面 agent。先抓一个窄场景：
+
+1. 选 2-3 个高频 SaaS 后台任务，例如 Shopify 订单处理、客服工单分类、发票下载归档。
+2. 做 Chrome extension 或轻量桌面 recorder，采集点击、输入、DOM、截图和用户可选旁白。
+3. 录制后生成步骤卡片：动作、页面、字段、判断条件、失败重试、转人工条件。
+4. 用户只需要确认关键规则，不能让 agent 自己猜高风险动作。
+5. 执行时提供 dry-run、单步确认、失败回放、人工接管。
+6. 每次运行生成 receipt：节省时间、失败原因、修改建议、是否触及敏感字段。
+
+第一批用户别找大型企业。找 20 个 Shopify / DTC 小团队、AI-first agency、运营外包团队。他们流程重复、痛点直接、买单链路短。
+
+## 商业化路径
+
+早期定价可以按“workflow + run + seat”走：
+
+- Free：本地录制、单个 workflow、手动执行、有限历史。
+- Pro：多 workflow、定时运行、失败回放、模板复用、浏览器和桌面双入口。
+- Team：共享 workflow、审批、队列、权限、Slack / email 通知、团队统计。
+- Enterprise：私有部署、审计日志、敏感字段脱敏、SSO、系统连接器、合规保留。
+
+这个产品不要卖“万能 AI 员工”。卖点应该更朴素：把人已经会做的重复流程，变成能被 agent 安全复跑的工作配方。
+
+## 反例 / 风险
+
+- **通用性陷阱。** UI 变化、弹窗、验证码、权限过期会让 agent 频繁失败。MVP 必须限制场景，先证明 3 个任务能稳定跑。
+- **安全风险。** 一旦 agent 能点按钮和执行命令，误操作成本很高。必须有权限边界、dry-run、危险动作确认和回放。
+- **录制数据敏感。** 录屏和 DOM 可能包含客户信息、订单、邮箱、付款数据。产品要默认本地处理、脱敏、可删除。
+- **平台会吸收。** Microsoft、OpenAI、浏览器厂商、RPA 平台都可能做示范式自动化。独立产品要靠跨工具模板、行业 workflow、审计和失败恢复站住。
+- **用户以为录一次就永远能跑。** 真实流程会变。产品必须把“维护 workflow”做得轻，否则留存会掉。
+
+## 可验证指标
+
+- 从录制到首次成功执行的时间。
+- 用户创建第二个 workflow 的比例。
+- 每个 workflow 每周运行次数。
+- 无人工接管成功率，以及触发接管后的恢复率。
+- UI 变化后修复 workflow 的平均时间。
+- 每次运行节省的人工分钟数。
+- Receipt 被转发给同事或客户的次数。
+- 付费用户愿意为哪些能力付费：定时、共享、审批、日志、私有部署。
+
+## 适合谁先做
+
+最适合三类团队：
+
+1. 做 browser / desktop agent runtime 的团队，有执行层能力但缺业务入口。
+2. 做 RPA / workflow automation 的小团队，想用 AI 降低流程配置门槛。
+3. 服务 DTC、客服、运营外包、财务 ops 的 agency，他们知道客户每天重复做什么。
+
+## 来源
+
+- [Product Hunt: Trainer](https://www.producthunt.com/products/trainer-2)
+- [OpenAdapt GitHub](https://github.com/OpenAdaptAI/OpenAdapt)
+- [Microsoft UFO GitHub](https://github.com/microsoft/UFO)
+- [Product Hunt: ShioriCode](https://www.producthunt.com/products/shioricode)
+- [Reddit r/LocalLLaMA: got my first rm -rf today](https://www.reddit.com/r/LocalLLaMA/comments/1thosnt/got_my_first_rm_rf_today/)

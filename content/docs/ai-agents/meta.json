@@ -2,6 +2,7 @@
   "title": "AI 智能体",
   "pages": [
     "index",
+    "demonstration-to-agent-workflow-trainer",
     "research-agent-citation-verifier",
     "computer-use-agent-sandbox-runtime",
     "mobile-gui-agent-runtime",

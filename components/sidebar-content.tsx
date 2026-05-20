@@ -180,6 +180,8 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "2026-05-20", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Demo-to-Agent Workflow", href: "/docs/ai-agents/demonstration-to-agent-workflow-trainer", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-19", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "Geospatial FM Eval", href: "/docs/vertical-ai/geospatial-foundation-model-evaluation-layer", icon: () => <MapPinned className="w-4 h-4 text-current" /> },
 			{ title: "Durable Agent Workflow", href: "/docs/developer-tools/durable-agent-workflow-runtime", icon: () => <Activity className="w-4 h-4 text-current" /> },
@@ -318,6 +320,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/ai-agents", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Demonstration-to-Agent Workflow Trainer", href: "/docs/ai-agents/demonstration-to-agent-workflow-trainer", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Research Agent Citation Verifier", href: "/docs/ai-agents/research-agent-citation-verifier", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "Computer-Use Agent Sandbox Runtime", href: "/docs/ai-agents/computer-use-agent-sandbox-runtime", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Mobile GUI Agent Runtime", href: "/docs/ai-agents/mobile-gui-agent-runtime", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
