@@ -1,0 +1,138 @@
+---
+title: Design System Extraction Layer for Coding Agents
+description: AI coding agent 做前端的缺口不是再多一个生成器，而是把真实网站、品牌规则、设计 token、交互状态和可访问性压成 agent 可执行的设计约束包。
+created: 2026-05-21
+tags:
+  - ai-coding
+  - developer-tools
+  - design-systems
+  - frontend
+  - workflow-automation
+---
+# Design System Extraction Layer for Coding Agents
+
+## 一句话判断
+
+AI coding agent 做前端的缺口，不是再多一个“输入 prompt 生成页面”的玩具，而是把真实网站、品牌规则、设计 token、交互状态和可访问性压成 agent 可执行的设计约束包。
+
+这个机会很实在：agent 会写 UI，但经常写出不像品牌、不可维护、不可复用的页面。设计系统抽取层的价值是让 agent 先拿到“公司到底长什么样”，再开始写代码。
+
+## 赛道 / 产品信号
+
+这轮信号来自 GitHub、npm、HN 和 Reddit，热度不只在设计师圈，也出现在 AI coding 工作流里。
+
+- [design-extract GitHub repo](https://github.com/Manavarya09/design-extract) 定位很直接：从任意网站抽取完整设计系统，输出 DTCG tokens、Tailwind config、Figma variables、MCP server payload、Claude Code / Cursor / Windsurf agent rules。GitHub API 本轮显示 2.8k+ stars，并且 2026-05-20 仍有更新。
+- [designlang npm package](https://www.npmjs.com/package/designlang) 的 latest 描述写到：抽取完整 design language，生成 working Next.js starter、CI drift bot、local studio、W3C DTCG tokens、motion tokens、typed anatomy stubs、Tailwind config。
+- [design-extract README](https://github.com/Manavarya09/design-extract/blob/main/README.md) 不只是截图抽色。它强调 responsive behavior、hover / focus / active states、WCAG contrast scoring、multi-page consistency、drift checks、agent rules 和 MCP payload。
+- HN 上 [Show HN: Figma-use – CLI to control Figma for AI agents](https://news.ycombinator.com/item?id=47645856) 有 115 points / 37 comments，说明“AI agent 直接读取或控制设计工具”已经有真实讨论。
+- HN 上还有 [Show HN: Angora – Front-End Design System as Code Using Claude Code](https://getangora.org)，方向是把 design system 作为 code 给 Claude Code 使用。
+- Reddit RSS 搜索里，r/Frontend 出现“AI to Code on the front-end”和“DOM + visual analysis for frontend audits”等帖子；r/ChatGPTCoding 也出现“让网站更容易被 AI 读取”的讨论。单条热度不高，但痛点方向一致。
+
+## 用户痛点是什么
+
+AI 前端生成现在最尴尬的地方，是“能跑”和“像真的产品”之间隔着一大截。
+
+典型痛点：
+
+- Founder 用 Lovable、v0、Cursor、Claude Code 生成页面，第一版能看，但和品牌、官网、产品 UI 不像。
+- 设计系统散在官网、Figma、CSS、Tailwind config、组件库、品牌 PDF 里，agent 只能靠 prompt 猜。
+- 前端工程师 review agent 代码时，不只是看 bug，还要修 spacing、tokens、hover、dark mode、accessibility、responsive behavior。
+- 代理生成多个页面后，每个页面的按钮、阴影、卡片、文案语气都开始漂。
+- 传统 design handoff 是给人看的；AI coding agent 需要的是可执行、可引用、可测试的设计规则。
+
+这里浪费的不是“写 UI 的时间”，而是把品牌和界面规律翻译给 agent 的时间。
+
+## AI-native wedge
+
+最小 wedge 应该非常清楚：
+
+> 用户输入一个官网 URL、Figma link 或现有产品页面；系统抽取设计 token、组件模式、交互状态、文案语气和可访问性问题；输出一份 agent-ready design pack，让 Claude Code / Cursor / Codex 在实现新页面前读取，并在 PR 后生成 design drift report。
+
+AI 真正压缩三件事：
+
+1. **压缩设计理解。** 从 live DOM、CSS、截图和交互状态里抽取稳定规则，而不是让用户写“做得像 Stripe 一点”。
+2. **压缩 agent 上下文。** 把设计语言转成 tokens、rules、prompts、MCP payload 和 framework config，agent 可以直接消费。
+3. **压缩验收成本。** 新页面生成后，不靠人眼从头扫，而是输出 drift report：哪些 token、状态、断点、对比度、组件结构偏离了源设计。
+
+它不是替代设计师。它是把设计系统变成 coding agent 的运行约束。
+
+## 为什么现在
+
+几个变化叠在一起：
+
+- AI coding agent 已经从“写脚本”进入“生成完整产品界面”。前端质量短板变得刺眼。
+- Lovable、v0、Cursor、Claude Code 等工具降低了做页面的门槛，也放大了同质化和品牌漂移。
+- MCP、agent rules、skills、CLI hook 让设计系统可以被 agent 直接读取，而不是停在 PDF 或 Figma 注释里。
+- DTCG design token 格式、Tailwind、Figma variables、shadcn/ui 这些结构化对象，天然适合变成 agent context。
+- 小团队更愿意为“少改三轮 UI”付费，而不是为一个完整设计平台迁移付费。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：** 用户已经在用 AI 写前端，但生成结果不像自己的产品。一个 URL 到 design pack 的工具，比让用户手写风格 prompt 更快。
+
+**为什么留：** 每次新增页面、重构组件、生成营销页、改版 landing，都可以先读 design pack、后跑 drift check。只要少返工一次，就值得保留在 workflow 里。
+
+**为什么传播：** 最适合传播的是 design report card：源站设计系统、生成页偏离点、修复前后对比、设计分数 badge。它比“又一个 AI builder”更容易被工程师和设计师转发。
+
+**为什么付费：** 个人开发者为 CLI / Pro usage 付费；AI-first agency 为多客户 design packs、brand books、PR drift reports 付费；团队为私有 repo、Figma / GitHub 集成、CI gate、历史漂移监控、SSO 和私有部署付费。
+
+## MVP 实验
+
+别上来做 Figma 替代品。先做一个窄工具：
+
+1. 输入一个公开 URL，抓取首页、产品页、pricing 页三类页面。
+2. 输出 `design-pack/`：DTCG tokens、Tailwind config、component anatomy、interaction states、copy voice、agent rules。
+3. 支持 `npx design-pack add-to-claude-code` 或类似命令，把规则注入 Claude Code / Cursor 项目。
+4. 用户让 agent 生成一个新页面。
+5. 工具对新页面跑 drift check，返回 spacing、color、type scale、component、responsive、accessibility 的偏离报告。
+6. 记录指标：生成页首轮可用率、人工 UI review 时间、设计返工次数、drift report 被贴进 PR 的次数。
+
+第一批用户应该找三类人：AI-first agency、独立 SaaS founder、用 AI 生成营销页和后台页面的小团队。
+
+## 商业化路径
+
+早期产品可以这样分层：
+
+- 免费开源：单 URL 抽取、基础 tokens、基础 agent rules。
+- Pro：多页面抽取、品牌书、Figma variables、drift report、设计分数 badge。
+- Team：GitHub PR check、Figma / Linear / Slack 集成、多品牌 workspace、历史版本比较。
+- Enterprise / Agency：私有部署、多客户模板、白标报告、合规扫描、设计系统迁移服务。
+
+真正能收钱的点不是“抽色”。是减少 AI 生成前端的返工、品牌事故和 review 成本。
+
+## 反例 / 风险
+
+- **平台会吃掉一部分。** Figma、Vercel、Lovable、Cursor 都可能内置设计系统读取能力。独立产品必须赢在跨工具、跨源、CI drift 和 agent-ready 输出。
+- **抽取质量可能很脏。** 复杂网站 CSS、A/B test、第三方组件、广告和 legacy 页面会污染 token。MVP 要让用户确认 source-of-truth 页面。
+- **版权和品牌滥用风险。** “复制任意网站设计”容易滑向抄袭工具。更稳的定位是抽取自己产品、客户授权站点、内部设计系统和品牌一致性检查。
+- **设计师不一定买账。** 如果输出只是给工程师绕过设计师，会被抵触。更好的叙事是把设计系统变成 agent 可执行规范，让设计师少做重复验收。
+- **只做 prompt 包不够。** 如果没有 drift check 和 PR receipt，很容易被 agent rules、README、Cursor rules 这种轻量方案替代。
+
+## 可验证指标
+
+- URL 到可用 design pack 的成功率。
+- Agent 生成页面的首轮验收通过率。
+- 人工 UI review 时间是否下降 30% 以上。
+- Drift report 发现的问题中，多少被开发者实际修复。
+- PR 中 design drift check 的使用频率。
+- 用户是否为多页面、多品牌、多 repo 持续使用。
+- Agency 是否愿意把 report card 发给客户。
+
+## 适合谁先做
+
+最适合三类团队：
+
+1. 已经做 AI coding / AI design / frontend agent 工具的开发者。
+2. 服务多客户的 AI-first agency，他们最怕每个客户的品牌 UI 被 agent 写跑。
+3. 做 design system、frontend platform、DX 工具的小团队，能从 CI / GitHub PR gate 切进去。
+
+## 来源
+
+- [GitHub: Manavarya09/design-extract](https://github.com/Manavarya09/design-extract)
+- [design-extract README](https://github.com/Manavarya09/design-extract/blob/main/README.md)
+- [npm: designlang](https://www.npmjs.com/package/designlang)
+- [Design Tokens Community Group format](https://tr.designtokens.org/format/)
+- [HN: Show HN: Figma-use – CLI to control Figma for AI agents](https://news.ycombinator.com/item?id=47645856)
+- [HN: Show HN: Angora – Front-End Design System as Code Using Claude Code](https://getangora.org)
+- [Reddit r/Frontend search: AI design system](https://www.reddit.com/r/Frontend/search.rss?q=AI%20design%20system&restrict_sr=1&sort=new&t=month)
+- [Reddit r/ChatGPTCoding search: design system cursor claude code](https://www.reddit.com/r/ChatGPTCoding/search.rss?q=design%20system%20cursor%20claude%20code&restrict_sr=1&sort=new&t=month)
