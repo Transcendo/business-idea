@@ -1,0 +1,155 @@
+---
+title: Agent-Readable Docs Readiness Layer
+description: Coding agent 和 MCP 工具开始替开发者读文档、接 API、改代码后，文档的新机会不是更漂亮的 docs 站，而是把产品、API、示例和边界条件压成 agent 能正确执行的 readiness report 与修复 PR。
+created: 2026-05-21
+tags:
+  - ai-coding
+  - developer-tools
+  - documentation
+  - mcp
+  - workflow-automation
+---
+
+# Agent-Readable Docs Readiness Layer
+
+## 一句话判断
+
+AI coding agent 正在把“读文档、接 API、写集成代码”变成自动任务。问题是，很多 docs 是给人扫读的，不是给 agent 稳定执行的。
+
+机会不是再做一个文档 CMS，而是做一层 agent-readable docs readiness：扫描 docs、API reference、SDK 示例、GitHub repo、MCP server 和 `llms.txt`，跑真实 agent 集成任务，找出 agent 会误解、缺证据、缺示例、缺权限说明的地方，然后输出修复 PR、readiness 分数和可复测报告。
+
+## 赛道 / 产品信号
+
+这轮信号来自 HN、GitHub、Reddit 和公开规范，不是单个孤例。
+
+- HN 上 [Show HN: Dari-docs – Optimize your docs using parallel coding agents](https://news.ycombinator.com/item?id=48210615) 指向一个很清楚的方向：用多批 coding agents 并行读文档、尝试完成任务，再反推文档哪里让 agent 失败。
+- GitHub 上 [mupt-ai/dari-docs](https://github.com/mupt-ai/dari-docs) 的定位是“optimize your documentation through fleets of agents”。仓库很早期，但切口准：文档质量开始用 agent 任务完成率来衡量。
+- Reddit r/mcp 出现 [AgentLighthouse](https://www.reddit.com/r/mcp/comments/1tj2wqs/i_built_agentlighthouse_a_local_lighthouse_for_ai/)：本地扫描 repos、docs、APIs 的“Lighthouse for AI agents”。同一帖子也出现在 r/aiagents，说明 builders 已经把“agent readiness”当成一个可命名问题。
+- GitHub 上 [PainDeMie64/agentlighthouse](https://github.com/PainDeMie64/agentlighthouse) 直接写到：产品、API、文档和代码库需要被 AI agents 正确使用。
+- [Answer.AI 的 llms.txt proposal](https://llmstxt.org/) 和 [AnswerDotAI/llms-txt](https://github.com/AnswerDotAI/llms-txt) 已经把“给 LLM/agent 准备机器可读文档入口”变成公开格式讨论。
+- [ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) 和 [GitHub 官方 MCP server](https://github.com/github/github-mcp-server) 这类项目说明：agent 不只读网页文档，也会通过 MCP 直接操作开发工具和 SaaS。docs、tools、permissions 必须一起被测试。
+
+信号的共同点：文档不再只服务人类读者，也开始服务会执行动作的 agent。
+
+## 用户痛点是什么
+
+API 公司、devtools 公司和开源项目现在会遇到一个新问题：人类觉得文档“还行”，agent 一接就出错。
+
+典型痛点：
+
+- Agent 看不到关键前置条件：鉴权、scope、rate limit、环境变量、region、billing、sandbox / production 差异。
+- 示例代码给人类足够，但对 agent 太散。agent 会拿错 SDK 版本、混用旧 API、漏掉 error handling。
+- 文档站搜索对人还凑合，对 agent 是噪声。重要概念藏在博客、changelog、issue、README、SDK docs 之间。
+- MCP server 暴露了工具，却没有清楚说明工具边界、参数约束、危险动作和审批点。
+- DevRel 和 support 团队不知道 agent 为什么接错 API，只能等用户贴一段坏代码来排查。
+
+这不是“文档不美观”。这是 agent 自动集成时的失败率和支持成本问题。
+
+## AI-native wedge
+
+最小 wedge：
+
+> 用户输入 docs URL、GitHub repo、OpenAPI spec、SDK repo 或 MCP server；系统生成一组真实 agent 集成任务，让多个 coding agents 尝试完成；系统记录失败点、缺失证据、误读路径和危险动作，输出 agent-readiness report、`llms.txt` / docs patch、示例代码修复 PR 和可复测任务集。
+
+AI 真正压缩四件事：
+
+1. **压缩文档审计。** 以前 DevRel 靠人工读文档找洞；现在让 agent 按真实任务走一遍，失败在哪里就标哪里。
+2. **压缩集成测试。** 不是问“文档完整吗”，而是问“agent 能不能在 20 分钟内正确接通 checkout / webhook / auth / search API”。
+3. **压缩修复写作。** LLM 可以把失败 trace 变成 docs patch、SDK snippet、MCP tool description 和 `llms.txt` 更新草案。
+4. **压缩销售证明。** 输出一张 readiness report：agent success rate、最常失败步骤、修复后提升、可复跑任务。
+
+这类产品的价值不在“AI 帮你写文档”。价值在“证明 agent 能正确使用你的产品”。
+
+## 为什么现在
+
+几个变化撞在一起：
+
+- Claude Code、Codex、Cursor、Devin、Cline、OpenHands 等 coding agent 让开发者更少手读文档，更多让 agent 直接接 API。
+- MCP 把 SaaS、浏览器、数据库、GitHub、DevTools 接到 agent 工具链里。文档缺口会变成错误工具调用。
+- `llms.txt`、agent rules、MCP tool descriptions 让 docs 有了机器可读入口，但多数团队还不知道怎么评估质量。
+- API 公司在 AI 搜索里被提到还不够。真正转化发生在 agent 能不能成功集成并跑通第一个任务。
+- DevRel 支持成本会上升：用户拿着 agent 生成的错误代码来问“为什么不行”，但真正原因可能是文档结构不适合 agent。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：** API / devtools 团队会发现用户开始用 coding agent 接入产品，但 agent 频繁走错路径。一个 readiness scan 比“重写整个 docs 站”轻得多。
+
+**为什么留：** 文档、SDK、API、MCP server、pricing、权限规则都会变。每次发版本都可以跑 agent-readiness regression，防止新 docs 让 agent 集成失败。
+
+**为什么传播：** 最适合传播的是一张 agent readiness report card：`agent success rate 42% → 81%`、失败路径截图、修复 PR、`llms.txt` badge。DevRel、开源作者和 API 公司会愿意展示“我们的产品对 coding agents 友好”。
+
+**为什么付费：** 个人开源项目可能只用免费扫描。付费在 API 公司、devtools、SDK 团队、AI infra、SaaS 平台：他们愿意为 docs scan、CI regression、私有 repo、MCP security review、竞品对比、DevRel 报告和自动 PR 付费。
+
+## MVP 实验
+
+别做文档平台。先做一个 narrow scanner。
+
+### 7 天 MVP
+
+1. 输入一个公开 docs URL 和 GitHub repo。
+2. 让 3 个 agent 角色执行 5 个固定任务：安装 SDK、完成 auth、调用核心 API、处理错误、跑一个真实 demo。
+3. 记录每一步 agent 读了哪些页面、用了哪些代码、在哪里失败。
+4. 输出 `agent-readiness.md`：成功率、失败步骤、缺失文档、混淆页面、建议补丁。
+5. 自动生成一个 docs PR：补 `llms.txt`、Quickstart、error handling、MCP tool description 或 SDK example。
+
+### 30 天验证
+
+- 找 20 个开源 API / devtools repo 做免费 scan。
+- 把 report card 发给维护者，看有多少愿意合并 docs PR。
+- 记录指标：agent 首次集成成功率、平均失败步数、docs PR merge rate、维护者是否愿意接 CI check。
+- 对 3 家 API 公司做 paid pilot：每周跑一次 agent-readiness regression，并把失败 trace 交给 DevRel。
+
+## 商业化路径
+
+早期可以这样切：
+
+- 免费 CLI：扫公开 docs + repo，生成基础 report。
+- Pro：多任务、多 agent、多 SDK 语言、`llms.txt` 生成、自动 docs PR。
+- Team：CI regression、私有 repo、OpenAPI / MCP / SDK 联合扫描、历史分数、Slack / GitHub issue 输出。
+- Enterprise：DevRel dashboard、agent-search 对比、竞品 agent-readiness benchmark、私有部署、审批和安全策略。
+
+真正能收钱的是两个结果：减少 support ticket，提升 agent-assisted integration conversion。
+
+## 反例 / 风险
+
+- **平台会内置。** 文档平台、API gateway、Postman、GitHub、Mintlify、ReadMe、Vercel、Cursor 都可能做一部分。独立产品要赢在跨 docs / repo / API / MCP 的执行测试，而不是只生成 `llms.txt`。
+- **早期信号可能很小。** Dari-docs 和 AgentLighthouse 还很早，不能把 star 数当市场证明。更强验证要看 API 公司是否愿意付钱。
+- **Agent 失败不一定是文档错。** 模型能力、工具权限、网络环境、package 安装都可能导致失败。报告要区分 docs gap、tool gap、model gap。
+- **自动 PR 可能制造噪声。** 如果补丁只是泛泛加几段解释，维护者会烦。MVP 必须让 PR 绑定失败 trace。
+- **安全边界很敏感。** MCP tool description、API keys、private docs、internal endpoints 不能被泄漏。企业版必须默认本地运行、secret redaction、最小权限。
+
+## 可验证指标
+
+- 输入 docs URL 后，能否稳定生成可复跑任务集。
+- Agent 首次集成成功率是否提升 30% 以上。
+- 失败 trace 中，被维护者确认“文档确实要改”的比例。
+- 自动 docs PR 的 merge rate。
+- `agent-readiness.md` 被贴进 GitHub issue、HN、Reddit、DevRel report 的次数。
+- 团队是否愿意把 scanner 接进 docs CI。
+- 付费 pilot 是否从一次性 audit 转成每周 regression。
+
+## 适合谁先做
+
+最适合三类团队：
+
+1. 熟悉 DevRel、API docs、SDK 维护的人。
+2. 做 AI coding / MCP / agent tooling 的开发者，能把真实 agent 任务跑起来。
+3. 服务开发者公司的 agency，可以先用 report card 卖 audit，再产品化。
+
+## 来源
+
+- [HN: Show HN: Dari-docs – Optimize your docs using parallel coding agents](https://news.ycombinator.com/item?id=48210615)
+- [GitHub: mupt-ai/dari-docs](https://github.com/mupt-ai/dari-docs)
+- [Reddit r/mcp: AgentLighthouse, a local “Lighthouse for AI agents”](https://www.reddit.com/r/mcp/comments/1tj2wqs/i_built_agentlighthouse_a_local_lighthouse_for_ai/)
+- [GitHub: PainDeMie64/agentlighthouse](https://github.com/PainDeMie64/agentlighthouse)
+- [llms.txt proposal](https://llmstxt.org/)
+- [GitHub: AnswerDotAI/llms-txt](https://github.com/AnswerDotAI/llms-txt)
+- [GitHub: ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp)
+- [GitHub: github/github-mcp-server](https://github.com/github/github-mcp-server)
+
+## 后续跟踪点
+
+- Dari-docs 是否能从 demo 变成可复跑的 benchmark，而不只是一次性 agents review。
+- AgentLighthouse 是否补出 repo/docs/API 扫描规则和真实用户案例。
+- 文档平台是否开始提供 agent-readiness badge。
+- API 公司是否愿意把“agent 集成成功率”当成 DevRel KPI。

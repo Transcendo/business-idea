@@ -7,6 +7,7 @@
     "ai-coding-agent-control-plane",
     "ai-coding-token-cost-profiler",
     "design-system-extraction-layer-for-coding-agents",
+    "agent-readable-docs-readiness-layer",
     "agent-failure-regression-harness",
     "agent-database-branching-sandbox",
     "insforge-agentic-backend",
