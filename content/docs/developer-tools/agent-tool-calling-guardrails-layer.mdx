@@ -1,0 +1,213 @@
+---
+title: Agent Tool-Calling Guardrails Layer
+description: 面向 coding agent、browser agent 和本地小模型 agent 的工具调用可靠性层，把 JSON 修复、步骤约束、上下文预算、失败恢复和 run receipt 放在模型与客户端之间。
+---
+
+# Agent Tool-Calling Guardrails Layer
+
+## 一句话判断
+
+Agent 越来越会调用 shell、浏览器、MCP server 和内部 API，但真正卡住生产化的不是“模型不会想”，而是工具调用经常坏在语法、步骤、上下文和失败恢复上。
+
+机会不是再做一个更强模型，而是在模型与 agent 客户端之间插一层 guardrail proxy：修坏掉的 tool call，约束多步流程，记录失败轨迹，并把一次运行变成可回放的 receipt。
+
+## 为什么现在热
+
+几个信号同时出现：
+
+- Hacker News 上 Forge 的 Show HN 帖子拿到 600+ points，叙事很刺眼：用 guardrails 把 8B 模型在 agentic tasks 上从 53% 拉到 99%。这说明市场开始意识到“小模型 + 运行时约束”可能比单纯换大模型更便宜。
+- GitHub 上 Forge、Context Gateway、Claw-Eval、Future AGI、Judgeval 等仓库同时围绕 agent reliability、context compaction、eval、observability、guardrails 起量。
+- Product Hunt 同一天出现 Re_gent、Glia、Contextberg、Skilled、Manus Scheduled Tasks 2.0 等 agent 运行、记忆、活动版本和技能治理产品。它们不都强，但说明 builder 们在围绕 agent 长任务的状态、上下文和可控性找入口。
+- Reddit 上 LocalLLaMA 与 ChatGPTCoding 的讨论不断回到同一个问题：本地模型和 coding agent 能跑 demo，但循环、误调工具、上下文爆掉、依赖幻觉会让真实工作流失控。
+
+这不是资讯热闹。它指向一个更硬的判断：agent 客户端已经够多，模型也够多，下一层会卖“让 agent 稳定完成任务”的中间层。
+
+## 用户痛点
+
+目标用户不是普通聊天用户，而是让 agent 真的动手干活的人：AI-first dev agency、内部平台工程团队、agent infra 团队、开源本地模型玩家、MCP server 作者。
+
+他们的痛点很具体：
+
+1. tool call 会坏在小地方
+
+模型输出了近似 JSON、错字段、漏参数、schema 版本不匹配。人眼看是小错，agent 运行时看就是任务失败。
+
+2. 多步任务会漏步骤
+
+模型先改代码，忘了跑测试；先调用危险工具，忘了读 policy；先压缩上下文，丢掉关键约束。靠 prompt 提醒不够稳定。
+
+3. 本地小模型更需要外骨骼
+
+很多团队想用 7B、8B、14B 本地模型跑低成本 agent，但 tool-calling、长上下文和错误恢复比大模型脆。只卖模型榜单解决不了这个问题。
+
+4. 失败不能复盘
+
+一次 agent run 失败后，团队通常只有聊天记录、终端碎片和猜测。没有结构化 trace，就无法判断是模型错、工具错、schema 错、上下文错，还是用户指令太宽。
+
+5. 客户端太碎
+
+Claude Code、Cursor、OpenCode、OpenClaw、Aider、Continue、本地代理工具都在跑自己的上下文和工具协议。团队不想给每个客户端分别写一套可靠性补丁。
+
+## AI-native wedge
+
+最小切口：
+
+用户接入一个 OpenAI-compatible proxy 或 SDK middleware；系统拦截 agent 的每次模型调用和工具调用，返回三类东西：
+
+- repaired call：把破损 JSON、错字段、低置信参数修成可执行调用，必要时要求模型重试。
+- step gate：强制执行预设步骤，例如“读文件前不能改文件”“改代码后必须跑指定测试”“高危命令要人工批准”。
+- run receipt：记录输入、上下文摘要、tool call、失败点、重试、最终结果，供团队复盘和回归测试。
+
+产品价值不是“更会聊天”，而是把 agent 的不稳定输出压成可执行、可审计、可重跑的任务轨迹。
+
+## 产品形态
+
+### 1. Agent reliability proxy
+
+放在 agent 客户端与模型 API 之间，兼容 OpenAI API。早期先支持 coding agent 和 shell/tool-calling 场景，不碰所有垂直业务。
+
+核心能力：
+
+- tool schema validation
+- malformed JSON rescue
+- retry nudge
+- required-step enforcement
+- context budget guard
+- dangerous-call approval
+- trace export
+
+### 2. Guardrail pack marketplace
+
+不同任务需要不同规则。比如：
+
+- coding PR guardrail pack
+- migration guardrail pack
+- MCP server release guardrail pack
+- browser task guardrail pack
+- local LLM tool-calling pack
+
+早期不急着做市场。先把 3 个高频 pack 做深：coding、MCP、local model agent。
+
+### 3. Failure-to-eval loop
+
+每次失败可以一键转成回归样例。下一次升级模型、换 prompt、换工具 schema 时，系统跑同一批失败任务，给出 pass/fail receipt。
+
+这会把产品从“运行时补丁”升级成“持续改进 agent 的证据层”。
+
+## 为什么用户会来、留、传播、付费
+
+会来：他们已经在用 coding agent、本地 agent 或 MCP 工具，失败成本开始变高。看到“少换模型，先修运行时”会有立即尝试动机。
+
+会留：只要系统记录了团队的失败 trace、guardrail pack 和回归样例，迁移成本就开始出现。真正有粘性的不是 proxy，而是失败知识库。
+
+会传播：最容易传播的是 before/after run card。例如同一个 8B 模型，裸跑失败，接入 guardrails 后通过；或者同一个 coding task，原来循环 8 次，接入后 2 次完成。
+
+会付费：付费方是团队，不是个人玩具用户。收费可以按 seat、run volume、trace retention、private guardrail pack、CI gate 收。开发团队愿意为“少炸 repo、少浪费 agent token、可审计”付钱。
+
+## MVP 怎么做
+
+### 第 1 周：只做 coding agent proxy
+
+支持一个入口：OpenAI-compatible proxy。
+
+支持两个客户端：OpenCode / Aider / Continue 中任选两个能稳定接入的客户端。
+
+支持三类 guardrail：
+
+- JSON/tool schema 修复
+- 必跑测试步骤
+- 高危 shell 命令拦截
+
+输出一个 run receipt：markdown + JSON 两种格式。
+
+### 第 2 周：做失败样例库
+
+收集 30 个真实失败任务：
+
+- malformed tool call
+- 漏测试
+- 错路径
+- 错 package
+- 上下文丢失
+- 无限循环
+
+每个任务都要能复跑，不能只靠人工描述。
+
+### 第 3 周：做 before/after benchmark
+
+用同一个小模型、同一批任务，比较：
+
+- 裸 agent pass rate
+- 接入 guardrail 后 pass rate
+- 平均重试次数
+- 平均 token / runtime
+- 人工接管次数
+
+如果没有明显提升，这个项目就别硬推。
+
+## 商业化路径
+
+早期不要卖“完整 LLMOps 平台”，太宽，容易撞 Langfuse、Future AGI、HoneyHive、Judgeval。
+
+更好的入口是：
+
+1. AI-first dev agency
+
+他们每天让 agent 写代码、改客户项目、跑脚本。agent 失败直接吃掉交付时间。卖点是项目级 run receipt 和团队 guardrail pack。
+
+2. 本地模型 agent 用户
+
+他们想用便宜模型替代昂贵 API。卖点是让小模型完成更多工具调用任务，而不是追求聊天质量。
+
+3. MCP server 团队
+
+他们需要证明自己的 server 在不同 agent 客户端里可稳定调用。卖点是 release gate + compatibility receipt。
+
+4. 企业平台工程团队
+
+他们允许 agent 进入内部 repo 前，需要审计、策略和失败回放。卖点是 private deployment、policy pack、trace retention。
+
+## 反例与风险
+
+1. 大模型继续变强，弱化 proxy 价值
+
+如果主流模型 tool-calling 可靠性快速提升，小团队很难靠 JSON 修复长期收费。产品必须尽快从“修格式”升级到“流程约束 + 回归证据”。
+
+2. 客户端自己内置 guardrails
+
+Cursor、Claude Code、OpenAI Codex、OpenCode 都可能把一部分能力内置。独立产品要吃跨客户端、跨模型、团队级审计这块，而不是只做单客户端插件。
+
+3. 容易变成一堆规则配置
+
+如果用户要手写复杂规则，产品会死在上手成本。MVP 必须提供可直接用的 guardrail pack，并从失败 trace 自动建议规则。
+
+4. 评测样例不真实
+
+如果 benchmark 是玩具任务，开发者不会信。Claw-Eval 这类项目强调 human-verified tasks 和 full-trajectory auditing，说明市场已经对“假榜单”警惕了。
+
+5. 和安全网关边界重叠
+
+MCP 安全、shell sandbox、identity policy 都会碰到这个方向。这个页面的切口应坚持 reliability：任务能不能稳定、可复盘地完成。安全只是其中一个 gate。
+
+## 可验证指标
+
+- malformed tool call 修复率
+- 失败任务转回归样例比例
+- 接入后 pass rate 提升
+- 平均重试次数下降
+- 人工接管次数下降
+- 高危命令拦截命中率
+- 同一 guardrail pack 在多个客户端的可用率
+- 团队每周复用的 failure receipt 数
+
+## 可信来源
+
+- [Show HN: Forge – Guardrails take an 8B model from 53% to 99% on agentic tasks](https://news.ycombinator.com/item?id=48192383)
+- [Forge GitHub repository](https://github.com/antoinezambelli/forge)
+- [Context Gateway GitHub repository](https://github.com/Compresr-ai/Context-Gateway)
+- [Show HN: Context Gateway – Compress agent context before it hits the LLM](https://news.ycombinator.com/item?id=47367526)
+- [Claw-Eval GitHub repository](https://github.com/claw-eval/claw-eval)
+- [Future AGI GitHub repository](https://github.com/future-agi/future-agi)
+- [Judgeval GitHub repository](https://github.com/JudgmentLabs/judgeval)
+- [Product Hunt: Re_gent](https://www.producthunt.com/products/re_gent)
+- [Product Hunt: Contextberg](https://www.producthunt.com/products/contextberg)

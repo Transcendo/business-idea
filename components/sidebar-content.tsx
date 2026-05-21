@@ -359,6 +359,7 @@ export const contents: Content[] = [
 			{ title: "Design System Extraction Layer", href: "/docs/developer-tools/design-system-extraction-layer-for-coding-agents", icon: () => <Image className="w-4 h-4 text-current" /> },
 			{ title: "Agent-Readable Docs Readiness", href: "/docs/developer-tools/agent-readable-docs-readiness-layer", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "MCP Cross-Client Testing", href: "/docs/developer-tools/mcp-cross-client-testing-layer", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
+			{ title: "Agent Tool-Calling Guardrails", href: "/docs/developer-tools/agent-tool-calling-guardrails-layer", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Failure Regression Harness", href: "/docs/developer-tools/agent-failure-regression-harness", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "Agent Database Branching Sandbox", href: "/docs/developer-tools/agent-database-branching-sandbox", icon: () => <Database className="w-4 h-4 text-current" /> },
 			{ title: "InsForge Agentic Backend", href: "/docs/developer-tools/insforge-agentic-backend", icon: () => <Boxes className="w-4 h-4 text-current" /> },

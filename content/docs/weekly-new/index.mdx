@@ -12,6 +12,7 @@ description: 2026-05-18 至 2026-05-24 这一周新增或重点更新的公开 A
 ## 2026-05-21
 
 - [MCP Cross-Client Testing Layer](/docs/developer-tools/mcp-cross-client-testing-layer)：MCP app 的新痛点不是本地 server 能不能跑，而是同一个工具在 ChatGPT、Claude、Cursor、IDE 等客户端里能不能稳定调用、可回放、可进发布 gate。
+- [Agent Tool-Calling Guardrails Layer](/docs/developer-tools/agent-tool-calling-guardrails-layer)：Agent 开始调用 shell、浏览器、MCP 和内部 API 后，机会不是再换一个更强模型，而是把破损 tool call、漏步骤、上下文超限和失败回放压成可靠性 proxy 与 run receipt。
 - [Agent-Readable Docs Readiness Layer](/docs/developer-tools/agent-readable-docs-readiness-layer)：Coding agent 开始替开发者读 docs、接 API、调 MCP 后，机会不是更漂亮的文档站，而是把 docs、repo、API、SDK 和 MCP tool 压成可复跑的 agent-readiness report 与修复 PR。
 - [Design System Extraction Layer for Coding Agents](/docs/developer-tools/design-system-extraction-layer-for-coding-agents)：AI coding agent 做前端的缺口不是再多一个生成器，而是把真实网站、品牌规则、设计 token、交互状态和可访问性压成 agent 可执行的设计约束包。
 - [AI Coding Package Hallucination Firewall](/docs/cybersecurity/ai-coding-package-hallucination-firewall)：Coding agent 自动写依赖、跑安装、开 PR 后，包名幻觉会从聊天窗口进入供应链；机会是在 agent-generated dependency diff 前做 package risk receipt。
