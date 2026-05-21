@@ -8,6 +8,7 @@
     "ai-coding-token-cost-profiler",
     "design-system-extraction-layer-for-coding-agents",
     "agent-readable-docs-readiness-layer",
+    "mcp-cross-client-testing-layer",
     "agent-failure-regression-harness",
     "agent-database-branching-sandbox",
     "insforge-agentic-backend",

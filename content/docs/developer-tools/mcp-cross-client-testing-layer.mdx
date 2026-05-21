@@ -1,0 +1,167 @@
+---
+title: MCP Cross-Client Testing Layer
+description: MCP app 真正难的不是把 server 跑起来，而是同一个工具在 ChatGPT、Claude、Cursor、IDE、浏览器 agent 里行为不一致；机会是把跨客户端安装、工具调用、截图回放和上线 gate 压成可复跑的测试层。
+created: 2026-05-21
+tags:
+  - mcp
+  - developer-tools
+  - ai-agents
+  - testing
+  - workflow-automation
+---
+
+# MCP Cross-Client Testing Layer
+
+## 一句话判断
+
+MCP 已经从 demo 进入真实工具接入阶段。新痛点不是“怎么写一个 MCP server”，而是“同一个 MCP app 在不同 agent 客户端里会不会真的按预期工作”。
+
+机会是做 MCP cross-client testing：自动安装 MCP app 到 ChatGPT、Claude、Cursor、IDE 或其他 agent 客户端，跑标准化任务，记录 tool calls、截图、屏幕录像、失败原因和安全边界，最后给出可进 CI 的 release gate。
+
+## 赛道 / 产品信号
+
+这轮信号比普通 MCP demo 更硬，因为它指向测试和上线风险。
+
+- HN 上 [Show HN: How we made MCP development feel good](https://news.ycombinator.com/item?id=48110929) 指向 Manufact 的 MCP 测试实践。HN 点数不高，但问题非常准：MCP 开发不是只要本地跑通。
+- Manufact 博客 [We Made MCP Testing Less Painful](https://manufact.com/blog/mcp-testing) 明确写到：MCP server testing painful，原因包括 slow install loops、不同 client 行为不同、很难知道 agent 是否正确调用工具。
+- 同一篇文章提到自动 cross-client testing：定义 user message、expected tool calls、evaluation rubrics，让 browser agents 在真实 clients 里安装 app、跑测试，产出结果、截图和屏幕录像，并能接进 deploy pipeline。
+- 官方 [MCP Inspector docs](https://modelcontextprotocol.io/docs/tools/inspector) 把 Inspector 定义为 testing and debugging MCP servers 的工具。
+- GitHub [modelcontextprotocol/inspector](https://github.com/modelcontextprotocol/inspector) 是 MCP 官方生态里的 visual testing tool，GitHub API 显示约 9.8k stars，2026-05-20 仍在更新。
+- Product Hunt 同日出现多条相邻信号：如 [Runtime](https://www.producthunt.com/products/runtime) 的 sandboxed coding agents、[Contextberg](https://www.producthunt.com/products/contextberg) 的 MCP agent memory、[Re_gent](https://www.producthunt.com/products/re_gent) 的 agent activity version control。它们不是同一个产品，但都在往“agent 运行需要证据和边界”靠。
+
+判断：MCP 工具供应开始变多，下一层短缺会从“工具数量”转成“工具在真实客户端里的可靠性证明”。
+
+## 用户痛点是什么
+
+MCP app 开发者和平台团队会卡在几个具体地方：
+
+- 本地 Inspector 能连通，不代表 ChatGPT / Claude / Cursor 里的体验正确。
+- 不同客户端的模型、系统提示、工具选择策略、权限弹窗、安装方式、上下文注入都不一样。
+- MCP 工具调用失败时，开发者常常只看到“agent 没用对”，缺少完整回放。
+- 危险工具、写操作、私有数据读取、OAuth / token 交换，一旦描述不清，agent 会误用。
+- 每次 server、schema、tool description、client 版本更新，都可能把原来可用的流程打坏。
+
+这不是传统 API unit test 能解决的问题。MCP 的失败发生在“agent + client + tool + UI + 权限”组合里。
+
+## AI-native wedge
+
+最小 wedge：
+
+> 用户提交一个 MCP server、manifest、安装说明和 5 个目标任务；系统自动在多个真实客户端里安装、启动、发起用户任务、记录 tool calls、截图和屏幕录像，然后输出 cross-client compatibility report、失败回放、schema / description 修复建议和 CI gate。
+
+AI 真正压缩的是：
+
+1. **压缩人工装客户端测试。** 开发者不用自己在每个客户端里反复安装、授权、对话、截图。
+2. **压缩工具调用审计。** 系统不是只看 HTTP 200，而是看 agent 是否调用了正确工具、参数是否合理、是否越权。
+3. **压缩失败复现。** 失败不再靠一句“Claude 没调工具”，而是有完整 conversation、tool trace、截图和录像。
+4. **压缩上线判断。** 每次发布前跑一组 MCP acceptance tests，没过就不升级 production。
+
+核心价值不是“帮你写 MCP server”。核心价值是证明 MCP app 在真实 agent 客户端里可用、可控、可回放。
+
+## 为什么现在
+
+几个条件刚好到位：
+
+- MCP server 数量暴涨，很多工具还停在 demo / README 阶段。
+- ChatGPT、Claude、Cursor、IDE、浏览器 agent 都在变成不同的 MCP 执行环境。
+- Agent 行为差异越来越大：同一个模型 API 和产品客户端里的表现可能完全不同。
+- 企业愿意试 MCP，但不会接受“我本地测过”的上线证据。
+- Browser agent、headless terminal、sandbox runtime、trace/eval 工具已经能把真实客户端操作自动化。
+
+所以 MCP 测试会从开发辅助变成发布基础设施。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：** MCP app 开发者第一次遇到“本地可用，客户端里坏掉”时，会需要一张兼容性报告。
+
+**为什么留：** MCP server、tool schema、客户端能力和模型行为都会变。只要每周更新，cross-client regression 就有持续价值。
+
+**为什么传播：** 最适合传播的是 MCP compatibility badge：`ChatGPT pass / Claude pass / Cursor partial`，配失败回放和修复 PR。开源作者、MCP marketplace、DevRel 团队都会愿意展示“我的工具真的能跑”。
+
+**为什么付费：** 免费层可以测公开 server。付费点在私有 MCP app、CI gate、多客户端覆盖、敏感工具策略、企业审计记录、failure replay storage、上线审批和 marketplace certification。
+
+## MVP 实验
+
+别先做大平台。先做一个很窄的 test runner。
+
+### 7 天 MVP
+
+1. 支持 2 个客户端：MCP Inspector + 一个真实聊天/IDE 客户端。
+2. 输入 MCP server 命令、env schema、tool list、5 个自然语言任务。
+3. 自动安装并运行任务。
+4. 记录：是否安装成功、agent 是否选择目标 tool、参数是否正确、返回是否被正确解释。
+5. 输出 `mcp-compatibility-report.md`，附 tool trace、截图、失败归因和修复建议。
+
+### 30 天验证
+
+- 找 30 个公开 MCP servers 做免费扫描。
+- 给维护者开 issue：附兼容性报告和一条具体修复 PR。
+- 对 5 个做 MCP 的 devtools / SaaS 团队卖 paid pilot：每次发布前跑 cross-client regression。
+- 验证是否有人愿意把报告挂进 README、docs 或 release checklist。
+
+## 商业化路径
+
+可从四层收费：
+
+- Free：公开 MCP server 单次扫描，生成基础 compatibility report。
+- Pro：多客户端、多任务、历史报告、失败回放、README badge。
+- Team：CI integration、GitHub checks、私有 repo / server、Slack 通知、自动修复 PR。
+- Enterprise：私有部署、SSO、secret redaction、approval policy、审计日志、marketplace certification。
+
+最像钱的买家不是个人玩家，而是要把 MCP 工具卖给团队的 SaaS、devtools、AI infra 公司，以及准备运营 MCP marketplace 的平台。
+
+## 传播路径
+
+这类产品天然有公开传播物：
+
+- MCP server compatibility badge。
+- “Top 20 MCP servers cross-client pass rate”榜单。
+- 失败回放短视频：同一个任务为什么在 A 客户端成功、B 客户端失败。
+- 给开源 repo 的自动 issue / PR。
+- DevRel 报告：修复后 tool-call success rate 从 48% 到 86%。
+
+但要克制，别做成公开羞辱榜。更好的方式是“修复导向的 readiness report”。
+
+## 反例 / 风险
+
+- **客户端接入不稳定。** 很多客户端没有公开自动化接口，可能要靠 browser automation，维护成本高。
+- **官方会补。** MCP 官方 Inspector、客户端厂商、IDE 厂商可能把基础测试内置。独立产品必须做跨客户端、CI、企业审计，而不是只做一个本地调试器。
+- **测试结果容易漂。** 模型行为、客户端版本、系统提示变化会让结果不稳定。报告必须保留环境版本和 replay。
+- **安全边界敏感。** 测私有 MCP server 时可能碰 secrets、内部数据和写操作。默认必须 redaction、dry-run、最小权限。
+- **买方可能太早。** 现在很多 MCP app 还没有真实用户。MVP 要找有分发压力的团队，不要只服务 hobby demo。
+
+## 可验证指标
+
+- MCP app 安装成功率。
+- 每个客户端的目标任务 pass rate。
+- Tool-call correctness：工具选择、参数、顺序、权限是否正确。
+- 失败归因被维护者确认的比例。
+- 自动修复 PR / tool description patch 的 merge rate。
+- 报告 badge 被 README / docs 采用的比例。
+- Paid pilot 是否把测试接进 release pipeline。
+- 发布后由 MCP 调用失败引起的 support ticket 是否下降。
+
+## 适合谁先做
+
+适合三类团队：
+
+1. 做过浏览器自动化、E2E 测试、CI、开发者工具的人。
+2. 深度用 MCP / agent tooling 的开发者，知道 tool schema 和客户端行为差异。
+3. 服务 API / devtools 公司的 DevRel agency，可以先用测试报告卖 audit，再产品化。
+
+## 来源
+
+- [HN: Show HN: How we made MCP development feel good](https://news.ycombinator.com/item?id=48110929)
+- [Manufact Blog: We Made MCP Testing Less Painful](https://manufact.com/blog/mcp-testing)
+- [MCP Inspector docs](https://modelcontextprotocol.io/docs/tools/inspector)
+- [GitHub: modelcontextprotocol/inspector](https://github.com/modelcontextprotocol/inspector)
+- [Product Hunt: Runtime](https://www.producthunt.com/products/runtime)
+- [Product Hunt: Contextberg](https://www.producthunt.com/products/contextberg)
+- [Product Hunt: Re_gent](https://www.producthunt.com/products/re_gent)
+
+## 后续跟踪点
+
+- Manufact 的 cross-client testing 是否从案例变成可自助购买产品。
+- MCP Inspector 是否继续扩展到跨客户端测试，还是停在本地调试。
+- MCP marketplace 是否需要 certification / compatibility badge。
+- 开发者是否愿意为“每次发布前测试 MCP app”付费，而不是只在坏了时手工排查。
