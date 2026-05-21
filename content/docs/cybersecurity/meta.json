@@ -2,6 +2,7 @@
   "title": "网络安全",
   "pages": [
     "index",
+    "ai-coding-package-hallucination-firewall",
     "agentic-security-evaluation-harness",
     "ai-soc-triage-runtime",
     "agent-identity-policy-runtime",

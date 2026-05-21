@@ -180,6 +180,8 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "2026-05-21", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Package Hallucination Firewall", href: "/docs/cybersecurity/ai-coding-package-hallucination-firewall", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-20", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "On-Call Runbook Agent", href: "/docs/developer-tools/on-call-runbook-execution-agent", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "AI Search Visibility", href: "/docs/vertical-ai/ai-search-visibility-action-layer", icon: () => <Search className="w-4 h-4 text-current" /> },
@@ -409,6 +411,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/cybersecurity", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "AI Coding Package Hallucination Firewall", href: "/docs/cybersecurity/ai-coding-package-hallucination-firewall", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agentic Security Evaluation Harness", href: "/docs/cybersecurity/agentic-security-evaluation-harness", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "AI SOC Triage Runtime", href: "/docs/cybersecurity/ai-soc-triage-runtime", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Identity Policy Runtime", href: "/docs/cybersecurity/agent-identity-policy-runtime", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },

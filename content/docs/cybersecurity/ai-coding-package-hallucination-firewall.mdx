@@ -1,0 +1,197 @@
+---
+title: AI Coding Package Hallucination Firewall
+description: Coding agent 开始自动写依赖、跑安装、改 CI 后，包名幻觉不再只是“模型答错了”，而是会变成可被抢注、可进供应链的 slopsquatting 攻击面。机会不是再做一个依赖扫描器，而是在 agent 写入依赖和执行安装前，给每个包名生成存在性、相似性、来源和风险 receipt。
+created: 2026-05-21
+tags:
+  - ai-coding
+  - supply-chain-security
+  - agent-security
+  - cybersecurity
+  - developer-tools
+---
+
+# AI Coding Package Hallucination Firewall
+
+## 一句话判断
+
+Coding agent 的包名幻觉会从“小 bug”升级成供应链入口。
+
+机会不是再做一个 npm audit，而是在 agent 生成依赖、修改 package 文件、执行 install、提交 PR 前，拦截不存在、相似、可疑新注册、低信誉的包名，并把判断做成开发者能看懂、CI 能执行的 package risk receipt。
+
+## 赛道 / 产品信号
+
+几条公开信号已经连起来了：
+
+- arXiv 论文《We Have a Package for You!》把问题定义得很清楚：代码生成 LLM 会编造不存在的 Python / JavaScript 包名，这会形成新的 package confusion attack。论文评测 16 个热门 LLM，覆盖 576,000 个代码样本。
+- HN 对这篇论文有讨论，开发者没有把它当成纯学术问题，而是在讨论“模型推荐不存在依赖”如何进入真实开发链路。
+- Reddit r/ChatGPTCoding 里已经出现用户自述：ChatGPT 推荐的包里有一部分不存在，于是他做了一个 MCP server，在 install 前拦住假包。这个帖子很小，但痛点非常准：问题出现在 coding agent 的日常动作里，不是在安全白皮书里。
+- GitHub 上出现 DepScope 这类公开 hallucinated package corpus。README 直接写到 production AI coding agent traffic、slopsquatting、daily update。即使它还早，也说明有人在从真实 agent 流量里沉淀风险名单。
+- descoped/mcp-pkg-local 这类 MCP 项目从另一个角度切入：让 LLM 读取本地已安装 package 源码，减少 API / package 幻觉。
+- Aperion Shield 这类本地 guardrail 项目虽然不是专做包名幻觉，但证明了一个趋势：开发者愿意给 Claude Code、Cursor、Cline、Windsurf 这类 coding agent 加本地拦截层，而不是只信模型自觉。
+
+这个方向还没到大平台全吃掉的阶段，但问题已经从论文走到 Reddit、MCP、GitHub 数据集和本地 agent guardrail。
+
+## 用户痛点是什么
+
+用户不是缺一个“更安全的依赖列表”。真正痛点是：
+
+1. **Agent 会直接改依赖文件。** `package.json`、`requirements.txt`、`pyproject.toml`、`Cargo.toml` 一旦被 agent 改了，后面的 install、CI、Docker build、部署脚本可能自动跟上。
+2. **开发者不会逐个查包名。** 人类 review agent PR 时通常看业务 diff，不会每次都查“这个包是不是真的存在、是不是刚注册、是不是和知名包差一个字符”。
+3. **传统 SCA 扫不到不存在包的前置风险。** 很多工具擅长扫已安装依赖的 CVE，但包名幻觉发生在安装前，甚至发生在模型输出的一行建议里。
+4. **攻击者可以反向抢注。** 如果某个幻觉包名在模型输出里反复出现，攻击者注册这个名字，就可能等 agent 或开发者自动安装。
+5. **多语言、多 registry 很散。** npm、PyPI、RubyGems、Go、Rust、Docker、Maven 的规则、元数据、命名习惯、下载量信号都不同。人肉判断成本很高。
+
+最要命的是，coding agent 的卖点正是“少打断人”。如果它连安装依赖都要人全程盯着，自动化价值会掉一截。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户把 coding agent / CI / package manager 接进一个 sidecar；当 agent 新增或安装依赖时，系统在 10 秒内返回 package risk receipt，并决定允许、警告、阻断或要求人工确认。**
+
+第一版只做四件事：
+
+- `diff scan`：监听 agent 对依赖文件的修改，识别新增包、版本范围、安装命令。
+- `existence check`：查 npm / PyPI / GitHub / OSV 等公开元数据，判断包是否存在、是否刚注册、是否下载量异常低。
+- `confusion check`：和项目已有依赖、热门包、同生态常用包做相似度比较，抓 typosquatting、slopsquatting、品牌混淆。
+- `receipt`：输出一张可进 PR / CI 的解释卡：为什么放行或阻断、证据链接、建议替代包、人工确认按钮。
+
+不要上来做完整供应链安全平台。入口应该很窄：**AI coding agent 新增依赖时的前置刹车。**
+
+## AI 是否真的压缩任务
+
+能压缩，而且压的是一个人类很不愿做、但出错代价很高的判断链。
+
+以前：
+
+- 开发者看到 agent 加了一个包。
+- 手动去 npm / PyPI 搜。
+- 看下载量、维护者、发布时间、README、相似包、GitHub repo。
+- 再判断是正常依赖、幻觉包、恶意抢注，还是可接受的小众库。
+
+现在：
+
+- sidecar 自动识别新增依赖。
+- 规则引擎查确定性元数据。
+- LLM 只负责把证据压成简短解释和替代建议。
+- CI 根据风险等级阻断或要求确认。
+
+这里不能让 LLM 单独决定安全。LLM 适合做解释、聚合、替代建议；拦截边界必须由确定性元数据、规则和人工确认兜住。
+
+## 为什么现在
+
+- AI coding agent 正在从“给建议”变成“直接改仓库”。只要 agent 能写文件、跑命令、开 PR，依赖风险就进入执行链。
+- MCP 和本地 agent 工具让 agent 更容易调用 shell、package manager、GitHub、CI。包名幻觉不再停在聊天窗口里。
+- 论文已经证明包名幻觉是可测现象，不是个别段子。
+- Reddit 用户开始自己造 MCP 拦截器，说明早期用户已经遇到真实疼点。
+- 安全预算通常要等事故，但开发者安全工具可以从“免费扫描你的 agent PR”切入，用具体 receipt 先获得传播。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+第一次发现 agent 推荐了一个不存在包，或者 CI 安装了一个陌生包，开发者会立刻紧张。这个恐惧很具体。
+
+**为什么留：**
+
+只要团队每天用 coding agent，依赖 diff 就每天发生。这个工具不是一次性扫描，而是每次 agent PR 的安全闸。
+
+**为什么传播：**
+
+最强传播物是一张 package risk receipt：
+
+- `Agent added pyreqwest. Package does not exist on PyPI. Similar to requests.`
+- `New npm package registered 2 days ago, 43 downloads, name similar to @company/internal-sdk.`
+- `Install blocked: hallucinated package appears in public corpus.`
+
+这种卡片能直接贴到 PR、GitHub issue、HN、Reddit。它比“AI 供应链安全”这种大词好传播。
+
+**谁付费：**
+
+个人开发者可能愿意为本地 CLI 付小钱。真正预算在 AI coding team、devtools 公司、安全团队、平台团队。付费理由是减少恶意依赖、误装、CI 污染和安全 review 时间。
+
+## MVP 实验
+
+### 7 天 MVP
+
+做一个 CLI：
+
+```bash
+pkg-firewall scan-diff
+pkg-firewall install -- npm install
+pkg-firewall receipt last
+```
+
+只支持两个生态：npm 和 PyPI。
+
+只接三个入口：
+
+- Git diff / PR diff
+- `npm install` / `pip install` wrapper
+- Claude Code / Codex CLI / Cursor 生成的依赖文件变更
+
+只做六类规则：
+
+- registry 不存在
+- 刚注册，下载量极低
+- 与热门包或项目已有包高度相似
+- 缺少源码 / 维护者信息异常
+- 出现在 hallucinated package corpus
+- agent 输出里只出现包名，没有官方文档或 GitHub 来源
+
+输出：
+
+1. `package-risk.json`：CI 可读。
+2. `package-risk.md`：PR 可读。
+3. `allowlist.yaml`：团队确认过的小众包白名单。
+
+### 30 天验证
+
+- 在 HN / Reddit / GitHub 发“免费扫你的 AI-generated dependency diff”。
+- 找 30 个重度 Claude Code / Cursor / Codex 用户安装 wrapper。
+- 统计每 100 个 agent PR 里新增依赖数量、阻断数量、人工放行数量。
+- 让 5 个小团队把 receipt 接进 PR review，看它是否减少“这个包靠谱吗”的沟通。
+
+## 商业化路径
+
+1. **开源 CLI。** 免费 diff scan，建立开发者信任。
+2. **团队版 CI gate。** 按 repo / seat 收费，支持策略、白名单、历史 receipt、PR 评论机器人。
+3. **Agent 平台 SDK。** 给 coding agent、AI IDE、MCP gateway、CI 平台提供 dependency-risk API。
+4. **安全集成。** 接 OSV、Socket、Snyk、GitHub Advanced Security、SIEM、内部 package registry，卖给安全团队。
+
+更聪明的定价不是“扫了多少包”，而是“多少个 agent-generated dependency change 被保护”。
+
+## 反例 / 风险
+
+1. **可能被现有安全厂商吸收。** Snyk、Socket、GitHub、1Password、npm / PyPI 生态工具都可能补这层。创业公司要抓住 agent-native workflow 和跨工具 receipt。
+2. **误报会很烦。** 小众包、内部包、私有 registry 很容易被误拦。必须有快速确认、白名单和团队策略。
+3. **只靠下载量很粗糙。** 新包不一定危险，老包也可能被接管。元数据只是起点。
+4. **开发者可能低估风险。** 如果没有真实事故，个人用户会觉得“我自己看一眼就行”。传播要靠具体拦截案例。
+5. **攻击者会适应。** 一旦出现工具，恶意包会补 README、GitHub repo、下载量和维护者伪装。产品需要持续更新信号。
+
+## 可验证指标
+
+- 扫描后安装 wrapper / CI gate 的比例。
+- 每个 repo 每周 agent-generated dependency diff 数量。
+- 阻断中被用户确认“确实应该拦”的比例。
+- 误报放行时间中位数。
+- `package-risk.md` 被贴进 PR、issue、Slack 的次数。
+- 团队是否愿意把私有 registry 和 allowlist 接入。
+- 付费转化：个人 $10/月；团队 $10-30/seat/月或按 repo 收费。
+
+## 来源
+
+- arXiv：《We Have a Package for You! A Comprehensive Analysis of Package Hallucinations by Code Generating LLMs》，2024：[https://arxiv.org/abs/2406.10279](https://arxiv.org/abs/2406.10279)
+- HN：A Comprehensive Analysis of Package Hallucinations by Code Generating LLMs，31 points / 9 comments：[https://news.ycombinator.com/item?id=41703726](https://news.ycombinator.com/item?id=41703726)
+- Reddit r/ChatGPTCoding：用户提到“20% of packages ChatGPT recommends dont exist”，并做 MCP server 在 install 前拦假包：[https://www.reddit.com/r/ChatGPTCoding/search/?q=20%25%20of%20packages%20ChatGPT%20recommends%20dont%20exist&restrict_sr=1](https://www.reddit.com/r/ChatGPTCoding/search/?q=20%25%20of%20packages%20ChatGPT%20recommends%20dont%20exist&restrict_sr=1)
+- GitHub：DepScope hallucinations dataset，production AI coding agent traffic、slopsquatting corpus：[https://github.com/cuttalo/depscope-hallucinations-dataset](https://github.com/cuttalo/depscope-hallucinations-dataset)
+- GitHub：mcp-pkg-local，让 LLM 读取本地已安装 package 源码以减少 API hallucination：[https://github.com/descoped/mcp-pkg-local](https://github.com/descoped/mcp-pkg-local)
+- HN：Aperion Shield，本地 guardrail 拦 destructive AI coding agent ops：[https://news.ycombinator.com/item?id=48207471](https://news.ycombinator.com/item?id=48207471)
+- GitHub：Aperion Shield README，本地 MCP guardrail 支持 Claude Code、Cursor、Cline、Continue、Windsurf、Zed：[https://github.com/AperionAI/shield](https://github.com/AperionAI/shield)
+
+## 后续跟踪点
+
+- Reddit 这个 MCP 假包拦截器是否公开源码、是否有真实用户反馈。
+- DepScope corpus 能否持续更新，数据是否能被 CI / agent runtime 直接调用。
+- Socket / Snyk / GitHub 是否推出 agent-generated dependency gate。
+- Coding agent 是否会在生成依赖时附带来源证据；如果模型原生补 evidence，独立产品要转向跨 agent / 跨 registry 的执行层。
