@@ -180,6 +180,8 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "2026-05-22", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Side-Effect Replay Ledger", href: "/docs/developer-tools/agent-side-effect-replay-ledger", icon: () => <Repeat2 className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-21", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "MCP Cross-Client Testing", href: "/docs/developer-tools/mcp-cross-client-testing-layer", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "Design System Extraction", href: "/docs/developer-tools/design-system-extraction-layer-for-coding-agents", icon: () => <Image className="w-4 h-4 text-current" /> },

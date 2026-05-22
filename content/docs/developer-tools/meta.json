@@ -10,6 +10,7 @@
     "agent-readable-docs-readiness-layer",
     "mcp-cross-client-testing-layer",
     "agent-tool-calling-guardrails-layer",
+    "agent-side-effect-replay-ledger",
     "agent-failure-regression-harness",
     "agent-database-branching-sandbox",
     "insforge-agentic-backend",

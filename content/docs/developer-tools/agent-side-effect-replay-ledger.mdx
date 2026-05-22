@@ -1,0 +1,193 @@
+---
+title: Agent Side-Effect Replay Ledger
+description: 面向长任务 agent 的副作用账本，把外部写入、重试、人工批准、幂等键和回滚证据从聊天记录里拆出来，变成可审查的执行收据。
+---
+
+# Agent Side-Effect Replay Ledger
+
+## 一句话判断
+
+Agent 开始接邮箱、数据库、支付、CRM、工单和浏览器后，真正危险的不是“回答错了”，而是失败重试时把同一个外部动作执行两遍。
+
+机会不是再做一个 agent 编排画布，而是做一层 side-effect ledger：每次外部写入前先登记意图，执行后留下证据，重试时判断该跳过、补偿、人工确认，还是重新执行。
+
+## 为什么现在热
+
+几个信号叠在一起：
+
+- Reddit r/LocalLLaMA 出现很直白的 builder 痛点：本地 agent workflow 的 retry 会 replay side effects。这个问题不性感，但是真进生产就要命。
+- OpenAI Agents SDK 已经把 tools、handoffs、guardrails、tracing 放到框架层。说明 agent 不再只是聊天，而是在变成可执行软件。
+- Product Hunt 上的 Tycoon AI、InstaVM 这类产品把叙事推向“agent 直接经营公司、占用电脑、执行任务”。任务越接近真实业务，副作用越不能靠 prompt 管。
+- HN 上 Agent.email 的讨论也指向同一件事：agent 需要自己的邮箱、OTP、claim 流程和人类接管。身份、通信和外部动作会一起进入 agent runtime。
+- Temporal 这类 durable execution 工具已经证明普通后端也需要工作流状态、重试、补偿和审计；agent 只是把这个老问题放大了，因为它的动作更不确定。
+
+这条机会的热度不在“agent 又会了什么”，而在“agent 开始真的动手，工程团队开始怕它多动手”。
+
+## 用户痛点
+
+目标用户是已经让 agent 做外部动作的团队：AI-first dev agency、内部自动化团队、客服 / 销售 / 运营 agent 团队、个人自动化 power user。
+
+他们遇到的问题很具体：
+
+1. retry 会重复执行
+
+Agent 调用接口失败后重试，看起来只是恢复任务，实际上可能重复发邮件、重复建工单、重复扣库存、重复写 CRM。
+
+2. 执行记录散在多处
+
+聊天记录、终端日志、SaaS 审计日志、数据库行、浏览器截图各存一份。出了问题后，很难判断 agent 当时想做什么、实际做了什么、能不能安全重试。
+
+3. prompt 不能保证幂等
+
+让模型“不要重复操作”没用。只要上下文丢失、工具报错、任务恢复、模型换版本，重复动作仍会发生。
+
+4. 人工审批没有上下文
+
+很多团队会加 approve gate，但审批卡片只有一句“是否执行”。人类看不到上一次是否已经执行、执行结果是什么、补偿动作是什么。
+
+5. agent 越本地化，治理越薄
+
+本地模型、本地 MCP、本地桌面 agent 很容易绕开企业 SaaS 的权限与审计。小团队先爽，出了事故才发现没有账本。
+
+## AI-native wedge
+
+最小切口：
+
+用户把 agent 的外部工具调用接入一个 ledger SDK / proxy；系统在每个高副作用动作前后生成三类记录：
+
+- intent record：agent 想做什么，参数是什么，为什么要做，幂等键是什么。
+- effect receipt：实际调用了哪个系统，返回什么，外部证据链接是什么。
+- replay decision：任务恢复或重试时，系统判断跳过、补执行、人工确认、补偿，还是重新执行。
+
+产品不是“更聪明的 agent”。它压缩的是一件脏活：把不可控的 agent 重试变成可审查、可恢复、可解释的业务动作。
+
+## 产品形态
+
+### 1. Side-effect SDK
+
+先支持几类高频工具：email、Slack / Discord、CRM、ticket、payment sandbox、database write、browser form submit。
+
+每次调用必须带：
+
+- action type
+- target system
+- idempotency key
+- risk level
+- expected external result
+- human approval policy
+- compensation hint
+
+### 2. Replay gate
+
+当 agent run 被恢复、重试或换模型继续跑时，系统先查 ledger：
+
+- 已执行且证据完整：跳过。
+- 已执行但结果不确定：要求人工确认。
+- 未执行但 intent 已登记：继续执行。
+- 执行失败且有补偿路径：先补偿，再继续。
+
+### 3. Human approval card
+
+审批卡片不要只问“允许吗”。它要显示：
+
+- 这次动作的外部影响。
+- 是否已有相同 idempotency key。
+- 上一次类似动作的结果。
+- 不执行的后果。
+- 可选补偿动作。
+
+### 4. Incident receipt
+
+事故发生后，团队能导出一张 receipt：agent 指令、工具调用、外部证据、重复动作判断、人工审批、补偿结果。
+
+这张 receipt 是付费点。没有它，团队只能在 Slack 里吵。
+
+## 为什么用户会来、留、传播、付费
+
+会来：他们已经被 agent 重试坑过，或者刚准备把 agent 接进外部系统。副作用账本是“上线前最后一道保险”。
+
+会留：ledger 里沉淀了团队的动作历史、幂等键规则、审批策略和事故 receipt。迁走等于丢掉 agent 的执行记忆。
+
+会传播：最容易传播的是事故前后对比卡。同一个任务，裸 agent 重试发了两封邮件；接入 ledger 后第二次被跳过并生成证据。
+
+会付费：付费方是团队和自动化代理商。收费可以按动作量、保留期、私有部署、审批 seat、外部系统连接数、incident export 收。
+
+## MVP 实验
+
+第 1 周不要做大平台。只做一个 Python / TypeScript SDK，加一个本地 dashboard。
+
+支持三种动作：send email、create ticket、write database row。
+
+每个动作强制生成 intent、effect、replay decision。
+
+第 2 周找 10 个真实 agent workflow：客服回复、销售跟进、bug 工单、发票提醒、数据修复、内容发布、浏览器填表。人为制造失败重试，看 ledger 能否阻止重复动作。
+
+第 3 周做 before / after：
+
+- 重复外部动作次数
+- 人工确认次数
+- 不确定状态比例
+- 从失败恢复到继续执行的时间
+- incident receipt 是否能让工程师复盘
+
+如果不能明显减少重复动作，这个方向就别硬推。
+
+## 商业化路径
+
+早期不要卖“企业 agent 治理套件”，太宽，容易撞大厂平台。
+
+更好的入口是三个窄场景：
+
+1. AI 自动化代理商
+
+他们替客户做 agent workflow，最怕 agent 多发、多写、多扣。卖点是项目级执行收据和客户交付证据。
+
+2. 客服 / 销售 agent 团队
+
+外部动作高频，错误可见。先从 ticket、email、CRM 三件事切。
+
+3. 本地 agent power user / 小团队
+
+他们用本地模型、MCP 和桌面 agent，缺企业级治理。卖点是本地优先、可导出账本、可人工接管。
+
+## 反例与风险
+
+1. Workflow runtime 平台内置
+
+Temporal、Inngest、LangGraph、OpenAI Agents、企业自动化平台都可能内置部分能力。独立产品必须吃跨 agent、跨工具、跨本地 / 云端的动作账本，而不是只做一个 workflow engine。
+
+2. 太重会没人接
+
+如果接入每个工具都要改大量业务代码，用户会退。MVP 必须从 SDK wrapper 和 OpenAI-compatible tool proxy 入手。
+
+3. 普通只读 agent 不需要
+
+如果 agent 只是总结、搜索、写草稿，side-effect ledger 没价值。这个方向必须绑定“外部写入”和“重试事故”。
+
+4. 补偿动作很难标准化
+
+发错邮件不能真正撤回，扣错款也不能只靠代码补偿。产品要诚实地区分可补偿、需人工、不可逆三类动作。
+
+5. 容易和审计日志混淆
+
+审计日志只记录发生过什么；side-effect ledger 要在重试前做决策。只做日志就是弱功能。
+
+## 可验证指标
+
+- 重试导致的重复动作下降比例
+- 每 100 次外部动作里的不确定状态数量
+- replay decision 自动命中率
+- 人工审批平均耗时
+- incident receipt 导出后复盘耗时
+- 接入后 agent workflow 的恢复成功率
+- 高风险动作的幂等键覆盖率
+
+## 可信来源
+
+- [Reddit r/LocalLLaMA: built a self-hosted layer for local agent workflows because retries kept replaying side effects](https://www.reddit.com/r/LocalLLaMA/comments/1tjupyf/built_a_selfhosted_layer_for_local_agent/)
+- [OpenAI Agents Python SDK](https://github.com/openai/openai-agents-python)
+- [OpenAI Agents SDK docs](https://openai.github.io/openai-agents-python/)
+- [Temporal documentation](https://docs.temporal.io/)
+- [HN: Agent.email — sign up via curl, claim with a human OTP](https://news.ycombinator.com/item?id=48225596)
+- [Product Hunt: Tycoon AI](https://www.producthunt.com/products/tycoon-us)
+- [Product Hunt: InstaVM](https://www.producthunt.com/products/instavm)
