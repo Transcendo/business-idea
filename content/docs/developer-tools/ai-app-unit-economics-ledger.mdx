@@ -1,0 +1,172 @@
+---
+title: AI App Unit Economics Ledger
+description: AI app 的成本问题不只在模型账单，而是用户、功能、工作流和 agent 动作到底有没有赚钱。机会是把产品事件、LLM trace、工具调用和 provider pricing 压成每个功能的毛利账本与预算刹车。
+created: 2026-05-22
+tags:
+  - ai-products
+  - developer-tools
+  - llm-observability
+  - unit-economics
+  - product-analytics
+---
+
+# AI App Unit Economics Ledger
+
+## 一句话判断
+
+AI app 的新痛点不是“模型贵”，而是团队不知道哪类用户、哪条功能、哪段 agent workflow 正在亏钱。
+
+下一层机会是把产品事件、LLM trace、工具调用、模型价格和收入事件压成一份 unit economics ledger：每个用户行为消耗多少 token、调用了哪些工具、带来什么转化、是否值得继续跑。
+
+这不是普通 LLM observability。Observability 告诉你模型调用发生了什么；ledger 要回答一个更商业的问题：这次 AI 能力到底赚没赚钱，下一次该不该降级、限流、改 prompt，还是直接砍掉。
+
+## 赛道 / 产品信号
+
+本轮信号来自三类地方。
+
+- Product Hunt 上 Mixpanel Headless 的定位是“Programmatic access to product analytics for agents and devs”。产品分析开始被 agent 和开发者 API 化，不再只是给人点 dashboard。
+- Reddit r/SaaS 出现很直接的抱怨：“Most AI apps have no idea which users/features are actually making them lose money”。这不是抽象 FinOps，是 AI SaaS 创业者已经被毛利打到脸上。
+- Product Hunt 同期还有 Tycoon AI、Google Antigravity 2.0、Manus Scheduled Tasks 2.0、Runtime 这类 agent / workflow / coding-agent 产品。AI app 正在从一次回答变成多步骤执行，成本结构会更像任务账本。
+- HN 上 Superlog、Torrix 等 observability 产品持续出现，说明 builder 对自动诊断、trace、成本和故障归因的需求在升温。
+- OpenAI pricing、Anthropic pricing、云端推理、browser/runtime/sandbox 成本叠在一起，单看 provider 账单已经不够。
+
+判断：AI app 进入真实收费阶段后，团队会从“功能能不能跑”转向“哪个功能值得跑”。谁能把每次 AI 动作和收入、留存、成本绑在一起，谁就有机会站在 LLM observability 和 product analytics 中间。
+
+## 用户痛点是什么
+
+1. **不知道谁在亏钱。** 一个免费用户可能疯狂触发长上下文、多模型、多工具调用；账单涨了，但 product analytics 只显示活跃上升。
+2. **功能成本和功能价值分裂。** Mixpanel / PostHog 知道用户点了什么，Langfuse / OpenTelemetry 知道 LLM 调用了什么，Stripe 知道谁付钱。没人天然回答“这个功能毛利是多少”。
+3. **agent 成本不可预测。** Agent 会重试、调用浏览器、跑代码、查资料、写入 SaaS。一次用户请求可能变成 20 次模型和工具调用。
+4. **降级策略靠拍脑袋。** 团队不知道哪些场景该用便宜模型，哪些场景必须保质量，哪些免费用户该限流。
+5. **投资人和老板问的是毛利。** “DAU 涨了”不够。AI 产品必须证明增长没有把毛利烧穿。
+
+## AI 是否真的压缩任务
+
+这里 AI 压缩的是一组过去很难手工拼起来的判断：
+
+- 从产品事件、LLM trace、工具调用、账单、订阅收入里自动对齐同一次用户任务。
+- 把原始调用压成“每个功能 / 用户分群 / workflow 的收入、成本、毛利、失败率”。
+- 给出能执行的动作：降级模型、加缓存、拆 prompt、限制重试、改免费额度、把某条 agent workflow 改成异步付费任务。
+
+好输出应该像这样：
+
+```text
+Feature: AI slide generation
+Segment: free workspace, 3+ runs/day
+Avg cost per task: $0.42
+Conversion lift: low
+Gross margin: -78%
+Action: cap free runs at 2/day; switch draft mode to small model; ask upgrade before image generation.
+Evidence: 1,482 tasks, 7-day retention 9%, paid conversion 0.7%.
+```
+
+这份 receipt 能发给 founder、PM、工程和增长团队。它比“本月 token 花了 800 美元”有用得多。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户接入一个轻量 SDK 或日志导入器；系统把 product event、LLM call、tool call、revenue event 串成 task-level ledger，并输出亏钱功能、浪费路径和预算策略。**
+
+第一版只做四类事件：
+
+- `task_start / task_end`：一次 AI 任务的业务边界。
+- `llm_call`：模型、输入输出 tokens、价格、latency、错误。
+- `tool_call`：browser、search、code runtime、image/video、database、external API。
+- `revenue_event`：subscription、credit purchase、usage charge、trial conversion。
+
+不要一上来做大而全 BI。先让一个 AI SaaS founder 在 30 分钟内看到：哪 3 个功能最亏，哪 3 个用户分群最危险，哪 3 条策略能立刻止血。
+
+## 为什么现在
+
+- AI 产品从 demo 进入收费，毛利压力开始真实出现。
+- Agent 和 workflow 把一次用户请求变成多步执行，成本从可预测 API call 变成任务树。
+- Product analytics 正在被 programmatic / headless 化，agent 可以直接读分析结果并生成动作建议。
+- LLM observability 已经证明 trace 有价值，但 trace 还没有天然连到收入和用户分群。
+- 免费层、试用层、usage-based pricing 会逼团队精细控制成本，否则增长越快亏越多。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+账单上升、免费层被薅、某个 AI 功能看起来热闹但转化很差。founder 不想再凭感觉砍功能。
+
+**为什么留：**
+模型价格、prompt、用户行为、产品包装都会变。ledger 每周都能重新告诉团队该调哪条策略。
+
+**为什么传播：**
+可传播单元是 margin receipt：
+
+```text
+我们发现 12% 免费用户制造了 61% AI 成本，付费转化只有 0.4%。
+改成小模型 draft + 付费生成后，毛利从 -42% 回到 +18%。
+```
+
+这类卡适合发给团队、投资人、创业群，也适合被 AI SaaS 工具商用来获客。
+
+**谁付费：**
+AI SaaS、AI-native agency、consumer AI app、agent workflow 产品、开发者工具、垂直 AI 公司。付费点在团队报表、实时预算 gate、Stripe / Mixpanel / PostHog / Langfuse 集成、策略模拟、私有部署和成本中心导出。
+
+## MVP 实验
+
+### 7 天 MVP
+
+只支持 3 个集成：Stripe、一个 product analytics 工具、一个 LLM trace 工具。没有集成也允许上传 CSV / JSON。
+
+输出三张表：
+
+1. `feature_margin.md`：每个 AI 功能的调用量、成本、收入关联、毛利。
+2. `segment_risk.md`：亏钱用户分群、免费层滥用、异常重试。
+3. `budget_policy.md`：模型降级、缓存、限流、升级提示、异步任务建议。
+
+### 30 天验证
+
+- 找 15 个已经上线收费的 AI app。
+- 接入最近 14 天数据，给出 5 条毛利修复建议。
+- 只要求用户执行其中 1 条：比如免费层降级、重试上限、昂贵功能升级提示。
+- 观察 7 天后毛利、留存、付费转化、投诉率是否变化。
+
+如果用户只看报告但不改策略，说明产品只是报表。如果用户把预算 gate 接进运行时，机会才硬。
+
+## 商业化路径
+
+1. **免费诊断。** 上传 7 天日志，生成 feature margin receipt。
+2. **团队监控。** 按功能、用户、workspace、渠道、模型、agent workflow 看毛利。
+3. **预算 gate。** 任务执行前判断是否超预算，自动降级模型或要求升级。
+4. **策略模拟。** 模拟“免费层改成 3 次 / 天”“图片生成改成付费 credit”“长任务异步收费”对毛利和转化的影响。
+5. **私有部署。** 面向企业 AI 产品，处理敏感用户数据、成本中心和合规导出。
+
+## 反例 / 风险
+
+1. **大平台可能内置。** Mixpanel、PostHog、Langfuse、OpenAI、Anthropic 都可能做一部分。独立产品必须赢在跨系统 task-level margin 和预算策略。
+2. **收入归因很脏。** 用户今天用 AI 功能，三周后付费。归因模型容易误导，必须展示置信度。
+3. **早期 AI app 数据太少。** 样本少时建议会飘。MVP 更适合有真实付费和一定调用量的团队。
+4. **会被误用成粗暴限流。** 如果只砍成本不看体验，可能伤留存。产品要同时看毛利、成功率、满意度和转化。
+5. **接入成本可能太高。** 如果 SDK 太重，founder 不会装。第一版必须支持日志导入和最小埋点。
+
+## 可验证指标
+
+- 是否能在 30 分钟内生成第一份 feature margin receipt。
+- 用户是否能指出“这条建议我今天就能改”。
+- 执行建议后 AI 成本 / 任务是否下降。
+- 毛利改善是否没有明显伤害 7 日留存和付费转化。
+- Budget gate 是否被接进生产运行时。
+- Receipt 是否被发给团队、投资人或客户。
+- 从免费诊断到付费监控的转化率。
+
+## 来源
+
+- Product Hunt：Mixpanel Headless，描述为 programmatic access to product analytics for agents and devs：[https://www.producthunt.com/products/mixpanel](https://www.producthunt.com/products/mixpanel)
+- Reddit：r/SaaS 用户讨论 AI apps 不知道哪些用户 / 功能在亏钱：[https://www.reddit.com/r/SaaS/comments/1tk234n/most_ai_apps_have_no_idea_which_usersfeatures_are/](https://www.reddit.com/r/SaaS/comments/1tk234n/most_ai_apps_have_no_idea_which_usersfeatures_are/)
+- Product Hunt：Runtime，sandboxed coding agents for everyone on your team，说明 agent runtime 成本会进入团队协作场景：[https://www.producthunt.com/products/runtime](https://www.producthunt.com/products/runtime)
+- Product Hunt：Tycoon AI，one-person company with AI agents，反映 agent workflow 产品继续涌现：[https://www.producthunt.com/products/tycoon-us](https://www.producthunt.com/products/tycoon-us)
+- HN：Superlog，observability that installs itself and fixes bugs：[https://news.ycombinator.com/item?id=48207105](https://news.ycombinator.com/item?id=48207105)
+- HN：Torrix，自托管 LLM observability：[https://news.ycombinator.com/item?id=48223988](https://news.ycombinator.com/item?id=48223988)
+- OpenAI：API pricing 公开页面：[https://platform.openai.com/docs/pricing](https://platform.openai.com/docs/pricing)
+- Langfuse：open source LLM engineering / observability：[https://github.com/langfuse/langfuse](https://github.com/langfuse/langfuse)
+
+## 后续跟踪点
+
+- Mixpanel / PostHog 是否把 AI cost attribution 直接做进产品分析。
+- Langfuse / OpenTelemetry 生态是否向收入归因延伸。
+- AI app founder 更愿意为成本节省付费，还是为毛利策略和预算 gate 付费。
+- Usage-based pricing、credit、free-tier cap 哪一种最适合成为第一批策略模板。

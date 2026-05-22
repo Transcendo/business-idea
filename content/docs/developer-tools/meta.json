@@ -6,6 +6,7 @@
     "cursor-anysphere",
     "ai-coding-agent-control-plane",
     "ai-coding-token-cost-profiler",
+    "ai-app-unit-economics-ledger",
     "design-system-extraction-layer-for-coding-agents",
     "agent-readable-docs-readiness-layer",
     "mcp-cross-client-testing-layer",
