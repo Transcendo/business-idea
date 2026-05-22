@@ -1,0 +1,176 @@
+---
+title: Repo Preference Pack for Coding Agents
+description: coding agent 已经会写代码，但还不懂每个仓库的口味、禁区和历史坑。机会是把 merge history、review comment 和 revert 压成可执行的 repo preference pack，变成 agent 写代码前后的团队风格门禁。
+created: 2026-05-22
+tags:
+  - ai-coding
+  - developer-tools
+  - code-review
+  - ai-agents
+  - preference-learning
+---
+
+# Repo Preference Pack for Coding Agents
+
+## 一句话判断
+
+AI coding agent 现在最尴尬的不是不会写，而是像一个永远刚入职的外包同事：能产出代码，但不懂这个仓库为什么这么命名、为什么某个目录不能碰、为什么这个团队讨厌某种抽象、为什么以前某个实现被 revert。
+
+更锐的机会不是再做一个通用 code review bot，而是做 repo-specific preference pack：从已合并 PR、review comment、revert、test fix、lint fix、架构文档和 issue 里提炼团队口味，生成 agent 可执行的规则、反例、验证任务和 PR 前置检查。
+
+这不是“帮你写 rules.md”。它应该成为 coding agent 每次改代码前后的团队记忆层。
+
+## 赛道 / 产品信号
+
+本轮信号集中在同一件事：coding agent 进入真实仓库后，通用能力不够，团队偏好和代码结构才是反复返工的根。
+
+- OpenAI Codex CLI、Claude Code、OpenCode 这类终端 coding agent 正在把“让 agent 改真实 repo”变成日常动作。
+- Sentry 的 Warden 把定位写得很直白：agents that review your code；它支持本地 CLI 和 GitHub Action，并强调用 skills 定义分析规则。
+- AFT 用 tree-sitter 给 agent 提供语义编辑、call graph 导航和结构搜索，说明 agent 不该只靠文本 grep 理解代码。
+- HN 上有人问为什么大家不更担心 AI 在 code review 里 impersonation，背后其实是一个问题：PR 里哪些判断来自真实团队共识，哪些只是模型伪装成 reviewer？
+- Reddit / LocalLLaMA 里仍有用户愿意花硬件钱追求本地 coding agent，说明 agent-heavy 开发者已经在意成本、隐私和长期工作流，而不只是一次性代码生成。
+
+判断：agent 会写代码后，下一层稀缺品是“这个团队到底怎么判断好代码”。谁能把团队偏好变成 agent 可用、可更新、可验证的对象，谁就能卡在 coding agent 到 merge 的中间层。
+
+## 用户痛点是什么
+
+1. **Agent 不懂团队口味。** 命名、目录边界、测试习惯、错误处理、组件风格、数据库迁移习惯，都很难只靠 README 表达。
+2. **Reviewer 反复纠正同类问题。** “这里别加抽象”“这个 hook 不能这么用”“这个模块不要跨层调用”，这些评论一遍遍出现。
+3. **rules 文件太静态。** 手写 rules.md 往往过期，而且只记录显性规则，无法捕捉 review 里真实发生过的取舍。
+4. **代码历史里有禁区。** 某些实现以前试过、失败过、被 revert 过。Agent 不知道，就会把坑再挖一遍。
+5. **PR review 证据不足。** AI reviewer 给出的建议如果不能对应团队历史、文件结构和先例，很容易被当成噪音。
+
+## AI-native wedge
+
+最小产品是 repo preference pack generator。
+
+输入：一个 GitHub repo，外加最近 100-500 个 merged PR、review comments、reverts、CI failures、architecture docs。
+
+系统产出：
+
+- `preferences.md`：团队偏好，用短规则表达。
+- `anti_patterns.md`：历史踩坑、被拒绝过的实现方式。
+- `examples/`：好 PR / 坏 PR 的摘录和原因。
+- `agent_rules.json`：可被 Codex、Claude Code、OpenCode、Cursor rules、GitHub Action 使用的结构化规则。
+- `verifier_tasks.yaml`：PR 前置检查任务，比如“是否跨层调用”“是否缺少回归测试”“是否绕过现有错误处理模式”。
+- `pre_merge_receipt.md`：agent 改完代码后解释自己如何遵守偏好。
+
+一句话：用户给 repo 和历史记录，系统在 30 分钟内生成一个会随 PR 演化的团队口味包。
+
+## 为什么现在热
+
+1. **Coding agent 从 demo 进真实 repo。** 真实 repo 的最大摩擦不是写一个函数，而是别破坏团队隐性约定。
+2. **Agent 数量会上升。** 一个团队可能同时用 Codex、Claude Code、Cursor、OpenCode、CI reviewer。偏好层不能绑死在单一客户端。
+3. **Review 成本变成瓶颈。** Agent 写得越多，人工 reviewer 越容易被低质量 PR 淹没。
+4. **代码历史是未开发资产。** merge history 和 review comment 本来就是团队偏好的训练集，只是没人把它产品化。
+5. **企业要可解释性。** 如果 AI reviewer 能说“这个建议来自过去 18 个相似 PR 的拒绝原因”，信任度比泛泛建议高很多。
+
+## 为什么用户会来 / 留 / 传播 / 付费
+
+### 为什么会来
+
+agent-heavy 团队已经被“代码能跑，但不像我们团队写的”折磨过。只要 demo 能证明同一个 issue 的 review comment 减少，工程负责人会愿意试。
+
+### 为什么会留
+
+偏好包会持续吸收新 PR、新 review、新 revert。时间越久，它越像团队工程记忆。迁走意味着重新训练团队口味。
+
+### 为什么会传播
+
+传播单元不是 dashboard，而是一张 before / after receipt：
+
+“同一个 agent 接入 preference pack 后，PR 被打回的风格问题从 12 条降到 3 条。”
+
+工程圈会转这种具体对比，不会转“AI code review 更智能”。
+
+### 为什么会付费
+
+付费点来自可量化的 review 节省和风险下降：
+
+- 私有 repo 历史解析。
+- PR comment 聚类和偏好提取。
+- 多 coding-agent 客户端适配。
+- CI / GitHub Action verifier。
+- 敏感代码本地部署。
+- 团队级偏好版本管理和回滚。
+- 新人/外包/agent 的统一 onboarding pack。
+
+## 可验证 MVP 怎么做
+
+不要先做完整平台。先做一个 repo、一个 agent、一个 review 指标。
+
+### MVP 版本
+
+- 接入 GitHub repo。
+- 拉取最近 200 个 merged PR 和 review comments。
+- 用 LLM + 静态分析提炼 30-80 条偏好规则。
+- 生成 Claude/Codex/Cursor 可用的 rules 文件。
+- 提供 GitHub Action：PR 打开时输出 preference violations 和引用过往先例。
+
+### 测试任务
+
+选 3 个真实开源或企业 repo，每个 repo 选 20 个历史 issue。
+
+对照组：普通 coding agent 直接执行。
+
+实验组：coding agent 先读取 preference pack，PR 前跑 verifier。
+
+### 关键指标
+
+- review comment 总数是否下降。
+- 同类重复评论是否下降。
+- PR 被打回次数是否下降。
+- 从 agent 完成到可 merge 的时间是否下降。
+- verifier 的误报率是否低于 20%。
+- 规则引用的历史先例是否被 reviewer 认可。
+
+## 商业化路径
+
+### 1. GitHub App / Action
+
+从 PR review 门禁切入。免费生成基础 preference pack，收费卖私有 repo、历史深度、团队规则版本和 CI gate。
+
+### 2. Coding-agent 插件
+
+适配 Codex、Claude Code、OpenCode、Cursor、Windsurf。卖点是“让任何 agent 先学会这个 repo 的口味”。
+
+### 3. Enterprise engineering memory
+
+面向大团队，把偏好包定位成工程记忆资产：新人 onboarding、外包审查、agent 代码门禁、架构规则沉淀。
+
+### 4. Vertical repo packs
+
+先做前端 monorepo、Rails/Django 后端、移动 App、数据管道这类高重复风格的 repo。不要一开始宣称适配所有语言。
+
+## 反例 / 风险
+
+1. **可能只是 PR review 工具的功能。** Warden、Qodo、GitHub Copilot、Cursor 都可能把 repo memory 加进去。
+2. **历史评论质量不稳定。** 很多 review comment 是个人偏好、临时妥协或过时规则，直接学习会污染 agent。
+3. **隐私和权限很重。** 私有代码、评论、组织结构都敏感，本地部署和最小权限是底线。
+4. **小 repo 数据不够。** 新项目没有足够 PR 历史，生成的偏好包会虚。
+5. **误报会伤信任。** 如果 verifier 把正常实现判成违反偏好，团队会关掉它。
+6. **规则维护容易烂。** 偏好会变，必须支持过期、冲突检测和 owner 审批。
+
+## 更像创业机会的切法
+
+不要卖“AI code review”。太泛，也太挤。
+
+更好的定位是：
+
+> Turn your merge history into a repo-specific taste pack for coding agents.
+
+中文说法：
+
+> 把团队过去的 PR 和 review，变成 coding agent 每次写代码前都会遵守的仓库口味包。
+
+第一批用户不是所有开发者，而是已经高频使用 coding agent 的团队、AI-first dev agency、开源 maintainer、代码审查压力大的平台工程团队。
+
+## 来源
+
+- [OpenAI Codex GitHub](https://github.com/openai/codex)
+- [getsentry/warden GitHub](https://github.com/getsentry/warden)
+- [cortexkit/aft GitHub](https://github.com/cortexkit/aft)
+- [HN: Why aren't more people worried about AI impersonation in code reviews?](https://news.ycombinator.com/item?id=48173182)
+- [Reddit / LocalLLaMA: local coding agent hardware spend question](https://www.reddit.com/r/LocalLLaMA/comments/1tk2s09/in_theory_if_i_have_20kish_to_spend_on_hardware/)
+- [cmux GitHub](https://github.com/manaflow-ai/cmux)
+- [tmux-agent-sidebar GitHub](https://github.com/hiroppy/tmux-agent-sidebar)
