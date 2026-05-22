@@ -1,0 +1,179 @@
+---
+title: Agent Virtual Filesystem Layer
+description: Agent 工具越来越多，真正卡住的不是再接一个 API，而是让模型用同一种路径、权限和读写语义处理 Slack、GitHub、S3、数据库、RAG 和本地文件。机会是做 AI agent 的虚拟文件系统层。
+created: 2026-05-22
+tags:
+  - ai-agents
+  - developer-tools
+  - context-infrastructure
+  - tool-integration
+  - mcp
+---
+
+# Agent Virtual Filesystem Layer
+
+## 一句话判断
+
+AI agent 的工具层正在变成一团乱麻。每个 SaaS、数据库、搜索、RAG、文件仓库都暴露一套 tool schema，模型要在几十个动作、参数和权限之间猜。
+
+更锐的机会不是“再做一个 connector”，而是把异构服务挂成一棵 agent 能读懂的虚拟文件树：Slack 是 `/slack`，GitHub 是 `/github`，S3 是 `/s3`，数据库查询结果是 `/db`，记忆和检索结果是 `/memory`。Agent 用 `ls`、`cat`、`grep`、`cp`、`write` 这类天然熟悉的动作完成跨源任务。
+
+这不是文件管理器。它是 agent 的数据面、权限面和上下文面。
+
+## 赛道 / 产品信号
+
+本轮信号集中在同一件事：agent 不缺工具，缺统一的操作语义。
+
+- Mirage 把自己定义成 “Unified Virtual File System for AI Agents”，把 S3、Google Drive、Slack、Gmail、Redis、GitHub 等服务挂在同一棵树里，让 agent 用类 Unix 命令跨源组合任务。
+- ToolFS 明确把 files、persistent memory、semantic search、WASM skills 映射到 POSIX 风格的 `/toolfs` namespace，理由很直接：LLM 天生理解路径和文件操作，几十个 API 会制造 tool bloat。
+- agent-vfs 把持久化 agent memory 做成 SQLite / Postgres 后端的虚拟文件系统，让 agent 用 read / write / ls / grep 管理自己的长期记忆。
+- AFS、chromafs-lite 这类项目也在尝试让应用状态、浏览器上下文或 agent memory 变成可读写的文件结构。
+- HN 上 Mirage 和 agent-vfs 的讨论说明 builder 已经在寻找比“多注册几个 tool”更低摩擦的 agent 操作层。
+
+判断：MCP 解决了“工具怎么接进来”，但没有自动解决“agent 怎么稳定理解、发现、组合、审计这些工具”。虚拟文件系统层可能成为 MCP 之后的一层 agent-native data plane。
+
+## 用户痛点是什么
+
+1. **Tool schema 太碎。** 一个 agent 任务可能要查 Slack、读 GitHub issue、拿 S3 日志、写 Notion、更新数据库。每个工具都有不同参数、返回结构和错误语义。
+2. **发现成本高。** Agent 不知道有哪些资源、路径和能力可用，只能依赖系统 prompt 或工具列表；工具一多，选择错误率上升。
+3. **上下文和状态分裂。** 会话记忆、检索结果、文件、SaaS 数据、临时输出各有生命周期，难做一致的缓存、回放和权限控制。
+4. **权限难管。** 团队想限制 agent 只能读某些频道、仓库、bucket 或字段，但普通 tool 调用往往把权限散在各个 connector 里。
+5. **调试很痛。** Agent 为什么读错数据、写错地方、漏掉文件？如果没有统一路径和操作日志，很难复盘。
+
+## AI-native wedge
+
+最小产品不是“全服务连接器市场”，而是一个 agent VFS gateway。
+
+输入：团队选择 3-5 个数据源，比如 GitHub、Slack、S3、Postgres、local folder。
+
+系统产出：一棵权限受控的虚拟文件树，外加少量 agent 已经会用的文件命令。
+
+Agent 可以：
+
+- `ls /github/org/repo/issues/open`
+- `grep "payment failed" /slack/support/*.json`
+- `cat /s3/logs/2026-05-22/errors.jsonl`
+- `cp /github/repo/README.md /memory/project-context.md`
+- `write /drafts/release-note.md`
+
+核心不是模拟终端，而是让 agent 用稳定路径发现资源、读写状态、组合跨源动作，并留下可审计的 file-operation ledger。
+
+## 为什么现在热
+
+1. **Agent 从聊天走向执行。** 一旦 agent 要完成真实工作，就必须访问多源数据和外部系统。
+2. **MCP 把工具数量推高。** MCP 降低接入门槛后，企业会面对更多 tool，而不是更少 tool。
+3. **模型对文件系统有先验。** 训练语料里有大量 shell、路径、文件读写、grep、diff。相比让模型学习每个 SaaS API，路径抽象更省心。
+4. **企业需要权限和审计。** Agent 读写真实数据后，谁挂载了什么、读了什么、写了什么、为什么写，都会变成采购问题。
+5. **上下文窗口仍然贵。** 把数据挂成可查询路径，比把所有东西塞进 prompt 更可控。
+
+## 为什么用户会来 / 留 / 传播 / 付费
+
+### 为什么会来
+
+用户已经被 MCP server、SaaS connector、tool schema 和 prompt 维护折磨过。只要一个 demo 证明 agent 可以用同一组文件命令跨 Slack、GitHub、S3 完成任务，AI-first 工具团队会愿意试。
+
+### 为什么会留
+
+路径命名、权限规则、缓存策略、mount 配置、团队数据源和历史操作日志会沉淀。换掉 VFS 意味着重配 agent 数据面。
+
+### 为什么会传播
+
+传播单元很清楚：
+
+“我让 agent grep Slack 支持记录、读 GitHub issue、查 S3 日志，然后生成 bug summary，全程只用文件命令。”
+
+这比“我们又接了 12 个工具”更容易被 builder 听懂。
+
+### 为什么会付费
+
+付费点不是开源本地 demo，而是团队级能力：
+
+- 私有 SaaS / database mount。
+- 细粒度路径权限和敏感字段遮挡。
+- 操作日志、回放和审计。
+- 多 agent / 多 tenant 隔离。
+- 托管 gateway、缓存、失败恢复。
+- 与 MCP、LangChain、OpenAI Agents SDK、Claude Code、OpenCode 的适配。
+
+## 可验证 MVP 怎么做
+
+不要先做 20 个 connector。先做一个窄任务集。
+
+### MVP 版本
+
+- 支持 3 个 mount：GitHub repo、Slack export、S3/local log folder。
+- 提供 6 个动作：`ls`、`cat`、`grep`、`find`、`cp`、`write`。
+- 每次操作记录 actor、path、permission、input、output hash、error。
+- 给 agent 一个简短 prompt：资源都在 `/workspace` 下，先 `ls`，再读写。
+
+### 测试任务
+
+1. 根据 Slack 抱怨、GitHub issue 和日志生成 bug triage。
+2. 读取产品文档和客户反馈，生成 changelog 草稿。
+3. 查找某个错误码在 issue、日志、支持记录里的出现次数。
+4. 把调查过程写成可复盘 receipt。
+
+### 关键指标
+
+- 同一任务下 tool-call 数量下降多少。
+- 错选工具 / 错传参数次数下降多少。
+- agent 首次完成率是否提高。
+- 人工修正时间是否下降。
+- 权限拒绝、敏感路径访问、写入操作是否可审计。
+- 新数据源接入时间是否低于普通 connector。
+
+## 商业化路径
+
+### 1. Open-source core + hosted control plane
+
+开源本地 VFS runtime，收费卖托管 gateway、team mounts、权限、审计、缓存和连接器。
+
+### 2. Agent platform SDK
+
+面向做 agent 产品的公司，作为 SDK 嵌进他们的 runtime。收费按 agent seat、mount 数、操作量或企业 license。
+
+### 3. Enterprise data access layer
+
+面向企业内部 AI 平台团队，把 VFS 定位成“agent 数据访问层”。重点卖私有部署、SSO、权限映射、审计和合规报告。
+
+### 4. Vertical VFS
+
+先做一个高频场景，比如 support engineering：Slack / Zendesk / GitHub / logs / docs。不要一开始宣称所有系统都能挂。
+
+## 反例 / 风险
+
+1. **可能只是 MCP 的 feature。** 如果主流 MCP client 自带更好的资源树、权限和审计，独立 VFS 会被吸收。
+2. **POSIX 抽象不适合所有 API。** 支付、审批、事务型数据库写入不是简单文件操作，乱抽象会制造危险。
+3. **权限误配很致命。** VFS 一旦统一了入口，也统一了事故半径。默认只读和最小权限必须是产品底线。
+4. **Connector 维护很重。** 真正商业化会被各种 SaaS API、rate limit、schema change 拖住。
+5. **模型可能直接适应 tool schema。** 如果 frontier models 对复杂工具选择能力大幅提升，VFS 的差异会变窄。
+6. **开源竞争快。** Mirage、ToolFS、agent-vfs 已经存在。新创业项目必须拿出更强的场景、权限和团队协作能力。
+
+## 更像创业机会的切法
+
+不要卖“给 agent 的文件系统”这个抽象词。卖具体成果：
+
+- Agent 少传错参数。
+- Agent 能自己发现数据源。
+- Agent 访问企业数据可审计。
+- Agent 跨 Slack / GitHub / S3 做调查不用手写 connector workflow。
+- 每次读写都有 receipt，出错能回放。
+
+一句话定位可以是：
+
+> The data access layer where agents read company tools like files, with permissions and receipts.
+
+中文说法：
+
+> 让 agent 像读文件一样读企业工具，同时留下权限和复盘记录。
+
+## 来源
+
+- [strukto-ai/mirage GitHub](https://github.com/strukto-ai/mirage)
+- [Mirage project page](https://www.strukto.ai/mirage)
+- [ToolFS GitHub](https://github.com/IceWhaleTech/ToolFS)
+- [agent-vfs GitHub](https://github.com/johannesmichalke/agent-vfs)
+- [AIGNE AFS GitHub](https://github.com/AIGNE-io/afs)
+- [chromafs-lite GitHub](https://github.com/tom-doerr/chromafs-lite)
+- [HN: Mirage — Unified Virtual File System for AI Agents](https://news.ycombinator.com/item?id=48229766)
+- [HN: agent-vfs — persistent virtual filesystem for agents](https://news.ycombinator.com/item?id=48229398)
