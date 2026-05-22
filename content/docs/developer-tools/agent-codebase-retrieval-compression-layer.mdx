@@ -1,0 +1,182 @@
+---
+title: Agent Codebase Retrieval Compression Layer
+description: Coding agent 进入真实仓库后，最贵的不是生成代码，而是反复 grep、read、猜文件、塞上下文。机会是做 agent 专用代码检索压缩层：用自然语言和结构信号返回最相关代码片段、调用关系和证据，减少 token、误读和返工。
+created: 2026-05-22
+tags:
+  - ai-coding
+  - developer-tools
+  - ai-agents
+  - code-search
+  - context-infrastructure
+---
+
+# Agent Codebase Retrieval Compression Layer
+
+## 一句话判断
+
+Coding agent 现在会写代码，但在大仓库里经常像拿着手电筒翻仓库：先 grep 一轮，再 read 一堆文件，再猜哪个上下文是真的相关。
+
+这会烧 token、拖慢任务、增加误改概率。更糟的是，很多 agent 失败不是模型不会写，而是读错了代码边界、漏掉相似实现、没看到历史模式。
+
+更锐的机会不是再做一个通用代码搜索框，而是做 agent 专用的 codebase retrieval compression layer：用户给 repo，agent 用自然语言查“认证怎么走”“这个错误码在哪里处理”“类似组件怎么写”，系统返回最小、可引用、可复查的代码证据包。
+
+一句话：把 agent 的“乱读仓库”压缩成“只读该读的证据”。
+
+## 赛道 / 产品信号
+
+本轮信号集中在同一件事：agent-heavy 开发正在从“能不能生成代码”转向“能不能稳定理解真实仓库”。
+
+- Semble 把定位写得很直：code search for agents，并声称相比 grep + read 使用约 98% 更少 token。它支持自然语言代码搜索、MCP server、AGENTS.md / CLAUDE.md 接入。
+- HN 上 Semble、Darc 这类“给 coding agent 搜记忆 / 搜代码”的 Show HN 连续出现，说明 builder 已经在寻找 grep 之外的 agent 检索层。
+- Reddit / SaaS 里有人直接把 AI coding 最大问题说成 context fragmentation，不是代码生成能力。
+- OpenSquilla 把 token-efficient agent 作为核心定位，说明 token 预算、上下文密度和模型路由正在变成 agent runtime 的产品点。
+- GitHub 新项目里大量 agent runtime、sandbox、code search、memory 项目同时冒出，说明 coding agent 的下游基础设施还没定型。
+
+判断：未来每个 coding agent 都需要 codebase retrieval，但赢家未必是 IDE。独立机会在于跨 Codex、Claude Code、Cursor、OpenCode、CI agent 的统一检索压缩层。
+
+## 用户痛点是什么
+
+1. **Agent 太爱读文件。** 一次任务可能先 grep 几十次，再 read 大段文件，最后把上下文窗口塞满。
+2. **关键词搜索不懂意图。** 用户问“登录态怎么续期”，grep `auth` 可能返回一堆无关文件，漏掉真正的 session refresh、middleware、cookie 处理。
+3. **大仓库里相似实现太多。** Agent 容易仿错旧代码，或者没看到新模式，导致 PR 风格和架构都偏。
+4. **检索结果不可复查。** Agent 说“我参考了现有实现”，但 reviewer 不知道它读了哪些文件、为什么这些片段够用。
+5. **上下文成本和质量一起恶化。** 读太少会漏信息，读太多会分散注意力。普通全文搜索很难在二者之间做取舍。
+6. **团队无法统一 agent 入口。** Claude、Codex、Cursor、CI bot 各自读仓库，缺少共享索引、权限和 retrieval receipt。
+
+## AI-native wedge
+
+最小产品是 agent codebase retrieval proxy。
+
+输入：一个 GitHub repo 或本地仓库。
+
+系统产出：
+
+- 语义索引：函数、类、文件块、调用关系、README、测试、配置。
+- 自然语言搜索接口：`search "where is auth refresh handled"`。
+- 相似代码发现：给一个文件和行号，找同类实现、测试、调用方。
+- 证据包：返回 5-15 个最相关片段，而不是整文件。
+- Agent 指令：给 Claude Code、Codex、OpenCode、Cursor、CI agent 的统一 usage rule。
+- Retrieval receipt：记录 query、候选片段、命中原因、被 agent 引用的文件、token 估算。
+
+最小体验应该是：
+
+> Agent 开始任务前先问 retrieval layer，而不是直接 grep 全仓库。返回的证据包能让它在更少 token 内完成修改，并让 reviewer 复查它参考了什么。
+
+## 为什么现在热
+
+1. **Coding agent 已经进入真实 repo。** Demo repo 不需要好检索，生产 monorepo 需要。
+2. **上下文窗口变大不等于读得对。** 模型能塞更多文件，但错上下文仍然会污染判断。
+3. **MCP 给了分发入口。** Semble 这类工具可以通过 MCP server 或 AGENTS.md 接入不同 agent，不必绑死在单一 IDE。
+4. **Token 成本开始被团队看见。** 多 agent 并行后，检索浪费会直接变成账单和等待时间。
+5. **Code review 压力会放大检索问题。** Agent 生成的 PR 越多，reviewer 越在意“它到底基于哪些代码证据做的判断”。
+
+## 为什么用户会来 / 留 / 传播 / 付费
+
+### 为什么会来
+
+AI-first 团队已经遇到“agent 能写，但老读错仓库”的痛。只要 demo 能证明同一任务下 tool call、read 行数、token、返工次数下降，开发者会愿意接。
+
+### 为什么会留
+
+索引会沉淀仓库结构、常用查询、文件热度、reviewer 接受的证据模式。团队越用，检索层越懂这个 repo 的真实工作流。换掉它会损失这些 retrieval memory。
+
+### 为什么会传播
+
+传播单元不是“语义搜索更准”，而是一张任务对比卡：
+
+“同一个 issue，普通 agent 读了 38 个文件、花 120k token；接入 retrieval compression 后读了 9 个片段、花 18k token，PR 一次过。”
+
+开发者会转这种具体数字。
+
+### 为什么会付费
+
+付费点来自可量化节省和团队控制：
+
+- 私有 repo 索引。
+- 大 monorepo 增量索引。
+- 多 agent 客户端统一接入。
+- Retrieval receipt 和 PR 证据引用。
+- 权限过滤，避免 agent 读敏感目录。
+- CI / GitHub Action：PR 前检查 agent 是否引用足够代码证据。
+- 团队查询历史、命中率和 token 节省报告。
+
+## 可验证 MVP 怎么做
+
+不要先做完整 IDE。先做一个 agent 插件和一个指标。
+
+### MVP 版本
+
+- 支持本地 repo 和 GitHub repo。
+- 用 tree-sitter / embeddings / symbol index 建基础索引。
+- 提供三个命令：`search`、`find-related`、`explain-context`。
+- 支持 MCP server 和 CLI 两种接入。
+- 生成 `retrieval-receipt.md`：query、片段、路径、token 估算、引用理由。
+- 给 Claude Code / Codex / OpenCode 一段规则：改代码前先查 retrieval layer，除非任务只改单文件。
+
+### 测试任务
+
+选 5 个中大型开源 repo，每个 repo 取 20 个历史 issue 或小 bugfix。
+
+对照组：agent 用默认 grep/read。
+
+实验组：agent 先使用 retrieval compression。
+
+### 可验证指标
+
+- agent read 的总行数下降多少。
+- token 使用下降多少。
+- 首次完成率是否提高。
+- PR review comment 是否减少。
+- 漏读关键文件的比例是否下降。
+- 返回片段被最终 diff 引用或影响的比例是否超过 60%。
+- 检索误导导致的错误是否低于对照组。
+
+## 商业化路径
+
+### 1. 开源 CLI + 托管团队索引
+
+本地 CLI 开源，收费卖私有 repo 增量索引、团队共享索引、云缓存、权限和 receipt dashboard。
+
+### 2. MCP / agent plugin
+
+面向 Claude Code、Codex、Cursor、OpenCode、Windsurf 用户卖插件。核心卖点不是“更聪明搜索”，而是“让 agent 少烧 token、少读错文件”。
+
+### 3. PR evidence gate
+
+做 GitHub App：当 PR 标记为 agent-generated 时，检查它是否附带足够相关代码证据，是否漏掉相似实现和测试文件。
+
+### 4. Enterprise monorepo search for agents
+
+面向大公司平台工程团队。卖点是权限、审计、索引速度、跨语言、跨 repo、on-prem 部署。
+
+## 反例 / 风险
+
+1. **可能被 IDE 内置。** Cursor、GitHub Copilot、Claude Code 都有动力把更好的 codebase retrieval 做进客户端。
+2. **搜索质量很难证明。** 如果返回片段看起来相关但实际误导 agent，用户会很快失去信任。
+3. **大仓库索引不便宜。** 多语言、生成代码、vendor、monorepo、权限边界都会让索引复杂。
+4. **Token 省了但任务没变好，就没价值。** 只卖 token reduction 容易变成小工具；必须绑定完成率和 review 结果。
+5. **隐私和权限是硬门槛。** 私有代码索引、query log、receipt 都敏感。默认本地、最小权限、可删除是底线。
+6. **小团队可能用免费工具就够。** 真正付费用户更可能是 agent 使用量高、repo 大、review 压力高的团队。
+
+## 更像创业机会的切法
+
+不要卖“代码语义搜索”。这太泛，也容易被当成老东西。
+
+更好的定位是：
+
+> A retrieval compression layer that helps coding agents read the right code, not more code.
+
+中文说法：
+
+> 让 coding agent 少读文件、读对证据、少烧 token。
+
+第一批用户不是所有程序员，而是已经高频使用 coding agent 的团队、AI-first dev agency、大型开源 maintainer、平台工程团队。先证明一个指标：同样任务下，agent 读更少上下文，PR 更快过审。
+
+## 来源
+
+- [MinishLab/semble GitHub](https://github.com/MinishLab/semble)
+- [HN: Show HN: Semble – Code search for agents that uses 98% fewer tokens than grep](https://news.ycombinator.com/item?id=48169874)
+- [HN: Show HN: Darc – grep-like memory search tool for coding agents](https://news.ycombinator.com/item?id=48224372)
+- [Reddit / SaaS: The Biggest problem with AI Coding Isn’t Code Generation - It’s Context Fragmentation](https://www.reddit.com/r/SaaS/comments/1tjnfzy/the_biggest_problem_with_ai_coding_isnt_code/)
+- [OpenSquilla GitHub](https://github.com/opensquilla/opensquilla)
+- [HN: Coding agents run on terminal memories. Bottle yours](https://news.ycombinator.com/item?id=48227628)
