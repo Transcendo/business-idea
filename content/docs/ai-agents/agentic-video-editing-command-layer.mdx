@@ -1,0 +1,108 @@
+---
+title: Agentic Video Editing Command Layer
+description: 面向创作者和增长团队的视频编辑智能体，把素材理解、剪辑指令、版本生成、品牌约束和发布证据压成可复跑的视频生产层。
+---
+
+# Agentic Video Editing Command Layer
+
+短视频和产品视频的痛点不是“能不能生成一段视频”。真正折磨人的是：素材太散、剪辑要求反复变、不同渠道尺寸不同、字幕和 B-roll 容易错、每次改版都要重新沟通。
+
+Agentic video editing command layer 的机会，不是做一个更炫的 text-to-video 玩具，而是把“这里有一堆素材，按这个目标剪出 3 个可投放版本”压成可复跑、可审查、可交接的编辑命令层。
+
+## 产品信号
+
+GitHub 上已经出现专门把视频编辑变成 agent 可操作任务的项目。[video-use](https://github.com/video-use/video-use) 把自己定位成面向 AI agents 的视频编辑库，目标是让 agent 能完成裁剪、合成、字幕、音频和导出这类编辑动作；[agentic-video-editor](https://github.com/surisreehith/agentic-video-editor) 则直接做 conversational video editing。
+
+Product Hunt 的 AI feed 里也出现了更贴近普通用户的视频工具。[motionvid.ai](https://www.producthunt.com/products/motionvid-ai) 的一句话是 “Your AI Motion & Video Editor”，[AutoSubtitles](https://www.producthunt.com/products/autosubtitles) 这类字幕工具说明创作者仍在为视频后处理付费。Product Hunt 当前 feed 同时有 Prosed、Shroomie、Reader Alive 等内容再加工产品，说明“把已有内容变成另一个可发布形态”仍是热区。
+
+HuggingFace Spaces 搜索 `video agent` 能看到 [video_editing_genie_mcp_server](https://huggingface.co/spaces/Agents-MCP-Hackathon/video_editing_genie_mcp_server)、[video-agent-hero](https://huggingface.co/spaces/ejzhu2026/video-agent-hero)、[video-dubbing-agent](https://huggingface.co/spaces/sauravghu/video-dubbing-agent) 这类 demo。点赞不高，不能当市场验证，但说明开发者已经在把视频处理拆成 agent/MCP 可调用工具。
+
+## 用户痛点
+
+第一类用户是中小创作者和自媒体团队。他们不是缺灵感，而是素材、脚本、字幕、封面、节奏和多平台适配堆在一起，剪一条视频要跨好几个工具。
+
+第二类用户是 B2B 增长团队。一次产品更新、客户案例、功能发布，常常要剪官网版、LinkedIn 版、Twitter 版、YouTube Shorts 版、销售私发版。人工剪辑的问题不是贵，而是每次改一句话、换一个 CTA、加一个品牌约束都要重新排队。
+
+第三类用户是 AI-first agency。客户要的不是“生成一个视频”，而是按品牌、语气、素材权限和渠道目标持续出版本。没有编辑 receipt，客户很难知道 agent 做了什么、用了哪些素材、有没有踩版权和品牌红线。
+
+## AI-native wedge
+
+最小 wedge 应该是：用户上传素材包、目标和渠道，系统输出 3 个视频版本 + 一张 editing receipt。
+
+receipt 至少包含：
+
+- 输入素材：使用了哪些片段、图片、音频、字幕和 logo。
+- 编辑动作：裁剪、拼接、转场、字幕、配音、B-roll、节奏点。
+- 渠道目标：每个版本对应 TikTok、YouTube Shorts、LinkedIn、官网或广告位。
+- 品牌约束：字体、颜色、禁用词、视觉禁区、CTA。
+- 风险提示：素材版权不明、人物肖像、音乐授权、字幕误识别。
+- 可复跑命令：下一轮只改 hook、CTA、时长或字幕，不从零开始。
+
+AI 压缩的不是单次生成，而是把素材理解、剪辑决策、多版本导出和修改回合压成一个可执行的编辑任务。
+
+## 为什么现在
+
+视频生成模型变强之后，大家容易误判机会在“从 0 生成视频”。但多数商业视频并不是纯生成：它们有真实产品截图、真人素材、客户案例、品牌资产和渠道要求。
+
+现在热，是因为三件事撞在一起：视频需求继续碎片化；AI agents 开始能调用文件、FFmpeg、浏览器和设计工具；创作者和增长团队已经接受按月付费给内容工具。谁能把视频编辑从“人肉改版本”变成“agent 执行带证据的编辑命令”，谁就更接近生产预算。
+
+## 用户为什么来、留、传播、付费
+
+来：创作者和增长团队手里有素材，但不想再进复杂剪辑软件，也不想每次小改都找剪辑师排期。
+
+留：同一品牌、同一频道、同一产品会持续需要版本。只要系统记住品牌规则、渠道模板和历史高转化结构，就会越用越省沟通。
+
+传播：输出的视频本身会传播；更关键的是 editing receipt 可以发给老板、客户或剪辑师，说明“这版为什么这样剪”。
+
+付费：创作者为省时间付费，增长团队为多版本投放付费，agency 为交付效率和可追责付费。更高客单价来自团队协作、品牌库、素材权限、批量导出和广告素材测试。
+
+## MVP 实验
+
+不要先做全能视频编辑器。先卡一个窄场景：B2B SaaS 产品更新短视频，或者 AI 工具创作者的多平台剪辑。
+
+7 天 MVP：
+
+1. 只支持 30 到 90 秒短视频。
+2. 输入：素材文件夹、产品 URL、品牌色、禁用词、目标渠道、希望表达的一句话。
+3. 输出：3 个版本，分别偏 hook、功能演示、用户痛点。
+4. 生成 `editing-receipt.md`，记录素材、时间轴、字幕、CTA 和风险。
+5. 下一轮支持自然语言修改：更快节奏、换 CTA、压到 30 秒、加字幕、删掉某个片段。
+
+30 天验证：找 10 个创作者或 5 个小型增长团队，每周让他们用它完成至少 3 条真实发布视频。不要只看生成次数，要看他们是否真的发布、是否复用品牌模板、是否把 receipt 发给团队。
+
+## 商业化路径
+
+第一层按月订阅：个人创作者每月固定导出额度，小团队按席位和品牌空间收费。
+
+第二层按工作流收费：批量版本、广告素材 A/B、字幕翻译、多语言配音、品牌审核、素材权限检查。
+
+第三层卖给 agency 和增长团队：客户空间、审稿流程、历史版本、素材库权限、投放表现回流、与 CapCut / Premiere / Drive / YouTube / TikTok / LinkedIn 的发布链路。
+
+## 反例和风险
+
+最大风险是平台内置。CapCut、Adobe、Canva、Descript、Runway 都可能把自然语言编辑和多版本导出做进去。创业公司不能只靠“AI 视频编辑”，必须卡住 receipt、品牌规则、渠道模板和团队交接。
+
+第二个风险是输出质量不稳定。视频节奏很主观，agent 第一次剪得不对很正常。产品要把可修改、可复跑、可比较做强，而不是假装一次命中。
+
+第三个风险是版权和素材权限。增长团队不会接受 agent 随便拿音乐、图片或外部素材。MVP 最好先限制为用户上传素材和明确授权素材。
+
+第四个风险是太像玩具。大量 AI video app 会吸引尝鲜用户，但留存很差。真正值得做的是重复发生、多人协作、和收入或发布节奏绑定的视频生产任务。
+
+## 可验证指标
+
+- 从素材上传到第一个可发布版本是否小于 10 分钟。
+- 每个用户每周真实发布的视频数量。
+- 一条原始素材被复用成多个渠道版本的比例。
+- 自然语言修改后无需人工重剪的比例。
+- editing receipt 被团队成员、客户或剪辑师打开的次数。
+- 字幕错误、素材误用、版权风险提示的命中率。
+- 30 天后仍保留的品牌模板数量和复用次数。
+
+## 可信来源
+
+- [GitHub: video-use/video-use](https://github.com/video-use/video-use)
+- [GitHub: surisreehith/agentic-video-editor](https://github.com/surisreehith/agentic-video-editor)
+- [Product Hunt: motionvid.ai](https://www.producthunt.com/products/motionvid-ai)
+- [Product Hunt: AutoSubtitles](https://www.producthunt.com/products/autosubtitles)
+- [HuggingFace Space: video editing genie MCP server](https://huggingface.co/spaces/Agents-MCP-Hackathon/video_editing_genie_mcp_server)
+- [HuggingFace Space: video dubbing agent](https://huggingface.co/spaces/sauravghu/video-dubbing-agent)

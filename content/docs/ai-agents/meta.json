@@ -8,6 +8,7 @@
     "mobile-gui-agent-runtime",
     "realtime-voice-agent-runtime",
     "ai-video-demo-agent",
+    "agentic-video-editing-command-layer",
     "voice-agent-qa-scorecard",
     "browser-agent-execution-harness",
     "statewright-agent-state-machine-guardrails",

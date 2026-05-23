@@ -343,6 +343,7 @@ export const contents: Content[] = [
 			{ title: "Mobile GUI Agent Runtime", href: "/docs/ai-agents/mobile-gui-agent-runtime", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Realtime Voice Agent Runtime", href: "/docs/ai-agents/realtime-voice-agent-runtime", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "AI Video Demo Agent", href: "/docs/ai-agents/ai-video-demo-agent", icon: () => <Headphones className="w-4 h-4 text-current" /> },
+			{ title: "Agentic Video Editing Command Layer", href: "/docs/ai-agents/agentic-video-editing-command-layer", icon: () => <Image className="w-4 h-4 text-current" /> },
 			{ title: "Voice Agent QA Scorecard", href: "/docs/ai-agents/voice-agent-qa-scorecard", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "Browser Agent Execution Harness", href: "/docs/ai-agents/browser-agent-execution-harness", icon: () => <Globe className="w-4 h-4 text-current" /> },
 			{ title: "Statewright Agent State Machine Guardrails", href: "/docs/ai-agents/statewright-agent-state-machine-guardrails", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
