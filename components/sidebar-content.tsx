@@ -370,6 +370,7 @@ export const contents: Content[] = [
 			{ title: "MCP Cross-Client Testing", href: "/docs/developer-tools/mcp-cross-client-testing-layer", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "Agent Tool-Calling Guardrails", href: "/docs/developer-tools/agent-tool-calling-guardrails-layer", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Side-Effect Replay Ledger", href: "/docs/developer-tools/agent-side-effect-replay-ledger", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
+			{ title: "Messaging-Native Coding Agent Command Center", href: "/docs/developer-tools/messaging-native-coding-agent-command-center", icon: () => <MessageCircle className="w-4 h-4 text-current" /> },
 			{ title: "Agent Failure Regression Harness", href: "/docs/developer-tools/agent-failure-regression-harness", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "Agent Database Branching Sandbox", href: "/docs/developer-tools/agent-database-branching-sandbox", icon: () => <Database className="w-4 h-4 text-current" /> },
 			{ title: "Agent-Readable Database Contract", href: "/docs/developer-tools/agent-readable-database-contract-layer", icon: () => <Database className="w-4 h-4 text-current" /> },

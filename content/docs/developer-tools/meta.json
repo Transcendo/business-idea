@@ -15,6 +15,7 @@
     "mcp-cross-client-testing-layer",
     "agent-tool-calling-guardrails-layer",
     "agent-side-effect-replay-ledger",
+    "messaging-native-coding-agent-command-center",
     "agent-failure-regression-harness",
     "agent-database-branching-sandbox",
     "agent-readable-database-contract-layer",
