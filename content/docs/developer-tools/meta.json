@@ -17,6 +17,7 @@
     "agent-side-effect-replay-ledger",
     "agent-failure-regression-harness",
     "agent-database-branching-sandbox",
+    "agent-readable-database-contract-layer",
     "insforge-agentic-backend",
     "agent-session-supervision-layer",
     "agent-structural-memory-layer",

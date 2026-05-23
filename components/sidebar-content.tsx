@@ -372,6 +372,7 @@ export const contents: Content[] = [
 			{ title: "Agent Side-Effect Replay Ledger", href: "/docs/developer-tools/agent-side-effect-replay-ledger", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Failure Regression Harness", href: "/docs/developer-tools/agent-failure-regression-harness", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "Agent Database Branching Sandbox", href: "/docs/developer-tools/agent-database-branching-sandbox", icon: () => <Database className="w-4 h-4 text-current" /> },
+			{ title: "Agent-Readable Database Contract", href: "/docs/developer-tools/agent-readable-database-contract-layer", icon: () => <Database className="w-4 h-4 text-current" /> },
 			{ title: "InsForge Agentic Backend", href: "/docs/developer-tools/insforge-agentic-backend", icon: () => <Boxes className="w-4 h-4 text-current" /> },
 			{ title: "Agent Session Supervision Layer", href: "/docs/developer-tools/agent-session-supervision-layer", icon: () => <NotebookTabs className="w-4 h-4 text-current" /> },
 			{ title: "Agent Structural Memory Layer", href: "/docs/developer-tools/agent-structural-memory-layer", icon: () => <BrainCircuit className="w-4 h-4 text-current" /> },
