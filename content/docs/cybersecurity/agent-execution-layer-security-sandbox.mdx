@@ -1,0 +1,201 @@
+---
+title: Agent Execution-Layer Security Sandbox
+description: AI coding agent 开始在真实电脑和真实仓库里跑 shell、读文件、发网络请求和处理密钥后，机会不是再写一层 prompt 安全，而是在执行层给每个 agent run 加文件、网络、进程、密钥和审计边界。
+created: 2026-05-23
+tags:
+  - agent-security
+  - ai-coding
+  - cybersecurity
+  - sandbox
+  - developer-tools
+---
+
+# Agent Execution-Layer Security Sandbox
+
+## 一句话判断
+
+Agent 安全的硬机会不在“提醒模型别乱来”，而在模型已经要乱来的那一秒，系统能不能真的拦住文件、网络、进程、密钥和高危命令。
+
+这不是又一个安全聊天框。它更像 AI coding 时代的 `sudo`、沙箱、egress firewall、secret broker 和 audit log 的组合。
+
+## 赛道 / 产品信号
+
+最近几个公开信号指向同一件事：agent 正在从 IDE 里的建议者，变成会在本机和云端执行命令的半自动操作者。
+
+- Greywall 把自己定位成 Linux / macOS 上给 AI coding agents 用的 container-free、deny-by-default sandbox，用内核级文件、网络和 syscall 限制包住 Claude Code、OpenCode 这类工具。
+- agentsh 直接使用 Execution-Layer Security 这个表述，核心是 policy-enforced shell：拦截文件、网络、进程和 signal activity，并输出结构化审计事件。
+- Microsoft Agent Governance Toolkit 把 policy enforcement、zero-trust identity、execution sandboxing 和 reliability engineering 放在同一个 agent governance 包里。大厂已经不把 agent 安全当成 prompt 问题。
+- sandboxed.sh 从 on-chain AI agents 切入，强调隔离 workspace、加密 secrets、只读 OKX security checks。Web3 场景更极端，但把风险放大得很清楚：agent 一旦碰钱包和交易，执行边界必须硬。
+- Sponsio 这类项目开始用 deterministic safety for probabilistic AI agents 的说法，说明市场在寻找确定性外壳来约束概率模型。
+- Product Hunt 上的 DCP 用一句话打中同类需求：Give your AI agents encrypted permission and keys。说明 agent permission / key custody 已经进入产品发布层，而不只是安全研究话题。
+
+这些信号未必都能长成大公司，但它们共同验证一个方向：AI agent 的下一层基础设施不是“更聪明”，而是“可控地执行”。
+
+## 用户痛点是什么
+
+重度 coding agent 用户现在的危险点很具体：
+
+1. **agent 会跑 shell。** 它可能删除文件、改配置、启动脚本、安装包、执行未知二进制。
+2. **agent 会发网络请求。** 它可能把代码、日志、环境变量或客户数据发到外部服务。
+3. **agent 会读到密钥。** `.env`、SSH key、npm token、GitHub token、云服务 credential 都可能被读进上下文。
+4. **agent 会跨 session 失忆。** 上一个 session 的约束不一定会被下一个 session 记住。
+5. **团队没法复盘。** 出事后只能翻 terminal scrollback、agent transcript、git diff 和 shell history，证据散得像事故现场。
+
+用户不是在找一个“更安全的 AI”。他们要的是：我敢不敢让 agent 在真实 repo 里长时间跑？能不能让它自己尝试，但不允许它越界？
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户用一个本地 wrapper 启动 coding agent；wrapper 在执行层拦截 shell、文件、网络、进程和密钥访问，并为每个被允许或拒绝的动作生成 receipt。**
+
+第一版不要做完整企业治理平台。只做一件尖锐的事：让开发者放心把 agent 放进真实项目。
+
+可执行形态：
+
+```bash
+agent-sandbox init
+agent-sandbox run -- claude-code "fix the failing tests"
+agent-sandbox receipt last
+```
+
+默认策略应该很硬：
+
+- 当前 repo 可读，可写范围需要显式确认。
+- `rm -rf`、credential 文件、SSH key、系统目录默认拒绝。
+- 外部网络默认只允许 GitHub、npm、PyPI、官方 API 和用户 allowlist。
+- 生产环境变量、长期 token、私钥只能通过 broker 注入，不能被模型直接读取。
+- 每次危险动作生成 `allowed` / `denied` / `needs approval` 事件。
+
+真正的产品价值不是“有个漂亮控制台”。是 agent 要做危险动作时，这层系统真的挡在中间。
+
+## AI 是否真的压缩任务
+
+能，但 AI 不是安全边界本身。
+
+它压缩的是三件事：
+
+- 把自然语言任务和实际动作对齐：agent 说要修测试，实际却准备外发日志，系统要指出不一致。
+- 把零散执行日志翻译成开发者能看懂的 run receipt。
+- 从历史 run 中生成策略建议，比如“这个 repo 的测试命令可以常放行，外部 POST 永远要审批”。
+
+但拦截必须是确定性的。文件访问、网络 egress、进程树、secret access 不能交给 LLM 自觉。LLM 可以解释风险，不能当锁。
+
+## 为什么现在热
+
+几个条件撞在一起了：
+
+- Coding agent 已经从补全进入长任务。Claude Code、Codex CLI、Cline、OpenCode 这类工具会真实读写文件、跑测试、调包管理器。
+- 企业开始让 agent 接触内部 repo。个人试用时删坏一个文件还能笑笑，团队仓库、客户数据和生产 token 出事就不是玩笑了。
+- MCP 和工具生态扩大了攻击面。agent 不只跑本地命令，还会调用数据库、浏览器、Slack、GitHub、内部 API。
+- 安全团队需要确定性控制。prompt guardrail、模型自我检查、事后日志都不够。它们要 policy、sandbox、audit、SIEM 接入。
+- 本地和云端 agent runner 都在兴起。只要 agent 运行环境变成基础设施，执行边界就会变成基础设施。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+第一次让 agent 跑真实任务时，开发者会怕它乱删、乱传、乱装包、乱用 token。这个恐惧很强，比“提升 10% 代码效率”更直接。
+
+**为什么留：**
+
+只要 agent 每天跑，sandbox 就每天有价值。策略会随着 repo 和团队习惯沉淀，receipt 会变成 review、incident、security check 的默认证据。
+
+**为什么传播：**
+
+最适合传播的不是官网，而是具体拦截卡：
+
+- `Denied: Claude tried to read .env.production while fixing CSS.`
+- `Blocked: external POST to unknown domain with 2 source files in payload.`
+- `Allowed: npm install only after package provenance check passed.`
+- `Needs approval: agent wants to delete 143 generated files.`
+
+这类截图天然适合发 HN、X、GitHub issue、团队 Slack。它讲的是一个真实惊吓，不是安全 PPT。
+
+**谁付费：**
+
+个人开发者会为本地安全感付小钱，但更大的钱在三类团队：
+
+1. AI-first dev agencies：每天让多个 agent 跑客户代码，必须降低事故风险。
+2. 企业平台工程：要允许 agent 进入内部 repo，同时满足安全和审计要求。
+3. Agent 平台 / IDE / runner：需要内置执行层安全能力，否则大客户不敢放开权限。
+
+## MVP 实验
+
+### 7 天 MVP
+
+做一个本地 CLI wrapper，只支持 macOS / Linux 上最窄的一条链：Claude Code 或 OpenCode + git repo + shell command + network allowlist。
+
+最小功能：
+
+- 记录 agent run、命令、进程树、文件读写、网络目的地。
+- `.env`、SSH key、云 credential、npm token、GitHub PAT 默认不可读。
+- 允许用户配置 `read`, `write`, `network`, `install`, `git` 五类策略。
+- 生成 `receipt.md` 和 `events.jsonl`。
+- 对高危动作弹一次短审批，不要弹成蚊子包。
+
+### 30 天验证
+
+找 20 个重度 coding agent 用户和 5 个小团队，让他们在真实 repo 里试用。
+
+验证问题：
+
+- 他们是否愿意把 agent 默认通过 wrapper 启动。
+- wrapper 是否挡住过他们认为“幸好拦了”的动作。
+- 审批摩擦是否低到能长期打开。
+- receipt 是否会被复制到 PR、issue、incident review 或安全评审里。
+- 团队是否愿意为策略模板、集中日志、SSO/SIEM 接入付费。
+
+## 商业化路径
+
+1. **开发者本地版。** 免费本地 sandbox，付费解锁历史、策略模板、多 agent 配置、团队共享 policy。
+2. **团队控制台。** 管策略、审批、run history、异常告警、repo 风险榜、agent 工具权限。
+3. **企业安全版。** 接 SSO、SIEM、DLP、EDR、GitHub audit log、云 IAM，卖审计与治理。
+4. **平台 SDK。** 卖给 AI IDE、agent runner、MCP gateway、browser agent，让它们内置执行层安全。
+
+最早别卖“AI 安全平台”。太泛。卖一句更硬的话：让 coding agent 能在真实 repo 里跑，但不能越界。
+
+## 可验证指标
+
+- 安装后 7 日内，仍通过 sandbox 启动 agent 的用户比例。
+- 每日 agent run 数、命令数、文件读写数、网络请求数。
+- 被拒绝动作中，被用户标记为“正确拦截”的比例。
+- 高危动作审批通过率和取消率。
+- receipt 被复制到 PR / issue / Slack / 安全评审的次数。
+- 团队策略数量是否增长，还是用户一直只用默认配置。
+- 付费转化是否来自真实团队，而不是安全爱好者一次性打赏。
+
+## 反例 / 风险
+
+1. **平台会内建。** Anthropic、OpenAI、Cursor、GitHub、Microsoft 都可能把基础 sandbox 和 permission 做进自家 agent。
+2. **系统级拦截很难。** macOS、Linux、Windows 的文件、网络、进程隔离机制不同。跨平台做硬边界会很累。
+3. **开发者讨厌摩擦。** 如果每个命令都要批准，用户会关掉。默认策略必须聪明但可解释。
+4. **安全承诺不能乱喊。** 如果说“绝对安全”，一次绕过就完蛋。更稳的说法是减少高危面、保留证据、默认最小权限。
+5. **本地日志可能含敏感信息。** 事件流和 receipt 必须本地优先、可脱敏、可配置保留期。
+6. **卖给 CISO 太早会死。** 早期应该从 coding agent 重度用户和 AI-first 团队切入，用真实拦截案例获得分发。
+
+## 和已有方向的区别
+
+它和 [Agent Identity Policy Runtime](/docs/cybersecurity/agent-identity-policy-runtime) 相邻，但不重复。
+
+- Identity policy 解决的是“这个 agent 代表谁、权限从哪来、审计链怎么传递”。
+- Execution-layer sandbox 解决的是“它正在碰哪些文件、开哪些进程、发哪些网络请求、读哪些密钥，能不能立刻挡住”。
+
+前者偏身份和治理链，后者偏本机 / runner / shell 的硬执行边界。真正的大产品会合流，但创业切口可以分开验证。
+
+## 来源
+
+- GitHub：Greywall，container-free deny-by-default sandbox for AI coding agents：[https://github.com/GreyhavenHQ/greywall](https://github.com/GreyhavenHQ/greywall)
+- GitHub：agentsh，Execution-Layer Security for AI agents：[https://github.com/canyonroad/agentsh](https://github.com/canyonroad/agentsh)
+- GitHub：Microsoft Agent Governance Toolkit：[https://github.com/microsoft/agent-governance-toolkit](https://github.com/microsoft/agent-governance-toolkit)
+- GitHub：sandboxed.sh，safe runtime for autonomous on-chain AI agents：[https://github.com/Th0rgal/sandboxed.sh](https://github.com/Th0rgal/sandboxed.sh)
+- GitHub：Sponsio，deterministic safety solutions for probabilistic AI agents：[https://github.com/SponsioLabs/Sponsio](https://github.com/SponsioLabs/Sponsio)
+- Product Hunt：DCP，Give your AI agents encrypted permission and keys：[https://www.producthunt.com/products/dcp](https://www.producthunt.com/products/dcp)
+- HN：Show HN: Vectimus – Cedar policy enforcement for AI coding agents：[https://news.ycombinator.com/item?id=47765871](https://news.ycombinator.com/item?id=47765871)
+
+## 后续跟踪点
+
+- Greywall / agentsh / Sponsio 这类项目是否能获得真实团队长期使用，而不是安全圈短期 star。
+- AI IDE 和 agent runner 是否开始公开 execution policy API。
+- 企业是否要求 coding agent run 进入 SIEM / audit log。
+- Product Hunt 上 agent permission / key custody 类产品是否继续出现，还是变成 IDE 内置功能。
