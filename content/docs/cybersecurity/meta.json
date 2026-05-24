@@ -2,6 +2,7 @@
   "title": "网络安全",
   "pages": [
     "index",
+    "agent-database-access-firewall",
     "agent-dev-machine-exposure-scanner",
     "agent-execution-layer-security-sandbox",
     "ai-coding-package-hallucination-firewall",

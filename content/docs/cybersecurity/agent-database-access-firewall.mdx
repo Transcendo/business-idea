@@ -1,0 +1,130 @@
+---
+title: Agent Database Access Firewall
+description: AI agent 开始直连数据库后，机会不是把生产库凭证塞给聊天工具，而是在查询执行前加一层只读、脱敏、限表、限额和审计防火墙。
+---
+
+# Agent Database Access Firewall
+
+## 一句话判断
+
+AI coding agent 和内部运营 agent 正在从“读文档、改代码”走向“查真实数据库”。这一步很危险：一次错 prompt、一次工具投毒、一次幻觉 SQL，都可能把敏感字段、生产表、慢查询和误写操作带进事故现场。
+
+更好的创业切口不是再做一个通用数据库聊天框，而是做 **agent 访问数据库前的安全查询闸门**：agent 可以理解 schema、运行有限查询、拿到可用结果，但每次访问都被限权、脱敏、限额、记录和复查。
+
+## 产品信号
+
+[SafeDB MCP](https://github.com/narekmalk/safedb-mcp) 把问题说得很直：AI agents 需要查询 Postgres、MySQL、MariaDB、SQLite，但不能直接拿危险凭证。它的 MVP 做了 MCP tools、只读 SQL guardrails、table allowlist / denylist、row limit、statement timeout、PII masking 和 JSONL audit log。
+
+[Hacker News 对 SafeDB MCP 的收录](https://news.ycombinator.com/item?id=48250140) 信号还小，说明它不是已经被市场验证的大产品；但它暴露的是一个会越来越硬的工作流问题。agent 一旦能查库，企业不会只问“能不能查”，而会问“查了什么、为什么查、有没有碰敏感列、出了事谁复盘”。
+
+旁边还有更大的安全信号：[SAFE-MCP](https://github.com/safe-agentic-framework/safe-mcp) 把 MCP 威胁按类似 MITRE ATT&CK 的方式整理，[Snyk Agent Scan](https://github.com/snyk/agent-scan) 开始扫描 agents、MCP servers 和 skills，[Tencent AI-Infra-Guard](https://github.com/Tencent/AI-Infra-Guard) 也把 Agent Scan、MCP scan、Skills scan 放进 AI red teaming 平台。方向很清楚：agent 工具链进入生产后，安全会从“模型输出安全”下沉到“工具执行安全”。
+
+## 用户痛点
+
+最痛的不是 SQL 不会写，而是团队不敢让 agent 靠近真实数据。
+
+- 工程师想让 coding agent 看 schema、定位 bug、解释报表异常，但不想给它生产库自由访问。
+- 数据团队想让业务同事用自然语言查数，但害怕 PII 泄露、慢查询拖库、错误口径扩散。
+- 安全团队不想逐个审 MCP 配置、数据库凭证和 agent 插件。
+- 创始人和运营负责人想快速问业务数据，但不想等工程排期，也不想被幻觉 SQL 骗。
+
+这类痛点的核心是“判断和控制”，不是“再加一个聊天入口”。
+
+## AI-native wedge
+
+用户给系统一个数据库连接、schema 范围和访问策略；系统返回一个可被 Claude / Cursor / internal agent 调用的安全查询入口。
+
+关键输出不是自然语言答案，而是 query receipt：
+
+- agent 请求了哪些表和字段；
+- SQL 是否只读；
+- 是否命中敏感字段；
+- 返回行数、耗时、成本和截断原因；
+- 哪些字段被 mask；
+- 哪个用户、哪个 agent、哪个任务触发；
+- 是否需要人工批准。
+
+AI 真正压缩的任务，是把“人写 SQL、人审权限、人查日志、人解释结果”的链路压成一个可执行、可复查的数据库访问动作。
+
+## 为什么现在
+
+几个变化叠在一起：
+
+1. MCP 把本地工具、SaaS、数据库和 agent 连起来，数据库不再只是后端服务，而是 agent 的工具。
+2. Coding agent 从补全代码走向长任务执行，定位 bug 时会天然想查 schema、migration、样例数据。
+3. 企业 AI adoption 的瓶颈正在从“模型够不够强”转为“能不能安全接内部系统”。
+4. 开源安全工具已经在扫 MCP、skills、agent harness，说明攻击面被看见了。
+
+SafeDB MCP 这种小项目的价值，不在星数，而在它把一个未来的大类问题压成了很具体的 MVP。
+
+## MVP 实验
+
+不要从企业级数据库治理平台开始。先做一个很窄的 wedge。
+
+目标用户：10-50 人的 AI-first SaaS 团队，已经在用 Claude Code / Cursor / internal agents，希望 agent 能查 staging 或只读 replica。
+
+两周 MVP：
+
+1. 支持 Postgres。
+2. 接 Claude Desktop / Cursor / OpenCode 的 MCP。
+3. 配置 table allowlist、column mask、row limit、query timeout。
+4. 每次查询生成 receipt。
+5. 对危险查询给出 blocking reason。
+6. 提供一页审计 dashboard，按 agent task 聚合。
+
+付费验证可以很简单：团队愿不愿意每月付 99-299 美元，让 agent 安全查询 staging / replica，并把 receipt 贴进 PR、incident 或 Slack。
+
+## 商业化路径
+
+第一阶段卖给 AI-first 工程团队：按 seat 或 database connector 收费。
+
+第二阶段卖给平台工程 / 安全团队：策略管理、SSO、审批流、审计导出、SIEM 集成、敏感字段自动发现。
+
+第三阶段变成 agent data access gateway：不只管 SQL，还管 warehouse、CRM、support tickets、logs 和 internal APIs。
+
+这个方向容易被数据库厂商和安全厂商吸收，所以早期不要和它们拼平台。更聪明的切口是“agent-native”：和 Claude Code、Cursor、OpenCode、MCP、GitHub PR、incident runbook 深度连接。
+
+## 传播路径
+
+这个产品适合靠事故感传播。
+
+可分享资产不是官网长文，而是三类卡片：
+
+- “你的 agent 数据库访问风险报告”；
+- “这次 agent 查询为什么被拦截”；
+- “agent 查库 receipt：查了什么、没查什么、为什么安全”。
+
+开发者会把这种 receipt 贴进 PR、安全 review 和团队群。安全团队会转发风险报告。开源版本可以靠 MCP 社区传播，商业版吃团队治理和审计。
+
+## 反例和风险
+
+最大风险：这只是 MCP server 的一个功能，不是公司。
+
+反例也很强：
+
+- 数据库本身已经有只读账号、RLS、query timeout 和审计；
+- 企业 data catalog / warehouse governance 已经管权限；
+- AI IDE 或数据库厂商可能内置安全代理；
+- 只靠 SQL AST 很难覆盖所有绕过方式；
+- 如果用户没有把 agent 接真实库，痛点会停在“有趣工具”。
+
+所以机会不该押在“比数据库更懂权限”，而要押在“比数据库更懂 agent 任务上下文”。没有 task context、receipt、人工批准和 IDE/agent 集成，就很容易变成薄包装。
+
+## 可验证指标
+
+- 7 天内接入后，agent 查询数据库的任务数。
+- 被拦截查询占比，以及拦截后用户是否调整策略继续使用。
+- 查询 receipt 被贴进 PR / incident / Slack 的次数。
+- 敏感字段 mask 命中次数。
+- 平均 query review 时间是否下降。
+- 团队是否愿意把 staging 扩到只读 replica。
+- 安全负责人是否要求所有 agent DB access 走同一入口。
+
+## 来源
+
+- [SafeDB MCP GitHub](https://github.com/narekmalk/safedb-mcp)
+- [Hacker News: SafeDB MCP](https://news.ycombinator.com/item?id=48250140)
+- [SAFE-MCP security framework](https://github.com/safe-agentic-framework/safe-mcp)
+- [Snyk Agent Scan](https://github.com/snyk/agent-scan)
+- [Tencent AI-Infra-Guard](https://github.com/Tencent/AI-Infra-Guard)
+- [Terminal Guardian MCP](https://github.com/7Majesty-M/terminal-guardian-mcp)

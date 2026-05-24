@@ -181,6 +181,7 @@ export const contents: Content[] = [
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-24", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Agent Database Access Firewall", href: "/docs/cybersecurity/agent-database-access-firewall", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Dev-Machine Exposure Scanner", href: "/docs/cybersecurity/agent-dev-machine-exposure-scanner", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-23", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "Agent Execution Sandbox", href: "/docs/cybersecurity/agent-execution-layer-security-sandbox", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
@@ -437,6 +438,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/cybersecurity", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Agent Database Access Firewall", href: "/docs/cybersecurity/agent-database-access-firewall", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Dev-Machine Exposure Scanner", href: "/docs/cybersecurity/agent-dev-machine-exposure-scanner", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Execution-Layer Security Sandbox", href: "/docs/cybersecurity/agent-execution-layer-security-sandbox", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "AI Coding Package Hallucination Firewall", href: "/docs/cybersecurity/ai-coding-package-hallucination-firewall", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
