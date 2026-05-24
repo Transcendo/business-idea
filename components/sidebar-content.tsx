@@ -181,6 +181,7 @@ export const contents: Content[] = [
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-24", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Computer-Use Trajectory Data", href: "/docs/ai-agents/computer-use-trajectory-data-foundry", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Agent Database Access Firewall", href: "/docs/cybersecurity/agent-database-access-firewall", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Dev-Machine Exposure Scanner", href: "/docs/cybersecurity/agent-dev-machine-exposure-scanner", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-23", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
@@ -343,6 +344,7 @@ export const contents: Content[] = [
 			{ title: "Demonstration-to-Agent Workflow Trainer", href: "/docs/ai-agents/demonstration-to-agent-workflow-trainer", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Research Agent Citation Verifier", href: "/docs/ai-agents/research-agent-citation-verifier", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "Computer-Use Agent Sandbox Runtime", href: "/docs/ai-agents/computer-use-agent-sandbox-runtime", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
+			{ title: "Computer-Use Trajectory Data Foundry", href: "/docs/ai-agents/computer-use-trajectory-data-foundry", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Mobile GUI Agent Runtime", href: "/docs/ai-agents/mobile-gui-agent-runtime", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Realtime Voice Agent Runtime", href: "/docs/ai-agents/realtime-voice-agent-runtime", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "AI Video Demo Agent", href: "/docs/ai-agents/ai-video-demo-agent", icon: () => <Headphones className="w-4 h-4 text-current" /> },

@@ -1,0 +1,138 @@
+---
+title: Computer-Use Trajectory Data Foundry
+description: Computer-use agent 真正缺的不是又一个会点屏幕的 demo，而是高质量任务轨迹、失败轨迹、人工修正和可授权复用的数据资产。
+created: 2026-05-24
+tags:
+  - ai-agents
+  - computer-use
+  - data
+  - evaluation
+---
+
+# Computer-Use Trajectory Data Foundry
+
+## 一句话判断
+
+Computer-use agent 真正缺的不是又一个会点屏幕的 demo，而是高质量任务轨迹、失败轨迹、人工修正和可授权复用的数据资产。
+
+如果浏览器、桌面、手机 agent 都要进真实工作流，模型厂和应用团队都会遇到同一个瓶颈：没有足够多“真实用户怎么做任务、agent 哪里做错、人怎么修”的轨迹数据。这个数据比普通网页文本更稀缺，也更接近商业价值。
+
+## 赛道 / 产品信号
+
+近期公开信号集中在三层：
+
+- Product Hunt 上的 Forsy 直接把定位写成“Capture and sell your AI agent workflow data”。这说明有人开始把 agent workflow 从功能卖点改写成数据资产。
+- OpenCUA、TongUI、Video2GUI 这类项目都在做 computer-use / GUI agent 轨迹、UI 分解、教程到交互轨迹。研究侧已经承认：泛化的 GUI agent 需要大量真实或合成轨迹。
+- Hugging Face 上能搜到多组 agent trajectory 数据集，例如 MCP agent trajectory benchmark、tool-calling trajectory、ChemCraft agent trajectory。数据形态正在从“prompt + answer”转向“任务 + 工具调用 + 状态变化 + 成败”。
+- Reddit 的 AgentLantern 讨论把 AI agent project 之间的隐藏图谱拿出来看，虽不能单独作为强证据，但它反映了一个趋势：agent 项目越来越多，市场开始关心运行轨迹、关系图和可复用经验，而不是只看单点 demo。
+
+判断：这不是普通标注外包。机会在“把真实 computer-use / workflow-use 行为变成可授权、可脱敏、可评测、可训练的数据流水线”。
+
+## 用户痛点是什么
+
+目标用户不是普通终端用户，而是三类 builder：
+
+1. **模型团队。** 他们要训 GUI / browser / desktop agent，但高质量轨迹少，公开 benchmark 又太窄。
+2. **Agent 应用团队。** 他们知道自己的 agent 在真实流程里失败，却缺少统一格式收集失败、人工修正和回归样本。
+3. **垂直 SaaS / BPO 团队。** 他们掌握大量人工操作流程，比如报销、客服后台、CRM 更新、财务系统录入，但不知道怎样把这些流程变成可卖、可用、合规的数据资产。
+
+痛点不是“缺数据”这么粗。更准确地说，是缺四种东西：
+
+- 真实任务上下文：用户到底想完成什么。
+- 逐步状态：屏幕、DOM、App 状态、点击、输入、等待、错误。
+- 人工修正：agent 失败后，人怎么接管、怎样判断、怎样收尾。
+- 授权边界：哪些轨迹可以训练，哪些只能评测，哪些必须脱敏或删除。
+
+## AI-native wedge
+
+最小 wedge：
+
+**团队接入一个本地 recorder，录制真实 browser / desktop / app 任务；系统自动生成脱敏轨迹、失败标签、人工修正片段和可出售或自用的数据包。**
+
+这件事 AI 真的能压缩任务，因为它不只是存屏幕录像：
+
+- 自动把长录像切成 task steps。
+- 抽取 UI 元素、用户意图、工具调用、结果状态。
+- 标出 agent 失败原因：看错元素、状态没等到、权限不够、上下文丢失、操作风险高。
+- 生成训练样本、评测样本和 regression case。
+- 自动做 PII / secret / customer data 脱敏，再给人工复核。
+
+没有 AI，这会变成昂贵的标注流水线。有 AI，它可以变成“录任务 → 自动结构化 → 人确认 → 数据资产入库”。
+
+## 为什么现在
+
+三个变化叠在一起：
+
+1. **Computer-use agent 终于能跑进真实界面。** 浏览器、桌面、手机、终端都在变成 agent runtime。
+2. **通用模型缺真实轨迹。** 文本数据已经卷到天花板，GUI 操作、工具调用、失败恢复数据更稀缺。
+3. **企业不会裸交生产操作。** 真正可用的 agent 需要回归测试和失败样本，不是一次演示视频。
+
+所以这个方向的热度不来自“数据交易”四个字，而来自 agent 进入生产前必然需要的训练、评测和修复数据。
+
+## 为什么用户会来、留下、传播、付费
+
+**为什么来：** agent 团队想知道自己的产品为什么在真实流程里失败，模型团队想要更贴近生产的轨迹数据。
+
+**为什么留下：** 每次 agent 失败都会产生新样本。只要团队持续迭代 agent，轨迹库就会变成回归测试和训练资产。
+
+**为什么传播：** 最容易传播的不是完整数据集，而是匿名化 failure card：这个 agent 在某一步为什么失败、人怎么修、修完后新版本是否通过。
+
+**为什么付费：** 付费点在 recorder seat、脱敏审核、数据托管、dataset export、benchmark suite、商业授权和私有数据市场抽成。
+
+## MVP 实验
+
+不要一开始做大而全的数据市场。先做一个窄场景：
+
+1. 只支持 browser workflow，目标客户选 browser agent / SaaS automation builder。
+2. Chrome extension + local recorder 录屏幕、DOM、点击、输入、等待和最终结果。
+3. 用户标一个任务目标，比如“把 20 条线索录入 CRM”。
+4. 系统生成 step graph、失败标签、PII 脱敏建议和 replay package。
+5. 人工 review 后导出三种格式：训练集、评测集、失败回归集。
+6. 找 5 个 agent builder 付费试用，看他们是否愿意把失败样本接进 CI / eval。
+
+更激进一点，可以从“失败轨迹”开始卖。成功轨迹很多团队觉得普通，失败轨迹和修正轨迹更稀缺。
+
+## 商业化路径
+
+- **SaaS recorder：** 按录制 seat、轨迹条数、脱敏审核量收费。
+- **Eval package：** 面向 agent builder 卖垂直 workflow benchmark。
+- **Private data foundry：** 帮企业把内部流程变成私有训练/评测数据。
+- **Marketplace take rate：** 允许拥有者出售脱敏轨迹，平台抽成。但这个要最后做，别一上来就碰合规地雷。
+
+短期更现实的是 B2B tooling，不是开放市场。
+
+## 传播路径
+
+可传播单元要小：
+
+- “这个 browser agent 在 Salesforce 第 7 步失败，因为 modal 状态没等到。”
+- “人类修正轨迹显示，需要先检查字段权限，再提交表单。”
+- “新模型在同一组 50 条失败轨迹上通过率从 42% 到 71%。”
+
+这类 failure card 可以进 GitHub issue、PR、Slack、Discord、benchmark blog，比“我们有很多数据”更容易被 builder 转发。
+
+## 反例 / 风险
+
+1. **数据合规很硬。** 屏幕和后台系统里会有客户信息、账号、金额、合同。脱敏不稳，这家公司直接死。
+2. **市场可能太早。** 很多 agent builder 还没到愿意买数据的阶段，只愿意买工具。
+3. **大模型厂会自建。** OpenAI、Google、Anthropic、字节、阿里都可能自己收轨迹。创业公司要抓长尾垂直和企业私有流程。
+4. **卖数据容易低毛利。** 如果只是标注外包，会被人力成本拖死。必须把 recorder、自动切分、脱敏、eval export 产品化。
+5. **授权边界难证明。** 谁拥有轨迹？员工操作能不能卖？客户数据能不能训练？这些问题必须产品层面解决。
+
+## 可验证指标
+
+- 单条轨迹从录制到可用 eval case 的人工分钟数。
+- PII / secret 脱敏召回率与人工返工率。
+- Agent builder 是否把生成的 failure cases 接进回归测试。
+- 同一批失败轨迹能否稳定区分两个 agent 版本。
+- 付费客户是否愿意为私有数据 foundry 续费，而不是只买一次数据清洗。
+- 匿名 failure card 的转发、收藏、issue 引用数。
+
+## 来源
+
+- [Product Hunt: Forsy](https://www.producthunt.com/products/forsy)
+- [OpenCUA GitHub](https://github.com/xlang-ai/OpenCUA)
+- [TongUI GitHub](https://github.com/TongUI-agent/TongUI-agent)
+- [Video2GUI GitHub](https://github.com/WeiminXiong/Video2GUI)
+- [Hugging Face: MCP Agent Trajectory Benchmark](https://huggingface.co/datasets/obaydata/mcp-agent-trajectory-benchmark)
+- [Reddit: AgentLantern discussion](https://www.reddit.com/r/MachineLearning/comments/1tlmw03/agentlantern_exposing_the_hidden_graph_of_ai/)
