@@ -1,0 +1,145 @@
+---
+title: Agent-Native Compiler Contract Layer
+description: Coding agents 进入真实工程后，语言和构建系统的新机会不是再给人类做一个更漂亮的 IDE，而是把规则、诊断、修复计划和工程证明变成 agent 可读、可复跑、可审计的 compiler contract。
+created: 2026-05-24
+tags:
+  - ai-coding
+  - developer-tools
+  - agents
+  - programming-languages
+  - verification
+---
+
+# Agent-Native Compiler Contract Layer
+
+## 一句话判断
+
+AI coding 的下一段竞争，不只是“哪个模型会写代码”。更硬的问题是：代码库、语言、编译器、测试和 review 能不能给 agent 一套稳定契约，让它少猜、少翻车、能自修。
+
+机会不是做一门新语言本身。机会是做 agent-native compiler contract layer：把语言规则、parse graph、diagnostics、repair plan、dependency graph、effect / capability facts、proof chain 和 CI gate 暴露成结构化接口，让 coding agent 每次改代码都能先读契约、按证据修复、产出可复查报告。
+
+## 赛道 / 产品信号
+
+这轮信号来自 HN、GitHub 和项目官方文档，方向集中在“agent 是一等用户”的开发基础设施。
+
+- Vercel Labs 的 [zerolang](https://github.com/vercel-labs/zerolang) 明确写着 “The programming language for agents”。GitHub API 本轮读取到它创建于 2026-05-15，已超过 4,400 stars，更新到 2026-05-24。
+- [zerolang 官方站](https://zerolang.ai/) 把自己描述为 agent-first language experiment，目标是让语言易于 agent 临时学习、确定性检查和修复，并强调 standard-library first、explicit enough、one obvious path。
+- zerolang README 里最值得看的是 “Agent Workflow Interfaces”：编译器通过 `zero skills get`、`zero check --json`、`zero parse --json`、`zero graph --json`、`zero fix --plan --json`、`zero size --json` 暴露结构化契约，而不是只输出给人看的报错文本。
+- HN 上 [The Programming Language for Agents](https://news.ycombinator.com/item?id=48193539) 和 [Zero – Programming Language for Agents](https://news.ycombinator.com/item?id=48246710) 都在 2026-05 中旬出现，说明“agent-first language / compiler surface”已经从实验变成 builder 讨论点。
+- [Anatomia](https://github.com/anatomia-dev/anatomia) 虽然还是早期项目，但 README 的定位很清楚：Verified AI development、scope / plan / build / verify、多 agent、contracts sealed before code、proof chain entry。它不是做语言，而是把 AI 开发流程机械化证明。
+- 这和现有的 coding agent 控制台、token profiler、failure regression harness 不是同一层。它更靠近语言和构建系统：给 agent 一个可靠的工程真相接口。
+
+共同信号：agent 需要的不是更多 prompt，而是更硬的、机器可读的工程契约。
+
+## 用户痛点是什么
+
+开发团队现在用 Claude Code、Codex、Cursor、Devin、Cline 这类工具时，最痛的不是“agent 完全不会写”。最痛的是它经常在工程约束上猜错。
+
+典型痛点：
+
+- Agent 读 README、旧代码、lint 报错和测试输出，靠上下文猜项目规则。上下文一长就漏。
+- 编译器和测试只告诉它哪里失败，但不给稳定的修复路径、影响面、依赖图、capability 边界。
+- Code review 里大量问题是“你没理解这个项目怎么组织”“你改了不该改的层”“你绕过了约束”。这些不该只靠人类 reviewer 事后骂醒。
+- 多 agent workflow 会互相覆盖计划、重复修 bug、误解 contract。缺少一份可复跑的工程事实层。
+- 企业团队很难判断一个 agent 改动到底是“模型运气好”还是“契约足够硬”。
+
+这不是 IDE UI 问题，是 agent 执行工程任务时缺少可验证边界。
+
+## AI-native wedge
+
+最小 wedge：
+
+> 用户接入一个 repo。系统从编译器、类型检查、测试、lint、依赖图、数据库 schema、API contract 和历史 PR 中生成 agent contract pack。Coding agent 每次执行任务前必须读取 contract，执行中拿结构化 diagnostics 和 repair plan，结束后输出 proof receipt：读了哪些规则、触发哪些诊断、修复依据是什么、哪些边界没碰。
+
+AI 真正压缩的任务：
+
+1. 压缩工程理解。Agent 不再从几万 token 文档里猜项目结构，而是读一份 versioned contract。
+2. 压缩修复循环。失败不只是“test failed”，而是 diagnostic code、span、expected / actual、safe fix、影响面和复测命令。
+3. 压缩 review 成本。Reviewer 先看 proof receipt：agent 为什么这么改，哪些契约通过，哪些风险仍需人工判断。
+4. 压缩多 agent 协作。每个 agent 都写入同一份契约和 proof chain，避免不同 session 各说各话。
+
+这比“给 agent 写更长的 AGENTS.md”更硬。AGENTS.md 是说明书，contract layer 是执行约束。
+
+## 为什么现在
+
+几个变化叠在一起：
+
+- Coding agent 已经从 autocomplete 进入“自己读 repo、开分支、改多文件、跑测试”的阶段。
+- Agent 改动越大，prompt 规则越脆。团队会更需要 compiler / CI / schema / tests 暴露机器可读事实。
+- zerolang 这类实验说明：语言设计开始反过来服务 agent，而不是只服务人类可读性。
+- Anatomia 这类流程工具说明：团队不只想让 AI 写代码，还想要 plan、contract、verification 和 proof chain。
+- 企业真正愿意付费的是“可控地让 agent 进工程流程”，不是买一个更会聊天的编辑器。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：** 团队已经在试 coding agent，但 PR 返工、测试失败、架构误读、review 噪声很多。一个 repo contract scan 比换模型更可控。
+
+**为什么留：** Contract 会随着代码库变化。每次新增 package、改 schema、换框架、改 CI，都需要更新 agent contract，并看 agent 成功率是否下降。
+
+**为什么传播：** 最适合传播的不是产品截图，而是一张 agent-proof receipt：`agent PR first-pass rate 38% → 72%`、`unsafe file touch 下降 60%`、`diagnostic repair loop 缩短 40%`。开源 repo 可以挂 “agent-ready contract” badge。
+
+**为什么付费：** 免费版可以生成基础 contract pack。付费在团队和企业：私有 repo、CI gate、多语言支持、数据库/API contract、proof history、review integration、agent vendor 对比、合规审计。
+
+## MVP 实验
+
+不要一上来做语言或完整平台。先做 repo contract scanner + agent repair gate。
+
+### 7 天 MVP
+
+1. 支持 TypeScript / Next.js repo。
+2. 扫描 `package.json`、tsconfig、lint、test、Prisma / SQL schema、routes、env example、AGENTS.md / CLAUDE.md。
+3. 生成 `agent-contract.json`：架构边界、危险路径、测试命令、数据边界、常见诊断、允许修改面。
+4. 包一层 CLI：agent 每次任务前读取 contract；失败时把 lint / test / typecheck 输出转成 structured repair plan。
+5. 结束输出 `agent-proof.md`：任务、修改文件、触发诊断、修复理由、未覆盖风险。
+
+### 30 天验证
+
+- 找 10 个真实开源 repo，各选 5 个 issue。
+- 对比“只有 README / AGENTS.md”和“有 contract pack”的 agent PR 成功率。
+- 指标看：首次测试通过率、平均修复循环次数、review comment 数、误改文件数、人工回滚率。
+- 让 3 个付费团队试用：目标不是 demo 漂亮，而是 PR 返工下降。
+
+## 商业化路径
+
+早期可以这样切：
+
+- CLI 免费：生成基础 `agent-contract.json` 和 `agent-proof.md`。
+- Pro：历史 contract、PR comment、GitHub Action、typed repair plan、dangerous file guard。
+- Team：私有 repo、多 agent session、review dashboard、schema/API contract、agent vendor 对比。
+- Enterprise：本地部署、审计日志、policy pack、合规导出、与内部 CI / code review / ticket 系统集成。
+
+最好的买方不是个人开发者，而是已经把 coding agent 接进开发流程的工程团队、平台工程、AI enablement team。
+
+## 传播路径
+
+- 开源 repo badge：`agent-ready: 82%`。
+- PR proof card：每个 AI PR 自动附上 contract pass / fail。
+- 对比报告：同一 issue 用 Claude Code / Codex / Cursor 跑，比较 contract pass rate。
+- Failure gallery：展示 agent 如何因为缺 contract 误改数据库、权限或测试。
+
+传播要靠可复查的工程证据，不靠“AI 会写代码”的泛宣传。
+
+## 反例 / 风险
+
+- **语言实验未必会赢。** zerolang 可能永远停在实验阶段。机会不应押注某一门新语言，而应抽象成跨 repo contract layer。
+- **平台会内置。** GitHub、Cursor、Claude Code、Vercel、JetBrains、Qodo 都可能把一部分 contract / proof 做进产品。独立公司要赢在跨工具、跨语言、跨 CI 的中立层。
+- **太重会没人接。** 如果需要团队重写工程体系，MVP 会死。必须从只读 scanner 和 PR receipt 切入。
+- **Proof 可能是假安全感。** Contract 通过不代表代码无 bug。报告必须明确哪些风险没覆盖，不能装成形式化验证。
+- **噪声风险。** 如果 repair plan 只是把报错翻译成中文/英文，价值很低。必须能减少 agent 修复循环或 reviewer 返工。
+
+## 可验证指标
+
+- Agent PR first-pass CI pass rate。
+- 平均修复循环次数。
+- PR review comment 中“违反项目规则/架构误读”的数量。
+- Agent 误改危险文件次数。
+- Contract 更新后 agent 成功率提升。
+- 付费团队是否愿意把 proof receipt 作为 AI PR merge gate。
+
+## 来源
+
+- [GitHub: vercel-labs/zerolang](https://github.com/vercel-labs/zerolang)
+- [zerolang 官方站](https://zerolang.ai/)
+- [HN: The Programming Language for Agents](https://news.ycombinator.com/item?id=48193539)
+- [HN: Zero – Programming Language for Agents](https://news.ycombinator.com/item?id=48246710)
+- [GitHub: anatomia-dev/anatomia](https://github.com/anatomia-dev/anatomia)

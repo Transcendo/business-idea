@@ -181,6 +181,7 @@ export const contents: Content[] = [
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-24", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Agent-Native Compiler Contract", href: "/docs/developer-tools/agent-native-compiler-contract-layer", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "Computer-Use Trajectory Data", href: "/docs/ai-agents/computer-use-trajectory-data-foundry", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Agent Database Access Firewall", href: "/docs/cybersecurity/agent-database-access-firewall", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Dev-Machine Exposure Scanner", href: "/docs/cybersecurity/agent-dev-machine-exposure-scanner", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
@@ -378,6 +379,7 @@ export const contents: Content[] = [
 			{ title: "Repo Preference Pack", href: "/docs/developer-tools/repo-preference-pack-for-coding-agents", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "Design System Extraction Layer", href: "/docs/developer-tools/design-system-extraction-layer-for-coding-agents", icon: () => <Image className="w-4 h-4 text-current" /> },
 			{ title: "Agent-Readable Docs Readiness", href: "/docs/developer-tools/agent-readable-docs-readiness-layer", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
+			{ title: "Agent-Native Compiler Contract", href: "/docs/developer-tools/agent-native-compiler-contract-layer", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "MCP Cross-Client Testing", href: "/docs/developer-tools/mcp-cross-client-testing-layer", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "Agent Tool-Calling Guardrails", href: "/docs/developer-tools/agent-tool-calling-guardrails-layer", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Side-Effect Replay Ledger", href: "/docs/developer-tools/agent-side-effect-replay-ledger", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },

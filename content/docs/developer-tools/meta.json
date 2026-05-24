@@ -12,6 +12,7 @@
     "repo-preference-pack-for-coding-agents",
     "design-system-extraction-layer-for-coding-agents",
     "agent-readable-docs-readiness-layer",
+    "agent-native-compiler-contract-layer",
     "mcp-cross-client-testing-layer",
     "agent-tool-calling-guardrails-layer",
     "agent-side-effect-replay-ledger",
