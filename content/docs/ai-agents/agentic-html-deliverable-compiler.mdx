@@ -1,0 +1,110 @@
+---
+title: Agentic HTML Deliverable Compiler
+description: 面向创作者、顾问和增长团队的 HTML 交付物智能体，把草稿、资料、品牌约束、预览和导出压成可复跑的内容生产层。
+---
+
+# Agentic HTML Deliverable Compiler
+
+很多 AI 内容工具的问题不是“不会写”。它们会写，但输出常常卡在聊天窗口、Markdown 文件、PPT 半成品和一堆截图里。真正要交付给客户、老板、社群或渠道时，用户还要自己排版、改样式、做封面、导出图片、转公众号、小红书、网页或 PDF。
+
+Agentic HTML deliverable compiler 的机会，是把“我有一个主题、一堆素材、一些品牌规则，要产出可分享交付物”压成一次可执行的 agent 任务。它不应该只生成漂亮 HTML，而要给用户一个可预览、可修改、可导出、可复跑的交付物工作台。
+
+## 产品信号
+
+GitHub 上的 [nexu-io/html-anything](https://github.com/nexu-io/html-anything) 是一个很强的近期信号。项目把自己定位成 “agentic HTML editor”，强调本地 AI agent 写 HTML，支持 magazine、deck、poster、XHS / tweet、prototype、data report 等 surface，并带 sandboxed preview 和一键导出。GitHub API 在本轮抓取到它创建于 2026-05-11，已超过 4,600 stars。这个速度说明开发者和 AI-first 创作者正在寻找“从 AI 产出到可交付页面”的桥。
+
+Product Hunt 同期也有相邻信号。[Shuffle Design CLI](https://www.producthunt.com/products/shuffle-design-cli) 的定位是 multi-AI CLI for building and redesigning websites；[Prosed](https://www.producthunt.com/products/prosed-turn-your-content-into-a-book) 把 newsletter 和 podcast 变成书稿；[Auto Posts](https://www.producthunt.com/products/auto-posts) 解决内容发布排程；[DCP](https://www.producthunt.com/products/dcp) 关注给 AI agents 加密权限和 key。这些信号拼在一起，说明用户不只想要文本生成，而是在找可落地、可发布、可授权的 AI 交付链路。
+
+Reddit 的 r/SaaS 当前也出现“building a design system to bring the soul and imperfections of the real world online”这类讨论。它不是直接验证这个产品，但说明 SaaS 创作者已经在为“看起来不像模板、能表达品牌气质”的页面和内容资产操心。
+
+## 用户痛点
+
+第一类用户是 AI-first 创作者。他们每天用 Claude Code、Cursor、Codex、Gemini 或本地模型做内容、报告、海报、活动页、小红书图文和产品说明，但最后一步总是很脏：复制粘贴、调样式、截屏、转格式、发不同渠道。
+
+第二类用户是顾问、agency 和独立创业者。他们需要把研究、复盘、方案、客户周报、市场分析做成看起来能交付的东西。纯 Markdown 太像草稿，PPT 太重，设计外包太慢。真正痛的是“今天就要发给客户，还要看起来像认真做过”。
+
+第三类用户是增长团队。他们需要把同一份素材变成 landing page、社媒卡片、邮件图、活动页、内部 memo 和数据报告。每个渠道都有尺寸、语气、CTA 和品牌要求，人工改版会吃掉大量碎时间。
+
+## AI-native wedge
+
+最小 wedge：用户给草稿、资料包、目标渠道和品牌约束；系统返回一个可预览的 HTML 交付物、3 个渠道版本和一张 `delivery-receipt.md`。
+
+receipt 要记录：
+
+- 使用了哪些输入资料、链接、图片和数据。
+- 生成了哪些页面模块、图文块、CTA 和导出版本。
+- 品牌约束：颜色、字体、语气、禁用词、logo 使用规则。
+- 渠道目标：网页、长图、小红书、公众号、deck、PDF、PNG。
+- 风险提示：来源缺失、数据未验证、版权不明、过度承诺。
+- 可复跑命令：只改标题、视觉风格、渠道尺寸或 CTA 时，不从零开始。
+
+AI 压缩的不是排版本身，而是把写作、结构设计、视觉套版、预览修改、导出和交付解释压成一个可审查的生产动作。
+
+## 为什么现在
+
+AI coding agent 已经能稳定生成前端页面、调用本地文件、执行构建、截图预览。与此同时，内容生产者已经被短视频、长图、newsletter、landing page、社群海报和客户报告切碎了。
+
+过去这件事很难，是因为“写内容的人”和“会做页面的人”不是同一批人；现在 agent 可以直接跨过这条边界。更关键的是，输出形态从聊天答案变成 HTML 后，天然可预览、可审查、可导出，也更容易进入商业交付。
+
+## 用户为什么来、留、传播、付费
+
+来：他们已经有内容草稿和素材，但讨厌最后一公里的排版、导出和多渠道改版。
+
+留：品牌规则、历史模板、渠道尺寸和高转化结构会积累。每次新交付物都能复用上一轮的视觉和结构。
+
+传播：生成出来的网页、长图、海报、deck 本身就是传播物。receipt 还能发给客户或团队，解释这版用了什么资料、为什么这样组织。
+
+付费：个人创作者为省时间付费，顾问和 agency 为客户交付速度付费，增长团队为批量版本和品牌一致性付费。高客单价来自团队模板库、审批流、素材权限、导出额度和客户空间。
+
+## MVP 实验
+
+不要一开始做“万能 AI 设计平台”。先选一个窄任务：把一份研究笔记或产品更新变成可发布的 HTML 长图/网页。
+
+7 天 MVP：
+
+1. 输入：Markdown 草稿、3 到 10 个来源链接、品牌色、目标渠道、禁用词。
+2. 输出：一个 HTML 页面、一个移动端长图版本、一个社媒摘要卡。
+3. 提供 sandbox preview，允许用户用自然语言改标题、段落顺序、视觉密度和 CTA。
+4. 导出 PNG、HTML 和 `delivery-receipt.md`。
+5. 只支持 3 个模板族：研究报告、产品发布、活动/课程页面。
+
+30 天验证：找 20 个 AI 创作者、顾问或小型增长团队，让他们每周用它交付至少 2 个真实公开或客户可见产物。不要看生成次数，要看导出、分享、复用模板和客户打开 receipt 的次数。
+
+## 商业化路径
+
+个人版按月订阅，限制导出次数和模板数量。
+
+团队版按品牌空间、协作席位、审批流程、客户空间和导出格式收费。
+
+agency 版可以卖项目工作台：每个客户有独立品牌包、素材库、历史交付物、审批记录和复跑命令。
+
+更长期的收入点是渠道集成：公众号、小红书、X、LinkedIn、Notion、Webflow、Framer、PDF、邮件系统和内部知识库。
+
+## 反例和风险
+
+最大风险是沦为“漂亮模板生成器”。如果用户只生成一次就走，说明产品没有抓住重复工作流。必须卡住品牌记忆、版本复用、渠道导出和客户交付 receipt。
+
+第二个风险是被大工具吸收。Canva、Framer、Notion、Gamma、Adobe、Webflow、Cursor 都可能做自然语言生成页面。创业公司的防线不是“我也能生成 HTML”，而是更懂 AI-first 创作者和 agency 的交付动作。
+
+第三个风险是质量不稳定。HTML 好看不代表能用，移动端、中文排版、截图导出、长图压缩、公众号兼容都可能翻车。MVP 要把 preview、导出和复跑测试做扎实。
+
+第四个风险是来源和版权。系统不能把用户给的草稿包装成确定事实。receipt 必须标出来源缺失、数据未验证和外部素材版权风险。
+
+## 可验证指标
+
+- 从草稿到第一个可分享版本是否小于 10 分钟。
+- 生成后真实导出或发布的比例。
+- 同一个品牌模板 30 天内被复用的次数。
+- 每个交付物的自然语言修改轮数是否下降。
+- 用户是否把 receipt 发给客户、老板或团队。
+- 多渠道版本是否被真实发布，而不是只停在预览。
+- 30 天后用户是否仍保留 3 个以上活跃模板。
+
+## 可信来源
+
+- [GitHub: nexu-io/html-anything](https://github.com/nexu-io/html-anything)
+- [Product Hunt: Shuffle Design CLI](https://www.producthunt.com/products/shuffle-design-cli)
+- [Product Hunt: Prosed](https://www.producthunt.com/products/prosed-turn-your-content-into-a-book)
+- [Product Hunt: Auto Posts](https://www.producthunt.com/products/auto-posts)
+- [Product Hunt: DCP](https://www.producthunt.com/products/dcp)
+- [Reddit r/SaaS: design system discussion](https://www.reddit.com/r/SaaS/comments/1tl3d1k/building_a_design_system_to_bring_the_soul_and/)

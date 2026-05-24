@@ -1,0 +1,263 @@
+---
+title: Agent Dev-Machine Exposure Scanner
+description: AI agent 进入本地开发机后，机会不是再劝开发者“注意安全”，而是把 MCP server、IDE 插件、agent CLI、环境变量、包安装和工具权限压成可复查的暴露面报告。
+---
+
+# Agent Dev-Machine Exposure Scanner
+
+## 一句话判断
+
+AI agent 正在从网页聊天框搬到开发者电脑里。
+
+它会读仓库、跑 shell、装包、连 MCP server、调用浏览器、触碰环境变量和本地凭据。
+
+新的安全机会不是泛泛地给 agent 加 prompt 规则，而是先回答一个更硬的问题：这台开发机现在到底暴露给 AI agent 了什么？
+
+## 公开信号
+
+- StepSecurity 的 `dev-machine-guard` 把定位写得很直：扫描开发机上的 AI agents、MCP servers、IDE extensions 和可疑 packages。GitHub API 显示它在 2026-05-23 仍有更新，仓库描述已经指向本地 agent 暴露面扫描：[step-security/dev-machine-guard](https://github.com/step-security/dev-machine-guard)
+- 同一个项目在 Hacker News 以 `Show HN: Scan your dev machine for AI agents, MCP servers, and IDE extensions` 出现，虽然讨论量不大，但问题定义非常新：[HN item](https://news.ycombinator.com/item?id=47355463)
+- Product Hunt 上的 DCP 用 `Give your AI agents encrypted permission and keys` 做定位，说明 agent 权限、密钥和 delegated access 已经进入产品发布层：[DCP](https://www.producthunt.com/products/dcp)
+- `agent-trace` 把自己描述为 `strace for AI agents`，能记录和回放 Claude Code、Cursor、Gemini CLI 或 MCP client 的工具调用、prompt 和 response：[Siddhant-K-code/agent-trace](https://github.com/Siddhant-K-code/agent-trace)
+- Dagu 的仓库描述也提到通过 secure MCP 创建、更新、运行 workflow，并保留 traceability 和 logging：[dagucloud/dagu](https://github.com/dagucloud/dagu)
+- HN 上 `I threw away my analytics dashboard and replaced it with 42 MCP tools` 这类低分但直接的帖子，说明 MCP 工具开始在个人和小团队工作流里野蛮扩张：[HN item](https://news.ycombinator.com/item?id=48233125)
+
+## 用户痛点
+
+开发者现在很容易在几周内装出一台“agent 杂货铺”：Cursor、Claude Code、Gemini CLI、各种 MCP server、浏览器自动化工具、npm/pip 包、VS Code 插件、GitHub token、OpenAI key、云厂商凭据、本地 `.env`。
+
+问题是没人真的知道这些东西之间的边界。
+
+一个 MCP server 读了哪些目录？
+
+一个 IDE 插件能不能拿到 workspace secrets？
+
+一个 agent run 安装过哪些包？
+
+本机有没有把生产 token 暴露给会执行 shell 的工具？
+
+企业安全团队更惨。过去他们管 endpoint、MDM、EDR、SCA、secret scanning。现在开发者自己把 agent 工具接进本机，速度比安全流程快得多。
+
+## AI-native wedge
+
+用户运行一次扫描。
+
+系统返回一份 `agent-exposure-report.md`：
+
+- 本机已安装的 AI agent / IDE agent / MCP server / agent 相关 CLI
+- 每个工具能访问的目录、配置文件、环境变量、密钥位置和网络目标
+- 最近 agent run 或 shell history 中出现的高风险动作
+- 可疑包、过宽权限、明文 token、未固定版本、未知 MCP server
+- 风险分级、修复命令、可导出的团队策略 baseline
+
+这不是普通杀毒软件。
+
+它的判断对象是“AI agent 能不能把本机变成可执行攻击面”。
+
+## 为什么现在热
+
+### 1. Agent 工具从云端 UI 进了本地开发机
+
+Web chat 的风险主要是泄露文本。
+
+本地 coding agent 的风险是读文件、改代码、装依赖、提交 PR、访问凭据、调用公司内部工具。
+
+攻击面变厚了。
+
+### 2. MCP 让工具连接变得太便宜
+
+MCP 的价值是统一工具接入。
+
+副作用是 server sprawl。每个人都能装几个 server，每个 server 都可能有文件、网络、数据库、浏览器或 SaaS 权限。
+
+企业很难靠人工盘点。
+
+### 3. 安全产品还没完全覆盖 agent-native 本机场景
+
+EDR 看进程和行为。
+
+SCA 看依赖。
+
+Secret scanner 看代码仓库和文本。
+
+但 agent 开发机暴露面横跨 IDE、MCP、CLI、浏览器、`.env`、shell history、工具配置、模型 API key 和 agent trace。这个拼图现在没人真正收口。
+
+### 4. 开发团队需要可交付的安全凭证
+
+“我觉得可以用 Cursor / Claude Code”没法进入企业流程。
+
+一份定期扫描报告、风险修复清单和团队 baseline，才能让安全团队允许 agent 在真实仓库里跑。
+
+## 为什么用户会来
+
+个人开发者会来，是因为他们开始害怕自己把一堆 key、MCP server 和 agent CLI 装乱了。
+
+小团队会来，是因为 CTO 想知道团队成员的机器上到底跑了什么 agent 工具。
+
+企业会来，是因为安全团队需要在不封死 AI coding 的前提下，给 agent adoption 一个可审计入口。
+
+## 为什么用户会留下
+
+一次扫描只能发现现状。
+
+留存来自持续 drift detection：
+
+- 新装了 agent CLI 或 MCP server
+- 新出现了高危 `.env` 暴露
+- 某个插件权限变化
+- agent run 安装了未知包
+- 团队 baseline 和个人机器偏离
+- 发现一个新的 supply-chain / MCP 风险规则
+
+这会变成 weekly security hygiene，而不是一次性工具。
+
+## 为什么会传播
+
+最强传播单元不是“安全报告全文”。
+
+而是三种小卡片：
+
+- `Your agent surface score: 42/100`，适合开发者晒给朋友
+- `Team agent adoption report`，适合 CTO 发给安全团队
+- `Before/after fix receipt`，适合开源作者或团队证明自己修过风险
+
+开发者安全产品如果只有恐吓，很难传播。
+
+但如果它能把“我的开发机被 AI 工具摸成什么样了”可视化，就有天然讨论点。
+
+## 谁付费
+
+个人版可以免费或低价，用来建立规则库和信任。
+
+付费点在团队和企业：
+
+- 团队 baseline：哪些 agent / MCP / 插件允许使用
+- GitHub / MDM / endpoint 集成：按成员和设备看风险
+- CI / PR gate：高风险 agent-generated dependency 或配置变更拦截
+- 安全报告导出：给采购、合规、客户安全问卷
+- policy-as-code：把扫描结果变成可执行规则
+
+真正付费的不是“扫一下”。
+
+是“允许团队安全地用 AI coding agent”。
+
+## MVP 实验
+
+### MVP 1：macOS 开发机本地扫描 CLI
+
+入口只做开发者常见路径：
+
+- Cursor / VS Code / Claude Code / Gemini CLI / Codex CLI 配置
+- MCP server 配置文件
+- `.env`、shell rc、known secret locations
+- npm、pip、brew 中 agent 相关包
+- 最近 shell history 中的 agent install / run 命令
+
+输出三件东西：
+
+- `agent-exposure-report.md`
+- `fix.sh`，只包含低风险修复建议
+- `baseline.json`，用于下次 drift 比对
+
+### MVP 2：团队收集模式
+
+让 5–20 人团队跑本地 CLI。
+
+只上传脱敏摘要，不上传原始 secrets、不上传完整路径、不上传 shell history 原文。
+
+团队管理员看到：
+
+- 多少人装了哪些 agent 工具
+- 哪些 MCP server 最常见
+- 哪些风险重复出现
+- 哪些修复已完成
+
+### MVP 3：Agent adoption readiness report
+
+面向准备引入 Cursor / Claude Code / MCP 的团队，生成一页 readiness report：
+
+- 当前暴露面
+- 必须修的 5 个风险
+- 建议允许列表
+- 禁用列表
+- 试点成员名单
+- 30 天复测计划
+
+这个报告可以直接卖给 AI-first 开发团队、外包 agency、SaaS 初创公司。
+
+## 可验证指标
+
+- 首次扫描发现的有效风险数：每台机器至少发现 3 个用户认同的风险，才说明不是玩具
+- 修复完成率：用户是否真的执行建议，而不是看完就关
+- 二次扫描率：7 天或 14 天后是否回来复测
+- 团队覆盖率：一个团队里有多少成员愿意安装并提交脱敏摘要
+- 新增工具 drift：每周是否能发现新增 agent / MCP / 插件
+- 安全审批转化：报告是否帮助团队通过内部 AI coding 试点
+
+## 反例和风险
+
+### 1. 它可能只是一个开源脚本
+
+如果只做静态扫描，GitHub 上很快会有免费替代品。
+
+商业化必须靠团队 baseline、持续 drift、策略分发和审批报告。
+
+### 2. 它可能被 EDR / MDM / IDE 厂商吸收
+
+企业 endpoint 产品可以加 agent posture module。
+
+Cursor、GitHub、Anthropic、OpenAI 也可以在自家工具里加安全检查。
+
+创业公司要避开纯平台功能，先拿跨工具、跨 MCP、跨 IDE 的中立视角。
+
+### 3. 隐私风险很高
+
+扫描开发机是敏感动作。
+
+产品必须默认本地运行，上传脱敏摘要，并明确不上传 secret 原文、文件内容、私有仓库代码或完整 shell history。
+
+否则用户不会信。
+
+### 4. 安全建议可能误伤开发效率
+
+如果规则太保守，开发者会关掉。
+
+早期不要做“一键禁止”。先做证据报告、风险分级、可解释修复和 team baseline。
+
+## 和已有页面的关系
+
+它和 [Agent Execution-Layer Security Sandbox](/docs/cybersecurity/agent-execution-layer-security-sandbox) 不一样。
+
+Execution sandbox 解决的是“agent 运行时怎么被隔离和约束”。
+
+Dev-machine exposure scanner 解决的是“在你加 sandbox 之前，这台开发机已经暴露了什么”。
+
+它和 [MCP Agent Security Gateway](/docs/cybersecurity/mcp-agent-security-gateway) 也不一样。
+
+MCP gateway 是调用路径里的门。
+
+Exposure scanner 是资产盘点、风险发现和 adoption readiness。
+
+## 早期创业判断
+
+这是一个小而硬的机会。
+
+它不适合做成泛安全平台。那会死在 EDR、MDM 和平台厂商手里。
+
+更好的切口是 AI coding adoption 的“体检报告”：团队准备放开 agent 之前，先扫一遍每个开发者的本地 agent 暴露面，给 CTO / 安全负责人一份能讨论的证据。
+
+如果它能证明两件事，就值得继续：
+
+- 扫描能稳定发现开发者愿意修的真实风险
+- 团队愿意把它作为 AI coding 试点的准入和复测流程
+
+否则它只是另一个好用但难收费的安全 CLI。
+
+## 来源
+
+- StepSecurity `dev-machine-guard`：扫描开发机上的 AI agents、MCP servers、IDE extensions 和可疑 packages：[GitHub](https://github.com/step-security/dev-machine-guard)
+- Hacker News：`Show HN: Scan your dev machine for AI agents, MCP servers, and IDE extensions`：[HN item](https://news.ycombinator.com/item?id=47355463)
+- Product Hunt：DCP，`Give your AI agents encrypted permission and keys`：[Product Hunt](https://www.producthunt.com/products/dcp)
+- Agent Trace：`strace for AI agents`，记录和回放 Claude Code、Cursor、Gemini CLI 或 MCP client 的工具调用：[GitHub](https://github.com/Siddhant-K-code/agent-trace)
+- Dagu：通过 secure MCP 运行 workflow，并强调 traceability 和 logging：[GitHub](https://github.com/dagucloud/dagu)
+- Hacker News：`I threw away my analytics dashboard and replaced it with 42 MCP tools`：[HN item](https://news.ycombinator.com/item?id=48233125)

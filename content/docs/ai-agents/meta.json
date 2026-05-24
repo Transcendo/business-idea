@@ -9,6 +9,7 @@
     "realtime-voice-agent-runtime",
     "ai-video-demo-agent",
     "agentic-video-editing-command-layer",
+    "agentic-html-deliverable-compiler",
     "voice-agent-qa-scorecard",
     "browser-agent-execution-harness",
     "statewright-agent-state-machine-guardrails",
