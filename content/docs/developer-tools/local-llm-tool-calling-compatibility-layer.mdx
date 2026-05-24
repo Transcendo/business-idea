@@ -1,0 +1,214 @@
+---
+title: Local LLM Tool-Calling Compatibility Layer
+description: 面向 llama.cpp、Ollama、Open WebUI、本地 agent 和 coding agent 的工具调用兼容层，把不同模型、客户端、schema、工具结果和失败轨迹压成可测试、可路由、可回放的兼容性网关。
+---
+
+# Local LLM Tool-Calling Compatibility Layer
+
+## 一句话判断
+
+本地 LLM 正在从“离线聊天”和“便宜补全”走向真实工具调用：读文件、跑命令、调用 MCP server、接本机服务、驱动 coding agent。
+
+机会不是再做一个模型下载器，而是在本地模型、agent 客户端和工具之间放一层 compatibility gateway：把 OpenAI / Anthropic / Ollama / llama.cpp 的 tool-call 差异、schema 差异、工具结果格式、多轮状态和失败回放统一起来。
+
+这个方向和通用 guardrail 不一样。guardrail 关心“这次调用安不安全、稳不稳”；compatibility layer 关心“同一个 agent 工作流能不能在不同本地模型和运行时里跑通”。
+
+## 为什么现在热
+
+几个信号叠在一起：
+
+- llama.cpp 已经不只是推理库。GitHub issues 里围绕 server、tool calling、multi-turn tool use 和 OpenAI-compatible 行为的讨论很多。一个本地 server 一旦开始接工具，就会撞上客户端兼容、工具返回格式和多轮状态问题。
+- llama.cpp 的 issue `[BUG] 400 error 'Output of tool call should be 'Input text''` 指向一个很具体的痛点：模型能吐 tool call，不代表工具结果能被下一轮正确吃回去。
+- llama.cpp 的 PR `Integration tests for multi-turn tool use` 说明开源社区也在把 tool calling 当成需要测试的协议层，而不是 demo 级能力。
+- Product Hunt 上 Vibedock 的定位是“Toggle Claude Code MCP servers from your menu bar”，Google Antigravity CLI 的定位是“Run coding agents directly from your terminal”。这类新品说明本地 agent 工具链开始变成日常操作面，而不是黑客玩具。
+- HN 上 Oats Protocol、InsForge、MCP tools 替代 dashboard 这类帖子都在把工具、agent、后台能力往更可组合的方向推。本地模型如果要进入这条链路，必须先解决兼容性和可复跑问题。
+
+热的不是“本地模型又快了一点”。热的是：开发者开始希望本地模型参与真实任务，但工具协议和客户端生态太碎。
+
+## 用户痛点
+
+目标用户不是泛泛的 AI 爱好者，而是几类已经在动手的人：
+
+1. 本地 LLM power user
+
+他们用 llama.cpp、Ollama、Open WebUI、LM Studio 跑模型，也想接文件、shell、浏览器、MCP。问题是同一个 prompt / tool schema 换个模型或 server 就坏。
+
+2. AI-first dev agency 和 coding-agent 重度用户
+
+他们想用便宜或私有的本地模型承担一部分 coding agent 任务。难点不只是质量，而是 tool call 行为不稳定，失败后很难判断是模型能力差、schema 不兼容、客户端适配错，还是工具返回格式错。
+
+3. MCP server 作者
+
+他们希望自己的工具被 Claude Code、Cursor、OpenCode、Open WebUI、本地模型 agent 调用。但每个客户端、模型和运行时对 tool result、错误重试、多轮上下文的处理都不一样。
+
+4. 企业平台工程团队
+
+他们想在内网跑本地模型和 agent，避开数据外传。但企业不会接受“在某台机器上能跑 demo”。他们要的是兼容性报告、失败样例、策略和审计。
+
+## AI-native wedge
+
+最小切口：
+
+用户接入一个本地 gateway。它同时面对三侧：
+
+- 上游 agent 客户端：Claude Code / OpenCode / Continue / Open WebUI / 自研 agent。
+- 下游模型运行时：llama.cpp server / Ollama / vLLM / 本地 OpenAI-compatible endpoint。
+- 旁路工具层：MCP server / shell / 文件工具 / HTTP 工具。
+
+系统返回三类东西：
+
+- compatibility adapter：把不同工具调用格式统一成内部 canonical schema，再转回目标客户端需要的格式。
+- model-task fit report：同一批工具调用任务在不同模型/运行时下的通过率、失败类型、重试次数、耗时和成本。
+- replayable failure case：每次失败保留 prompt、schema、tool result、下一轮输入和错误，使团队能回放、修 adapter、做回归测试。
+
+价值不是“让模型更聪明”，而是让本地模型的工具调用从一次性 demo 变成可测试、可替换、可回放的工程组件。
+
+## 产品形态
+
+### 1. Local tool-call compatibility proxy
+
+先做本地代理，不碰云平台大而全。
+
+支持：
+
+- OpenAI-compatible chat completions
+- basic Anthropic-style tool schema adapter
+- llama.cpp / Ollama endpoint adapter
+- MCP tool registry import
+- tool result canonicalization
+- multi-turn tool-use transcript
+- failure replay JSON
+
+早期不需要支持所有模型。先选 3 个高频本地模型和 2 个 agent 客户端，把真实失败打穿。
+
+### 2. Tool-call compatibility test suite
+
+每个 MCP server / tool pack 都可以跑一组测试：
+
+- schema 是否被模型正确理解
+- 必填字段是否稳定产出
+- 工具结果是否能被下一轮读懂
+- 错误信息是否能触发合理重试
+- 多工具链是否会乱序
+- 本地模型是否更容易陷入重复调用
+
+输出一张 compatibility card：在哪些模型、server、客户端组合下能跑，哪里会坏。
+
+### 3. Local-agent model router
+
+当测试数据积累后，产品可以给出任务级路由：
+
+- 简单路由、分类、文件查找交给本地小模型。
+- 高风险代码修改或多工具链任务转给更强模型。
+- 本地模型失败到某类错误时自动 fallback。
+
+这时它才从“兼容层”变成“本地 agent 成本与可靠性控制层”。
+
+## 为什么用户会来、留、传播、付费
+
+会来：本地模型用户已经有模型、客户端和工具，但经常卡在“为什么这个 tool call 换个端就不工作”。一个能直接告诉他哪里不兼容的工具有即时价值。
+
+会留：兼容性数据会沉淀成团队自己的模型-task 矩阵、失败样例和 adapter 配置。迁移成本在这些回归样例里，不在 proxy 本身。
+
+会传播：传播单位不是长文章，而是 compatibility card。比如“同一个 MCP server 在 Claude / local Qwen / local Llama 下的 tool-call 通过率对比”，开发者会转。
+
+会付费：个人用户付费弱，团队付费更清楚。AI-first dev agency、企业平台工程、本地 AI 工具链团队会为 private model matrix、CI compatibility gate、失败 trace 留存、团队策略和内网部署付费。
+
+## MVP 怎么做
+
+### 第 1 周：只做一个代理和一个测试集
+
+范围收死：
+
+- 上游支持一个 OpenAI-compatible agent 客户端。
+- 下游支持 llama.cpp server 和 Ollama。
+- 工具侧支持 5 个本地工具：read file、write temp file、shell dry-run、HTTP GET、MCP echo tool。
+
+输出：
+
+- canonical tool-call JSON
+- tool result canonical JSON
+- run transcript
+- failure replay file
+
+### 第 2 周：跑真实兼容性矩阵
+
+选 3 个模型、2 个客户端、10 个工具调用任务。
+
+任务要真实：
+
+- 查找文件并总结
+- 读取配置后生成命令
+- 调 MCP 工具拿结构化数据
+- 工具报错后修正参数
+- 多轮工具调用后给出结论
+
+指标：通过率、格式错误率、工具结果读回成功率、平均重试次数、人工接管次数。
+
+### 第 3 周：找 MCP server 作者和本地 agent 用户试用
+
+不要问“你会不会用本地 AI”。直接让他们拿自己的 MCP server 或本地 workflow 跑 compatibility test。
+
+如果他们愿意把 compatibility card 放进 README 或 release gate，这个方向有戏。
+
+## 商业化路径
+
+1. MCP server 发布前兼容性检测
+
+MCP server 作者付费拿 compatibility badge、失败报告和修复建议。这个入口小，但很具体。
+
+2. 企业本地 AI 试点工具链
+
+企业内网部署本地模型前，需要证明哪些任务能交给本地模型，哪些必须走云模型。卖 model-task fit report 和 private compatibility matrix。
+
+3. AI-first dev agency 成本路由
+
+团队希望把低风险 agent 子任务丢给本地模型，降低 API 成本。卖 task router、fallback policy 和 run receipt。
+
+4. Local agent CI gate
+
+每次升级模型、工具 schema、MCP server 或 agent 客户端时，跑回归测试，避免“昨天能用，今天全坏”。
+
+## 反例与风险
+
+1. 平台直接内置兼容层
+
+Ollama、Open WebUI、Claude Code、Cursor、llama.cpp server 都可能逐步修掉一部分兼容问题。独立产品必须吃跨模型、跨客户端、跨团队回归测试这块。
+
+2. 个人用户付费弱
+
+本地模型社区很热，但很多人习惯免费开源。商业化要面向团队、企业内网和 MCP server 作者，而不是只卖给 hobbyist。
+
+3. 质量问题会伪装成兼容问题
+
+有些模型不是 schema 不兼容，而是能力不够。产品必须区分 model capability、adapter bug、tool schema 设计差和客户端行为差，否则报告没有信任度。
+
+4. 安全边界不能乱承诺
+
+兼容层不是完整 sandbox。它可以记录和约束工具格式，但不能假装解决文件、网络、密钥、进程权限的全部问题。安全执行应接已有 sandbox / policy layer。
+
+5. 测试集容易玩具化
+
+如果测试只是 echo、天气、计算器，开发者不会信。必须收集真实 MCP server、本地文件任务和 coding-agent 子任务。
+
+## 可验证指标
+
+- 同一 tool schema 在多个模型/运行时下的通过率
+- tool result 被下一轮正确消费的比例
+- multi-turn tool-use 成功率
+- adapter 修复后失败样例回归通过率
+- 本地模型替代云模型的任务占比
+- fallback 后总成本是否下降
+- MCP server 作者是否愿意公开 compatibility card
+- 团队是否把 compatibility test 放进 release gate
+
+## 可信来源
+
+- [llama.cpp GitHub repository](https://github.com/ggml-org/llama.cpp)
+- [llama.cpp issue: 400 error 'Output of tool call should be Input text'](https://github.com/ggml-org/llama.cpp/issues/23542)
+- [llama.cpp PR: Integration tests for multi-turn tool use](https://github.com/ggml-org/llama.cpp/pull/21308)
+- [Product Hunt: Vibedock](https://www.producthunt.com/products/vibedock)
+- [Product Hunt: Google Antigravity CLI](https://www.producthunt.com/products/google-antigravity)
+- [HN: The Oats Protocol – Open Agent Tools for Local Coding Agents](https://news.ycombinator.com/item?id=48180667)
+- [HN: InsForge – Open-source Heroku for coding agents](https://news.ycombinator.com/item?id=48181342)
+- [Metorial GitHub repository](https://github.com/metorial/metorial)

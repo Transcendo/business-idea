@@ -15,6 +15,7 @@
     "agent-native-compiler-contract-layer",
     "mcp-cross-client-testing-layer",
     "agent-tool-calling-guardrails-layer",
+    "local-llm-tool-calling-compatibility-layer",
     "agent-side-effect-replay-ledger",
     "messaging-native-coding-agent-command-center",
     "agent-failure-regression-harness",
