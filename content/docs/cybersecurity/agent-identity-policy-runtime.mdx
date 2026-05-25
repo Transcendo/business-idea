@@ -28,6 +28,20 @@ Agent 安全的下一层不是再写一堆 prompt guardrail，而是让 agent �
 
 现在的早期项目常把问题拆成 MCP gateway、agent firewall、workflow runtime、secret proxy。下一步会合并成更基础的运行时问题：agent identity 怎么贯穿整条执行链。
 
+## 2026-05-25 更新：授权层从“谁登录”转向“它正在做什么”
+
+AgentGate 这类新项目把这个问题说得更尖：OAuth 只知道 agent 拿着一个有效 token，不知道它此刻是在总结报表，还是被 prompt injection 诱导去导出薪资表。
+
+这不是普通权限管理。agent 的危险来自三层错位：
+
+- **身份错位**：下游系统看到的是 token，不是这次 run 的人类授权、任务目标和委派链。
+- **意图错位**：同一个 agent 可以从“读季度报告”漂移到“把敏感文件写到外部站点”。传统 scope 很难表达这种目的变化。
+- **时间错位**：agent run 结束后，权限、子任务、缓存 token 和外部连接是否过期，很多工具没有强约束。
+
+所以更准的 wedge 不是“给 agent 加 OAuth”，而是做一个 action-time authorization layer：每次 agent 行动前，检查 actor、purpose、resource、delegation chain、behavior drift 和风险分数，再给出 permit / deny / ask-human。
+
+这也解释了为什么这个方向会热。agent 已经从聊天框走到 shell、浏览器、数据库、GitHub、Slack 和云资源。只要 agent 开始替团队写入真实系统，授权就不能只发生在登录时，必须发生在每次高风险动作之前。
+
 ## 用户痛点是什么
 
 团队真正怕的不是“模型回答错了”。
@@ -188,6 +202,9 @@ agent-id receipt last
 
 ## 来源
 
+- HN：Authorization layer for AI agents (OAuth has no idea what your agent is doing)，2026-05-24：[https://news.ycombinator.com/item?id=48261032](https://news.ycombinator.com/item?id=48261032)
+- AgentGate 官网：Trust Authorization for Autonomous AI Agents：[https://www.tryagentgate.com/](https://www.tryagentgate.com/)
+- GitHub：AgentGate public repo and README：[https://github.com/ElamOlame31/agentgate-public](https://github.com/ElamOlame31/agentgate-public)
 - HN：Keycard, decentralized identity for AI agents，2026-05-14：[https://news.ycombinator.com/item?id=48125985](https://news.ycombinator.com/item?id=48125985)
 - Keycard：What every builder should know about agentic identity：[https://keycard.com/blog/what-every-builder-should-know-about-agentic-identity](https://keycard.com/blog/what-every-builder-should-know-about-agentic-identity)
 - GitHub：Microsoft Agent Governance Toolkit：[https://github.com/microsoft/agent-governance-toolkit](https://github.com/microsoft/agent-governance-toolkit)

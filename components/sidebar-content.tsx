@@ -180,6 +180,8 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "2026-05-25", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Agent Identity Policy Runtime", href: "/docs/cybersecurity/agent-identity-policy-runtime", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-24", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "Agent-Native Compiler Contract", href: "/docs/developer-tools/agent-native-compiler-contract-layer", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "Local LLM Tool-Calling Compatibility", href: "/docs/developer-tools/local-llm-tool-calling-compatibility-layer", icon: () => <Zap className="w-4 h-4 text-current" /> },
