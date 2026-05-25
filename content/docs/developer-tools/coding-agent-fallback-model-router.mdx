@@ -1,0 +1,194 @@
+---
+title: Coding Agent Fallback Model Router
+description: Coding agent 的新摩擦不是“有没有一个最强模型”，而是长任务跑到一半被额度、模型波动、上下文丢失和质量回退打断。机会是做一层任务级 fallback router，把模型选择、预算、能力探测、失败恢复和结果 receipt 压成 agent 运行时的可靠性层。
+created: 2026-05-25
+tags:
+  - ai-coding
+  - developer-tools
+  - model-routing
+  - agent-runtime
+---
+
+# Coding Agent Fallback Model Router
+
+## 一句话判断
+
+Coding agent 的下一层痛点不是“哪个模型最强”，而是长任务能不能稳定跑完。
+
+开发者已经在 Claude Code、Codex、Cursor、OpenCode、DeepSeek、OpenRouter、本地模型之间来回切。真正烦的是：模型突然限额、价格太贵、上下文被截断、某个子任务质量下降、半路换模型后结果接不上。
+
+机会是做一层 coding-agent fallback router：按任务类型、上下文大小、预算、风险和历史成功率选择模型；失败时自动降级或切换；最终给开发者一份可审查的 run receipt。
+
+这不是普通 API gateway。API gateway 只转请求。router 要知道“这个任务该交给谁、什么时候换、换完如何不丢状态”。
+
+## 赛道 / 产品信号
+
+本轮信号很集中：AI coding 从单模型体验进入多模型、长任务、预算敏感阶段。
+
+- Product Hunt 上 Edgee Fallback Models 的一句话是 “Claude Code that never stops”。这个表达很准：用户不是想研究模型路由，而是想让 coding agent 别因为额度和模型不可用停工。
+- HN 上 DeepSeek Reasonix 拿到高讨论度，官网定位为 DeepSeek-native terminal coding agent，强调 prefix-cache、低成本、MCP、plan mode 和 cache-first loop。便宜模型不是玩具，而是在吃 coding-agent 长会话成本。
+- Stack Overflow Blog 写到 coding agents 正在制造 decision fatigue。模型、工具、prompt、review、批准点都在变多，开发者不想每天手动做运行时调度员。
+- GitHub 上 deepclaude 明确写“Use Claude Code's autonomous agent loop with DeepSeek V4 Pro, OpenRouter, or any Anthropic-compatible backend”，并把卖点压成“same UX, 17x cheaper”。这说明用户想保留成熟 agent 外壳，只替换或路由模型大脑。
+- OpenSquilla 把自己定义为 token-efficient AI agent，主张 same budget, more capability。围绕 token budget 和能力密度的 agent 设计正在冒头。
+- Product Hunt 同一天还出现 Google Antigravity CLI、ModelHub、Freu AI、Memdex、Vibedock 等本地/终端/agent 工具。开发者工具链明显在碎片化，多模型、多入口、多 MCP 是新常态。
+
+判断：模型路由会从“省钱技巧”变成 coding agent 运行时能力。单纯便宜不够，关键是让长任务在不同模型之间切换后仍然可控、可回放、可验收。
+
+## 用户痛点是什么
+
+1. **长任务被额度打断。** Claude Code、Codex、Cursor 这类工具一旦跑到长会话，额度、速率限制和价格就会直接打断工作流。
+
+2. **手动换模型很痛。** 开发者可以自己改 API endpoint、换 provider、重启 agent，但上下文、计划、文件变更、测试状态和失败原因很容易断。
+
+3. **不同子任务不该用同一模型。** 搜文件、改 CSS、解释错误、写 migration、跑重构、做 review，风险和能力要求完全不同。全都用最贵模型浪费，全都用便宜模型容易返工。
+
+4. **便宜模型的真实成本不透明。** 便宜模型单价低，但如果失败重试、读错上下文、需要人工救火，总成本可能更高。
+
+5. **团队没有路由策略。** 个人能手动折腾，团队不行。团队需要知道哪些任务允许 fallback，哪些任务必须用强模型，哪些动作需要人工批准。
+
+## AI 是否真的压缩任务
+
+这里 AI 压缩的是“运行时判断”和“失败恢复”。
+
+以前开发者要自己做这些判断：
+
+- 这个任务是否适合小模型。
+- 当前上下文是否太大。
+- 这次失败是模型能力问题、上下文问题、工具调用问题，还是测试本身问题。
+- 是否应该换模型继续，还是停下来让人看。
+- 换模型后哪些状态必须保留。
+
+router 可以把这些压成一个运行时决策：
+
+```text
+任务：修复 Prisma migration 测试失败
+当前模型：DeepSeek V4 Pro
+失败类型：schema diff 理解错误，连续 2 次 patch 未通过
+策略：切换到 Claude / GPT 强模型，仅携带 migration diff、失败测试和 DB contract
+预算：允许 1 次高价 fallback
+输出：fallback receipt + 最终 patch + 测试证据
+```
+
+好产品的输出不是“已自动选择模型”，而是“为什么这么选、失败怎么处理、结果如何验收”。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户继续使用熟悉的 coding agent；router 夹在 agent 和模型 provider 中间，读取任务上下文、预算、失败轨迹和工具结果，按任务级策略选择模型，并在失败时生成可恢复的 fallback handoff。**
+
+第一版只做四件事：
+
+- `classify`：把 agent step 分成查找、解释、编辑、测试修复、架构判断、高风险变更。
+- `route`：按任务类型、上下文大小、预算、历史成功率选择模型。
+- `fallback`：连续失败、限额、成本超预算或质量低于阈值时切换模型，并压缩 handoff context。
+- `receipt`：记录模型选择、成本、失败原因、切换点、测试结果和人工接管点。
+
+不要一上来做“所有模型的一站式平台”。先让一个重度 coding-agent 用户在不改工作习惯的情况下少被打断。
+
+## 为什么现在
+
+- Coding agent 从短补全变成长任务 worker。长任务自然会撞上额度、上下文、失败恢复和多模型成本。
+- DeepSeek、OpenRouter、本地模型和各种 Anthropic-compatible backend 让“换脑不换 agent 外壳”变得现实。
+- 开发者已经开始接受终端 agent、MCP、menu-bar controller、local model hub。router 可以作为这条链路里的运行时层。
+- 单一平台很难覆盖用户的全部偏好：有人要最低成本，有人要隐私，有人要稳定，有人要最强模型。路由层天然跨平台。
+- 早期项目已经把卖点说得很裸：never stops、17x cheaper、token-efficient。这些不是概念，是开发者每天会骂的痛点。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+会来：agent 跑到一半停、额度没了、账单爆了、便宜模型修坏代码。这些都是即时痛点。
+
+会留：每个 repo、团队、任务类型的模型适配都会积累数据。router 越跑越知道哪些任务能省钱，哪些任务不能冒险。
+
+会传播：传播单位是 fallback receipt，而不是模型榜单。
+
+```text
+本周 47 个 coding-agent runs：
+61% step 用低价模型完成；
+7 次自动 fallback 到强模型；
+平均成本下降 38%；
+CI 失败率没有上升；
+2 次高风险 migration 被策略拦下。
+```
+
+这种 receipt 可以贴进团队周报、PR、Slack，也能成为开源项目 README 的信任截图。
+
+会付费：个人开发者会被免费本地 proxy 吸引。付费方是重度 AI coding 团队、AI-native agency、软件外包团队、内部平台团队。付费点在团队策略、跨 provider 成本归因、私有部署、CI gate、SSO、审计导出和 repo 级模型适配矩阵。
+
+## MVP 实验
+
+### 7 天 MVP
+
+只支持一个 coding agent 外壳和两类 provider。
+
+```bash
+agent-router proxy --agent claude-code --providers anthropic,deepseek,openrouter
+agent-router policy init
+agent-router run --budget 5usd --fallback-on limit,repeat-failure
+agent-router receipt --last
+```
+
+输出三样东西：
+
+1. `fallback-receipt.md`：每个 step 用了哪个模型、为什么切换、花了多少钱、是否通过测试。
+2. `handoff-context.md`：切换模型时携带的最小上下文包，避免把整段长会话硬塞过去。
+3. `policy.yaml`：哪些文件、命令、任务类型可以低价模型先跑，哪些必须强模型或人工批准。
+
+### 30 天验证
+
+找 10 个高频 coding-agent 用户或小团队。
+
+- 对比 router 前后的任务完成率、平均成本、限额中断次数、人工接管次数。
+- 记录便宜模型导致的返工成本，而不是只看 token 单价。
+- 观察团队是否愿意维护 repo-specific routing policy。
+- 测试 receipt 是否能减少 PR reviewer 对 AI 生成代码的不信任。
+
+成立信号不是“省了 30% API 费”。更硬的信号是：团队愿意把 router 设成默认入口，并把高风险任务策略写进 repo。
+
+## 商业化路径
+
+1. **开源本地 proxy。** 支持少数高频 agent 和 provider，建立信任。
+2. **团队路由策略。** repo、branch、任务类型、文件路径、风险等级对应不同模型和预算。
+3. **CI / PR receipt。** AI 生成 PR 自动附上模型路由、fallback、测试和人工接管证据。
+4. **成本与质量矩阵。** 每个团队自己的 model-task fit matrix，而不是通用 benchmark。
+5. **企业私有部署。** SSO、provider key vault、审计、采购报表、模型白名单和内网部署。
+
+## 反例 / 风险
+
+1. **平台会内置基础 fallback。** Anthropic、OpenAI、Cursor、Google 可能把“限额后换模型”做掉。独立产品要赢在跨 provider、团队策略、repo 级矩阵和 receipt。
+
+2. **便宜模型可能制造假省钱。** 如果低价模型多次失败、改坏代码、增加 review 时间，总成本反而更高。router 必须看 completion cost，不只看 token price。
+
+3. **状态切换很难。** 长会话里的隐含计划、工具结果和文件变更不容易压成 handoff context。做不好就会让第二个模型接错任务。
+
+4. **安全边界不能乱放权。** 低价模型或第三方 provider 不应自动接触密钥、生产数据、支付、数据库写操作。策略层必须默认保守。
+
+5. **过度路由会增加认知负担。** 如果产品让开发者每天调 50 个模型参数，它就变成新的 decision fatigue。默认策略必须足够好。
+
+## 可验证指标
+
+- 限额或 provider 故障导致的中断次数是否下降。
+- 单任务 total completion cost 是否下降，而不是单价下降。
+- 通过测试的任务比例是否不低于 baseline。
+- 低价模型 step 的人工返工率。
+- fallback handoff 后一次成功率。
+- receipt 被贴进 PR / issue /团队周报的比例。
+- 团队是否愿意维护 repo-specific policy。
+- 30 天后 router 是否仍是默认 agent 入口。
+
+## 来源
+
+- Product Hunt：Edgee Fallback Models，定位 “Claude Code that never stops”：[https://www.producthunt.com/products/edgee](https://www.producthunt.com/products/edgee)
+- HN：DeepSeek Reasonix 讨论，高热度 coding-agent / 低成本模型信号：[https://news.ycombinator.com/item?id=48257930](https://news.ycombinator.com/item?id=48257930)
+- DeepSeek Reasonix 官方页：DeepSeek-native terminal coding agent，强调 prefix-cache、MCP、plan mode 和低成本长会话：[https://esengine.github.io/DeepSeek-Reasonix/](https://esengine.github.io/DeepSeek-Reasonix/)
+- Stack Overflow Blog：Coding agents are giving everyone decision fatigue：[https://stackoverflow.blog/2026/05/21/coding-agents-are-giving-everyone-decision-fatigue/](https://stackoverflow.blog/2026/05/21/coding-agents-are-giving-everyone-decision-fatigue/)
+- GitHub：deepclaude，用 Claude Code agent loop 接 DeepSeek / OpenRouter / Anthropic-compatible backend：[https://github.com/aattaran/deepclaude](https://github.com/aattaran/deepclaude)
+- GitHub：OpenSquilla，token-efficient AI agent：[https://github.com/opensquilla/opensquilla](https://github.com/opensquilla/opensquilla)
+- Product Hunt：Google Antigravity CLI，coding agents from terminal：[https://www.producthunt.com/products/google-antigravity](https://www.producthunt.com/products/google-antigravity)
+
+## 后续跟踪点
+
+- Edgee / deepclaude 这类工具是否从个人省钱走向团队策略。
+- Coding agent 平台是否开始开放原生 fallback hook。
+- 低价模型用于 coding 子任务时，真实返工成本如何计算。
+- 团队是否把模型路由 receipt 作为 AI PR 的默认证据。

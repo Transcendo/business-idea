@@ -6,6 +6,7 @@
     "cursor-anysphere",
     "ai-coding-agent-control-plane",
     "ai-coding-token-cost-profiler",
+    "coding-agent-fallback-model-router",
     "ai-app-unit-economics-ledger",
     "agent-virtual-filesystem-layer",
     "agent-codebase-retrieval-compression-layer",
