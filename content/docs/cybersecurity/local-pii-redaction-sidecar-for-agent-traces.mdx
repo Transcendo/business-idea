@@ -1,0 +1,229 @@
+---
+title: Local PII Redaction Sidecar for Agent Traces
+description: Agent、support copilot 和 computer-use 工作流开始吞日志、截图、工单和浏览器轨迹后，新机会不是再做一个隐私口号，而是在上下文进入模型、trace 平台或工单系统前，用本地 sidecar 生成可审查的脱敏证据。
+---
+
+# Local PII Redaction Sidecar for Agent Traces
+
+## 一句话判断
+
+Agent 进入真实业务之后，隐私风险从“用户会不会把敏感信息贴进聊天框”升级成了另一个问题：系统会自动把截图、日志、工单、网页、数据库片段和运行轨迹塞进模型上下文。
+
+这个缺口不适合用一页合规说明解决。
+
+更像一个本地 sidecar：任何上下文进 LLM、LangSmith、Langfuse、support copilot 或 agent trace 之前，先做 PII 检测、遮蔽、例外审批和 redaction receipt。
+
+## 公开信号
+
+- Reddit r/LocalLLaMA 出现 `New local model reaching near frontier on PII removal at 9 ms CPU inference` 讨论，本地低延迟 PII 移除正在从研究/模型能力变成可产品化模块：[Reddit thread](https://www.reddit.com/r/LocalLLaMA/comments/1tnqk4h/new_local_model_reaching_near_frontier_on_pii/)
+- Microsoft Presidio 是开源 PII 检测、脱敏、遮蔽、匿名化框架，支持文本、图片和结构化数据。GitHub API 本轮显示 `microsoft/presidio` 约 8.3k stars，并且 2026-05-26 仍有更新：[microsoft/presidio](https://github.com/microsoft/presidio)
+- Presidio 官方文档列出多类 supported entities，说明 PII 不是一个正则表达式能吃完的问题，而是跨姓名、电话、邮箱、地址、账号、证件、金融字段的实体识别工程：[Presidio supported entities](https://microsoft.github.io/presidio/supported_entities/)
+- LangSmith 已经有 mask inputs / outputs 的文档，说明 LLM observability 平台自己也承认 trace 里会出现敏感输入输出：[LangSmith mask inputs and outputs](https://docs.langchain.com/langsmith/mask-inputs-outputs)
+- Langfuse 也把 masking 做成 tracing feature。GitHub API 本轮显示 `langfuse/langfuse` 约 27.9k stars，trace/observability 已经是 agent 应用的默认基础设施之一：[Langfuse masking](https://langfuse.com/docs/tracing-features/masking)
+- Product Hunt 本轮出现 Yansu（`AI that learns how you work and turns it into software`）和 Fred（`AI-orchestrated UX research with behavioural tracking`）这类“学习工作流/行为追踪”的新品信号。它们不是隐私产品，但说明 AI workflow capture 正在扩散，敏感轨迹会更多：[Yansu](https://www.producthunt.com/products/yansu) / [Fred](https://www.producthunt.com/products/fred-the-uxr-shepherd)
+
+## 用户痛点
+
+团队想用 AI 处理真实工作，但真实工作里到处是 PII。
+
+客服工单有姓名、手机号、地址、订单号。
+
+开发日志有邮箱、user id、session id、内部 URL、错误栈和数据库字段。
+
+Computer-use agent 会录屏、截网页、读表单、访问后台。
+
+UX research 工具会记录用户行为、访谈原文和可识别片段。
+
+问题不只是“泄露给模型供应商”。更麻烦的是 trace 会被留存在 observability、eval、debug、support、notebook、工单系统和团队聊天里。
+
+一次泄露，会从一次 prompt 变成多处副本。
+
+## AI-native wedge
+
+输入不是“请帮我脱敏一段文本”。
+
+真正的 wedge 是：agent trace、support ticket、截图、日志 bundle 或 browser session 进入系统前，本地 sidecar 自动拦截。
+
+输出四件东西：
+
+- `redacted-context.jsonl`：可送进模型或 trace 平台的脱敏上下文
+- `redaction-map.local.json`：只存在本机/客户环境的映射表，用于人工复原和审计
+- `redaction-receipt.md`：遮蔽了哪些字段、保留了哪些字段、为什么保留
+- `exceptions.yaml`：团队批准的保留规则，比如内部 ticket id 可以保留，手机号必须遮蔽
+
+这不是简单敏感词过滤。
+
+AI 压缩的是人工检查上下文、手动涂黑截图、决定哪些字段能进模型的反复劳动。
+
+## 为什么现在热
+
+### 1. Agent trace 正在变成默认生产资料
+
+过去只有 prompt 和 response。
+
+现在有 tool call、screen recording、DOM、shell output、browser history、ticket text、RAG chunk、eval replay。
+
+越是想让 agent 可观测、可复盘、可评测，越会记录更多敏感上下文。
+
+### 2. Observability 平台需要数据，但客户怕上传原文
+
+LangSmith、Langfuse 这类平台的价值来自 trace。
+
+但企业客户不愿把原始客户信息、内部日志和业务数据原样传出去。
+
+平台内置 masking 能处理一部分问题，但很多公司会要求在数据离开设备/私有网络前就完成脱敏。
+
+### 3. 本地模型让实时脱敏成本下降
+
+Reddit 信号里的 9ms CPU PII removal 不是单独证明一个产品成立，但它说明方向很清楚：PII 检测不一定非要走云 API。
+
+如果本地低延迟足够好，sidecar 可以插进代理、CLI、浏览器扩展、support webhook、OpenTelemetry collector。
+
+### 4. 合规不是唯一卖点，采用 AI 的心理门槛才是
+
+很多团队不是完全不能用 AI。
+
+他们是不知道怎样证明“我们没有把客户 PII 乱扔进模型和 trace”。
+
+redaction receipt 能把这件事从口头承诺变成可检查材料。
+
+## 为什么用户会来
+
+第一类用户是客服、医疗、金融、法律、B2B SaaS ops。
+
+他们想让 AI 总结工单、排查日志、生成回复，但一看到 raw ticket 或 raw log 要进模型就卡住。
+
+第二类用户是 agent builder。
+
+他们需要 trace 做调试和 eval，但不想在 demo 或客户安全审查里暴露真实数据。
+
+第三类用户是安全/合规团队。
+
+他们不一定关心哪个模型最好，他们关心：数据进模型之前有没有拦截层？有没有证据？有没有默认本地？
+
+## 为什么用户会留下
+
+PII 脱敏不是一次性动作。
+
+留存来自持续运行：
+
+- 每张新工单都要脱敏
+- 每次 agent run 都会产生 trace
+- 每次 eval replay 都会重用上下文
+- 每个新字段、新页面、新日志格式都会带来漏检风险
+- 每个客户可能有不同保留规则
+
+如果 sidecar 成为 AI 工作流的入口，就会像日志 agent、EDR agent 或 OpenTelemetry collector 一样常驻。
+
+## 为什么会传播
+
+传播单元不是“我们很重视隐私”。
+
+是三种可截图材料：
+
+- `Before / after redaction`：一眼能看到敏感字段被遮蔽
+- `Redaction receipt`：能发给安全审查、客户和内部审批
+- `AI adoption readiness card`：证明这个团队可以在某类数据上安全试点 AI
+
+对开发者社区，开源 CLI 的 before/after 效果很容易传播。
+
+对企业，receipt 能进入采购和安全问卷。
+
+## 谁付费
+
+开源或免费层可以做本地 CLI / proxy，吸引开发者和小团队。
+
+付费点在企业控制面：
+
+- 团队级 redaction policy
+- 私有部署和本地模型包
+- 多模态脱敏：截图、PDF、网页、日志、表格
+- 与 LangSmith、Langfuse、OpenTelemetry、Zendesk、Intercom、Slack、Datadog 的连接器
+- false negative review queue
+- 审计导出和客户安全包
+
+真正付费的是“让敏感业务数据进入 AI 工作流前可控”。
+
+## MVP 实验
+
+### MVP 1：agent trace 本地代理
+
+只接三个入口：
+
+- OpenAI / Anthropic compatible proxy
+- LangSmith / Langfuse trace export hook
+- 本地 JSONL / log bundle CLI
+
+输出脱敏后的 trace，加本地 receipt。
+
+目标用户是已经在跑 agent eval 或 LLM observability 的小团队。
+
+### MVP 2：support ticket redaction webhook
+
+接 Zendesk / Intercom / Linear / GitHub issue 的 webhook。
+
+新工单进入 AI summary 前，先生成：
+
+- 脱敏版 ticket
+- 保留字段说明
+- 需要人工确认的疑似字段
+- 可粘贴到安全审查的 receipt
+
+不要一开始做全渠道客服平台。先证明“现有客服系统 + AI summary”前面的脱敏层有价值。
+
+### MVP 3：screenshot / browser-session redaction
+
+面向 computer-use agent 和 UX research 工具。
+
+先支持浏览器截图里的邮箱、手机号、姓名、地址、账号字段遮蔽。
+
+输出图片遮蔽层和文本 redaction map。
+
+这会比纯文本更难，但也更像未来 agent trace 的真实形态。
+
+## 可验证指标
+
+- PII recall：人工抽检中漏检率是否低到团队愿意放进真实流程
+- 延迟：单条 ticket / trace chunk 脱敏是否能控制在用户可接受范围
+- 误杀率：是否把业务关键 ID 全遮掉，导致 agent 无法完成任务
+- receipt 使用率：安全、客户、内部审批是否真的打开 receipt
+- 二次接入率：用户是否接入第二个数据源，比如先接 trace，再接 support ticket
+- AI 试点转化：因为有脱敏层，原本被卡住的 AI workflow 是否进入试点
+
+## 反例和风险
+
+### 1. PII 漏检会直接毁掉信任
+
+这个产品不能用“多数时候有效”糊弄。
+
+如果漏掉身份证、手机号、病历号或客户地址，用户会立刻撤掉。
+
+MVP 必须限定数据类型和场景，不要一上来承诺全世界所有 PII。
+
+### 2. 平台会内置 masking
+
+LangSmith、Langfuse、support copilot、LLM gateway 都可以做自己的 masking。
+
+创业公司要避开“平台 UI 里的一个开关”，抓跨平台、本地优先、多源入口和 receipt 审计。
+
+### 3. 过度脱敏会伤害 AI 效果
+
+如果把所有 ID、地点、时间、产品名都遮掉，agent 可能没法判断问题。
+
+好产品要做字段级策略：哪些必须遮蔽，哪些可以哈希，哪些可以保留，哪些需要人工批准。
+
+### 4. 安全产品会被信任问题反噬
+
+脱敏工具自己会看到最敏感的数据。
+
+默认本地、开源核心、可审计规则、客户自管映射表，比华丽 UI 更重要。
+
+## 来源
+
+- [Reddit r/LocalLLaMA: New local model reaching near frontier on PII removal at 9 ms CPU inference](https://www.reddit.com/r/LocalLLaMA/comments/1tnqk4h/new_local_model_reaching_near_frontier_on_pii/)
+- [Microsoft Presidio GitHub](https://github.com/microsoft/presidio)
+- [Microsoft Presidio supported entities](https://microsoft.github.io/presidio/supported_entities/)
+- [LangSmith mask inputs and outputs](https://docs.langchain.com/langsmith/mask-inputs-outputs)
+- [Langfuse masking](https://langfuse.com/docs/tracing-features/masking)
+- [Product Hunt: Yansu](https://www.producthunt.com/products/yansu)
+- [Product Hunt: Fred](https://www.producthunt.com/products/fred-the-uxr-shepherd)

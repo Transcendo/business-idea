@@ -2,6 +2,7 @@
   "title": "网络安全",
   "pages": [
     "index",
+    "local-pii-redaction-sidecar-for-agent-traces",
     "agent-database-access-firewall",
     "agent-dev-machine-exposure-scanner",
     "agent-execution-layer-security-sandbox",

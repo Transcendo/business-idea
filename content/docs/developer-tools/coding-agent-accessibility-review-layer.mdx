@@ -1,0 +1,211 @@
+---
+title: Coding Agent Accessibility Review Layer
+description: AI coding agent 正在批量生成前端和文档，但它们默认会漏掉键盘导航、ARIA、对比度、焦点状态和屏幕阅读器体验。机会不是再做一个通用代码审查器，而是在 agent PR 进入人工 review 前，给每个 UI diff 生成可复查的 accessibility receipt。
+created: 2026-05-26
+tags:
+  - ai-coding
+  - accessibility
+  - developer-tools
+  - frontend
+  - qa
+---
+
+# Coding Agent Accessibility Review Layer
+
+## 一句话判断
+
+AI coding agent 会让不可访问 UI 的产量变高。
+
+机会不是喊“让模型更懂无障碍”，而是在 agent 生成 UI、文档、组件、PR 后，自动跑 WCAG / keyboard / screen-reader / contrast / focus 检查，并把问题压成开发者能修、reviewer 能放行、团队能追责的 accessibility receipt。
+
+## 赛道 / 产品信号
+
+这条线索不是凭空想的。
+
+- Community Access 的 `accessibility-agents` 已经把问题写得很直：AI coding tools generate inaccessible code by default，会漏 ARIA、键盘导航、对比度和屏幕阅读器场景。仓库描述面向 Claude Code、GitHub Copilot、Claude Desktop，当前 GitHub API 显示 283 stars。
+- 这个项目不是单一 prompt。README 里写到 79 个 specialized agents，覆盖 web、document、GitHub workflow、developer tools 等团队，还明确提醒 AI 不能替代 VoiceOver、NVDA、JAWS 和键盘测试。
+- W3C 的 WCAG 2 是网页可访问性国际标准，覆盖 WCAG 2.0、2.1、2.2。它给了产品可执行的标准底座，而不是只靠“看起来还行”。
+- Deque 的 `axe-core` 是成熟的 automated web UI accessibility engine，GitHub API 显示 7,186 stars。说明自动化检测本身不是新事物，新缺口在于把检测嵌进 AI coding agent 的工作流。
+- Playwright MCP 这类 browser automation / agent 工具已经很热，GitHub API 显示 33,012 stars。AI agent 更容易操作浏览器，也更容易在不懂 a11y 的情况下生成和修改真实 UI。
+
+所以创业机会不在“做第 N 个 accessibility scanner”。真正机会在：**AI-generated UI diff 的无障碍发布闸。**
+
+## 用户痛点是什么
+
+痛点很具体：
+
+1. **agent 生成 UI 很快，错误也很快。** 一个产品经理让 agent 改表单、弹窗、导航、图表，几分钟就能开 PR。但它可能没有键盘路径、焦点陷阱、ARIA label，也可能把按钮做成不可读的 div。
+2. **人工 review 很少系统查 a11y。** 工程师通常看功能、样式、类型、测试。除非团队有强规范，否则无障碍问题会到上线后才被发现。
+3. **通用 lint 太碎。** axe、eslint、storybook、manual QA 都有价值，但 AI PR 里 reviewer 需要的是“这次 agent 改动哪里伤害了哪些用户，怎么修”。
+4. **企业有合规和品牌风险。** 金融、教育、政府、医疗、招聘、电商、SaaS 都不想因为 AI 生成的 UI 破坏 accessibility baseline。
+5. **残障用户受伤害不是抽象 KPI。** 屏幕阅读器用户、键盘用户、低视力用户会直接卡在注册、支付、搜索、提交表单这些关键路径。
+
+这不是“道德正确所以要做”。这是 AI coding 进入前端生产后的质量闸口。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户把 GitHub PR、agent session 或本地 diff 接进工具；每当 coding agent 改 UI / Markdown / PDF / docs，系统在 60 秒内返回 accessibility receipt：阻断项、警告项、证据截图、DOM 节点、WCAG 条款、修复建议和复测结果。**
+
+第一版只做三类输入：
+
+- PR diff：识别新增/修改的 React、Vue、HTML、CSS、Markdown、PDF 生成模板。
+- browser check：用 Playwright 打开关键页面，抓 DOM、截图、accessibility tree、键盘路径。
+- design/component context：读取 Storybook、组件库、design tokens、已有 a11y baseline。
+
+第一版只做五类输出：
+
+- `a11y-receipt.md`：贴进 PR 的人工可读报告。
+- `a11y-receipt.json`：CI 可读，支持 warn / block。
+- failing selectors：具体 DOM 节点、组件名、文件行号。
+- repair prompt：给 coding agent 的最小修复指令。
+- manual test checklist：只列必须人工测的 VoiceOver / NVDA / keyboard 场景。
+
+不要上来做完整 compliance 平台。入口应该更窄：**agent-generated UI diff 的无障碍 release gate。**
+
+## AI 是否真的压缩任务
+
+能压缩，但边界要清楚。
+
+以前：
+
+- reviewer 打开 agent PR。
+- 猜哪些页面受影响。
+- 手动跑本地页面。
+- 用 axe / browser devtools / screen reader / keyboard 逐项查。
+- 再把问题写成 reviewer comment。
+- agent 修完后还要复测。
+
+现在：
+
+- 系统从 diff 推断受影响页面和组件。
+- 自动跑静态规则、浏览器检查、截图和 accessibility tree。
+- LLM 只负责把证据整理成可修的说明，不负责凭空判断。
+- agent 根据 repair prompt 修一次。
+- CI 复测并更新 receipt。
+
+AI 压缩的是“从散落工具输出到可行动 review 意见”的中间劳动。底层判断必须由 WCAG、axe、DOM、键盘路径和人工 spot check 兜住。
+
+## 为什么现在
+
+- Coding agent 正在从补全代码变成开 PR。前端页面、表单、组件、文档会被批量生成。
+- 企业开始把 agent 接进真实仓库后，质量风险从“代码丑”变成“用户流程坏掉”。
+- Accessibility 传统上依赖专人 review，但 agent PR 数量会让专人被淹没。
+- `accessibility-agents` 这种开源项目出现，说明社区已经在把无障碍知识包装成 agent 可调用的检查和修复角色。
+- AI 生成 UI 的传播很快，坏案例也很容易传播。一个“agent 生成的页面屏幕阅读器完全读不了”的截图，比普通 bug 更伤品牌。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+团队发现 agent PR 让 modal、form、nav、chart 或 landing page 的 a11y 退化。这个问题肉眼不一定能看出来，但一旦被用户或法务指出，代价很高。
+
+**为什么留：**
+
+只要团队持续用 Cursor、Claude Code、Copilot、Codex、Devin、内部 agent 写前端，UI diff 就持续出现。每个 PR 都需要一个轻量闸口。
+
+**为什么传播：**
+
+传播物不是“我们做无障碍”。传播物是一张 receipt：
+
+- `Agent changed checkout modal. Keyboard focus cannot reach submit button.`
+- `Button has no accessible name. Screen reader announces blank.`
+- `Color contrast failed WCAG AA on pricing CTA.`
+- `Fix prompt generated; CI passed after repair.`
+
+这种卡片适合贴到 PR、Slack、GitHub issue、HN、Reddit。它比“AI 代码质量平台”更具体。
+
+**谁付费：**
+
+早期个人开发者可能只用免费 CLI。付费方是有前端质量压力的 SaaS 团队、电商、金融、教育、政府供应商、设计系统团队、platform engineering 团队。付费理由是减少 a11y 返工、降低合规风险、让 AI PR 更快过 review。
+
+## MVP 实验
+
+### 7 天 MVP
+
+做一个 GitHub App + CLI：
+
+```bash
+a11y-agent-gate scan-pr 123
+a11y-agent-gate run http://localhost:3000/pr-preview
+a11y-agent-gate receipt last
+```
+
+只支持 React / Next.js 项目。
+
+只测三类高频页面：
+
+- 登录 / 注册 / checkout / lead form。
+- dashboard table / filter / modal。
+- marketing landing page / pricing page。
+
+只做八类检查：
+
+- 可聚焦元素没有 accessible name。
+- button / link / input 语义错误。
+- keyboard tab 顺序断裂。
+- modal focus trap 异常。
+- form label / error message 关联错误。
+- color contrast 不达 WCAG AA。
+- image / icon alt 异常。
+- heading hierarchy 和 landmark 混乱。
+
+输出 PR comment：
+
+1. 哪个文件 / 组件 / DOM 节点有问题。
+2. 对应 WCAG 条款。
+3. 用户会怎么卡住。
+4. 最小修复 diff 或 agent repair prompt。
+5. 复测命令。
+
+### 30 天验证
+
+- 找 20 个重度使用 coding agent 的前端团队。
+- 免费扫描最近 50 个 agent PR。
+- 统计每 100 个 UI diff 中发现多少 a11y regression。
+- 看 receipt 是否能让 agent 一次修复成功。
+- 记录 reviewer 是否愿意把它设成 required check。
+
+## 商业化路径
+
+1. **开源 CLI。** 免费扫 PR diff 和本地 preview，输出 `a11y-receipt.md`。
+2. **团队版 GitHub App。** 按 repo 或 seat 收费，支持 required check、baseline、allowlist、历史趋势。
+3. **Design system integration。** 接 Storybook、tokens、组件库规范，把团队自定义组件约束加入检查。
+4. **Agent repair loop。** 给 Claude Code、Codex、Cursor、Copilot 生成可执行 repair prompt，并记录修复成功率。
+5. **Compliance evidence pack。** 面向金融、教育、政府、医疗、招聘等行业，导出审计报告和 release evidence。
+
+定价不要按“扫描次数”讲，应该按“AI-generated UI diff 被保护的数量”和“required check 覆盖的 repo”讲。
+
+## 反例 / 风险
+
+1. **现有工具会吸收一部分。** axe、Lighthouse、GitHub、Vercel、Storybook、Playwright 都能补功能。创业公司要抓 agent-native receipt 和修复回路。
+2. **自动化覆盖有限。** 很多屏幕阅读器体验必须人工测。产品不能假装 100% 自动合规。
+3. **误报会毁体验。** 如果每个 PR 都刷 30 条低价值警告，团队会关掉它。必须按用户路径和严重度排序。
+4. **小团队可能不付费。** 没有合规压力的小团队会把 a11y 当“以后再说”。早期要找有品牌、行业或采购压力的团队。
+5. **agent 修复可能越修越乱。** 修 a11y 可能破样式、破组件 API、破测试。repair loop 必须有复测和回滚。
+
+## 可验证指标
+
+- 扫描到的 agent-generated UI PR 数量。
+- 每 100 个 UI diff 的严重 a11y regression 数。
+- receipt 被 reviewer 采纳并要求修复的比例。
+- agent repair prompt 一次修复成功率。
+- required check 开启率。
+- 误报关闭率和平均放行时间。
+- 30 天内留存：团队是否继续让每个 agent PR 跑 gate。
+- 付费转化：团队版 $20-50 / seat / month，或按 repo / protected UI route 收费。
+
+## 来源
+
+- GitHub：Community Access `accessibility-agents`，面向 Claude Code、GitHub Copilot、Claude Desktop 的 accessibility review agents；README 写到 AI coding tools 默认会生成 inaccessible code，并覆盖 79 个 specialized agents：[https://github.com/Community-Access/accessibility-agents](https://github.com/Community-Access/accessibility-agents)
+- W3C：WCAG 2 Overview，解释 WCAG 2.0、2.1、2.2 作为网页可访问性标准：[https://www.w3.org/WAI/standards-guidelines/wcag/](https://www.w3.org/WAI/standards-guidelines/wcag/)
+- GitHub：Deque `axe-core`，automated Web UI accessibility testing engine：[https://github.com/dequelabs/axe-core](https://github.com/dequelabs/axe-core)
+- GitHub：Microsoft `playwright-mcp`，Playwright MCP server，说明 browser automation 正在进入 agent 工具链：[https://github.com/microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp)
+
+## 后续跟踪点
+
+- `accessibility-agents` 是否出现真实 PR case study、团队使用反馈或 Copilot / Claude Code 集成模板。
+- AI coding 平台是否内置 a11y regression gate。
+- Design system 团队是否愿意把自定义组件规范暴露给 agent。
+- 企业采购是否把“AI-generated UI accessibility evidence”列进上线要求。

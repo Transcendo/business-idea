@@ -181,6 +181,8 @@ export const contents: Content[] = [
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-26", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Local PII Redaction Sidecar", href: "/docs/cybersecurity/local-pii-redaction-sidecar-for-agent-traces", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
+			{ title: "Coding Agent Accessibility Review", href: "/docs/developer-tools/coding-agent-accessibility-review-layer", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "Stem-Controlled AI Music", href: "/docs/consumer-ai/stem-controlled-ai-music-workspace", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "Local-First Video Brief", href: "/docs/consumer-ai/local-first-video-brief-workspace", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "Self-Hosted Agent Runtime", href: "/docs/ai-agents/self-hosted-agent-runtime", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
@@ -390,6 +392,7 @@ export const contents: Content[] = [
 			{ title: "Agent Codebase Retrieval Compression", href: "/docs/developer-tools/agent-codebase-retrieval-compression-layer", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "Repo Preference Pack", href: "/docs/developer-tools/repo-preference-pack-for-coding-agents", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "Design System Extraction Layer", href: "/docs/developer-tools/design-system-extraction-layer-for-coding-agents", icon: () => <Image className="w-4 h-4 text-current" /> },
+			{ title: "Coding Agent Accessibility Review", href: "/docs/developer-tools/coding-agent-accessibility-review-layer", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "Agent-Readable Docs Readiness", href: "/docs/developer-tools/agent-readable-docs-readiness-layer", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "Agent-Native Compiler Contract", href: "/docs/developer-tools/agent-native-compiler-contract-layer", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "MCP Cross-Client Testing", href: "/docs/developer-tools/mcp-cross-client-testing-layer", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
@@ -455,6 +458,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/cybersecurity", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Local PII Redaction Sidecar", href: "/docs/cybersecurity/local-pii-redaction-sidecar-for-agent-traces", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Database Access Firewall", href: "/docs/cybersecurity/agent-database-access-firewall", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Dev-Machine Exposure Scanner", href: "/docs/cybersecurity/agent-dev-machine-exposure-scanner", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Execution-Layer Security Sandbox", href: "/docs/cybersecurity/agent-execution-layer-security-sandbox", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
