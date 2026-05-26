@@ -181,6 +181,7 @@ export const contents: Content[] = [
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-26", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Stem-Controlled AI Music", href: "/docs/consumer-ai/stem-controlled-ai-music-workspace", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "Local-First Video Brief", href: "/docs/consumer-ai/local-first-video-brief-workspace", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "Self-Hosted Agent Runtime", href: "/docs/ai-agents/self-hosted-agent-runtime", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-25", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
@@ -296,6 +297,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/consumer-ai", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Stem-Controlled AI Music", href: "/docs/consumer-ai/stem-controlled-ai-music-workspace", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "Local-First Video Brief", href: "/docs/consumer-ai/local-first-video-brief-workspace", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "Agentic Commerce Discovery", href: "/docs/consumer-ai/agentic-commerce-product-discovery", icon: () => <Search className="w-4 h-4 text-current" /> },
 			{ title: "Perplexity", href: "/docs/consumer-ai/perplexity", icon: () => <Search className="w-4 h-4 text-current" /> },
