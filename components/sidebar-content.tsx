@@ -180,6 +180,9 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "2026-05-26", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Local-First Video Brief", href: "/docs/consumer-ai/local-first-video-brief-workspace", icon: () => <Headphones className="w-4 h-4 text-current" /> },
+			{ title: "Self-Hosted Agent Runtime", href: "/docs/ai-agents/self-hosted-agent-runtime", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-25", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "Agent Identity Policy Runtime", href: "/docs/cybersecurity/agent-identity-policy-runtime", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Coding Agent Fallback Router", href: "/docs/developer-tools/coding-agent-fallback-model-router", icon: () => <Activity className="w-4 h-4 text-current" /> },
@@ -293,6 +296,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/consumer-ai", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Local-First Video Brief", href: "/docs/consumer-ai/local-first-video-brief-workspace", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "Agentic Commerce Discovery", href: "/docs/consumer-ai/agentic-commerce-product-discovery", icon: () => <Search className="w-4 h-4 text-current" /> },
 			{ title: "Perplexity", href: "/docs/consumer-ai/perplexity", icon: () => <Search className="w-4 h-4 text-current" /> },
 		],
@@ -357,6 +361,7 @@ export const contents: Content[] = [
 			{ title: "Agentic HTML Deliverable Compiler", href: "/docs/ai-agents/agentic-html-deliverable-compiler", icon: () => <Image className="w-4 h-4 text-current" /> },
 			{ title: "Voice Agent QA Scorecard", href: "/docs/ai-agents/voice-agent-qa-scorecard", icon: () => <Headphones className="w-4 h-4 text-current" /> },
 			{ title: "Browser Agent Execution Harness", href: "/docs/ai-agents/browser-agent-execution-harness", icon: () => <Globe className="w-4 h-4 text-current" /> },
+			{ title: "Self-Hosted Agent Runtime", href: "/docs/ai-agents/self-hosted-agent-runtime", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "Statewright Agent State Machine Guardrails", href: "/docs/ai-agents/statewright-agent-state-machine-guardrails", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Agent Traffic Analytics Layer", href: "/docs/ai-agents/agent-traffic-analytics-layer", icon: () => <Activity className="w-4 h-4 text-current" /> },
 			{ title: "Decagon", href: "/docs/ai-agents/decagon", icon: () => <Headphones className="w-4 h-4 text-current" /> },

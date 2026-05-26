@@ -1,0 +1,160 @@
+---
+title: Self-Hosted Agent Runtime
+description: Agent 不会只停在 IDE、浏览器插件或聊天框里。新的缺口是把个人助手和工作型 worker 封成可安装、可计划、可记忆、可审批、可审计的自托管运行时。
+created: 2026-05-26
+tags:
+  - ai-agents
+  - self-hosted
+  - agent-runtime
+  - workflow-automation
+---
+
+# Self-Hosted Agent Runtime
+
+## 一句话判断
+
+Agent 不会只停在 IDE、浏览器插件或聊天框里。新的缺口是把个人助手和工作型 worker 封成可安装、可计划、可记忆、可审批、可审计的自托管运行时。
+
+ClickHouse/Nerve 这个信号很有意思：它不是再做一个单点 agent demo，而是把 web UI、Telegram、cron、memory、skills、task management、worker mode、human approval 和 audit trail 放进同一个自托管 runtime。HN 上的讨论量不高，但方向本身值得跟踪，因为它戳中一个真实摩擦：agent 要长期有用，就不能只靠一次性聊天窗口。
+
+## 赛道 / 产品信号
+
+- Nerve README 直接把定位写成 “self-hosted AI agent runtime”，服务 personal assistants、autonomous workers 和中间形态。核心能力是 persistent memory、scheduled execution、task management、learnable skills、多渠道触达和 autonomous cron jobs。
+- Nerve 的 worker mode 更像一个任务型员工：用户给自然语言任务，系统研究任务、改写 `TASK.md`、创建 skills、配置 cron，再按 plan-approve-execute 循环运行。
+- 架构文档显示它不是插件式玩具，而是单进程 Python runtime：FastAPI gateway、agent engine、sources layer、cron service、SQLite + file store、Telegram / React Web UI、多 session 生命周期、session resume、channel mapping、orphan recovery。
+- Product Hunt 同一天能看到 Yansu、Unabyss、Pi Coding Agent Harness 这类产品：一个强调 “AI learns how you work and turns it into software”，一个强调 MCP-native context layer，一个强调 AI team 的编码 harness。信号分散，但都在指向同一件事：用户不想再手搓 prompt，他们想让 agent 记住上下文、接住流程、持续运行。
+- Reddit r/LocalLLaMA 上 “local agentic use”“local AI for legal drafting” 这类讨论说明本地/自托管不是小众洁癖。法律、研发、隐私敏感工作流里，用户确实不想把所有上下文交给云端黑盒。
+
+判断：这不是“个人 AI 助手又来了”。真正的机会是 agent operating shell：让一个 agent 长期住在用户自己的环境里，有身份、有任务、有记忆、有日程、有审批、有回放。
+
+## 用户痛点是什么
+
+用户不是缺少一个更会聊天的 bot。用户缺的是一个能长期接住事务的 agent 外壳。
+
+典型痛点：
+
+1. 一次性聊天没有连续性。今天让它整理 inbox，明天它忘了偏好、历史决策和上次卡在哪里。
+2. Agent 能力散在各处。IDE、浏览器、Telegram、cron、email、GitHub、文件系统各玩各的，用户要手动拼。
+3. 长任务缺少审批。真正有价值的任务会读文件、跑命令、改 PR、发通知、访问账号。没有 plan、approval、audit trail，用户不敢放权。
+4. 配置成本高。每个 workflow 都要重新写 prompt、接 tool、存 state、写 schedule。普通团队不会为了一个任务搭平台。
+5. 云端 agent 信任门槛高。法律、财务、客户支持、私人助理、研发代码库，都有数据边界和凭证问题。
+
+## AI-native wedge
+
+最小 wedge：
+
+用户用一句自然语言描述一个长期任务；系统在用户自己的环境里生成一个可运行 worker，包含任务文件、所需工具、执行计划、定时触发、人类审批点、运行日志和失败复盘。
+
+第一版不要做万能 agent OS。只做 3 个可落地 worker 模板：
+
+1. GitHub repo watcher：盯 CI、issue、PR，提出修复计划，等批准后改代码。
+2. Inbox / lead triage worker：每天扫邮件或表单，把线索分级，生成待办和回复草稿。
+3. Private research tracker：定时抓公开来源，维护本地知识库，输出带来源的判断卡。
+
+它压缩的任务不是“问 AI 一句话”，而是把重复的观察、整理、判断、提醒和低风险执行封成可复用 worker。
+
+## 为什么现在热
+
+- Agent SDK、MCP、tool calling、browser/computer-use 能力已经够用户拼出长任务，但缺一个普通人能安装和治理的 runtime。
+- Coding agent 和 workflow agent 从 demo 进入真实仓库后，session、resume、diff、approval、cron、memory 会变成基础设施问题。
+- 本地模型和隐私敏感行业推动自托管需求。不是所有上下文都适合放进 SaaS agent。
+- Telegram、Discord、Slack、email 这些消息入口证明用户愿意从对话里调度任务，但任务执行不能只停在聊天框。
+- Product Hunt 和 GitHub 上越来越多 agent harness、context layer、team coding agent 的小产品，说明市场正在从“单个智能按钮”转向“agent 生命周期管理”。
+
+## 为什么用户会来 / 留 / 传播 / 付费
+
+为什么来：
+
+用户已经有一个重复事务，但现有工具只能做一次性回答。比如每天看 CI、清 inbox、追公开信息源、做文档同步、监控竞品 release。
+
+为什么留：
+
+一旦 worker 记住偏好、任务边界、审批规则和历史失败，迁移成本会上升。长期记忆、日程、运行日志和技能库会变成粘性。
+
+为什么传播：
+
+传播单元不是“我有一个 agent”。更具体的是 worker run card：
+
+- `今天 CI watcher 找到 2 个 flaky test，1 个建议跳过，1 个建议修 fixture。`
+- `研究 worker 收了 12 条 AI infra 信号，3 条进入 A-review，0 条发布。`
+- `Inbox worker 拦下 7 封低优先邮件，生成 3 个可批准回复。`
+
+这种卡片可以进 Slack、Discord、飞书、GitHub issue 和个人日报。
+
+谁付费：
+
+早期付费方不是所有消费者，而是愿意为“长期任务外包”付钱的人：founder、独立开发者、AI-native agency、小团队工程负责人、研究员、运营负责人。收费可以按 worker 数、运行次数、托管/自托管支持、私有部署、审批与审计能力、连接器数量来收。
+
+## MVP 实验
+
+### 7 天 MVP
+
+只做一个 repo watcher worker。
+
+输入：GitHub repo、用户一句任务描述、允许读取的路径、允许执行的命令、必须审批的动作。
+
+输出：
+
+- `TASK.md`：任务边界、触发条件、审批规则。
+- `skills/`：仓库约定、测试命令、常见故障处理。
+- 定时任务：每天或每次 CI 失败后运行。
+- run card：发现了什么、建议做什么、需要谁批准、证据在哪里。
+- audit log：读了哪些文件、跑了哪些命令、改了哪些 diff。
+
+### 30 天验证
+
+找 10 个真实小团队，每队只接一个长期任务。
+
+验证问题：
+
+1. 用户是否能在 30 分钟内配置第一个 worker。
+2. Worker 连续 7 天是否能产出有用 run card。
+3. 用户是否批准过至少一次低风险执行。
+4. 用户是否愿意创建第二个 worker。
+5. 用户是否把 run card 转给团队成员。
+
+## 商业化路径
+
+1. 开源自托管 runtime，先拿开发者信任。
+2. 收托管控制台、远程 worker 管理、日志与通知费用。
+3. 收企业私有部署、SSO、权限、审计、密钥管理费用。
+4. 做 worker template marketplace：CI watcher、research watcher、support triage、finance ops、legal drafting assistant。
+5. 给 AI-native service agency 提供多客户隔离、审批和账单能力。
+
+## 反例 / 风险
+
+1. 这类产品容易变成“开源个人助理玩具”。如果没有高频任务和硬指标，用户装完就忘。
+2. 自托管降低信任门槛，也提高安装和维护门槛。MVP 必须把 first worker 配置压到 30 分钟内。
+3. Cron agent 很容易乱花 token、乱发通知、乱改东西。审批、预算、熔断和审计不是锦上添花，是底线。
+4. 通用 agent runtime 会被大厂和开源项目挤压。小团队更该从一两个 worker 模板切入。
+5. 私人助手长期记忆涉及隐私和人格边界。不要一上来卖“懂你的灵魂”，先证明它能安全地完成一个重复任务。
+
+## 可验证指标
+
+- 首个 worker 从任务描述到可运行需要多久。
+- 连续 7 天运行成功率。
+- 每次运行的人工审批率和批准率。
+- 用户是否读完 run card，并把它转发给团队。
+- Worker 建议被采纳的比例。
+- 第二个 worker 创建率。
+- 每个 worker 的 token 成本 / 产生的有效行动数。
+- 出错后能否定位到任务边界、工具失败、权限问题还是模型判断问题。
+
+## 来源
+
+- GitHub：ClickHouse/Nerve README，self-hosted AI agent runtime、persistent memory、scheduled execution、task management、skills、Telegram、cron jobs：[https://github.com/ClickHouse/nerve](https://github.com/ClickHouse/nerve)
+- GitHub：Nerve architecture，Gateway、Agent Engine、Sources Layer、Cron Service、SQLite + File Store、session resume、orphan recovery：[https://github.com/ClickHouse/nerve/blob/main/docs/architecture.md](https://github.com/ClickHouse/nerve/blob/main/docs/architecture.md)
+- GitHub：Nerve worker mode guide，TASK.md onboarding、skills、cron、plan-approve-execute loop：[https://github.com/ClickHouse/nerve/blob/main/docs/worker-guide.md](https://github.com/ClickHouse/nerve/blob/main/docs/worker-guide.md)
+- HN：Show HN: Nerve – self hosted runtime for AI agents，2026-05-25：[https://news.ycombinator.com/item?id=48272788](https://news.ycombinator.com/item?id=48272788)
+- Product Hunt：Yansu，AI learns how you work and turns it into software：[https://www.producthunt.com/products/yansu](https://www.producthunt.com/products/yansu)
+- Product Hunt：Unabyss - AI Context，MCP-native self-updating context layer：[https://www.producthunt.com/products/unabyss-ai-context](https://www.producthunt.com/products/unabyss-ai-context)
+- Product Hunt：Pi Coding Agent Harness for Teams，Harness to scale AI coding agents across teams：[https://www.producthunt.com/products/pi-coding-agent-harness-for-teams](https://www.producthunt.com/products/pi-coding-agent-harness-for-teams)
+- Reddit r/LocalLLaMA：Is Qwen3.6 current king for local agentic use?：[https://www.reddit.com/r/LocalLLaMA/](https://www.reddit.com/r/LocalLLaMA/)
+- Reddit r/LocalLLaMA：local AI for legal drafting / V100 cluster discussion：[https://www.reddit.com/r/LocalLLaMA/](https://www.reddit.com/r/LocalLLaMA/)
+
+## 后续跟踪点
+
+- Nerve 这类 runtime 是否会从个人助理扩展到团队 worker。
+- Product Hunt 上 agent harness/context layer 是否能拿到真实付费而不是 launch 流量。
+- 自托管 runtime 的安装成功率、长期运行稳定性和通知噪声控制。
+- 哪个 worker 模板最先付费：CI watcher、inbox triage、research tracker，还是 legal drafting assistant。

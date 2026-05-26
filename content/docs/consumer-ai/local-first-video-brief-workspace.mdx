@@ -1,0 +1,162 @@
+---
+title: Local-First Video Brief Workspace
+description: 视频摘要工具已经很多，新的机会不是再吐一段 summary，而是把下载、转写、时间戳证据、反驳点和可复查引用压成一个本地优先的研究 brief 工作流。
+created: 2026-05-26
+tags:
+  - consumer-ai
+  - local-first
+  - video-summarization
+  - research-workflow
+  - media-ai
+---
+
+# Local-First Video Brief Workspace
+
+一句话判断：长视频 AI 摘要的机会不在“帮我总结一下”，而在“把 3 小时视频变成可复查、可引用、可转发的证据包”。
+
+OpenBrief 这个信号值得看。它不是云端视频生成器，而是 Tauri 桌面端：导入本地音视频或视频链接，下载媒体，抽 transcript，生成 grounded summary，和媒体内容聊天，导出 reusable notes。HN 上的 Show HN 介绍也很直：它像 yt-dlp 加一层 AI GUI，本地下载，本地转写和语音生成，summary / chat 暂时 BYOK。
+
+这说明一个小但硬的痛点还没被彻底吃掉：研究者、投资人、学生、运营、创作者和播客重度用户并不只是“看不完视频”。他们需要把视频变成能写进笔记、报告、决策和内容脚本里的材料。
+
+## 赛道 / 产品信号
+
+- OpenBrief GitHub README 写明：桌面端、导入 URL 或本地音视频、下载媒体、转写、grounded summaries、chat with media、playlist、export notes。
+- HN Show HN 页面显示 2026-05-26 讨论，介绍文字强调 local AI transcription / voice generation、BYOK LLM、open source and free。
+- README 支持 Whisper、Parakeet、Qwen3-ASR；TTS 支持 Supertonic 3、Qwen3-TTS；LLM 支持 OpenAI、Anthropic、Gemini、OpenRouter DeepSeek。
+- 这不是孤立信号。yt-dlp、Whisper、本地桌面壳、BYOK LLM 和 markdown 笔记链路已经成熟，创业空间开始从“能不能摘要”转向“摘要能不能成为证据工作流”。
+
+## 用户痛点
+
+用户不缺视频，也不缺泛摘要。真正痛的是：
+
+- 长视频信息密度不稳定，用户不知道哪几分钟值得看。
+- 普通摘要经常没有时间戳，无法复查来源。
+- 做研究、投资 memo、课程笔记、竞品分析时，摘要必须能回到原片段。
+- 一批视频之间的重复观点、冲突观点、证据强弱很难手动整理。
+- 云端视频工具对私有课程、访谈、内部培训、付费内容的隐私和版权边界很敏感。
+
+所以用户要的不是“AI 看视频”，而是“帮我把视频变成可引用材料”。
+
+## AI-native wedge
+
+最小 wedge 可以很窄：
+
+> 用户输入 3 个公开视频或本地文件；系统输出一个带时间戳证据、主题摘要、关键片段、反驳点、引用卡和导出笔记的研究 brief。
+
+这比普通 summarizer 更像工作流，因为 AI 压缩的是一整串任务：下载 / 导入 → 转写 → 分段 → 摘要 → 找证据 → 生成引用 → 对比多视频 → 导出。
+
+关键不是聊天框。聊天只能作为二次追问入口。核心产物应该是 brief：可读、可复查、可转发。
+
+## 为什么现在热
+
+1. **视频知识爆炸。** YouTube、播客、课程、直播回放、会议录屏都在变成知识源，但人类时间没变多。
+2. **本地模型足够可用。** Whisper、Parakeet、Qwen3-ASR 这类转写模型让“本地先处理”变得现实。
+3. **BYOK 降低早期成本。** 让用户带自己的 LLM key，可以先验证工作流价值，不必一开始扛完整推理账单。
+4. **研究和内容团队需要证据。** 投资、市场研究、创作脚本、课程学习都不能只靠一句 summary，必须能回放片段。
+5. **隐私和版权边界逼出 local-first。** 越是私人访谈、付费课程、内部培训，越难放心丢到陌生云服务。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+### 为什么来
+
+用户来，是因为他手里已经有一堆视频没时间看。一个 30 秒出初稿的 brief，比打开播放器硬啃 90 分钟更有诱惑力。
+
+### 为什么留
+
+留存不来自一次摘要，而来自本地媒体资料库：转写稿、时间戳、主题标签、历史 brief、跨视频搜索、导出模板。只要用户把视频资料沉淀进去，迁移成本就会上来。
+
+### 为什么传播
+
+传播单元不是产品广告，而是带证据的 brief：
+
+- “这 3 个访谈里，创始人都提到了同一个采购痛点。”
+- “我把 2 小时发布会压成 8 条带时间戳的产品变化。”
+- “这段课里真正有用的是 12:40 到 18:20。”
+
+这种卡片适合发给同事、同学、社群和客户。
+
+### 谁付费
+
+- 个人研究者：为 batch、长视频、导出格式、本地库付费。
+- 内容团队：为多视频 brief、脚本生成、素材证据库付费。
+- 投资 / 咨询 / 市场团队：为访谈、会议、公开视频的 evidence pack 付费。
+- 企业培训团队：为内部培训视频的私有部署、权限、检索和摘要模板付费。
+
+不要第一天卖“通用视频摘要”。更稳的是卖给有明确复用场景的人：研究、内容、培训、投资。
+
+## MVP 实验
+
+### MVP 1：公开视频研究包
+
+输入 3 个 YouTube /公开视频链接。
+
+输出：
+
+- 每个视频的 10 条时间戳 takeaways。
+- 跨视频主题聚类。
+- 支持 / 反对 / 不确定证据。
+- 可复制引用卡。
+- Markdown / Notion / Obsidian 导出。
+
+验证：找 20 个研究或内容用户，让他们用这个 brief 写一页 memo。对比手动看视频，记录完成时间、引用准确率、回看次数和是否愿意转发。
+
+### MVP 2：本地访谈 brief
+
+输入本地音视频文件。
+
+输出：访谈摘要、需求/抱怨/购买信号、原话引用、时间戳、待追问问题。
+
+验证：服务 5 个做用户访谈的团队，看他们是否愿意为“每场访谈自动成 evidence pack”付费。
+
+### MVP 3：课程 / 播客复习卡
+
+输入一批课程或播客。
+
+输出：知识点卡片、错题式复习问题、原片段回放链接、跨集主题索引。
+
+验证：看用户 7 天内是否回来复习第二次，而不是只生成一次摘要就走。
+
+## 商业化路径
+
+1. 免费桌面版：限制 batch、导出和模型连接。
+2. Pro：多视频项目、长视频、模板、Obsidian / Notion / Markdown 导出、本地库搜索。
+3. Team：共享资料库、评论、引用审核、团队模板、权限。
+4. Private / Enterprise：内部视频、培训资料、私有模型、SSO、审计日志。
+5. Vertical Pack：投资访谈、用户研究、课程学习、播客剪辑、销售培训，每个垂直场景卖不同模板。
+
+付费点不是“AI 总结一句话”，而是省下真实工作时间，并留下可复查证据。
+
+## 反例 / 风险
+
+1. **摘要工具太拥挤。** YouTube summary、浏览器插件、NotebookLM、Otter、Descript 都会夹击。必须靠证据工作流区分。
+2. **版权边界敏感。** 下载公开视频、付费课程和私有内容的规则不同，产品要给用户清楚边界，不能鼓励侵权。
+3. **时间戳不准会毁信任。** 证据包最怕引用错位。宁可少生成，也要可复查。
+4. **本地体验难做。** 下载、转码、转写、模型、GPU/CPU、队列、失败恢复都很脏。GUI 漂亮没用，稳定更重要。
+5. **云端巨头会压。** YouTube、Google、Microsoft、Notion、NotebookLM 都有入口优势。早期要避开泛摘要，抓专业 workflow。
+
+## 可验证指标
+
+- 3 个视频生成 first brief 是否低于 10 分钟。
+- 每条 takeaway 是否带可点击时间戳。
+- 用户是否回看证据片段，而不是只读 summary。
+- brief 是否被复制到 Obsidian / Notion / Docs。
+- 7 天内同一用户是否导入第二批视频。
+- 用户是否愿意为 batch、导出、团队库付费。
+- 引用错误率和转写错误率。
+- 一份 brief 是否真的减少 memo / 脚本 /研究笔记制作时间。
+
+## 结论
+
+Local-first video brief 的机会不是做更会吹的摘要，而是把视频变成证据材料。
+
+如果一个产品只能告诉用户“这个视频大概讲了什么”，它会被浏览器插件和大模型入口吃掉。更强的切口是服务一个具体工作：研究视频、访谈视频、课程视频、发布会视频。每次输出都要有时间戳、证据、反驳点和导出路径。
+
+早期创业要少碰“全网视频知识库”这种大词，先证明一个小场景：输入几段视频，输出一份用户真的会拿去写 memo、发同事、存进资料库的 brief。
+
+## 来源
+
+- GitHub：OpenBrief README，Tauri desktop app、video/audio import、local transcription、grounded summaries、chat with media、export notes：[https://github.com/tantara/openbrief](https://github.com/tantara/openbrief)
+- HN：Show HN: OpenBrief – Local-first video downloader/summarizer，2026-05-26：[https://news.ycombinator.com/item?id=48272393](https://news.ycombinator.com/item?id=48272393)
+- GitHub：yt-dlp，视频下载工具生态：[https://github.com/yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp)
+- OpenAI：Whisper speech recognition model：[https://github.com/openai/whisper](https://github.com/openai/whisper)
+- Tauri 文档：桌面应用框架：[https://tauri.app/](https://tauri.app/)

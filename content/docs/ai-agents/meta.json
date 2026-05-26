@@ -13,6 +13,7 @@
     "agentic-html-deliverable-compiler",
     "voice-agent-qa-scorecard",
     "browser-agent-execution-harness",
+    "self-hosted-agent-runtime",
     "statewright-agent-state-machine-guardrails",
     "agent-traffic-analytics-layer",
     "decagon",
