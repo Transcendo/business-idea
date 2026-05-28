@@ -1,0 +1,206 @@
+---
+title: Agent-Native Office File Runtime
+description: AI agent 已经能写代码、跑分析、生成草稿，但真正卡住交付的常常是 Word、Excel、PowerPoint。机会不是再做一个 Office 聊天机器人，而是把 docx / xlsx / pptx 变成 agent 可读、可写、可渲染、可复查的 runtime。
+created: 2026-05-28
+tags:
+  - ai-coding
+  - developer-tools
+  - office
+  - document-automation
+  - workflow-automation
+---
+
+# Agent-Native Office File Runtime
+
+## 一句话判断
+
+AI agent 现在最尴尬的断点，不是不会生成内容，而是生成完之后还过不了公司真实交付物这一关。
+
+很多团队最后还是要交 `.docx`、`.xlsx`、`.pptx`。
+不是因为大家保守，而是因为董事会 deck、销售报价单、客户周报、财务表、采购模板、标书附件、培训材料，本来就活在 Office 世界里。
+
+机会不是再做一个“问答式 Office 助手”。
+真正的机会是：**把 Office 文件本身做成 agent runtime，让模型能直接读、写、渲染、复查、回滚。**
+
+## 赛道 / 产品信号
+
+这条线不是空想。
+
+- OfficeCLI 的 README 直接把自己定义成 “the world's first and the best Office suite designed for AI agents”，主打 Word、Excel、PowerPoint 的读写和自动化，而且强调单一 binary、无 Office 安装、无依赖。
+- README 里最关键的一句不是“支持 Office 文件”，而是它内置 agent-friendly rendering engine，可以把 `.docx` / `.xlsx` / `.pptx` 渲染成 HTML 或 PNG。这个点很硬，因为它把 agent 的 `生成 → 预览 → 修正` 流程补上了。
+- Trendshift 当前把 OfficeCLI 归到 AI agent、MCP、document processing，并显示 5.3k GitHub stars。说明这不是冷门脚本，而是 agent builder 在追的热门基础层。
+- README 还展示了 AionUi 里用 OfficeCLI 生成 PowerPoint 的过程。这个信号说明它不是“办公自动化老工具”的新包装，而是在接 agent workflow。
+
+这和已有的 spreadsheet AI、HTML deliverable、文档总结工具都不一样。
+那些工具解决的是“分析”“展示”或“摘要”。
+这个方向解决的是：**AI 产出如何真正落到企业默认接受的文件格式里。**
+
+## 用户痛点是什么
+
+痛点很具体。
+
+1. **agent 会产出内容，但不会稳定交付公司文件。** 模型能写总结、做分析、列结构，但一到 PPT 母版、Excel 公式、Word 样式、批注、页眉页脚、图片布局，就很容易乱。
+2. **最后一公里还是人工苦工。** 分析可以让 AI 先做，最后还得有人把内容搬进 PowerPoint、改格式、调版式、导出截图、给老板过目。
+3. **现有脚本太碎。** Python 库、COM 自动化、LibreOffice、云 API、截图工具各干一段。工程师能拼，普通团队拼不动，agent 更拼不稳。
+4. **没有渲染就没有质量。** 只会写 XML 或对象树不够，agent 必须看到最终页面长什么样，才知道版式有没有炸。
+5. **付费买家不是“想玩 Office AI”。** 他们要的是周报、投标、销售材料、客户方案、运营报表、培训包按模板按时交付。
+
+所以这不是“办公软件里加个聊天框”。
+这是 AI 从草稿走到正式交付物的执行层。
+
+## AI-native wedge
+
+最小 wedge：
+
+**用户给模板、结构化数据和一句目标；系统在 60 秒内返回可打开的 `.docx` / `.xlsx` / `.pptx`，外加渲染预览、修改 diff 和失败说明。**
+
+第一版只做三类输入：
+
+- 模板文件：公司现有 deck、报价单、报表、周报模板。
+- 结构化数据：CSV、数据库导出、JSON、指标表。
+- 自然语言目标：这份文件给谁看、要强调什么、哪些页必须保留。
+
+第一版只做五类输出：
+
+- 最终 Office 文件。
+- 渲染预览图或 HTML。
+- 页面级 diff / slide-level diff。
+- 失败定位：哪一页、哪个表格、哪个元素炸了。
+- repair receipt：给 agent 的最小修复上下文。
+
+不要一上来做全能办公套件。
+入口要更窄：**AI agent 的 Office 交付 runtime。**
+
+## AI 是否真的压缩任务
+
+能压缩，而且压的是最烦的那一段。
+
+以前：
+
+- 人先整理数据。
+- 再把结论写成大纲。
+- 然后把内容手工搬进 Word、Excel、PowerPoint。
+- 再导出预览，发现格式炸了。
+- 再手改。
+- 再让老板或客户看。
+
+现在可以变成：
+
+- agent 先理解模板和目标。
+- 直接生成 Office 文件。
+- 运行时自动渲染预览。
+- 把版式错误、溢出、空白页、表格错位变成可定位的问题。
+- 再修一轮并输出最终交付物。
+
+AI 压缩的不是“替你点开 PowerPoint”。
+AI 压缩的是从内容草稿到正式企业文件之间那一段反复搬运、预览、返工的劳动。
+
+## 为什么现在
+
+- coding agent、research agent、ops agent 已经能产出越来越多中间结果，但企业真实世界要的还是 Office 文件。
+- 很多 AI 产品停在 chat、canvas、notion-like 页面，离董事会 deck、客户交付件、采购表、财务周报还有一大截。
+- agent 现在不缺生成能力，缺的是最后一公里执行能力。
+- 如果 Office 文件能被 agent 稳定控制，很多“AI 只能给你一个草稿”的场景会变成“AI 直接交付第一版成品”。
+- 开源项目已经把这个方向打热了，说明 builder 已经意识到问题不在内容，而在交付格式和渲染回路。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+团队已经有 AI 生成的分析、文案、周报草稿，但还要有人手工做 PPT、报表、Word 文档，时间还是卡在最后一公里。
+
+**为什么留：**
+
+只要团队还在用 Office 模板交付，周报、客户 deck、报价单、项目复盘、运营报表、投标材料都会反复出现。
+
+**为什么传播：**
+
+传播物不是“我们的 AI 很聪明”。
+传播物是一张前后对比：
+
+- 输入 CSV 和目标，10 分钟后得到第一版 board deck。
+- agent 自动发现第 7 页图表溢出并修好。
+- Excel 月报连公式和格式都能保住。
+
+这种 demo 很容易在 GitHub、Reddit、Slack、微信群里扩散。
+
+**谁付费：**
+
+早期个人可能只用开源 CLI。
+真正付费的是：咨询/外包团队、销售运营、财务运营、客服运营、投融资顾问、企业 IT、垂直 SaaS 平台、文档工作流厂商。
+他们买的不是“会写 PPT”，而是**按模板稳定产出正式文件**。
+
+## MVP 实验
+
+### 7 天 MVP
+
+先只做一个场景：
+
+**CSV + 模板 → 销售周报 PowerPoint。**
+
+CLI 可以长这样：
+
+```bash
+office-agent build deck \
+  --template weekly-sales-template.pptx \
+  --data metrics.csv \
+  --goal "给销售 VP 的周报，强调环比变化、风险客户和下周动作"
+```
+
+只验证三件事：
+
+1. 能不能稳定生成可打开的 `.pptx`。
+2. 能不能自动渲染预览并发现版式问题。
+3. 用户最终手改比例能不能降到 30% 以下。
+
+### 30 天验证
+
+- 找 15 个高频做 deck / report 的团队。
+- 记录原来每份交付物要花多久。
+- 看 agent 生成的第一版是否能进入正式 review。
+- 统计人工返工时间、模板复用率、失败类型。
+- 看用户会不会上传第二个模板、第三个模板，而不是只玩一次 demo。
+
+## 商业化路径
+
+1. **开源 runtime。** 免费拿下开发者心智，让 agent 可以直接处理 Office 文件。
+2. **团队模板层。** 收费提供模板管理、品牌约束、变量映射、审批流和版本控制。
+3. **渲染 QA / diff 收费。** 对企业更值钱的不是能生成，而是能证明这次改动没把版式搞坏。
+4. **连接器层。** 对接 CRM、BI、ERP、数据库、云盘、知识库，让 agent 不只是处理文件，而是连数据和模板一起处理。
+5. **行业包。** 销售 deck、董事会材料、标书附件、财务周报、客服质检报告、保险/法律文书模板。
+
+定价不要按“生成次数”讲。
+应该按“节省的交付时间”“被保护的模板数”“自动化的正式文件工作流数”讲。
+
+## 反例 / 风险
+
+1. **微软和 Google 会下场。** 这是最大风险。创业公司不能只做“Office 里也能问 AI”，必须抓 runtime、渲染、diff、跨模板自动化这些硬层。
+2. **开源可能先把心智拿走。** 如果产品只是 OfficeCLI 的托管壳，很难收费。
+3. **最后审美仍然要人。** 版式、叙事、品牌感觉不可能完全交给模型。产品要承认这一点。
+4. **很多场景根本不需要 Office。** 小团队可能直接用 Notion、Linear、HTML 报告。要盯住仍被 `.docx` / `.xlsx` / `.pptx` 绑住的高价值团队。
+5. **格式兼容是泥潭。** 一个客户一个模板，一个行业一套规范，兼容性和回归测试会很重。
+
+## 可验证指标
+
+- 每份正式文件的首版生成时间。
+- 用户最终手改占比。
+- 模板复用率。
+- 渲染失败率和修复成功率。
+- 每周被自动生成的正式文件数。
+- 用户是否上传第二个模板、第三个模板。
+- 团队留存：30 天后是否仍在用它交付真实文件。
+- 付费转化：是否愿意为模板治理、审批、diff QA 和连接器付费。
+
+## 来源
+
+- GitHub：OfficeCLI README，主打 “Office suite designed for AI agents”，强调单一 binary、无 Office 安装、支持 Word/Excel/PowerPoint、并提供 agent-friendly rendering engine：[https://github.com/iOfficeAI/OfficeCLI](https://github.com/iOfficeAI/OfficeCLI)
+- GitHub：OfficeCLI Releases，验证它不是静态概念页，而是持续发布的 runtime 项目：[https://github.com/iOfficeAI/OfficeCLI/releases](https://github.com/iOfficeAI/OfficeCLI/releases)
+- Trendshift：OfficeCLI 仓库趋势页，当前显示 5.3k GitHub stars，并归类到 AI agent / MCP / document processing：[https://trendshift.io/repositories/24391](https://trendshift.io/repositories/24391)
+- GitHub：AionUi，README 展示的 OfficeCLI 演示场景所指向的 agent UI 仓库：[https://github.com/iOfficeAI/AionUi](https://github.com/iOfficeAI/AionUi)
+
+## 后续跟踪点
+
+- 是否出现真实团队把 Office runtime 接进周报、销售材料、投标或财务交付链路。
+- 是否有人把 slide-level diff / layout QA 做成团队级必经闸口。
+- Microsoft 365 Copilot、Google Workspace 和开源 runtime 的边界会怎么收缩。
+- 哪个垂直模板最容易先形成付费：销售、财务、咨询、法律、保险还是采购。

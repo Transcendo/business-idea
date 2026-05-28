@@ -180,6 +180,8 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "2026-05-28", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
+			{ title: "Agent-Native Office Runtime", href: "/docs/developer-tools/agent-native-office-file-runtime", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-26", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "Local PII Redaction Sidecar", href: "/docs/cybersecurity/local-pii-redaction-sidecar-for-agent-traces", icon: () => <ShieldCheck className="w-4 h-4 text-current" /> },
 			{ title: "Coding Agent Accessibility Review", href: "/docs/developer-tools/coding-agent-accessibility-review-layer", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
