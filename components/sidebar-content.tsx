@@ -182,6 +182,7 @@ export const contents: Content[] = [
 			{ title: "概览", href: "/docs/weekly-new", icon: () => <Book className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-29", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "Live Prospect Research Agent", href: "/docs/vertical-ai/live-prospect-research-agent", icon: () => <Briefcase className="w-4 h-4 text-current" /> },
+			{ title: "Executable Context Layer", href: "/docs/developer-tools/executable-context-layer-for-data-agents", icon: () => <Database className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-28", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "Agent-Native Office Runtime", href: "/docs/developer-tools/agent-native-office-file-runtime", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "AI HACCP Draft-and-Evidence Copilot", href: "/docs/vertical-ai/ai-haccp-draft-and-evidence-copilot", icon: () => <Utensils className="w-4 h-4 text-current" /> },

@@ -24,6 +24,7 @@
     "agent-failure-regression-harness",
     "agent-database-branching-sandbox",
     "agent-readable-database-contract-layer",
+    "executable-context-layer-for-data-agents",
     "insforge-agentic-backend",
     "agent-session-supervision-layer",
     "agent-structural-memory-layer",

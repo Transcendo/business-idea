@@ -1,0 +1,153 @@
+---
+title: Executable Context Layer for Data Agents
+description: Agentic BI 的机会不在再做一个聊天框，而在把指标、joins、business rules 和 query review 写成 agent 可执行、可审查的上下文层。
+---
+
+# Executable Context Layer for Data Agents
+
+我更看好这一类机会，不是因为“AI 会写 SQL”这件事本身有多新，而是因为越来越多团队已经发现：SQL 能跑通，不等于答案能拿去开会。
+
+## 为什么现在开始热
+
+1. 数据 agent 已经跨过了 demo 阶段。`Ktx` 在 Hacker News 上把自己直接定义成“executable context layer for data agents”，不是再卖一个 BI 聊天框，而是承认 agent 已经会查库，真正缺的是上下文约束。
+2. 开源需求在放大。`WrenAI` GitHub 已有很高 star 量，说明“让模型理解业务含义”已经不是少数团队的边角需求。
+3. 包装层开始外显。Product Hunt 上这类产品越来越常见，叙事都在往“AI 读懂数据、回答业务问题”靠。但真门槛不在回答界面，而在指标定义、join 规则、口径一致性和可复查性。
+4. 错误代价变高。过去 analyst 自己写错 SQL，通常会被自己发现。现在 agent 把错误答案包装得更流畅，反而更容易把错口径带进 board deck、QBR 和周会。
+
+## 用户真正痛点
+
+痛点不是“不会查数据库”。
+
+痛点是：
+
+- 指标定义散在 dbt、BI 仪表盘、Confluence、Slack 和分析师脑子里。
+- 同一个 revenue、active user、pipeline 可能有多个版本。
+- join fanout、grain 不一致、deprecated column 这类问题，模型很难靠 schema 猜对。
+- 业务团队不怕 agent 回答慢，怕它回答得像真的一样。
+
+这就是为什么很多所谓 chat-with-your-warehouse 产品看起来很顺，真正落到财务、增长、RevOps 场景却卡住。不是没人想问问题，是没人敢直接信答案。
+
+## AI 是否真的压缩任务
+
+这条线只有一种情况下算真的压缩任务：
+
+不是让模型自由发挥写 SQL。
+
+而是让系统先把“业务含义”编译出来，再约束模型只能沿着这些定义去问、去改、去解释。
+
+更具体一点：
+
+- 从 dbt model、BI metadata、query history、文档和 analyst correction 里抽取指标与业务规则。
+- 把 measures、joinable columns、filters、grain、forbidden paths 写成 reviewable YAML / Markdown / contract。
+- agent 生成查询前先读这些 contract。
+- 输出时附上“我依据了哪些定义、哪些 join 被允许、哪些地方仍然不确定”。
+
+如果做不到这一步，它就只是 NL-to-SQL 的升级版，不是新产品层。
+
+## 我认为更对的 AI-native wedge
+
+最小 wedge 不该是“问数据”。
+
+更对的形态是：
+
+用户给系统一个 warehouse、dbt 项目和少量关键文档；系统在 30 分钟内产出第一版 context layer，并在后续 agent 查询里充当 query planner + policy reviewer + answer receipt。
+
+首个可卖结果不是 dashboard，也不是 assistant avatar。
+
+首个可卖结果应该是：
+
+- 哪些指标已经有可信定义
+- 哪些 join 路径允许使用
+- 哪些查询会触发 grain / fanout / attribution 风险
+- 哪些答案可以直接给业务团队，哪些必须人工确认
+
+也就是说，它卖的是“可相信的 agent answer boundary”。
+
+## 为什么用户会来、留、传播、付费
+
+为什么会来：
+- 团队已经感受到 agent 查数很方便，但一两次错口径就足够让负责人不敢再放权。
+
+为什么会留：
+- schema 会变，口径会改，新的 metric 会长出来。上下文层不是一次性配置，而是持续维护的判断资产。
+
+为什么会传播：
+- “我们 agent 把 ARR 算错了”这种事故很容易在数据团队里传播。
+- 一份能展示 fanout 风险、定义差异和 query diff 的 receipt，也很容易被转发给同事和老板。
+
+为什么有人会付费：
+- 直接 buyer 很可能是 analytics engineering、data platform、RevOps、财务分析，或者做 agentic BI 的平台方。
+- 他们买的不是更酷的问答 UI，而是更低的错误成本和更少的人工兜底。
+
+## MVP 怎么做
+
+别一开始就接全仓库、全指标、全公司。
+
+更实际的 MVP：
+
+1. 只接一个 warehouse。
+2. 只选 20 到 30 个最关键指标。最好是 revenue、pipeline、active user、retention、campaign attribution 这类经常开会会用到的指标。
+3. 导入 dbt model、常用 SQL、仪表盘字段、术语表和过去错口径案例。
+4. 让 agent 在一组已知问题上回答两轮：一轮裸跑，一轮经过 context layer。
+5. 对比错误率、人工 review 时间、answer trust rate 和最终是否能直接进入 deck / QBR 材料。
+
+如果要选更锋利的切口，我会优先试两个方向：
+
+- 财务 / RevOps 的 board-deck metric audit
+- agentic BI 平台的内嵌 correctness layer
+
+前者 buyer 明确，后者分发更强。
+
+## 商业化路径
+
+我更相信三种收费方式：
+
+1. 按 warehouse / environment / seat 收年费。适合内部数据团队。
+2. 按已治理指标数、query volume 或 review volume 收费。适合平台方内嵌。
+3. 先卖审计和上线，再转成持续 correctness subscription。适合 finance / RevOps 场景。
+
+别太早卖“全公司 AI 数据助手平台”。那种故事太大，也太容易掉进大厂和现有 BI 厂商的分发阴影。
+
+## 传播路径
+
+这类产品天然适合靠事故和 repair story 传播。
+
+可传播的不是产品首页，而是这些 sharable artifact：
+
+- 错误答案 vs 纠正答案对比卡
+- join fanout / wrong grain 风险 receipt
+- metric definition diff
+- board-deck 发布前审计报告
+
+数据团队不是因为想聊天而买单，而是因为他们终于能把“为什么这次答案可信”讲清楚。
+
+## 风险和反例
+
+1. 可能退化成新版 semantic layer 维护税。历史已经证明，太重的建模流程会把团队劝退。
+2. 大厂和现有 BI / dbt / semantic layer 厂商完全可能把这层能力内建。
+3. 如果输出不可审查，或者 diff 不清楚，团队不会真信它。
+4. 很多团队真正的问题也许不是“agent 没上下文”，而是“内部指标治理本来就一团乱”。那时产品卖的是治理补课，不是 AI wedge。
+
+所以这条线最危险的地方，是看起来像 AI 新机会，最后却只是老 semantic layer 的新包装。
+
+## 我会盯的验证指标
+
+- 首批接入后，关键问题集的错误率下降多少
+- 人工 review 每条答案节省多少时间
+- 有多少 query 被自动路由到 approved measures，而不是裸 SQL
+- 有多少 board deck / QBR / weekly business review 愿意直接使用它的输出
+- context layer 更新后，团队是否持续维护，而不是首周配置完就放弃
+
+## 来源
+
+- [Show HN: Ktx – Open-source executable context layer for data agents](https://news.ycombinator.com/item?id=48309986)
+- [Kaelio / ktx 官网](https://www.kaelio.com/)
+- [ktx Docs: Introduction](https://docs.kaelio.com/ktx/docs/getting-started/introduction)
+- [ktx Docs: The Context Layer](https://docs.kaelio.com/ktx/docs/concepts/the-context-layer)
+- [GitHub: Kaelio/ktx](https://github.com/Kaelio/ktx)
+- [Wren AI docs: What is Context](https://docs.getwren.ai/oss/concepts/what_is_context)
+- [Wren AI docs: Best Practices](https://docs.getwren.ai/cp/getting_started/best_practice)
+- [GitHub: Canner/WrenAI](https://github.com/Canner/WrenAI)
+- [Product Hunt: Cube Dev](https://www.producthunt.com/products/cube-dev)
+- [Reddit: Never join fact tables](https://www.reddit.com/r/PowerBI/comments/1abo2cq/never_join_fact_tables/)
+- [Reddit: Thoughts on a business rules engine?](https://www.reddit.com/r/dataengineering/comments/zrdq62/thoughts_on_a_business_rules_engine/)
