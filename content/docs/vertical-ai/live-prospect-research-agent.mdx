@@ -1,0 +1,221 @@
+---
+title: Live Prospect Research Agent
+description: 销售和 GTM 团队最烦的不是不会写外联文案，而是拿到的数据库人人都能买、还经常过期。更硬的机会是把 event page、PDF、directory、registry、maps 这类活数据压成可验证的 prospect research workflow。
+created: 2026-05-29
+tags:
+  - vertical-ai
+  - sales-intelligence
+  - gtm-ops
+  - b2b-research
+  - ai-startups
+---
+
+# Live Prospect Research Agent
+
+## 一句话判断
+
+这条线值得做，但不要把它理解成“又一个 AI SDR”。
+
+更硬的机会是：**把 GTM 团队最费时间、最不想做、又最难买到独家数据的 prospect research，压成 live-source research workflow。**
+
+用户真正痛的不是“不会找邮箱”。
+是他们明明已经买了数据库、装了 enrichment 工具、搭了外联流水线，最后还是得自己去 event 页面、公司官网、PDF 名录、政府 registry、地图和行业 directory 里一点点核。
+
+## 赛道 / 产品信号
+
+这条线今天的信号很实。
+
+- Kuration 官网直接把自己定位成 “Your Data Edge, Built Not Rented”，强调不是租一个人人都能买的数据库，而是从 websites、PDFs、maps、directories、registries、events 构建自定义数据库。
+- 官网还把卖点收得很窄：在 90 秒内从 event page 提取 sponsors / exhibitors / speakers，做 extract、enrich、verify、score，并且 weekly auto-refresh。
+- Kuration 的 Product Hunt 页面把它叫成 “Cursor for B2B Research”，核心描述不是写邮件，而是 source、verify、aggregate、curate company information，自动做 qualification、scoring 和 decision-maker discovery。
+- Chrome Web Store listing 明确把它叫做 B2B research AI agent，说明产品已经在浏览器工作流里找入口，而不是只做一个后台数据库。
+- HN 关于 lead-gen 工具的讨论里，痛点仍然集中在 stale data、wrong data 和昂贵但并不真的独家的数据库。说明市场并没有被现有销售数据厂商彻底解决。
+
+所以热度点不在“AI 帮销售写话术”。
+热度点在：**AI 开始碰 live-source prospecting 这种脏活，而且目标是做出竞争对手买不到的 data edge。**
+
+## 用户痛点是什么
+
+痛点很具体。
+
+1. **数据库不够新。** 很多 list provider 数据延迟高，尤其在 event、区域市场、非英语目录、trade registry、长尾垂直行业上更明显。
+2. **数据库不够独家。** 你能买到的，竞争对手大概率也能买到。大家最后都在同一批名单上撞车。
+3. **真正费时间的是验证。** 公司是不是还活跃、是不是目标行业、是不是刚参加了某个 event、是不是在扩张、是不是符合 ICP，很多都要人工翻官网和目录。
+4. **长尾市场更麻烦。** 东南亚、中东、非英语市场、政府名录、行业目录、协会页面、展会页面，本来就碎，通用数据库覆盖差。
+5. **现有工具太多但责任没被压缩。** enrichment、email finder、CRM、outbound sequencer 一堆工具接起来，最费人的 research 判断还在手工完成。
+
+所以这不是“帮销售写一句更顺的开场白”。
+这是把**活数据发现、交叉验证、结构化评分和名单交付**做成一个能每天重复跑的研究工作流。
+
+## AI-native wedge
+
+最小 wedge 不该是大而全的 sales copilot。
+
+应该是：
+
+**用户给一个 ICP 和一个 live-source 起点，比如某个展会 sponsor page、政府 registry、行业 directory 或地图查询；系统在几分钟内返回一个带证据的 prospect list，包含公司、信号、联系人假设、验证状态和下一步动作。**
+
+第一版只做五件事：
+
+- 从活页面抓目标公司
+- 跨多个来源验证公司和信号
+- 提取一两个关键判定字段
+- 补齐联系人或角色假设
+- 输出可导出、可解释、可追踪更新的名单
+
+先别急着卷邮件生成、自动拨号、CRM 全自动串起来。
+先把**独家名单 + 证据 + refresh**做透。
+
+## AI 是否真的压缩任务
+
+这次是能压的。
+
+不是因为模型更会聊天。
+而是因为这个任务本来就充满了“半结构化网页读取 + 多来源比对 + 信号归类 + 名单整理”。
+
+以前的流程：
+
+- 人找 event page 或目录。
+- 人手动复制公司名。
+- 人开十几个标签页核官网、区域、产品、岗位、是否 still active。
+- 人再去找联系人。
+- 人最后拼成 CSV，过几天又过期。
+
+AI 能压缩的是中间最痛的四段：
+
+- 把各种乱页面先吃进去。
+- 自动抽 company / role / signal。
+- 做 source-by-source verification。
+- 周期性 refresh 并标记新旧变化。
+
+它压缩不了最终成交。
+但它能明显压缩“找到独家名单”和“证明这批名单值不值得打”这两个高频苦活。
+
+## 为什么现在
+
+- 大模型已经足够能读 event page、PDF、directory、registry 这种脏输入，不只是读标准网页。
+- 通用数据库越来越像基础设施，真正值钱的是别人拿不到的活信号。
+- 创始人和小销售团队更愿意自己拼 niche list，而不是签全年大单买一堆用不完的数据。
+- AI coding / AI workflow 火了之后，更多人开始相信 agent 可以先做 research dirty work，再把结果交给人判断。
+- 浏览器插件、表格导出、CRM handoff 这类轻交付已经足够成熟，不需要先造一个庞大销售平台。
+
+## 用户为什么来 / 留 / 传播 / 付费
+
+**为什么来：**
+
+他们不是缺另一个 CRM。
+他们是受够了千篇一律的数据库和大量手工验证。
+
+**为什么留：**
+
+名录、展会、目录、招聘、区域市场和联系人都在变。
+只要团队还在找新客户，refresh 就不是一次性的。
+
+**为什么传播：**
+
+最容易传播的不是“这个 AI 很聪明”。
+而是一份别人拿不到的名单：
+
+- 为什么这些公司会被选进来
+- 每家公司对应的公开证据是什么
+- 哪些联系人已验证，哪些只是角色假设
+- 哪些名单是新出现的
+
+这类 research receipt 比普通 SDR 文案更像工作成果，也更容易在团队里转发。
+
+**谁付费：**
+
+- founder-led sales 团队
+- outbound agency
+- recruiter / headhunter
+- GTM ops 团队
+- 垂直市场数据服务商
+- 投资 / BD / partnership 团队
+
+他们买的不是“AI 会搜网页”。
+他们买的是更独家的 pipeline 起点、更少的 research 工时、以及更高的名单可信度。
+
+## MVP 实验
+
+### 7 天 MVP
+
+先只做一个窄场景：
+
+**某个垂直 SaaS 团队做展会 sponsor / exhibitor prospecting。**
+
+输入：
+
+- 一组 event pages
+- 目标 ICP 规则
+- 2 到 3 个必须验证字段
+- 需要补的联系人角色
+
+输出：
+
+- verified prospect list
+- company-level source links
+- fit score
+- contact hypotheses / verified contacts
+- new-vs-old refresh diff
+
+只验证三件事：
+
+1. 和手工研究相比，名单准备时间能不能压到三分之一以下。
+2. 这批名单里有多少是现成数据库里没有或没标对的。
+3. 销售会不会真的拿这份名单去开工，而不是只看 demo。
+
+### 30 天验证
+
+- 找 10 个 founder-led sales 或 agency 团队。
+- 跑 3 种 source 类型：event、directory、registry。
+- 记录 verified company rate、contact hit rate、meeting-booking rate。
+- 对比 Apollo / ZoomInfo / Clay 现成 workflow 的差异。
+- 看 refresh 功能是不是带来第二次、第三次使用，而不是一次性挖矿。
+
+## 商业化路径
+
+1. **按名单或按工作流收费。** 先收 live-source research 和 verification 的钱。
+2. **浏览器插件 / 表格工作台。** 让研究员在网页上直接抽取、标注、补齐、导出。
+3. **refresh 订阅。** 某个市场、目录、展会池按周或按月自动增量更新。
+4. **垂直数据 edge。** 先在某个行业形成自己的持续数据库，再往更高毛利服务延伸。
+5. **CRM handoff / agency 模式。** 让名单直接进 HubSpot / Sheets / CRM，并带 source receipt。
+
+真正值钱的不是一次抓取。
+是后面那层**验证、刷新和独家性**。
+
+## 反例 / 风险
+
+1. **很容易滑成 another Clay workflow。** 如果产品最后还是人工清洗占大头，就没有护城河。
+2. **联系方式质量会拖垮信任。** 公司对了、联系人错了，用户还是会觉得你没价值。
+3. **法律和合规边界要小心。** 不同地区对 scraping、contact data 和 enrichment 容忍度不同。
+4. **数据库厂商会补能力。** Clay、Apollo、ZoomInfo、Hightouch 类玩家可能很快补 live-source signals。
+5. **名单独家不等于成交。** 如果名单虽新但不转化，用户会回到熟悉工具。
+
+## 可验证指标
+
+- list build 时间
+- verified company hit rate
+- verified contact hit rate
+- 与现有数据库重复度
+- 新增独家名单占比
+- refresh 后净新增信号数
+- meeting-booking rate / reply rate
+- 用户是否持续保存 source receipt 而不是只导出 CSV
+- 30 天后是否还有第二次 research run
+
+## 来源
+
+- 官方站点：Kuration 把自己定位成 “Your Data Edge, Built Not Rented”，强调从 websites、PDFs、maps、directories、registries、events 构建自定义数据库：[https://www.kurationai.com/](https://www.kurationai.com/)
+- 官方站点：Kuration 展示 90 秒内从 event page 抽 sponsor / exhibitor 数据，做 extract、enrich、verify、score，并支持 auto-refresh：[https://www.kurationai.com/](https://www.kurationai.com/)
+- Product Hunt：B2B Research AI Agent 页面强调 source、verify、aggregate、curate company information，并把 Kuration AI 定位成 “Cursor for B2B Research”：[https://www.producthunt.com/posts/b2b-research-ai-agent](https://www.producthunt.com/posts/b2b-research-ai-agent)
+- Product Hunt 产品页：描述 Kuration AI 会自动做 qualification、scoring 和 decision-maker discovery：[https://www.producthunt.com/products/b2b-research-ai-agent](https://www.producthunt.com/products/b2b-research-ai-agent)
+- Chrome Web Store：Kuration AI extension 把自己定义为 B2B research AI agent，当前 listing 显示 226 users，版本 2.4.3，更新时间 2026-05-07：[https://chromewebstore.google.com/detail/kuration-ai-extension/ddjmcjneljfmljlmlmclcbhefdlbaaoa](https://chromewebstore.google.com/detail/kuration-ai-extension/ddjmcjneljfmljlmlmclcbhefdlbaaoa)
+- HN 讨论：lead-gen 工具的痛点仍围绕 stale data、wrong data 和数据库价值感不足，说明市场缺的不是又一个 email generator，而是可信 research edge：[https://news.ycombinator.com/item?id=40729758](https://news.ycombinator.com/item?id=40729758)
+
+## 后续跟踪点
+
+- 第一批高留存买家会是 founder-led sales、agency，还是 recruiter / BD 团队。
+- 用户最愿意为哪层付费：名单生成、验证、refresh，还是 CRM handoff。
+- 哪类 live source 最能形成独家优势：event、registry、directory、marketplace，还是 job-posting signal。
+- 联系人验证能不能做成可信度分层，而不是 pretending 全部都准。
+- 这条线会不会最终变成垂直数据公司，而不是通用 sales AI 工具。

@@ -1,0 +1,143 @@
+---
+title: Production User-Flow Breakage Receipt
+description: 面向已上线产品的读路径巡检层，把生产环境真实用户流程的 breakage、复现步骤、截图证据和修复优先级压成一张 receipt。
+---
+
+# Production User-Flow Breakage Receipt
+
+AI 把发版速度推上去了，但没有同步解决“上线后到底哪里先炸”的问题。
+
+现在更痛的，不是缺一个能写测试脚本的工具，而是：团队已经把功能发到生产，结果登录、首单、邀请、结账、设置、导出这些关键路径在真实状态下坏了，直到用户抱怨才知道。
+
+新的机会是做一层 production user-flow breakage receipt：用户给出生产 URL、允许访问的只读路径和少量账号状态，系统在几分钟内像真实用户一样走关键流程，发现 breakage，返回截图、复现步骤、页面证据和按用户伤害排序的修复清单。
+
+## 产品信号
+
+这一轮信号不是单点冒出来，而是同一条链路的不同环节同时发热：
+
+- [Papercuts on Product Hunt](https://www.producthunt.com/products/papercuts) 直接把定位写得很狠：让 AI agents 像真实用户一样流过 production app，只给一个 URL，就在东西坏掉时通知你。
+- [Show HN: Quell – AI QA Agent Working Across Linear...](https://news.ycombinator.com/item?id=44083596) 说明“需求、issue、设计、CI 平台触发 AI 验收测试”已经被开发团队当成独立问题。
+- [Quell launch post](https://www.quellit.ai/blog/launching-today-on-product-hunt-quell-s-uat-ai-agent-platform) 和 [Quell product site](https://www.quellit.ai/) 把重点放在 acceptance criteria、bug tickets 和跨团队 UAT 自动化。
+- [Show HN: CmdRunner – Upload test cases and an AI agent runs them](https://news.ycombinator.com/item?id=47346986) 与 [CMDRunner official site](https://cmdrunner.com/) 又从另一头证明：团队手里早就有 Excel、文档、手写步骤，只是没人把这些材料稳定压成可执行的浏览器巡检。
+
+把这些信号放在一起看，机会不是再做一个更会写 Playwright 的工具，而是把“生产环境真实路径有没有坏”压成一张人人看得懂的 receipt。
+
+## 用户痛点
+
+最痛的是生产环境和预发环境根本不是一回事。
+
+预览链接能过，不代表生产一定没事。真实埋点、旧账号、第三方登录、支付状态、权限分层、脏数据、缓存、地区配置、浏览器插件、历史对象，都可能让生产流转和 preview 完全不同。
+
+多数小团队没有完善 QA。更现实的状态是：
+
+- 发布前点一下首页。
+- 真出问题了才去回放录屏。
+- 客服、运营、老板先看到事故。
+- 工程师再手动重走路径找复现条件。
+
+痛点不是“不会写测试”。痛点是没人能在生产里持续、廉价、低风险地替团队看住最关键的用户流。
+
+## AI-native wedge
+
+入口要短：
+
+用户给 `production URL + 允许访问的读路径 + 若干关键任务`，系统返回一张 breakage receipt。
+
+这张 receipt 至少包含：
+
+- 本轮巡检覆盖了哪些真实用户路径。
+- 每条路径走到了哪一步卡住。
+- 失败时的截图、DOM 摘要、console / network 线索和复现步骤。
+- AI 判断的用户伤害等级：阻断转化、影响留存、轻微退化。
+- 对工程师或 coding agent 可直接复用的修复提示。
+
+AI 真正压缩的是三件事：
+
+- 从模糊产品目标压出该巡检哪些关键路径。
+- 从长浏览器轨迹里提炼可修复的 breakage 证据。
+- 从多条失败现象里排出先修什么最值。
+
+## 为什么现在
+
+因为 AI 编程让“功能发得出去”越来越容易，反过来把“生产里有没有翻车”变成新瓶颈。
+
+过去这件事主要由完整 QA 团队承担。现在一批新买家已经出现：
+
+- 用 Claude Code、Cursor、Lovable 这类工具高速迭代的小团队。
+- 交付大量客户站点、管理后台和 AI SaaS 原型的 agency。
+- 自己兼产品、工程、客服的独立开发者。
+- 线上流量不大，但每一次转化链路断掉都很伤的早期 SaaS。
+
+这些人不一定想买测试平台，但都想买一件东西：别让我上线以后靠用户报错才知道哪里坏了。
+
+## 用户为什么来、留、传播、付费
+
+来：刚被生产事故坑过，或者已经知道 AI 加速开发后，自己的人工巡检跟不上。
+
+留：关键路径每天都会被新功能、依赖升级、数据状态和配置改动重新打坏。只要接上生产巡检，它就变成日常值班层。
+
+传播：一张带截图、步骤和伤害等级的 breakage receipt，比“好像哪里不对”更容易在工程、产品、运营和外包团队之间流转。
+
+付费：它离真实损失很近。一次注册、支付、导出、预约或邀请链路断掉，成本往往比月费高得多。
+
+## 可验证 MVP
+
+别先做大而全的测试平台。先抓一个窄入口。
+
+1. 只支持 4 类高价值只读路径：登录后首屏、搜索/列表、详情页、设置页。
+2. 用户手写 3 到 6 条最关键流程，或导入现有 SOP 文档。
+3. 系统在生产里只走 read-only route，不做写操作。
+4. 每次巡检输出 breakage receipt 和可复制修复提示。
+5. 如果团队已经有 coding agent，再把 receipt 直接喂给 agent 生成修复草案。
+
+第一阶段别碰全站 crawling、自动写回、复杂权限矩阵。先把“关键路径坏了能不能第一时间抓住”做好。
+
+## 商业化路径
+
+最顺的付费单位不是 seat，而是 coverage 和 frequency。
+
+- 按项目 / 站点 / 环境收费。
+- 按巡检路径数量收费。
+- 按每日 / 每次 deploy / 每小时巡检频率收费。
+- agency 版可以做多客户白标 receipt。
+- 更高客单价层可以卖到 Slack、Linear、GitHub、PagerDuty 这类告警和工单集成。
+
+## 传播路径
+
+这类产品最容易传播的不是主页，而是证据。
+
+- “这是今天生产里坏掉的真实路径。”
+- “这是 AI 帮你复现出来的截图和步骤。”
+- “这是为什么这次不能放量投流。”
+
+receipt 一旦被转发给产品、运营、老板、客户和外包工程师，本身就带传播属性。
+
+## 反例和风险
+
+最容易死的方式有四种：
+
+- 退化成另一个 E2E 测试框架，最后卷脚本维护。
+- 没有严格 read-only policy，结果用户不敢让它跑生产。
+- 噪音太高，动不动误报，团队很快关掉告警。
+- 只会报错，不会给出足够短的复现和修复证据。
+
+还有一个边界要说清：它不是要替代 staging QA，也不是要替代人工探索测试。它更像生产值班层，盯住那些用户最容易先撞上的关键流。
+
+## 可验证指标
+
+这个方向能不能成，不看模型 demo，看下面这些硬指标：
+
+- 首次发现 breakage 到人工确认的时间是否显著缩短。
+- receipt 里有多少问题能被工程师直接复现。
+- 误报率是否压到团队愿意持续开着。
+- 被覆盖的关键路径里，有多少真的是高转化或高投诉路径。
+- 用户是否愿意在第二个项目、第二个站点继续接入。
+
+## 来源
+
+- [Papercuts on Product Hunt](https://www.producthunt.com/products/papercuts)
+- [Show HN: Quell – AI QA Agent Working Across Linear...](https://news.ycombinator.com/item?id=44083596)
+- [Quell launch post](https://www.quellit.ai/blog/launching-today-on-product-hunt-quell-s-uat-ai-agent-platform)
+- [Quell product site](https://www.quellit.ai/)
+- [Show HN: CmdRunner – Upload test cases and an AI agent runs them](https://news.ycombinator.com/item?id=47346986)
+- [CMDRunner official site](https://cmdrunner.com/)

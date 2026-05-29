@@ -30,6 +30,7 @@
     "agent-context-sandbox-layer",
     "ai-debug-evidence-recorder",
     "ai-qa-release-gate",
+    "production-user-flow-breakage-receipt",
     "mobile-ai-test-agent",
     "on-call-runbook-execution-agent",
     "agent-plan-review-layer",
