@@ -25,6 +25,7 @@
     "agent-database-branching-sandbox",
     "agent-readable-database-contract-layer",
     "executable-context-layer-for-data-agents",
+    "multi-source-agent-context-store",
     "insforge-agentic-backend",
     "agent-session-supervision-layer",
     "agent-structural-memory-layer",

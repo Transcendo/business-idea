@@ -1,4 +1,11 @@
 {
   "title": "基础模型",
-  "pages": ["index", "zhipu", "moonshot", "stepfun", "01ai"]
+  "pages": [
+    "index",
+    "anthropic",
+    "zhipu",
+    "moonshot",
+    "stepfun",
+    "01ai"
+  ]
 }

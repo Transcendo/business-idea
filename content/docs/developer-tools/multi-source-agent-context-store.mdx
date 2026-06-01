@@ -1,0 +1,119 @@
+---
+title: Multi-Source Agent Context Store
+description: Agent 能跨 CRM、support、billing、product 等多系统问问题之后，新的机会不是再堆 connector，而是把 business object、relationship、freshness 和 allowed action path 预先压成可审查的 context store。
+created: 2026-05-29
+---
+
+# Multi-Source Agent Context Store
+
+我更看好这条线，不是因为“AI 能连更多 SaaS”本身有多新，而是 agent 开始真的替人做跨系统判断了。
+
+## 为什么现在开始热
+
+1. HN 上 `Airbyte Agents` 不是在卖又一个 chat-with-your-data。发帖人举的例子是一个本该回答“本季度哪些客户流失风险高”的 agent trace 跑了 47 步，说明瓶颈已经从模型生成转到找对象、串系统、判断上下文。
+2. Airbyte 官方把 Airbyte Agents 定位成“context for agents across every data source”，文档里单独拆出了 context store，说明连通性厂商也开始把“agent 读懂业务对象”当成独立层，而不只是 connector 数量竞赛。
+3. Product Hunt 和 Weavable 这类 launch 在讲同一件事：团队不缺 MCP 入口，缺的是跨 Slack、Linear、GitHub、Jira、Zendesk、Salesforce 的持续上下文。
+4. 现在很多企业 agent 不再只查仓库或单表，而是问更接近运营动作的问题：这个客户为什么危险、这个 bug 影响哪些用户、这笔退款是否异常。问题一跨系统，tool call 和 token 就会爆掉。
+
+## 用户真正痛点
+
+痛点不是“API 文档不全”。
+
+痛点是：
+
+- 一个业务问题往往横跨 CRM、support、billing、product analytics、工单和聊天记录。
+- 同一个 customer、account、incident 在不同系统里 id、字段、更新时间都不一样。
+- Agent 能调用很多工具，不等于知道先去哪、该信谁、哪个对象其实是同一件事。
+- 现在很多团队最后不是被模型质量卡住，而是被上下文检索成本、工具编排长度和答案可信度卡住。
+
+如果系统只暴露 raw APIs，团队还是得靠人手写 object mapping、freshness 规则和例外处理。
+
+## AI 是否真的压缩任务
+
+这条线只有在把“找上下文”的成本压下来时才算真的压缩任务。
+
+不是给 agent 再加十个 connector。
+
+而是先把多系统对象图编出来：
+
+- 把 account、user、ticket、invoice、repo、deployment 这类对象先标准化。
+- 把 relationship、更新时间和 authoritative source 一起保存。
+- 给 retrieval 加 scope，让 agent 先抓关键对象，不是全量 re-ingest。
+- 输出 reasoning packet，而不是只吐一个结论。
+
+理想形态是：用户问“哪些客户本季度流失风险高”，系统在 30 秒内返回排序结果、关键证据对象、时间戳和来源系统，而不是让 agent 盲跑几十步去猜。
+
+## AI-native wedge 是什么
+
+不是 data lake。
+
+也不是通用 chat shell。
+
+是 agent 用的跨系统对象上下文层：
+
+- 读连接器：把 source-of-record objects 变成可检索对象，不逼模型现拆 API。
+- 关系层：提前编码 account、ticket、invoice、repo、person 之间的关系。
+- freshness / trust layer：告诉 agent 哪个系统更新更快，哪些字段该被当成 authoritative。
+- action guardrails：哪些对象只读，哪些动作可写，哪些操作要额外审批。
+- receipt：每次回答都附带本次使用了哪些对象、哪些时间戳、来自哪些系统。
+
+## 为什么用户会来 / 留 / 传播 / 付费
+
+来：
+
+- 他们的内部 agent 已经能跑，但一跨系统就变慢、变贵、变不可信。
+
+留：
+
+- 业务系统、字段和权限一直在变。context layer 不是一次性 prompt，而是持续维护层。
+
+传播：
+
+- 最容易传播的不是“我们也有 MCP”，而是“原来 47 步的 trace 现在 9 步跑完，而且能给出证据对象”。
+
+付费：
+
+- 首批付费者会是内部 AI platform、data/platform teams、以及要把 agent 卖给 RevOps、support、finance 的厂商。
+- 收费可以按连接系统数、同步对象数、查询量、freshness SLA、审计/权限包、私有部署来收。
+
+## 可验证 MVP 怎么做
+
+1. 只挑一个高价值横向问题：
+   - 哪些客户本季度流失风险高。
+   - 哪些高优 bug 最可能影响付费客户。
+   - 哪些退款工单值得优先升级。
+2. 只连 3 个系统，比如 Salesforce + Zendesk + Stripe，或 GitHub + Jira + Slack。
+3. 先做只读对象层，不碰自动写回。
+4. 每次回答都附 evidence packet：object ids、updated_at、source system、ranking reason。
+5. 和直接 tool-calling baseline 比：
+   - tool calls
+   - token usage
+   - latency
+   - first-pass useful answer rate
+   - analyst correction rate
+
+## 风险和反例
+
+- 很容易重新掉回 integration services 生意：连接器很多、实施很重、上线很慢。
+- 大厂、CRM 平台、support suites 可能把这层吸进现有平台。
+- 如果没有鲜明的 first use case，context layer 会沦为“我们也有 graph”的抽象空话。
+- 数据 freshness 和权限边界没处理好，反而会让 agent 更自信地答错。
+- 如果买方只是在做单系统问答，这层太重，不如直接用现有 RAG、semantic layer 或 API wrapper。
+
+## 可验证指标
+
+- 平均 task tool-call 数下降 30% 以上。
+- 平均 token 成本下降 20% 以上。
+- 首次答案可采用率提升。
+- analyst / operator manual context stitching time 明显减少。
+- 证据对象覆盖率超过 80%。
+- 因 stale object 导致的错答率持续下降。
+- 第二个跨系统 workflow 在 14 天内被同团队创建。
+
+## 来源
+
+- HN：Show HN: Airbyte Agents – context for agents across every data source：[source](https://news.ycombinator.com/item?id=48023496)
+- Airbyte 官网：[source](https://airbyte.com/)
+- Airbyte 博客：Airbyte Agents：[source](https://airbyte.com/blog/airbyte-agents)
+- Airbyte Docs：Context Store 概念页：[source](https://docs.airbyte.com/ai-agents/concepts/context-store)
+- Product Hunt：Airbyte Agents：[source](https://www.producthunt.com/products/airbyte-agents)

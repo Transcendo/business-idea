@@ -2,6 +2,7 @@
   "title": "精选案例",
   "pages": [
     "index",
+    "anthropic",
     "lovable",
     "firecrawl",
     "cursor-anysphere",

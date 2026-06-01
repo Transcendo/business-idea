@@ -183,6 +183,7 @@ export const contents: Content[] = [
 			{ title: "2026-05-29", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "Live Prospect Research Agent", href: "/docs/vertical-ai/live-prospect-research-agent", icon: () => <Briefcase className="w-4 h-4 text-current" /> },
 			{ title: "Executable Context Layer", href: "/docs/developer-tools/executable-context-layer-for-data-agents", icon: () => <Database className="w-4 h-4 text-current" /> },
+			{ title: "Multi-Source Agent Context Store", href: "/docs/developer-tools/multi-source-agent-context-store", icon: () => <Database className="w-4 h-4 text-current" /> },
 			{ title: "2026-05-28", separator: true, icon: () => <CalendarDays className="w-4 h-4 text-current" /> },
 			{ title: "Agent-Native Office Runtime", href: "/docs/developer-tools/agent-native-office-file-runtime", icon: () => <FileSearch className="w-4 h-4 text-current" /> },
 			{ title: "AI HACCP Draft-and-Evidence Copilot", href: "/docs/vertical-ai/ai-haccp-draft-and-evidence-copilot", icon: () => <Utensils className="w-4 h-4 text-current" /> },
@@ -273,6 +274,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/weekly-picks", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Anthropic", href: "/docs/weekly-picks/anthropic", icon: () => <BrainCircuit className="w-4 h-4 text-current" /> },
 			{ title: "Lovable", href: "/docs/weekly-picks/lovable", icon: () => <Code2 className="w-4 h-4 text-current" /> },
 			{ title: "Firecrawl", href: "/docs/weekly-picks/firecrawl", icon: () => <Globe className="w-4 h-4 text-current" /> },
 			{ title: "Cursor（Anysphere）", href: "/docs/weekly-picks/cursor-anysphere", icon: () => <Code2 className="w-4 h-4 text-current" /> },
@@ -449,6 +451,7 @@ export const contents: Content[] = [
 		),
 		list: [
 			{ title: "概览", href: "/docs/foundation-models", icon: () => <Book className="w-4 h-4 text-current" /> },
+			{ title: "Anthropic", href: "/docs/foundation-models/anthropic", icon: () => <BrainCircuit className="w-4 h-4 text-current" /> },
 			{ title: "智谱", href: "/docs/foundation-models/zhipu", icon: () => <BotIcon className="w-4 h-4 text-current" /> },
 			{ title: "月之暗面", href: "/docs/foundation-models/moonshot", icon: () => <Globe className="w-4 h-4 text-current" /> },
 			{ title: "阶跃星辰", href: "/docs/foundation-models/stepfun", icon: () => <Activity className="w-4 h-4 text-current" /> },
